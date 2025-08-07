@@ -1,0 +1,127 @@
+{
+	"formId": "loanForm_v1",
+	"title": "Loan Application",
+	"pages": [
+		{
+			"id": "firstPage",
+			"title": "Loan Details",
+			"nextButtonVisibility": { "mode": ["allRequiredAnswered"] },
+			"questions": [
+				{
+					"id": "q1_loanName",
+					"bindsTo": "loanName",
+					"contextKey": "loanName",
+					"type": "radio",
+					"uiGroup": "loan_details",
+					"required": true,
+					"question": "What are you looking for?",
+					"description": "Get started by letting us know a little bit about what you need",
+					"options": [
+						{
+							"label": "Home Loan",
+							"value": "Home Loan",
+							"flagKey": { "isSecuredLoan": true, "isHomeLoan": true }
+						},
+						{
+							"label": "Plot Loan",
+							"value": "Plot Loan",
+							"flagKey": { "isSecuredLoan": true, "isPlotLoan": true }
+						},
+						{
+							"label": "Loan Against Property (LAP)",
+							"value": "Loan Against Property",
+							"flagKey": { "isSecuredLoan": true, "isLAP": true }
+						},
+						{
+							"label": "Business Loan",
+							"value": "Business Loan",
+							"flagKey": { "isUnsecuredLoan": true, "isBusinessLoan": true }
+						},
+						{
+							"label": "Professional Loan",
+							"value": "Professional Loan",
+							"flagKey": { "isUnsecuredLoan": true, "isProfessionalLoan": true }
+						},
+						{
+							"label": "Personal Loan",
+							"value": "Personal Loan",
+							"flagKey": { "isUnsecuredLoan": true, "isPersonalLoan": true }
+						}
+					]
+				},
+				{
+					"id": "q2_productType",
+					"bindsTo_template": "loan.{q1_loanName}.productType",
+					"contextKey": "productType",
+					"type": "radio",
+					"uiGroup": "loan_details",
+					"required": true,
+					"question": "Select the form in which you want to avail this unsecured loan.",
+					"description": "This helps us identify the most suitable loan structure for you. For details, check our Drop-line Overdraft (DOD) Page.",
+					"options": [
+						{ "label": { "var": "q1_loanName" }, "value": { "var": "q1_loanName" } },
+						{ "label": "Drop-line Overdraft (DOD)", "value": "Drop-line OverDraft (DOD)" }
+					],
+					"showWhen": {
+						"in": [
+							{ "var": "q1_loanName" },
+							["Personal Loan", "Professional Loan", "Business Loan"]
+						]
+					}
+				},
+				{
+					"id": "q3_haveAnyObligation",
+					"bindsTo_template": "loan.{q2_productType}.haveAnyObligation",
+					"contextKey": "haveAnyObligation",
+					"type": "radio",
+					"uiGroup": "loan_details",
+					"required": true,
+					"question": "Do you have any existing obligations?",
+					"description": "This includes all types of loans and credit limits you may have, such as personal loans, home loans, car loans, credit card loans (excluding monthly dues), gold loans, consumer durable loans, DODs, CCs, ODs, and any other ongoing liabilities.",
+					"showWhen": {
+						"in": [
+							{ "var": "q2_productType" },
+							["Personal Loan", "Professional Loan", "Business Loan", "Drop-line OverDraft (DOD)"]
+						]
+					},
+					"options": [
+						{ "label": "Yes", "value": "Yes" },
+						{ "label": "No", "value": "No" }
+					]
+				},
+				{
+					"id": "q4_loanType",
+					"bindsTo_template": "loan.{q2_productType}.loanType",
+					"contextKey": "loanType",
+					"type": "radio",
+					"uiGroup": "loan_details",
+					"required": true,
+					"question": "How you'd like to proceed with your loan?",
+					"description": "Tell us if you’re applying for a fresh loan or want to consolidate your current loans—fully or partially—with or without extra borrowing. If you only want debt consolidation, you can enter zero as the additional funds, later.",
+					"dependencies": ["q2_productType", "q3_haveAnyObligation"],
+					"showWhen": {
+						"and": [
+							{
+								"in": [
+									{ "var": "q2_productType" },
+									["Personal Loan", "Professional Loan", "Business Loan"]
+								]
+							},
+							{
+								"or": [
+									{
+										"==": [{ "var": "q3_haveAnyObligation" }, "Yes"]
+									}
+								]
+							}
+						]
+					},
+					"options": [
+						{ "label": "Start Fresh with New Loan", "value": "New Loan" },
+						{ "label": "Debt Consolidation with Extra Funds", "value": "Balance Transfer Only" }
+					]
+				}
+			]
+		}
+	]
+}

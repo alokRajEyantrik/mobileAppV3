@@ -1,0 +1,333 @@
+{
+	"formId": "loanForm_v1",
+	"title": "Loan Application",
+	"pages": [
+		{
+			"id": "firstPage",
+			"title": "Loan Details",
+			"nextButtonVisibility": { "mode": ["allRequiredAnswered"] },
+			"questions": [
+				{
+					"id": "q1_loanName",
+					"bindsTo": "loanName",
+					"contextKey": "loanName",
+					"type": "radio",
+					"uiGroup": "loan_details",
+					"required": true,
+					"question": "What are you looking for?",
+					"description": "Get started by letting us know a little bit about what you need",
+					"options": [
+						{
+							"label": "Home Loan",
+							"value": "Home Loan",
+							"flagKey": { "isSecuredLoan": true, "isHomeLoan": true }
+						},
+						{
+							"label": "Plot Loan",
+							"value": "Plot Loan",
+							"flagKey": { "isSecuredLoan": true, "isPlotLoan": true }
+						},
+						{
+							"label": "Loan Against Property (LAP)",
+							"value": "Loan Against Property",
+							"flagKey": { "isSecuredLoan": true, "isLAP": true }
+						},
+						{
+							"label": "Business Loan",
+							"value": "Business Loan",
+							"flagKey": { "isUnsecuredLoan": true, "isBusinessLoan": true }
+						},
+						{
+							"label": "Professional Loan",
+							"value": "Professional Loan",
+							"flagKey": { "isUnsecuredLoan": true, "isProfessionalLoan": true }
+						},
+						{
+							"label": "Personal Loan",
+							"value": "Personal Loan",
+							"flagKey": { "isUnsecuredLoan": true, "isPersonalLoan": true }
+						}
+					]
+				},
+				{
+					"id": "q2_productType",
+					"bindsTo_template": "productType",
+					"contextKey": "productType",
+					"type": "radio",
+					"uiGroup": "loan_details",
+					"required": true,
+					"question": "Select the form in which you want to avail this unsecured loan.",
+					"description": "This helps us identify the most suitable loan structure for you. For details, check our Drop-line Overdraft (DOD) Page.",
+					"options": [
+						{ "label": { "var": "q1_loanName" }, "value": { "var": "q1_loanName" } },
+						{ "label": "Drop-line Overdraft (DOD)", "value": "Drop-line OverDraft (DOD)" }
+					],
+					"showWhen": {
+						"in": [{ "var": "loanName" }, ["Personal Loan", "Professional Loan", "Business Loan"]]
+					}
+				},
+				{
+					"id": "q3_haveAnyObligation",
+					"bindsTo_template": "haveAnyObligation",
+					"contextKey": "haveAnyObligation",
+					"type": "radio",
+					"uiGroup": "loan_details",
+					"required": true,
+					"question": "Do you have any existing obligations?",
+					"description": "This includes all types of loans and credit limits you may have, such as personal loans, home loans, car loans, credit card loans (excluding monthly dues), gold loans, consumer durable loans, DODs, CCs, ODs, and any other ongoing liabilities.",
+					"showWhen": {
+						"in": [
+							{ "var": "productType" },
+							["Personal Loan", "Professional Loan", "Business Loan", "Drop-line OverDraft (DOD)"]
+						]
+					},
+					"options": [
+						{ "label": "Yes", "value": "Yes" },
+						{ "label": "No", "value": "No" }
+					]
+				},
+				{
+					"id": "q4_loanType",
+					"bindsTo_template": "loanType",
+					"contextKey": "loanType",
+					"type": "radio",
+					"uiGroup": "loan_details",
+					"required": true,
+					"question": "How you'd like to proceed with your loan?",
+					"description": "Tell us if you’re applying for a fresh loan or want to consolidate your current loans—fully or partially—with or without extra borrowing. If you only want debt consolidation, you can enter zero as the additional funds, later.",
+					"showWhen": {
+						"and": [
+							{
+								"in": [
+									{ "var": "productType" },
+									["Personal Loan", "Professional Loan", "Business Loan"]
+								]
+							},
+							{
+								"or": [
+									{
+										"==": [{ "var": "haveAnyObligation" }, "Yes"]
+									}
+								]
+							}
+						]
+					},
+					"options": [
+						{ "label": "Start Fresh with New Loan", "value": "Start Fresh with New Loan" },
+						{
+							"label": "Debt Consolidation with Extra Funds",
+							"value": "Debt Consolidation with Extra Funds"
+						}
+					]
+				}
+			]
+		},
+		{
+			"id": "businessPage",
+			"title": "Non-Collateral Loan Details",
+			"nextButtonVisibility": { "mode": ["allRequiredAnswered"] },
+			"questions": [
+				{
+					"id": "q1_businessITR",
+					"bindsTo_template": "ITRAvailable",
+					"contextKey": "ITRAvailable",
+					"type": "radio",
+					"uiGroup": "loan_details",
+					"required": true,
+					"question": "Have you filed Income Tax Returns (ITRs) for the last 3 financial years ?",
+					"options": [
+						{
+							"label": "Yes",
+							"value": "Yes"
+						},
+						{
+							"label": "No",
+							"value": "No"
+						}
+					],
+					"errorMessage": {
+						"required": true,
+						"message": "We regret to inform you that we are unable to process your request at this time due to the following reasons: ITR for last 3 years not available."
+					},
+					"validation": {
+						"condition": {
+							"!=": [{ "var": "ITRAvailable" }, "Yes"]
+						}
+					}
+				},
+				{
+					"id": "q2_currentAccount",
+					"bindsTo_template": "isCurrentAccount",
+					"contextKey": "isCurrentAccount",
+					"type": "radio",
+					"uiGroup": "loan_details",
+					"required": true,
+					"question": "Do you have Current, OD, or CC accounts in any bank with a total active history of 3 years or more?",
+					"options": [
+						{
+							"label": "Yes",
+							"value": "Yes"
+						},
+						{
+							"label": "No",
+							"value": "No"
+						}
+					],
+					"showWhen": {
+						"and": [
+							{ "!=": [{ "var": "ITRAvailable" }, ""] },
+							{ "==": [{ "var": "ITRAvailable" }, "Yes"] }
+						]
+					},
+					"errorMessage": {
+						"required": true,
+						"message": "We regret to inform you that we are unable to process your request at this time due to the following reasons: You do not have a current Account, Overdraft (OD), or Cash Credit (CC)."
+					},
+					"validation": {
+						"condition": {
+							"!=": [{ "var": "isCurrentAccount" }, "Yes"]
+						}
+					}
+				},
+				{
+					"id": "q3_isGSTRegistered",
+					"bindsTo_template": "isGSTRegistered",
+					"contextKey": "isGSTRegistered",
+					"type": "radio",
+					"uiGroup": "loan_details",
+					"required": true,
+					"question": "Is the GST registration with the current account three years old ?",
+					"options": [
+						{
+							"label": "Yes",
+							"value": "Yes"
+						},
+						{
+							"label": "No",
+							"value": "No"
+						}
+					],
+					"showWhen": {
+						"and": [
+							{ "!=": [{ "var": "isCurrentAccount" }, ""] },
+							{ "==": [{ "var": "isCurrentAccount" }, "Yes"] }
+						]
+					},
+					"errorMessage": {
+						"required": true,
+						"message": "We regret to inform you that we are unable to process you request at this time due to the following reasons: GST registration with current account not three year old."
+					},
+					"validation": {
+						"condition": {
+							"!=": [{ "var": "isGSTRegistered" }, "Yes"]
+						}
+					}
+				},
+				{
+					"id": "q4_GSTNumber",
+					"bindsTo_template": "GSTNumber",
+					"contextKey": "GSTNumber",
+					"type": "text",
+					"uiGroup": "text_fields",
+					"uiMeta": {
+						"placeholder": "Enter your GST Number"
+					},
+					"required": true,
+					"question": "Please enter your GST Number ?",
+					"showWhen": {
+						"and": [
+							{ "!=": [{ "var": "isGSTRegistered" }, ""] },
+							{ "==": [{ "var": "isGSTRegistered" }, "Yes"] }
+						]
+					},
+					"errorMessage": {
+						"required": "GST Number is required",
+						"lengthError": "GST Number must be exactly 15 characters long.",
+						"message": "We regret to inform you that we are unable to process your request at this time due to the following reasons: GST registration with current account not three years old.",
+						"stateNotServed": "We're not serve their"
+					},
+					"validation": {
+						"condition": {
+							"or": [
+								{ "==": [{ "var": "GSTNumber" }, ""] },
+								{ "!=": [{ "var": "GSTNumber.length" }, 15] }
+							]
+						},
+						"message": "validateGSTState"
+					}
+				},
+
+				{
+					"id": "q5_isNRI",
+					"bindsTo_template": "isNRI",
+					"contextKey": "isNRI",
+					"type": "radio",
+					"uiGroup": "loan_details",
+					"required": true,
+					"question": "If applicant or any of the co-applicants is NRI?",
+					"options": [
+						{
+							"label": "Yes",
+							"value": "Yes"
+						},
+						{
+							"label": "No",
+							"value": "No"
+						}
+					],
+					"showWhen": {
+						"!=": [{ "var": "GSTNumber" }, ""]
+					},
+					"errorMessage": {
+						"required": true,
+						"message": "We regret to inform you that we are unable to process you request at this time due to the following reasons: GST registration with current account not three year old."
+					},
+					"validation": {
+						"condition": {
+							"in": [{ "var": "isNRI" }, "Yes"]
+						},
+						"message": "validateisNRI"
+					}
+				}
+			]
+		},
+		{
+			"id": "locationPage",
+			"title": "Non-Collateral Loan Details",
+			"nextButtonVisibility": { "mode": ["allRequiredAnswered"] },
+			"questions": [
+				{
+					"id": "q_state",
+					"bindsTo_template": "State",
+					"contextKey": "State",
+					"type": "text",
+					"uiGroup": "text_fields",
+					"uiMeta": {
+						"placeholder": "State (auto-filled from GST Number)",
+						"readonly": true
+					},
+					"question": "State",
+					"required": true,
+					"showWhen": {
+						"in": [{ "var": "isNRI" }, "No"]
+					}
+				},
+				{
+					"id": "q_city",
+					"bindsTo_template": "City",
+					"contextKey": "City",
+					"type": "text",
+					"uiGroup": "text_fields",
+					"uiMeta": {
+						"placeholder": "City "
+					},
+					"question": "City",
+					"required": true,
+					"showWhen": {
+						"!=": [{ "var": "State" }, ""]
+					}
+				}
+			]
+		}
+	]
+}
