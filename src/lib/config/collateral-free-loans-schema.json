@@ -672,7 +672,7 @@
 					"id": "q2_residenceCityName",
 					"bindsTo_template": "residenceCityName",
 					"contextKey": "residenceCityName",
-					"type": "derivedSelect",
+					"type": "dynamicSelect",
 					"uiGroup": "select_fields",
 					"uiMeta": {
 						"placeholder": "Select City name"
@@ -680,22 +680,7 @@
 					"description": "City name",
 					"required": true,
 					"showWhen": {
-						"!=": [
-							{
-								"var": "residenceStateName"
-							},
-							""
-						]
-					},
-					"validation": {
-						"condition": {
-							"in": [
-								{
-									"var": "residenceCityName"
-								},
-								""
-							]
-						}
+						"!=": [{ "var": "residenceStateName" }, ""]
 					}
 				},
 				{
@@ -1017,17 +1002,9 @@
 					],
 					"showWhen": {
 						"in": [
-							{
-								"var": "tellUsApplying"
-							},
-							[
-								"Sole-Proprietorship",
-								"Company (Non-individual entity)"
-							]
+							{ "var": "tellUsApplying" },
+							["Sole-Proprietorship", "Company (Non-individual entity)"]
 						]
-					},
-					"validation": {
-						"required": true
 					}
 				},
 				{
@@ -1095,9 +1072,6 @@
 								]
 							}
 						]
-					},
-					"validation": {
-						"required": true
 					}
 				},
 				{
@@ -1250,8 +1224,11 @@
 							}
 						]
 					},
-					"validation": {
+					"errorMessage": {
 						"required": true,
+						"message": "Enter a number greater than one."
+					},
+					"validation": {
 						"condition": {
 							"or": [
 								{
@@ -1271,8 +1248,7 @@
 									]
 								}
 							]
-						},
-						"message": "Enter a number greater than one."
+						}
 					}
 				}
 			]
@@ -1311,7 +1287,7 @@
 					}
 				},
 				{
-					"id": "q1_companyName",
+					"id": "q2_companyName",
 					"bindsTo_template": "companyName",
 					"contextKey": "companyName",
 					"type": "text",
@@ -1323,21 +1299,13 @@
 					"question": "What's the company name?",
 					"description": "How it appears on company PAN",
 					"showWhen": {
-						"==": [
-							{
-								"var": "tellUsApplying"
-							},
-							"Company (Non-individual entity)"
-						]
-					},
-					"validation": {
-						"required": true
+						"==": [{ "var": "tellUsApplying" }, "Company (Non-individual entity)"]
 					}
 				},
 				{
-					"id": "q2_TypeOfResidence",
-					"bindsTo_template": "TypeOfResidence",
-					"contextKey": "TypeOfResidence",
+					"id": "q3_typeOfResidence",
+					"bindsTo_template": "typeOfResidence",
+					"contextKey": "typeOfResidence",
 					"type": "select",
 					"uiGroup": "selectButton",
 					"uiMeta": {
