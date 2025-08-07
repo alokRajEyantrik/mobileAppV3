@@ -73,13 +73,19 @@
   // Dynamic state options from pincode data
   $: stateOptions = Object.keys(pincode_IN_Selected).map((state) => ({ label: state, value: state }));
 
-  // Dynamic city options based on selected state
-  $: cityOptions = (() => {
-    const state = currentAnswers['residenceStateName'];
+  // Function to get city options for a specific state
+  function getCityOptionsForState(state: string | undefined): Array<{ label: string; value: string }> {
     if (!state || typeof state !== 'string') return [];
     const cities = Object.keys(pincode_IN_Selected[state as keyof typeof pincode_IN_Selected] || {});
-    return cities.map((city) => ({ label: city, value: city }));
-  })();
+    return cities.map(city => ({ label: city, value: city }));
+  }
+
+  // Separate city options for residence and business
+  $: residenceCityOptions = getCityOptionsForState(currentAnswers['residenceStateName']);
+  $: businessCityOptions = getCityOptionsForState(currentAnswers['businessStateName']);
+
+  // Business address fields visibility
+  $: showBusinessAddress = currentAnswers['addressSameOrNot'] === 'No';
 
   // Utility function to sanitize keys
   function sanitizeKey(value: string | undefined): string {
@@ -213,6 +219,12 @@
 
     if (key === 'residenceStateName') {
       updateAnswerByKey('residenceCityName', '');
+    } else if (key === 'businessStateName') {
+      updateAnswerByKey('businessCityName', '');
+    } else if (key === 'addressSameOrNot' && value === 'Yes') {
+      // Copy residence address to business address when "Yes" is selected
+      updateAnswerByKey('businessStateName', currentAnswers['residenceStateName'] || '');
+      updateAnswerByKey('businessCityName', currentAnswers['residenceCityName'] || '');
     }
   }
 
@@ -303,6 +315,14 @@
       }
     }
 
+    // Business address validation
+    if (question.id.startsWith('q4_business') || question.id.startsWith('q5_business')) {
+      const addressSameOrNot = answers['addressSameOrNot'];
+      if (addressSameOrNot === 'No' && (!val || (typeof val === 'string' && val === ''))) {
+        return question.errorMessage?.required ?? 'This field is required';
+      }
+    }
+
     return null;
   }
 
@@ -360,7 +380,7 @@
             id={question.id}
             label={question.question}
             options={
-              question.id === 'q1_residenceStateName'
+              question.id === 'q1_residenceStateName' || question.id === 'q4_businessStateName'
                 ? stateOptions
                 : question.options?.map((opt) => ({
                     label: opt.label as string,
@@ -377,12 +397,19 @@
           <DerivedSelect
             id={question.id}
             label={question.question}
-            options={question.id === 'q2_residenceCityName' ? cityOptions : []}
+            options={question.id === 'q2_residenceCityName' 
+              ? residenceCityOptions 
+              : question.id === 'q5_businessCityName'
+              ? businessCityOptions
+              : []}
             value={currentAnswers[resolveBindsTo(question, combinedAnswers, selectedLoan)] ?? ''}
             error={getValidationErrorMessage(question, combinedAnswers)}
             onChange={(value: string | number) => updateAnswer(question, value)}
             required={question.required ?? false}
-            disabled={question.id === 'q2_residenceCityName' && !currentAnswers['residenceStateName']}
+            disabled={
+              (question.id === 'q2_residenceCityName' && !currentAnswers['residenceStateName']) ||
+              (question.id === 'q5_businessCityName' && !currentAnswers['businessStateName'])
+            }
           />
         {:else if question.type === 'checkbox'}
           <CheckboxField
