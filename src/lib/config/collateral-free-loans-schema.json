@@ -321,11 +321,6 @@
 					"required": true,
 					"showWhen": {
 						"==": [{ "var": "applicantIsNRI" }, "No"]
-					},
-					"validation": {
-						"condition": {
-							"in": [{ "var": "residenceStateName" }, ""]
-						}
 					}
 				},
 				{
@@ -341,11 +336,6 @@
 					"required": true,
 					"showWhen": {
 						"!=": [{ "var": "residenceStateName" }, ""]
-					},
-					"validation": {
-						"condition": {
-							"in": [{ "var": "residenceCityName" }, ""]
-						}
 					}
 				},
 				{
@@ -374,7 +364,6 @@
 							{ "!=": [{ "var": "residenceCityName" }, ""] }
 						]
 					}
-					
 				},
 				{
 					"id": "q4_businessStateName",
@@ -513,9 +502,6 @@
 							{ "var": "tellUsApplying" },
 							["Sole-Proprietorship", "Company (Non-individual entity)"]
 						]
-					},
-					"validation": {
-						"required": true
 					}
 				},
 				{
@@ -561,9 +547,6 @@
 								]
 							}
 						]
-					},
-					"validation": {
-						"required": true
 					}
 				},
 				{
@@ -587,34 +570,10 @@
 						}
 					],
 					"showWhen": {
-						"or": [
-							{
-								"and": [
-									{ "==": [{ "var": "tellUsApplying" }, "Sole-Proprietorship"] },
-									{
-										"in": [
-											{ "var": "businessType" },
-											["Manufacturing", "Service industry", "Retail", "Trading"]
-										]
-									}
-								]
-							},
-							{
-								"and": [
-									{ "==": [{ "var": "tellUsApplying" }, "Company (Non-individual entity)"] },
-									{ "!=": [{ "var": "typeOfCompany" }, ""] },
-									{
-										"in": [
-											{ "var": "businessType" },
-											["Manufacturing", "Service industry", "Retail", "Trading"]
-										]
-									}
-								]
-							}
+						"in": [
+							{ "var": "businessType" },
+							["Manufacturing", "Service industry", "Retail", "Trading"]
 						]
-					},
-					"validation": {
-						"required": true
 					}
 				},
 				{
