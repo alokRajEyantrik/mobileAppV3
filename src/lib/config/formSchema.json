@@ -316,7 +316,8 @@
 					"id": "q_city",
 					"bindsTo_template": "City",
 					"contextKey": "City",
-					"type": "text",
+					"type": "select",
+					 "dynamic": "city",
 					"uiGroup": "text_fields",
 					"uiMeta": {
 						"placeholder": "City "
