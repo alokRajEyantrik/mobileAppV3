@@ -420,8 +420,8 @@
 					"id": "q6_banksOfCurrentAccount",
 					"bindsTo_template": "banksOfCurrentAccount",
 					"contextKey": "banksOfCurrentAccount",
-					"type": "checkbox",
-					"uiGroup": "checkbox_fields",
+					"type": "multiple-select",
+					"uiGroup": "select_fields",
 					"uiMeta": {
 						"placeholder": "Select banks"
 					},
@@ -438,11 +438,24 @@
 						{ "label": "Citi Bank", "value": "Citi Bank" },
 						{ "label": "Union Bank", "value": "Union Bank" }
 					],
+					"errorMessage": {
+						"required": "Please select at least one bank",
+						"minSelections": "Please select at least one bank"
+					},
+					"validation": {
+						"condition": {
+							"or": [
+								{ "==": [{ "var": "banksOfCurrentAccount" }, ""] },
+								{ "==": [{ "var": "banksOfCurrentAccount.length" }, 0] }
+							]
+						},
+						"message": "validateMinSelections"
+					},
 					"showWhen": {
 						"and": [
 							{ "in": [{ "var": "addressSameOrNot" }, ["Yes", "No"]] },
-							{ "!=": [{ "var": "businessState" }, ""] },
-							{ "!=": [{ "var": "businessCity" }, ""] }
+							{ "!=": [{ "var": "businessStateName" }, ""] },
+							{ "!=": [{ "var": "businessCityName" }, ""] }
 						]
 					}
 				}

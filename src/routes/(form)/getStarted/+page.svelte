@@ -460,7 +460,9 @@
               label: opt.label as string,
               value: opt.value as string | number
             })) ?? []}
-            selectedValues={(currentAnswers[resolveBindsTo(question, combinedAnswers, selectedLoan)] as (string | number)[]) ?? []}
+            selectedValues={Array.isArray(currentAnswers[resolveBindsTo(question, combinedAnswers, selectedLoan)]) 
+              ? currentAnswers[resolveBindsTo(question, combinedAnswers, selectedLoan)] as (string | number)[]
+              : []}
             error={getValidationErrorMessage(question, combinedAnswers)}
             onChange={(values: (string | number)[]) => updateAnswer(question, values)}
             required={question.required ?? false}
