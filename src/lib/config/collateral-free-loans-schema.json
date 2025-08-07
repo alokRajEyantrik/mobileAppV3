@@ -709,13 +709,10 @@
 							{ "==": [{ "var": "tellUsApplying" }, "Sole-Proprietorship"] },
 							{ "!=": [{ "var": "fullNameOfApplicant" }, ""] }
 						]
-					},
-					"validation": {
-						"required": true
 					}
 				},
 				{
-					"id": "q3_OfficePremises",
+					"id": "q4_OfficePremises",
 					"bindsTo_template": "OfficePremises",
 					"contextKey": "OfficePremises",
 					"type": "select",
@@ -745,13 +742,10 @@
 								"in": [{ "var": "typeOfResidence" }, ["Self owned", "Family owned", "Rented"]]
 							}
 						]
-					},
-					"validation": {
-						"required": true
 					}
 				},
 				{
-					"id": "q4_selectedAge",
+					"id": "q5_selectedAge",
 					"bindsTo_template": "selectedAge",
 					"contextKey": "selectedAge",
 					"type": "select",
@@ -776,19 +770,16 @@
 								"in": [{ "var": "OfficePremises" }, ["Self owned", "Rented"]]
 							}
 						]
-					},
-					"validation": {
-						"required": true
 					}
 				},
 				{
-					"id": "q4_dateOfIncorporation",
+					"id": "q6_dateOfIncorporation",
 					"bindsTo_template": "dateOfIncorporation",
 					"contextKey": "dateOfIncorporation",
 					"type": "select",
 					"uiGroup": "selectButton",
 					"uiMeta": {
-						"placeholder": "Select Age"
+						"placeholder": "Select years"
 					},
 					"required": true,
 					"question": "How many years has your company been in business?",
@@ -802,13 +793,10 @@
 							{ "==": [{ "var": "tellUsApplying" }, "Company (Non-individual entity)"] },
 							{ "!=": [{ "var": "companyName" }, ""] }
 						]
-					},
-					"validation": {
-						"required": true
 					}
 				},
 				{
-					"id": "q5_netProfitArray",
+					"id": "q7_netProfitArray",
 					"bindsTo_template": "netProfitArray",
 					"contextKey": "netProfitArray",
 					"type": "number",
@@ -839,16 +827,10 @@
 								]
 							}
 						]
-					},
-					"validation": {
-						"required": true,
-						"minItems": 3,
-						"maxLength": 12,
-						"errorMessage": "Please enter Net Profit for all 3 years"
 					}
 				},
 				{
-					"id": "q6_depreciationArray",
+					"id": "q8_depreciationArray",
 					"bindsTo_template": "depreciationArray",
 					"contextKey": "depreciationArray",
 					"type": "number",
@@ -882,16 +864,10 @@
 								]
 							}
 						]
-					},
-					"validation": {
-						"required": true,
-						"minItems": 3,
-						"maxLength": 12,
-						"errorMessage": "Please enter 'sum of Depreciation' or 'Interest on Loans' for all 3 years"
 					}
 				},
 				{
-					"id": "q7_creditScore",
+					"id": "q9_creditScore",
 					"bindsTo_template": "creditScore",
 					"contextKey": "creditScore",
 					"type": "select",
@@ -936,9 +912,54 @@
 								]
 							}
 						]
+					}
+				},
+				{
+					"id": "q10_whyLowCredit",
+					"bindsTo_template": "whyLowCredit",
+					"contextKey": "creditScore",
+					"type": "select",
+					"uiGroup": "selectButton",
+					"uiMeta": {
+						"placeholder": "Select credit score"
 					},
-					"validation": {
-						"required": true
+					"required": true,
+					"question": "What's the Credit Score?",
+					"description": "The credit score is a crucial factor that lenders consider to determine your creditworthiness A higher credit score is essential for securing more favorable loan terms and interest rates, directly influencing loan eligibility and approval.",
+					"options": [
+						{ "label": "No CIBIL", "value": "No CIBIL" },
+						{ "label": "650-699", "value": "650-699" },
+						{ "label": "700-729", "value": "700-729" },
+						{ "label": "730-749", "value": "730-749" },
+						{ "label": "750-779", "value": "750-779" },
+						{ "label": "780-799", "value": "780-799" },
+						{ "label": "more than 800", "value": "more than 800" }
+					],
+					"showWhen": {
+						"or": [
+							{
+								"and": [
+									{ "!=": [{ "var": "companyName" }, ""] },
+									{ "!=": [{ "var": "dateOfIncorporation" }, ""] },
+									{ "!=": [{ "var": "netProfitArray" }, ""] },
+									{ "!=": [{ "var": "depreciationArray" }, ""] }
+								]
+							},
+							{
+								"and": [
+									{ "!=": [{ "var": "fullNameOfApplicant" }, ""] },
+									{
+										"in": [{ "var": "typeOfResidence" }, ["Self owned", "Family owned", "Rented"]]
+									},
+									{
+										"in": [{ "var": "OfficePremises" }, ["Self owned", "Rented"]]
+									},
+									{ "!=": [{ "var": "selectedAge" }, ""] },
+									{ "!=": [{ "var": "netProfitArray" }, ""] },
+									{ "!=": [{ "var": "depreciationArray" }, ""] }
+								]
+							}
+						]
 					}
 				}
 			]
