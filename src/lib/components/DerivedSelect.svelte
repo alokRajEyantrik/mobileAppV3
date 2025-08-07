@@ -19,6 +19,7 @@
     const target = event.target as HTMLSelectElement;
     onChange(target.value);
   }
+  console.log('DerivedSelect', { id, label, options, value, error, disabled, required });
 </script>
 
 <div class="mb-4">

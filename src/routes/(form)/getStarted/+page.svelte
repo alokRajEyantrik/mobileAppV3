@@ -69,6 +69,14 @@
 	let currentPageIndex: number = 0;
 	let schema: Schema;
 	const gstStateError: Writable<string> = writable('');
+	
+	// City options state
+	$: cityOptions = (() => {
+		const state = currentAnswers['State'];
+		if (!state || typeof state !== 'string') return [];
+		const cities = Object.keys(pincode_IN_Selected[state as keyof typeof pincode_IN_Selected] || {});
+		return cities.map(city => ({ label: city, value: city }));
+	})();
 
 	// Utility function to sanitize keys
 	function sanitizeKey(value: string | undefined): string {
@@ -371,19 +379,20 @@
 						onChange={(value: string | number) => updateAnswer(question, value)}
 						required={question.required ?? false}
 					/>
-				{:else if question.type === 'dynamic'}
+				{:else if question.type === 'dynamicSelect'}
 					<DerivedSelect
 						id={question.id}
 						label={question.question}
-						options={question.options?.map((opt) => ({
+						options={question.id === 'q_city' ? cityOptions : (question.options?.map((opt) => ({
 							label: opt.label as string,
 							value: opt.value as string | number
-						})) ?? []}
-						value={currentAnswers[resolveBindsTo(question, combinedAnswers, selectedLoan)] || ''}
+						})) ?? [])}
+						value={currentAnswers[resolveBindsTo(question, combinedAnswers, selectedLoan)] ?? ''}
 						error={getValidationErrorMessage(question, combinedAnswers)}
-						onChange={(e) => updateAnswer(question, e.target.value)}
+						onChange={(value: string | number) => updateAnswer(question, value)}
 						required={question.required ?? false}
-					/>
+						disabled={question.id === 'q_city' && !currentAnswers['State']}
+					/>	
 				{:else if question.type === 'checkbox'}
 					<CheckboxField
 						id={question.id}
