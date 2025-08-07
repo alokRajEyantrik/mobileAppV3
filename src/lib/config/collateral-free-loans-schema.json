@@ -6,9 +6,7 @@
 			"id": "firstPage",
 			"title": "Let's Rock!",
 			"nextButtonVisibility": {
-				"mode": [
-					"allRequiredAnswered"
-				]
+				"mode": ["allRequiredAnswered"]
 			},
 			"questions": [
 				{
@@ -99,11 +97,7 @@
 							{
 								"var": "loanName"
 							},
-							[
-								"Personal Loan",
-								"Professional Loan",
-								"Business Loan"
-							]
+							["Personal Loan", "Professional Loan", "Business Loan"]
 						]
 					}
 				},
@@ -137,12 +131,7 @@
 							{
 								"var": "unSecureLoanType"
 							},
-							[
-								"Personal Loan",
-								"Professional Loan",
-								"Business Loan",
-								"Drop-line OverDraft (DOD)"
-							]
+							["Personal Loan", "Professional Loan", "Business Loan", "Drop-line OverDraft (DOD)"]
 						]
 					}
 				},
@@ -172,11 +161,7 @@
 									{
 										"var": "unSecureLoanType"
 									},
-									[
-										"Personal Loan",
-										"Professional Loan",
-										"Business Loan"
-									]
+									["Personal Loan", "Professional Loan", "Business Loan"]
 								]
 							},
 							{
@@ -196,9 +181,7 @@
 			"id": "collateral_free_selectionPage",
 			"title": "Non-Collateral Loan Details",
 			"nextButtonVisibility": {
-				"mode": [
-					"allRequiredAnswered"
-				]
+				"mode": ["allRequiredAnswered"]
 			},
 			"questions": [
 				{
@@ -230,10 +213,7 @@
 							{
 								"var": "unSecureLoanType"
 							},
-							[
-								"Business Loan",
-								"Professional Loan"
-							]
+							["Business Loan", "Professional Loan"]
 						]
 					},
 					"errorMessage": {
@@ -507,9 +487,7 @@
 							{
 								"var": "unSecureLoanType"
 							},
-							[
-								"Personal Loan"
-							]
+							["Personal Loan"]
 						]
 					},
 					"errorMessage": {
@@ -556,9 +534,7 @@
 							{
 								"var": "unSecureLoanType"
 							},
-							[
-								"Personal Loan"
-							]
+							["Personal Loan"]
 						]
 					},
 					"errorMessage": {
@@ -605,9 +581,7 @@
 							{
 								"var": "unSecureLoanType"
 							},
-							[
-								"Personal Loan"
-							]
+							["Personal Loan"]
 						]
 					},
 					"errorMessage": {
@@ -631,9 +605,7 @@
 			"id": "locationPage",
 			"title": "Business Location",
 			"nextButtonVisibility": {
-				"mode": [
-					"allRequiredAnswered"
-				]
+				"mode": ["allRequiredAnswered"]
 			},
 			"questions": [
 				{
@@ -656,16 +628,6 @@
 							},
 							"No"
 						]
-					},
-					"validation": {
-						"condition": {
-							"in": [
-								{
-									"var": "residenceStateName"
-								},
-								""
-							]
-						}
 					}
 				},
 				{
@@ -923,9 +885,7 @@
 			"id": "applicantPage",
 			"title": "Applicant Type",
 			"nextButtonVisibility": {
-				"mode": [
-					"allRequiredAnswered"
-				]
+				"mode": ["allRequiredAnswered"]
 			},
 			"questions": [
 				{
@@ -1063,12 +1023,7 @@
 									{
 										"var": "businessType"
 									},
-									[
-										"Manufacturing",
-										"Service industry",
-										"Retail",
-										"Trading"
-									]
+									["Manufacturing", "Service industry", "Retail", "Trading"]
 								]
 							}
 						]
@@ -1115,12 +1070,7 @@
 											{
 												"var": "businessType"
 											},
-											[
-												"Manufacturing",
-												"Service industry",
-												"Retail",
-												"Trading"
-											]
+											["Manufacturing", "Service industry", "Retail", "Trading"]
 										]
 									}
 								]
@@ -1148,12 +1098,7 @@
 											{
 												"var": "businessType"
 											},
-											[
-												"Manufacturing",
-												"Service industry",
-												"Retail",
-												"Trading"
-											]
+											["Manufacturing", "Service industry", "Retail", "Trading"]
 										]
 									}
 								]
@@ -1191,12 +1136,7 @@
 									{
 										"var": "businessType"
 									},
-									[
-										"Manufacturing",
-										"Service industry",
-										"Retail",
-										"Trading"
-									]
+									["Manufacturing", "Service industry", "Retail", "Trading"]
 								]
 							},
 							{
@@ -1216,10 +1156,7 @@
 									{
 										"var": "companyContinuouslyProfit"
 									},
-									[
-										"Yes",
-										"No"
-									]
+									["Yes", "No"]
 								]
 							}
 						]
@@ -1257,9 +1194,7 @@
 			"id": "basicInfoPage",
 			"title": "Income and Obligations",
 			"nextButtonVisibility": {
-				"mode": [
-					"allRequiredAnswered"
-				]
+				"mode": ["allRequiredAnswered"]
 			},
 			"questions": [
 				{
@@ -1408,11 +1343,7 @@
 									{
 										"var": "TypeOfResidence"
 									},
-									[
-										"Self owned",
-										"Family owned",
-										"Rented"
-									]
+									["Self owned", "Family owned", "Rented"]
 								]
 							}
 						]
@@ -1462,11 +1393,7 @@
 									{
 										"var": "TypeOfResidence"
 									},
-									[
-										"Self owned",
-										"Family owned",
-										"Rented"
-									]
+									["Self owned", "Family owned", "Rented"]
 								]
 							},
 							{
@@ -1474,10 +1401,7 @@
 									{
 										"var": "OfficePremises"
 									},
-									[
-										"Self owned",
-										"Rented"
-									]
+									["Self owned", "Rented"]
 								]
 							}
 						]
@@ -1536,11 +1460,7 @@
 					"type": "number",
 					"uiGroup": "inputNumber",
 					"uiMeta": {
-						"placeholder": [
-							"FY2023-24",
-							"FY2022-23",
-							"FY2021-22"
-						]
+						"placeholder": ["FY2023-24", "FY2022-23", "FY2021-22"]
 					},
 					"required": true,
 					"question": "What were the Net Profits for the last three financial years?",
@@ -1581,11 +1501,7 @@
 											{
 												"var": "TypeOfResidence"
 											},
-											[
-												"Self owned",
-												"Family owned",
-												"Rented"
-											]
+											["Self owned", "Family owned", "Rented"]
 										]
 									},
 									{
@@ -1593,10 +1509,7 @@
 											{
 												"var": "OfficePremises"
 											},
-											[
-												"Self owned",
-												"Rented"
-											]
+											["Self owned", "Rented"]
 										]
 									},
 									{
@@ -1619,11 +1532,7 @@
 					"type": "number",
 					"uiGroup": "inputNumber",
 					"uiMeta": {
-						"placeholder": [
-							"FY2023-24",
-							"FY2022-23",
-							"FY2021-22"
-						]
+						"placeholder": ["FY2023-24", "FY2022-23", "FY2021-22"]
 					},
 					"required": true,
 					"question": "What's the sum of 'Depreciation' and 'Interest on Loans' as per profit-loss statement?",
@@ -1673,11 +1582,7 @@
 											{
 												"var": "TypeOfResidence"
 											},
-											[
-												"Self owned",
-												"Family owned",
-												"Rented"
-											]
+											["Self owned", "Family owned", "Rented"]
 										]
 									},
 									{
@@ -1685,10 +1590,7 @@
 											{
 												"var": "OfficePremises"
 											},
-											[
-												"Self owned",
-												"Rented"
-											]
+											["Self owned", "Rented"]
 										]
 									},
 									{
@@ -1807,11 +1709,7 @@
 											{
 												"var": "TypeOfResidence"
 											},
-											[
-												"Self owned",
-												"Family owned",
-												"Rented"
-											]
+											["Self owned", "Family owned", "Rented"]
 										]
 									},
 									{
@@ -1819,10 +1717,7 @@
 											{
 												"var": "OfficePremises"
 											},
-											[
-												"Self owned",
-												"Rented"
-											]
+											["Self owned", "Rented"]
 										]
 									},
 									{
@@ -1855,25 +1750,17 @@
 					}
 				},
 				{
-					"id": "q10_whyLowCredit",
-					"bindsTo_template": "whyLowCredit",
-					"contextKey": "creditScore",
-					"type": "select",
-					"uiGroup": "selectButton",
-					"uiMeta": {
-						"placeholder": "Select credit score"
-					},
+					"id": "q10_isDefaulter",
+					"bindsTo_template": "isDefaulter",
+					"contextKey": "isDefaulter",
+					"type": "radio",
+					"uiGroup": "loan_details",
 					"required": true,
-					"question": "What's the Credit Score?",
-					"description": "The credit score is a crucial factor that lenders consider to determine your creditworthiness A higher credit score is essential for securing more favorable loan terms and interest rates, directly influencing loan eligibility and approval.",
+					"question": "Have you ever been defaulter?",
+					"description": "description",
 					"options": [
-						{ "label": "No CIBIL", "value": "No CIBIL" },
-						{ "label": "650-699", "value": "650-699" },
-						{ "label": "700-729", "value": "700-729" },
-						{ "label": "730-749", "value": "730-749" },
-						{ "label": "750-779", "value": "750-779" },
-						{ "label": "780-799", "value": "780-799" },
-						{ "label": "more than 800", "value": "more than 800" }
+						{ "label": "Yes", "value": "Yes" },
+						{ "label": "No", "value": "No" }
 					],
 					"showWhen": {
 						"or": [
@@ -1882,7 +1769,8 @@
 									{ "!=": [{ "var": "companyName" }, ""] },
 									{ "!=": [{ "var": "dateOfIncorporation" }, ""] },
 									{ "!=": [{ "var": "netProfitArray" }, ""] },
-									{ "!=": [{ "var": "depreciationArray" }, ""] }
+									{ "!=": [{ "var": "depreciationArray" }, ""] },
+									{ "!=": [{ "var": "creditScore" }, ""] }
 								]
 							},
 							{
@@ -1896,7 +1784,75 @@
 									},
 									{ "!=": [{ "var": "selectedAge" }, ""] },
 									{ "!=": [{ "var": "netProfitArray" }, ""] },
-									{ "!=": [{ "var": "depreciationArray" }, ""] }
+									{ "!=": [{ "var": "depreciationArray" }, ""] },
+									{ "!=": [{ "var": "creditScore" }, ""] }
+								]
+							}
+						]
+					}
+				},
+				{
+					"id": "q11_whyLowCredit",
+					"bindsTo_template": "whyLowCredit",
+					"contextKey": "creditScore",
+					"type": "multiple-select",
+					"uiGroup": "select_fields",
+					"uiMeta": {
+						"placeholder": "Select the reason why you have low credit score"
+					},
+					"required": true,
+					"question": "What are the possible reasons behind your low CIBIL score?",
+					"description": "select all the applicable reasons to help us understand what may be impacting your credit score",
+					"options": [
+						{ "label": "Delayed EMI", "value": "Delayed EMI" },
+						{ "label": "High credit card utilization", "value": "High credit card utilization" },
+						{ "label": "No credit history", "value": "No credit history" },
+						{
+							"label": "Frequent use of full credit limit",
+							"value": "Frequent use of full credit limit"
+						},
+						{ "label": "Delayed credit card payments", "value": "Delayed credit card payments" },
+						{
+							"label": "Multiple recent loan enquiries",
+							"value": "Multiple recent loan enquiries"
+						},
+						{ "label": "Co-applicant default", "value": "Co-applicant default" },
+						{ "label": "Loan default", "value": "Loan default" },
+						{
+							"label": "Only unsecured loans in profile",
+							"value": "Only unsecured loans in profile"
+						},
+						{
+							"label": "Minimum due payments only on credit card",
+							"value": "Minimum due payments only on credit card"
+						}
+					],
+					"showWhen": {
+						"or": [
+							{
+								"and": [
+									{ "!=": [{ "var": "companyName" }, ""] },
+									{ "!=": [{ "var": "dateOfIncorporation" }, ""] },
+									{ "!=": [{ "var": "netProfitArray" }, ""] },
+									{ "!=": [{ "var": "depreciationArray" }, ""] },
+									{ "in": [{ "var": "creditScore" }, ["No CIBIL", "650-699"]] },
+									{ "in": [{ "var": "isDefaulter" }, ["Yes", "No"]] }
+								]
+							},
+							{
+								"and": [
+									{ "!=": [{ "var": "fullNameOfApplicant" }, ""] },
+									{
+										"in": [{ "var": "typeOfResidence" }, ["Self owned", "Family owned", "Rented"]]
+									},
+									{
+										"in": [{ "var": "OfficePremises" }, ["Self owned", "Rented"]]
+									},
+									{ "!=": [{ "var": "selectedAge" }, ""] },
+									{ "!=": [{ "var": "netProfitArray" }, ""] },
+									{ "!=": [{ "var": "depreciationArray" }, ""] },
+									{ "in": [{ "var": "creditScore" }, ["No CIBIL", "650-699"]] },
+									{ "in": [{ "var": "isDefaulter" }, ["Yes", "No"]] }
 								]
 							}
 						]
