@@ -123,8 +123,8 @@
 			]
 		},
 		{
-			"id": "collateral_free_selectionPage",
-			"title": "Non-Collateral Loan Details",
+			"id": "selectionPage",
+			"title": "A few check points !",
 			"nextButtonVisibility": { "mode": ["allRequiredAnswered"] },
 			"questions": [
 				{
@@ -298,106 +298,6 @@
 						},
 						"message": "validateisNRI"
 					}
-				},
-
-				{
-					"id": "q_isPaySlipAvailable",
-					"bindsTo_template": "payslips",
-					"contextKey": "payslips",
-					"type": "radio",
-					"uiGroup": "loan_details",
-					"required": true,
-					"question": "If payslips are available for last 6 months ?",
-					"options": [
-						{
-							"label": "Yes",
-							"value": "Yes",
-							"flagKey": { "isPaySlipAvailable": true }
-						},
-						{
-							"label": "No",
-							"value": "No",
-							"flagKey": { "isPaySlipAvailable": false }
-						}
-					],
-					"showWhen": {
-						"in": [{ "var": "unSecureLoanType" }, ["Personal Loan"]]
-					},
-					"errorMessage": {
-						"required": true,
-						"message": "We regret to inform you that we are unable to process you request at this time due to the following reasons: Payslips not available."
-					},
-					"validation": {
-						"condition": {
-							"!=": [{ "var": "payslips" }, "Yes"]
-						}
-					}
-				},
-				{
-					"id": "q_isForm16Available",
-					"bindsTo_template": "Form16Available",
-					"contextKey": "Form16Available",
-					"type": "radio",
-					"uiGroup": "loan_details",
-					"required": true,
-					"question": "If latest Form-16 is available ?",
-					"options": [
-						{
-							"label": "Yes",
-							"value": "Yes",
-							"flagKey": { "isForm16Available": true }
-						},
-						{
-							"label": "No",
-							"value": "No",
-							"flagKey": { "isForm16Available": false }
-						}
-					],
-					"showWhen": {
-						"in": [{ "var": "unSecureLoanType" }, ["Personal Loan"]]
-					},
-					"errorMessage": {
-						"required": true,
-						"message": "We regret to inform you that we are unable to process you request at this time due to the following reasons: From16 not available."
-					},
-					"validation": {
-						"condition": {
-							"!=": [{ "var": "Form16Available" }, "Yes"]
-						}
-					}
-				},
-				{
-					"id": "q_isApplicantIsNRI",
-					"bindsTo_template": "ApplicantIsNRI",
-					"contextKey": "ApplicantIsNRI",
-					"type": "radio",
-					"uiGroup": "loan_details",
-					"required": true,
-					"question": "If applicant or any of the co-applicants is NRI?",
-					"options": [
-						{
-							"label": "Yes",
-							"value": "Yes",
-							"flagKey": { "isApplicantIsNRI": true }
-						},
-						{
-							"label": "No",
-							"value": "No",
-							"flagKey": { "isApplicantIsNRI": false }
-						}
-					],
-					"showWhen": {
-						"in": [{ "var": "unSecureLoanType" }, ["Personal Loan"]]
-					},
-					"errorMessage": {
-						"required": true,
-						"message": "We regret to inform you that we are unable to process you request at this time due to the following reasons: Applicant is NRI."
-					},
-					"validation": {
-						"condition": {
-							"!=": [{ "var": "ApplicantIsNRI" }, "Yes"]
-						}
-					}
 				}
 			]
 		},
@@ -427,7 +327,7 @@
 					"id": "q2_residenceCityName",
 					"bindsTo_template": "residenceCityName",
 					"contextKey": "residenceCityName",
-					"type": "derivedSelect",
+					"type": "dynamicSelect",
 					"uiGroup": "select_fields",
 					"uiMeta": {
 						"placeholder": "Select City name"
@@ -723,15 +623,17 @@
 							{ "in": [{ "var": "companyContinuouslyProfit" }, ["Yes", "No"]] }
 						]
 					},
-					"validation": {
+					"errorMessage": {
 						"required": true,
+						"message": "Enter a number greater than one."
+					},
+					"validation": {
 						"condition": {
 							"or": [
 								{ "==": [{ "var": "numberOfDirectorOrApplicant" }, ""] },
 								{ "<": [{ "var": "numberOfDirectorOrApplicant" }, 2] }
 							]
-						},
-						"message": "Enter a number greater than one."
+						}
 					}
 				}
 			]
@@ -755,13 +657,10 @@
 					"description": "How it appears on PAN, Passport, Aadhaar or Driving license",
 					"showWhen": {
 						"==": [{ "var": "tellUsApplying" }, "Sole-Proprietorship"]
-					},
-					"validation": {
-						"required": true
 					}
 				},
 				{
-					"id": "q1_companyName",
+					"id": "q2_companyName",
 					"bindsTo_template": "companyName",
 					"contextKey": "companyName",
 					"type": "text",
@@ -774,15 +673,12 @@
 					"description": "How it appears on company PAN",
 					"showWhen": {
 						"==": [{ "var": "tellUsApplying" }, "Company (Non-individual entity)"]
-					},
-					"validation": {
-						"required": true
 					}
 				},
 				{
-					"id": "q2_TypeOfResidence",
-					"bindsTo_template": "TypeOfResidence",
-					"contextKey": "TypeOfResidence",
+					"id": "q3_typeOfResidence",
+					"bindsTo_template": "typeOfResidence",
+					"contextKey": "typeOfResidence",
 					"type": "select",
 					"uiGroup": "selectButton",
 					"uiMeta": {
@@ -846,7 +742,7 @@
 							{ "==": [{ "var": "tellUsApplying" }, "Sole-Proprietorship"] },
 							{ "!=": [{ "var": "fullNameOfApplicant" }, ""] },
 							{
-								"in": [{ "var": "TypeOfResidence" }, ["Self owned", "Family owned", "Rented"]]
+								"in": [{ "var": "typeOfResidence" }, ["Self owned", "Family owned", "Rented"]]
 							}
 						]
 					},
@@ -874,7 +770,7 @@
 							{ "==": [{ "var": "tellUsApplying" }, "Sole-Proprietorship"] },
 							{ "!=": [{ "var": "fullNameOfApplicant" }, ""] },
 							{
-								"in": [{ "var": "TypeOfResidence" }, ["Self owned", "Family owned", "Rented"]]
+								"in": [{ "var": "typeOfResidence" }, ["Self owned", "Family owned", "Rented"]]
 							},
 							{
 								"in": [{ "var": "OfficePremises" }, ["Self owned", "Rented"]]
@@ -934,7 +830,7 @@
 								"and": [
 									{ "!=": [{ "var": "fullNameOfApplicant" }, ""] },
 									{
-										"in": [{ "var": "TypeOfResidence" }, ["Self owned", "Family owned", "Rented"]]
+										"in": [{ "var": "typeOfResidence" }, ["Self owned", "Family owned", "Rented"]]
 									},
 									{
 										"in": [{ "var": "OfficePremises" }, ["Self owned", "Rented"]]
@@ -976,7 +872,7 @@
 								"and": [
 									{ "!=": [{ "var": "fullNameOfApplicant" }, ""] },
 									{
-										"in": [{ "var": "TypeOfResidence" }, ["Self owned", "Family owned", "Rented"]]
+										"in": [{ "var": "typeOfResidence" }, ["Self owned", "Family owned", "Rented"]]
 									},
 									{
 										"in": [{ "var": "OfficePremises" }, ["Self owned", "Rented"]]
@@ -1029,7 +925,7 @@
 								"and": [
 									{ "!=": [{ "var": "fullNameOfApplicant" }, ""] },
 									{
-										"in": [{ "var": "TypeOfResidence" }, ["Self owned", "Family owned", "Rented"]]
+										"in": [{ "var": "typeOfResidence" }, ["Self owned", "Family owned", "Rented"]]
 									},
 									{
 										"in": [{ "var": "OfficePremises" }, ["Self owned", "Rented"]]
