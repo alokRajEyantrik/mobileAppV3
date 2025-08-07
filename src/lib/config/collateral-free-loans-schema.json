@@ -4,7 +4,7 @@
 	"pages": [
 		{
 			"id": "firstPage",
-			"title": "Loan Details",
+			"title": "Let's Rock!",
 			"nextButtonVisibility": { "mode": ["allRequiredAnswered"] },
 			"questions": [
 				{
@@ -123,8 +123,8 @@
 			]
 		},
 		{
-			"id": "businessPage",
-			"title": "Non-Collateral Loan Details",
+			"id": "selectionPage",
+			"title": "A few check points !",
 			"nextButtonVisibility": { "mode": ["allRequiredAnswered"] },
 			"questions": [
 				{
@@ -303,7 +303,7 @@
 		},
 		{
 			"id": "locationPage",
-			"title": "Non-Collateral Loan Details",
+			"title": "Business Location",
 			"nextButtonVisibility": { "mode": ["allRequiredAnswered"] },
 			"questions": [
 				{
@@ -316,7 +316,8 @@
 						"placeholder": "State (auto-filled from GST Number)",
 						"readonly": true
 					},
-					"question": "state",
+					"description": "state name",
+					"question": "Location for Business verification ?",
 					"required": true,
 					"showWhen": {
 						"==": [{ "var": "applicantIsNRI" }, "No"]
@@ -336,7 +337,7 @@
 					"uiMeta": {
 						"placeholder": "Select City name"
 					},
-					"question": "City name",
+					"description": "City name",
 					"required": true,
 					"showWhen": {
 						"!=": [{ "var": "residenceStateName" }, ""]
@@ -372,11 +373,6 @@
 							{ "!=": [{ "var": "residenceStateName" }, ""] },
 							{ "!=": [{ "var": "residenceCityName" }, ""] }
 						]
-					},
-					"validation": {
-						"condition": {
-							"in": [{ "var": "addressSameOrNot" }, ["Yes", "No"]]
-						}
 					}
 				},
 				{
@@ -388,15 +384,11 @@
 					"uiMeta": {
 						"placeholder": "Select a State"
 					},
+					"description": "state name",
 					"question": "Select location for your actual business",
 					"required": true,
 					"showWhen": {
 						"==": [{ "var": "addressSameOrNot" }, "No"]
-					},
-					"validation": {
-						"condition": {
-							"!=": [{ "var": "businessStateName" }, ""]
-						}
 					}
 				},
 				{
@@ -408,14 +400,18 @@
 					"uiMeta": {
 						"placeholder": "Select a City"
 					},
-					"question": "Select city for your actual business",
+					"description": "city name",
 					"required": true,
 					"showWhen": {
 						"!=": [{ "var": "businessStateName" }, ""]
 					},
+					"errorMessage": {
+						"required": true,
+						"message": "Kindly select a different city or update your earlier answer."
+					},
 					"validation": {
 						"condition": {
-							"!=": [{ "var": "businessCityName" }, ""]
+							"==": [{ "var": "businessCityName" }, { "var": "residenceCityName" }]
 						}
 					}
 				},
@@ -447,10 +443,6 @@
 							{ "!=": [{ "var": "businessState" }, ""] },
 							{ "!=": [{ "var": "businessCity" }, ""] }
 						]
-					},
-					"validation": {
-						"minItems": 1,
-						"errorMessage": "Please select at least one bank."
 					}
 				}
 			]
@@ -482,9 +474,6 @@
 					],
 					"showWhen": {
 						"!=": [{ "var": "banksOfCurrentAccount" }, ""]
-					},
-					"validation": {
-						"required": true
 					}
 				},
 				{
