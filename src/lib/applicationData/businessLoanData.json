@@ -29,13 +29,13 @@ let sampleData={
             "IDBI Bank"
         ],
         // page-3 (tellUsApplyingPage)
-        "tellUsApplying": "Individual", 
-        "businessType": "Manufacturing", 
-        "typeOfCompany": "select company name", 
-        "companyContinuouslyProfit": "Yes", 
-        "numberOfDirectorOrApplicant": null,  
-        "mortgageYear": 4, //not used yet
-        "SpecificLoanRequirement": "Yes", // not use yet
+        "tellUsApplying": "Individual", // done
+        "businessType": "Manufacturing", // done
+        "typeOfCompany": "select company name", // done
+        "companyContinuouslyProfit": "Yes", // done
+        "numberOfDirectorOrApplicant": null,  // done
+        "mortgageYear": 4, 
+        "SpecificLoanRequirement": "Yes", 
         "tableLoanEntries": [
             {
                 "loanType": "Loan Against Property",
@@ -111,22 +111,24 @@ let sampleData={
             "title": "Mr.", // not use yet
             "companyName": "eyantrik", // added this "key: value" myself  
             "dateOfIncorporation": 5,  // added this "key: value" myself  
-            "fullNameOfApplicant": "mkmfbf", 
-            "TypeOfResidence": "Self owned", 
-            "selectedAge": 33, 
+            "fullNameOfApplicant": "mkmfbf", // done
+            "typeOfResidence": "Self owned", // [changed "TypeOfResidence" to "typeOfResidence"]
+            "selectedAge": 33, // done
             "EmploymentType": "Self-employed(Businessman)",
-            "OfficePremises": "Self owned",
-            "netProfitArray": [ 
+            "OfficePremises": "Self owned", // done
+            "netProfitArray": [  // done
                 1500000,
                 1500000,
                 1500000
             ],
-            "depreciationArray": [
+            "depreciationArray": [ // done
                 1000000,
                 1000000,
                 1000000
             ],
-            "creditScore": "750-779",
+            "creditScore": "750-779", // done
+            "whyLowCredit": "select reason of why low credit score", // added this "key: value" myself  
+             "isDefaulter": "No",
             "totalEMIs": 15200,
             "totalLimit": 270000
         }
