@@ -29,6 +29,7 @@
 			| 'date'
 			| 'number'
 			| 'derivedSelect'
+			| 'dynamicSelect'
 			| 'multiple-select';
 		question: string;
 		bindsTo?: string;
@@ -393,7 +394,7 @@
             required={question.required ?? false}
             disabled={question.uiMeta?.readonly ?? false}
           />
-        {:else if question.type === 'derivedSelect'}
+        {:else if question.type === 'derivedSelect' || question.type === 'dynamicSelect'}
           <DerivedSelect
             id={question.id}
             label={question.question}
