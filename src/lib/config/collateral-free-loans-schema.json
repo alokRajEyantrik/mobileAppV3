@@ -323,7 +323,7 @@
 					},
 					"validation": {
 						"condition": {
-							"!=": [{ "var": "residenceStateName" }, ""]
+							"in": [{ "var": "residenceStateName" }, ""]
 						}
 					}
 				},
@@ -343,7 +343,7 @@
 					},
 					"validation": {
 						"condition": {
-							"!=": [{ "var": "residenceCityName" }, ""]
+							"in": [{ "var": "residenceCityName" }, ""]
 						}
 					}
 				},
@@ -372,12 +372,8 @@
 							{ "!=": [{ "var": "residenceStateName" }, ""] },
 							{ "!=": [{ "var": "residenceCityName" }, ""] }
 						]
-					},
-					"validation": {
-						"condition": {
-							"in": [{ "var": "addressSameOrNot" }, ["Yes", "No"]]
-						}
 					}
+					
 				},
 				{
 					"id": "q4_businessStateName",
