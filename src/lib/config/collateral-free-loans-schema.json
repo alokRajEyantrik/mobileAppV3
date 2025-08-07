@@ -1,0 +1,989 @@
+{
+	"formId": "loanForm_v1",
+	"title": "Loan Application",
+	"pages": [
+		{
+			"id": "firstPage",
+			"title": "Loan Details",
+			"nextButtonVisibility": { "mode": ["allRequiredAnswered"] },
+			"questions": [
+				{
+					"id": "q1_loanName",
+					"bindsTo_template": "loanName",
+					"contextKey": "loanName",
+					"type": "radio",
+					"uiGroup": "loan_details",
+					"required": true,
+					"question": "What are you looking for?",
+					"description": "Get started by letting us know a little bit about what you need",
+					"options": [
+						{
+							"label": "Home Loan",
+							"value": "Home Loan",
+							"flagKey": { "isSecuredLoan": true, "isHomeLoan": true }
+						},
+						{
+							"label": "Plot Loan",
+							"value": "Plot Loan",
+							"flagKey": { "isSecuredLoan": true, "isPlotLoan": true }
+						},
+						{
+							"label": "Loan Against Property (LAP)",
+							"value": "Loan Against Property",
+							"flagKey": { "isSecuredLoan": true, "isLAP": true }
+						},
+						{
+							"label": "Business Loan",
+							"value": "Business Loan",
+							"flagKey": { "isUnsecuredLoan": true, "isBusinessLoan": true }
+						},
+						{
+							"label": "Professional Loan",
+							"value": "Professional Loan",
+							"flagKey": { "isUnsecuredLoan": true, "isProfessionalLoan": true }
+						},
+						{
+							"label": "Personal Loan",
+							"value": "Personal Loan",
+							"flagKey": { "isUnsecuredLoan": true, "isPersonalLoan": true }
+						}
+					]
+				},
+				{
+					"id": "q2_unSecureLoanType",
+					"bindsTo_template": "unSecureLoanType",
+					"contextKey": "unSecureLoanType",
+					"type": "radio",
+					"uiGroup": "loan_details",
+					"required": true,
+					"question": "Select the form in which you want to avail this unsecured loan.",
+					"description": "This helps us identify the most suitable loan structure for you. For details, check our Drop-line Overdraft (DOD) Page.",
+					"options": [
+						{ "label": { "var": "q1_loanName" }, "value": { "var": "q1_loanName" } },
+						{ "label": "Drop-line Overdraft (DOD)", "value": "Drop-line OverDraft (DOD)" }
+					],
+					"showWhen": {
+						"in": [{ "var": "loanName" }, ["Personal Loan", "Professional Loan", "Business Loan"]]
+					}
+				},
+				{
+					"id": "q3_existingLoan",
+					"bindsTo_template": "existingLoan",
+					"contextKey": "existingLoan",
+					"type": "radio",
+					"uiGroup": "loan_details",
+					"required": true,
+					"question": "Do you have any existing obligations?",
+					"description": "This includes all types of loans and credit limits you may have, such as personal loans, home loans, car loans, credit card loans (excluding monthly dues), gold loans, consumer durable loans, DODs, CCs, ODs, and any other ongoing liabilities.",
+					"options": [
+						{
+							"label": "Yes",
+							"value": "Yes",
+							"flagKey": { "isObligation": true }
+						},
+						{ "label": "No", "value": "No", "flagKey": { "isObligation": false } }
+					],
+					"showWhen": {
+						"in": [
+							{ "var": "unSecureLoanType" },
+							["Personal Loan", "Professional Loan", "Business Loan", "Drop-line OverDraft (DOD)"]
+						]
+					}
+				},
+				{
+					"id": "q4_loanType",
+					"bindsTo_template": "loanType",
+					"contextKey": "loanType",
+					"type": "radio",
+					"uiGroup": "loan_details",
+					"required": true,
+					"question": "How you'd like to proceed with your loan?",
+					"description": "Tell us if you’re applying for a fresh loan or want to consolidate your current loans—fully or partially—with or without extra borrowing. If you only want debt consolidation, you can enter zero as the additional funds, later.",
+					"options": [
+						{ "label": "Start Fresh with New Loan", "value": "Start Fresh with New Loan" },
+						{
+							"label": "Debt Consolidation with Extra Funds",
+							"value": "Debt Consolidation with Extra Funds"
+						}
+					],
+					"showWhen": {
+						"and": [
+							{
+								"in": [
+									{ "var": "unSecureLoanType" },
+									["Personal Loan", "Professional Loan", "Business Loan"]
+								]
+							},
+							{
+								"==": [{ "var": "existingLoan" }, "Yes"]
+							}
+						]
+					}
+				}
+			]
+		},
+		{
+			"id": "businessPage",
+			"title": "Non-Collateral Loan Details",
+			"nextButtonVisibility": { "mode": ["allRequiredAnswered"] },
+			"questions": [
+				{
+					"id": "q1_ITRAvailable",
+					"bindsTo_template": "ITRAvailable",
+					"contextKey": "ITRAvailable",
+					"type": "radio",
+					"uiGroup": "loan_details",
+					"required": true,
+					"question": "Have you filed Income Tax Returns (ITRs) for the last 3 financial years?",
+					"options": [
+						{
+							"label": "Yes",
+							"value": "Yes",
+							"flagKey": { "isITRAvailable": true }
+						},
+						{
+							"label": "No",
+							"value": "No",
+							"flagKey": { "isITRAvailable": false }
+						}
+					],
+					"showWhen": {
+						"in": [{ "var": "unSecureLoanType" }, ["Business Loan", "Professional Loan"]]
+					},
+					"errorMessage": {
+						"required": true,
+						"message": "We regret to inform you that we are unable to process your request at this time due to the following reasons: ITR for last 3 years not available."
+					},
+					"validation": {
+						"condition": {
+							"!=": [{ "var": "ITRAvailable" }, "Yes"]
+						}
+					}
+				},
+				{
+					"id": "q2_haveCurrentAccount",
+					"bindsTo_template": "haveCurrentAccount",
+					"contextKey": "haveCurrentAccount",
+					"type": "radio",
+					"uiGroup": "loan_details",
+					"required": true,
+					"question": "Do you have Current, OD, or CC accounts in any bank with a total active history of 3 years or more?",
+					"options": [
+						{
+							"label": "Yes",
+							"value": "Yes",
+							"flagKey": { "haveCurrentAccount": true }
+						},
+						{
+							"label": "No",
+							"value": "No",
+							"flagKey": { "haveCurrentAccount": false }
+						}
+					],
+					"showWhen": {
+						"and": [
+							{ "!=": [{ "var": "ITRAvailable" }, ""] },
+							{ "==": [{ "var": "ITRAvailable" }, "Yes"] }
+						]
+					},
+					"errorMessage": {
+						"required": true,
+						"message": "We regret to inform you that we are unable to process your request at this time due to the following reasons: You do not have a current Account, Overdraft (OD), or Cash Credit (CC)."
+					},
+					"validation": {
+						"condition": {
+							"!=": [{ "var": "haveCurrentAccount" }, "Yes"]
+						}
+					}
+				},
+				{
+					"id": "q3_gstRegistration",
+					"bindsTo_template": "gstRegistration",
+					"contextKey": "gstRegistration",
+					"type": "radio",
+					"uiGroup": "loan_details",
+					"required": true,
+					"question": "Is the GST registration with the current account three years old?",
+					"options": [
+						{
+							"label": "Yes",
+							"value": "Yes",
+							"flagKey": { "isGstRegistration": true }
+						},
+						{
+							"label": "No",
+							"value": "No",
+							"flagKey": { "isGstRegistration": false }
+						}
+					],
+					"showWhen": {
+						"and": [
+							{ "!=": [{ "var": "haveCurrentAccount" }, ""] },
+							{ "==": [{ "var": "haveCurrentAccount" }, "Yes"] }
+						]
+					},
+					"errorMessage": {
+						"required": true,
+						"message": "We regret to inform you that we are unable to process you request at this time due to the following reasons: GST registration with current account not three year old."
+					},
+					"validation": {
+						"condition": {
+							"!=": [{ "var": "gstRegistration" }, "Yes"]
+						}
+					}
+				},
+				{
+					"id": "q4_GSTNumber",
+					"bindsTo_template": "GSTNumber",
+					"contextKey": "GSTNumber",
+					"type": "text",
+					"uiGroup": "text_fields",
+					"uiMeta": {
+						"placeholder": "Enter your GST Number"
+					},
+					"required": true,
+					"question": "Please enter your GST Number?",
+					"showWhen": {
+						"and": [
+							{ "!=": [{ "var": "gstRegistration" }, ""] },
+							{ "==": [{ "var": "gstRegistration" }, "Yes"] }
+						]
+					},
+					"errorMessage": {
+						"required": "GST Number is required",
+						"lengthError": "GST Number must be exactly 15 characters long.",
+						"message": "We regret to inform you that we are unable to process your request at this time due to the following reasons: GST registration with current account not three years old.",
+						"stateNotServed": "We're not serve their"
+					},
+					"validation": {
+						"condition": {
+							"or": [
+								{ "==": [{ "var": "GSTNumber" }, ""] },
+								{ "!=": [{ "var": "GSTNumber.length" }, 15] }
+							]
+						},
+						"message": "validateGSTState"
+					}
+				},
+				{
+					"id": "q5_applicantIsNRI",
+					"bindsTo_template": "applicantIsNRI",
+					"contextKey": "applicantIsNRI",
+					"type": "radio",
+					"uiGroup": "loan_details",
+					"required": true,
+					"question": "If applicant or any of the co-applicants is NRI?",
+					"options": [
+						{
+							"label": "Yes",
+							"value": "Yes",
+							"flagKey": { "applicantIsNRI": true }
+						},
+						{
+							"label": "No",
+							"value": "No",
+							"flagKey": { "applicantIsNRI": false }
+						}
+					],
+					"showWhen": {
+						"!=": [{ "var": "GSTNumber" }, ""]
+					},
+					"errorMessage": {
+						"required": true,
+						"message": "We regret to inform you that we are unable to process your request at this time due to the following reasons: Applicant is an NRI."
+					},
+					"validation": {
+						"condition": {
+							"==": [{ "var": "applicantIsNRI" }, "Yes"]
+						},
+						"message": "validateisNRI"
+					}
+				}
+			]
+		},
+		{
+			"id": "locationPage",
+			"title": "Non-Collateral Loan Details",
+			"nextButtonVisibility": { "mode": ["allRequiredAnswered"] },
+			"questions": [
+				{
+					"id": "q1_residenceStateName",
+					"bindsTo_template": "residenceStateName",
+					"contextKey": "residenceStateName",
+					"type": "select",
+					"uiGroup": "select_fields",
+					"uiMeta": {
+						"placeholder": "State (auto-filled from GST Number)",
+						"readonly": true
+					},
+					"question": "state",
+					"required": true,
+					"showWhen": {
+						"==": [{ "var": "applicantIsNRI" }, "No"]
+					},
+					"validation": {
+						"condition": {
+							"!=": [{ "var": "residenceStateName" }, ""]
+						}
+					}
+				},
+				{
+					"id": "q2_residenceCityName",
+					"bindsTo_template": "residenceCityName",
+					"contextKey": "residenceCityName",
+					"type": "dynamicSelect",
+					"uiGroup": "select_fields",
+					"uiMeta": {
+						"placeholder": "Select City name"
+					},
+					"question": "City name",
+					"required": true,
+					"showWhen": {
+						"!=": [{ "var": "residenceStateName" }, ""]
+					},
+					"validation": {
+						"condition": {
+							"!=": [{ "var": "residenceCityName" }, ""]
+						}
+					}
+				},
+				{
+					"id": "q3_addressSameOrNot",
+					"bindsTo_template": "addressSameOrNot",
+					"contextKey": "addressSameOrNot",
+					"type": "radio",
+					"uiGroup": "loan_details",
+					"required": true,
+					"question": "Is your GST registered address the same as your actual business address?",
+					"options": [
+						{
+							"label": "Yes",
+							"value": "Yes",
+							"flagKey": { "isAddressSame": true }
+						},
+						{
+							"label": "No",
+							"value": "No",
+							"flagKey": { "isAddressSame": false }
+						}
+					],
+					"showWhen": {
+						"and": [
+							{ "!=": [{ "var": "residenceStateName" }, ""] },
+							{ "!=": [{ "var": "residenceCityName" }, ""] }
+						]
+					},
+					"validation": {
+						"condition": {
+							"in": [{ "var": "addressSameOrNot" }, ["Yes", "No"]]
+						}
+					}
+				},
+				{
+					"id": "q4_businessStateName",
+					"bindsTo_template": "businessStateName",
+					"contextKey": "businessStateName",
+					"type": "select",
+					"uiGroup": "select_fields",
+					"uiMeta": {
+						"placeholder": "Select a State"
+					},
+					"question": "Select location for your actual business",
+					"required": true,
+					"showWhen": {
+						"==": [{ "var": "addressSameOrNot" }, "No"]
+					},
+					"validation": {
+						"condition": {
+							"!=": [{ "var": "businessStateName" }, ""]
+						}
+					}
+				},
+				{
+					"id": "q5_businessCityName",
+					"bindsTo_template": "businessCityName",
+					"contextKey": "businessCityName",
+					"type": "dynamicSelect",
+					"uiGroup": "select_fields",
+					"uiMeta": {
+						"placeholder": "Select a City"
+					},
+					"question": "Select city for your actual business",
+					"required": true,
+					"showWhen": {
+						"!=": [{ "var": "businessStateName" }, ""]
+					},
+					"validation": {
+						"condition": {
+							"!=": [{ "var": "businessCityName" }, ""]
+						}
+					}
+				},
+				{
+					"id": "q6_banksOfCurrentAccount",
+					"bindsTo_template": "banksOfCurrentAccount",
+					"contextKey": "banksOfCurrentAccount",
+					"type": "checkbox",
+					"uiGroup": "checkbox_fields",
+					"uiMeta": {
+						"placeholder": "Select banks"
+					},
+					"required": true,
+					"question": "Which of these banks have you used for a Current Account, Overdraft (OD), or Cash Credit (CC)?",
+					"description": "Select the banks which you use to receive the payments from your customers. Bank statements of these will verify your business income and cash flow.",
+					"options": [
+						{ "label": "HDFC Bank", "value": "HDFC Bank" },
+						{ "label": "SBI Bank", "value": "SBI Bank" },
+						{ "label": "Axis Bank", "value": "Axis Bank" },
+						{ "label": "ICICI Bank", "value": "ICICI Bank" },
+						{ "label": "Canara Bank", "value": "Canara Bank" },
+						{ "label": "Bank of Baroda", "value": "Bank of Baroda" },
+						{ "label": "Citi Bank", "value": "Citi Bank" },
+						{ "label": "Union Bank", "value": "Union Bank" }
+					],
+					"showWhen": {
+						"and": [
+							{ "in": [{ "var": "addressSameOrNot" }, ["Yes", "No"]] },
+							{ "!=": [{ "var": "businessState" }, ""] },
+							{ "!=": [{ "var": "businessCity" }, ""] }
+						]
+					},
+					"validation": {
+						"minItems": 1,
+						"errorMessage": "Please select at least one bank."
+					}
+				}
+			]
+		},
+		{
+			"id": "applicantPage",
+			"title": "Applicant Type",
+			"nextButtonVisibility": { "mode": ["allRequiredAnswered"] },
+			"questions": [
+				{
+					"id": "q1_tellUsApplying",
+					"bindsTo_template": "tellUsApplying",
+					"contextKey": "tellUsApplying",
+					"type": "radio",
+					"uiGroup": "loan_details",
+					"required": true,
+					"question": "Tell us who's applying",
+					"options": [
+						{
+							"label": "Sole-Proprietorship",
+							"value": "Sole-Proprietorship",
+							"flagKey": { "isIndividual": true }
+						},
+						{
+							"label": "Company (Non-individual entity)",
+							"value": "Company (Non-individual entity)",
+							"flagKey": { "isCompany": true }
+						}
+					],
+					"showWhen": {
+						"!=": [{ "var": "banksOfCurrentAccount" }, ""]
+					},
+					"validation": {
+						"required": true
+					}
+				},
+				{
+					"id": "q2_businessType",
+					"bindsTo_template": "businessType",
+					"contextKey": "businessType",
+					"type": "radio",
+					"uiGroup": "loan_details",
+					"required": true,
+					"question": "Please specify the type of Business.",
+					"description": "Lenders evaluate loan applications differently based on the business type selected. If you choose Manufacturing, a CA-audited stock report will be required. However, if your manufacturing is done on a job work basis (i.e., no stock is maintained), please select Service industry instead. Kindly choose the option that best describes your business.",
+					"options": [
+						{
+							"label": "Manufacturing",
+							"value": "Manufacturing",
+							"flagKey": { "isManufacturing": true }
+						},
+						{
+							"label": "Service industry",
+							"value": "Service industry",
+							"flagKey": { "isServiceIndustry": true }
+						},
+						{
+							"label": "Retail",
+							"value": "Retail",
+							"flagKey": { "isRetail": true }
+						},
+						{
+							"label": "Trading",
+							"value": "Trading",
+							"flagKey": { "isTrading": true }
+						}
+					],
+					"showWhen": {
+						"in": [
+							{ "var": "tellUsApplying" },
+							["Sole-Proprietorship", "Company (Non-individual entity)"]
+						]
+					},
+					"validation": {
+						"required": true
+					}
+				},
+				{
+					"id": "q3_typeOfCompany",
+					"bindsTo_template": "typeOfCompany",
+					"contextKey": "typeOfCompany",
+					"type": "select",
+					"uiGroup": "selectButton",
+					"uiMeta": {
+						"placeholder": "Select company type"
+					},
+					"required": true,
+					"question": "What's company type?",
+					"options": [
+						{
+							"label": "One Person Company (OPC)",
+							"value": "One Person Company (OPC)",
+							"flagKey": { "isCompanyTypeOPC": true }
+						},
+						{
+							"label": "Partnership firm",
+							"value": "Partnership firm",
+							"flagKey": { "isCompanyTypePartnership": false }
+						},
+						{
+							"label": "Limited Liability Partnership (LLP)",
+							"value": "Limited Liability Partnership (LLP)",
+							"flagKey": { "isCompanyTypeLLP": false }
+						},
+						{
+							"label": "Private Limited Company (Pvt. Ltd.)",
+							"value": "Private Limited Company (Pvt. Ltd.)",
+							"flagKey": { "isCompanyTypePrivate": false }
+						}
+					],
+					"showWhen": {
+						"and": [
+							{ "==": [{ "var": "tellUsApplying" }, "Company (Non-individual entity)"] },
+							{
+								"in": [
+									{ "var": "businessType" },
+									["Manufacturing", "Service industry", "Retail", "Trading"]
+								]
+							}
+						]
+					},
+					"validation": {
+						"required": true
+					}
+				},
+				{
+					"id": "q4_companyContinuouslyProfit",
+					"bindsTo_template": "companyContinuouslyProfit",
+					"contextKey": "companyContinuouslyProfit",
+					"type": "radio",
+					"uiGroup": "loan_details",
+					"required": true,
+					"question": "If the company is continuously in profit for last three financial years?",
+					"options": [
+						{
+							"label": "Yes",
+							"value": "Yes",
+							"flagKey": { "isCompanyProfit": true }
+						},
+						{
+							"label": "No",
+							"value": "No",
+							"flagKey": { "isCompanyProfit": false }
+						}
+					],
+					"showWhen": {
+						"or": [
+							{
+								"and": [
+									{ "==": [{ "var": "tellUsApplying" }, "Sole-Proprietorship"] },
+									{
+										"in": [
+											{ "var": "businessType" },
+											["Manufacturing", "Service industry", "Retail", "Trading"]
+										]
+									}
+								]
+							},
+							{
+								"and": [
+									{ "==": [{ "var": "tellUsApplying" }, "Company (Non-individual entity)"] },
+									{ "!=": [{ "var": "typeOfCompany" }, ""] },
+									{
+										"in": [
+											{ "var": "businessType" },
+											["Manufacturing", "Service industry", "Retail", "Trading"]
+										]
+									}
+								]
+							}
+						]
+					},
+					"validation": {
+						"required": true
+					}
+				},
+				{
+					"id": "q5_numberOfDirectorOrApplicant",
+					"bindsTo_template": "numberOfDirectorOrApplicant",
+					"contextKey": "numberOfDirectorOrApplicant",
+					"type": "text",
+					"uiGroup": "text_fields",
+					"uiMeta": {
+						"placeholder": "Enter the number"
+					},
+					"required": true,
+					"question": "How many Directors/Partners are there in the company?",
+					"description": "As the property is being purchased in the name of the company, it will be the primary applicant and all the Directors/Partners will be co-applicants on the loan.",
+					"showWhen": {
+						"and": [
+							{ "==": [{ "var": "tellUsApplying" }, "Company (Non-individual entity)"] },
+							{
+								"in": [
+									{ "var": "businessType" },
+									["Manufacturing", "Service industry", "Retail", "Trading"]
+								]
+							},
+							{
+								"in": [
+									{ "var": "typeOfCompany" },
+									[
+										"Partnership firm",
+										"Limited Liability Partnership (LLP)",
+										"Private Limited Company (Pvt. Ltd.)"
+									]
+								]
+							},
+							{ "in": [{ "var": "companyContinuouslyProfit" }, ["Yes", "No"]] }
+						]
+					},
+					"validation": {
+						"required": true,
+						"condition": {
+							"or": [
+								{ "==": [{ "var": "numberOfDirectorOrApplicant" }, ""] },
+								{ "<": [{ "var": "numberOfDirectorOrApplicant" }, 2] }
+							]
+						},
+						"message": "Enter a number greater than one."
+					}
+				}
+			]
+		},
+		{
+			"id": "basicInfoPage",
+			"title": "Income and Obligations",
+			"nextButtonVisibility": { "mode": ["allRequiredAnswered"] },
+			"questions": [
+				{
+					"id": "q1_fullNameOfApplicant",
+					"bindsTo_template": "fullNameOfApplicant",
+					"contextKey": "fullNameOfApplicant",
+					"type": "text",
+					"uiGroup": "text_fields",
+					"uiMeta": {
+						"placeholder": "Enter full name"
+					},
+					"required": true,
+					"question": "What's the full name of the Applicant?",
+					"description": "How it appears on PAN, Passport, Aadhaar or Driving license",
+					"showWhen": {
+						"==": [{ "var": "tellUsApplying" }, "Sole-Proprietorship"]
+					},
+					"validation": {
+						"required": true
+					}
+				},
+				{
+					"id": "q1_companyName",
+					"bindsTo_template": "companyName",
+					"contextKey": "companyName",
+					"type": "text",
+					"uiGroup": "text_fields",
+					"uiMeta": {
+						"placeholder": "Enter full name"
+					},
+					"required": true,
+					"question": "What's the company name?",
+					"description": "How it appears on company PAN",
+					"showWhen": {
+						"==": [{ "var": "tellUsApplying" }, "Company (Non-individual entity)"]
+					},
+					"validation": {
+						"required": true
+					}
+				},
+				{
+					"id": "q2_TypeOfResidence",
+					"bindsTo_template": "TypeOfResidence",
+					"contextKey": "TypeOfResidence",
+					"type": "select",
+					"uiGroup": "selectButton",
+					"uiMeta": {
+						"placeholder": "Select residence type"
+					},
+					"required": true,
+					"question": "Please select type of residence",
+					"description": "Having your own home or a family-owned residence strengthens your loan application, making it more attractive to lenders",
+					"options": [
+						{
+							"label": "Self owned",
+							"value": "Self owned",
+							"flagKey": { "isSelfOwned": true }
+						},
+						{
+							"label": "Family owned",
+							"value": "Family owned",
+							"flagKey": { "isFamilyOwned": false }
+						},
+						{
+							"label": "Rented",
+							"value": "Rented",
+							"flagKey": { "isRented": false }
+						}
+					],
+					"showWhen": {
+						"and": [
+							{ "==": [{ "var": "tellUsApplying" }, "Sole-Proprietorship"] },
+							{ "!=": [{ "var": "fullNameOfApplicant" }, ""] }
+						]
+					},
+					"validation": {
+						"required": true
+					}
+				},
+				{
+					"id": "q3_OfficePremises",
+					"bindsTo_template": "OfficePremises",
+					"contextKey": "OfficePremises",
+					"type": "select",
+					"uiGroup": "selectButton",
+					"uiMeta": {
+						"placeholder": "Select office premises"
+					},
+					"required": true,
+					"question": "And what about office premises?",
+					"options": [
+						{
+							"label": "Self owned",
+							"value": "Self owned",
+							"flagKey": { "isSelfOwnedOffice": true }
+						},
+						{
+							"label": "Rented",
+							"value": "Rented",
+							"flagKey": { "isRentedOffice": false }
+						}
+					],
+					"showWhen": {
+						"and": [
+							{ "==": [{ "var": "tellUsApplying" }, "Sole-Proprietorship"] },
+							{ "!=": [{ "var": "fullNameOfApplicant" }, ""] },
+							{
+								"in": [{ "var": "TypeOfResidence" }, ["Self owned", "Family owned", "Rented"]]
+							}
+						]
+					},
+					"validation": {
+						"required": true
+					}
+				},
+				{
+					"id": "q4_selectedAge",
+					"bindsTo_template": "selectedAge",
+					"contextKey": "selectedAge",
+					"type": "select",
+					"uiGroup": "selectButton",
+					"uiMeta": {
+						"placeholder": "Select Age"
+					},
+					"required": true,
+					"question": "What is the current age? (Select completed years only)",
+					"options": [
+						{ "label": "19", "value": "19" },
+						{ "label": "20", "value": "20" }
+					],
+					"showWhen": {
+						"and": [
+							{ "==": [{ "var": "tellUsApplying" }, "Sole-Proprietorship"] },
+							{ "!=": [{ "var": "fullNameOfApplicant" }, ""] },
+							{
+								"in": [{ "var": "TypeOfResidence" }, ["Self owned", "Family owned", "Rented"]]
+							},
+							{
+								"in": [{ "var": "OfficePremises" }, ["Self owned", "Rented"]]
+							}
+						]
+					},
+					"validation": {
+						"required": true
+					}
+				},
+				{
+					"id": "q4_dateOfIncorporation",
+					"bindsTo_template": "dateOfIncorporation",
+					"contextKey": "dateOfIncorporation",
+					"type": "select",
+					"uiGroup": "selectButton",
+					"uiMeta": {
+						"placeholder": "Select Age"
+					},
+					"required": true,
+					"question": "How many years has your company been in business?",
+					"options": [
+						{ "label": "3", "value": "3" },
+						{ "label": "5", "value": "5" },
+						{ "label": "10", "value": "10" }
+					],
+					"showWhen": {
+						"and": [
+							{ "==": [{ "var": "tellUsApplying" }, "Company (Non-individual entity)"] },
+							{ "!=": [{ "var": "companyName" }, ""] }
+						]
+					},
+					"validation": {
+						"required": true
+					}
+				},
+				{
+					"id": "q5_netProfitArray",
+					"bindsTo_template": "netProfitArray",
+					"contextKey": "netProfitArray",
+					"type": "number",
+					"uiGroup": "inputNumber",
+					"uiMeta": {
+						"placeholder": ["FY2023-24", "FY2022-23", "FY2021-22"]
+					},
+					"required": true,
+					"question": "What were the Net Profits for the last three financial years?",
+					"showWhen": {
+						"or": [
+							{
+								"and": [
+									{ "!=": [{ "var": "companyName" }, ""] },
+									{ "!=": [{ "var": "dateOfIncorporation" }, ""] }
+								]
+							},
+							{
+								"and": [
+									{ "!=": [{ "var": "fullNameOfApplicant" }, ""] },
+									{
+										"in": [{ "var": "TypeOfResidence" }, ["Self owned", "Family owned", "Rented"]]
+									},
+									{
+										"in": [{ "var": "OfficePremises" }, ["Self owned", "Rented"]]
+									},
+									{ "!=": [{ "var": "selectedAge" }, ""] }
+								]
+							}
+						]
+					},
+					"validation": {
+						"required": true,
+						"minItems": 3,
+						"maxLength": 12,
+						"errorMessage": "Please enter Net Profit for all 3 years"
+					}
+				},
+				{
+					"id": "q6_depreciationArray",
+					"bindsTo_template": "depreciationArray",
+					"contextKey": "depreciationArray",
+					"type": "number",
+					"uiGroup": "inputNumber",
+					"uiMeta": {
+						"placeholder": ["FY2023-24", "FY2022-23", "FY2021-22"]
+					},
+					"required": true,
+					"question": "What's the sum of 'Depreciation' and 'Interest on Loans' as per profit-loss statement?",
+					"description": "This sum will be included in your eligibility calculation, as these expenses are regarded as non-cash",
+					"showWhen": {
+						"or": [
+							{
+								"and": [
+									{ "!=": [{ "var": "companyName" }, ""] },
+									{ "!=": [{ "var": "dateOfIncorporation" }, ""] },
+									{ "!=": [{ "var": "netProfitArray" }, ""] }
+								]
+							},
+							{
+								"and": [
+									{ "!=": [{ "var": "fullNameOfApplicant" }, ""] },
+									{
+										"in": [{ "var": "TypeOfResidence" }, ["Self owned", "Family owned", "Rented"]]
+									},
+									{
+										"in": [{ "var": "OfficePremises" }, ["Self owned", "Rented"]]
+									},
+									{ "!=": [{ "var": "selectedAge" }, ""] },
+									{ "!=": [{ "var": "netProfitArray" }, ""] }
+								]
+							}
+						]
+					},
+					"validation": {
+						"required": true,
+						"minItems": 3,
+						"maxLength": 12,
+						"errorMessage": "Please enter 'sum of Depreciation' or 'Interest on Loans' for all 3 years"
+					}
+				},
+				{
+					"id": "q7_creditScore",
+					"bindsTo_template": "creditScore",
+					"contextKey": "creditScore",
+					"type": "select",
+					"uiGroup": "selectButton",
+					"uiMeta": {
+						"placeholder": "Select credit score"
+					},
+					"required": true,
+					"question": "What's the Credit Score?",
+					"description": "The credit score is a crucial factor that lenders consider to determine your creditworthiness A higher credit score is essential for securing more favorable loan terms and interest rates, directly influencing loan eligibility and approval.",
+					"options": [
+						{ "label": "No CIBIL", "value": "No CIBIL" },
+						{ "label": "650-699", "value": "650-699" },
+						{ "label": "700-729", "value": "700-729" },
+						{ "label": "730-749", "value": "730-749" },
+						{ "label": "750-779", "value": "750-779" },
+						{ "label": "780-799", "value": "780-799" },
+						{ "label": "more than 800", "value": "more than 800" }
+					],
+					"showWhen": {
+						"or": [
+							{
+								"and": [
+									{ "!=": [{ "var": "companyName" }, ""] },
+									{ "!=": [{ "var": "dateOfIncorporation" }, ""] },
+									{ "!=": [{ "var": "netProfitArray" }, ""] },
+									{ "!=": [{ "var": "depreciationArray" }, ""] }
+								]
+							},
+							{
+								"and": [
+									{ "!=": [{ "var": "fullNameOfApplicant" }, ""] },
+									{
+										"in": [{ "var": "TypeOfResidence" }, ["Self owned", "Family owned", "Rented"]]
+									},
+									{
+										"in": [{ "var": "OfficePremises" }, ["Self owned", "Rented"]]
+									},
+									{ "!=": [{ "var": "selectedAge" }, ""] },
+									{ "!=": [{ "var": "netProfitArray" }, ""] },
+									{ "!=": [{ "var": "depreciationArray" }, ""] }
+								]
+							}
+						]
+					},
+					"validation": {
+						"required": true
+					}
+				}
+			]
+		}
+	]
+}

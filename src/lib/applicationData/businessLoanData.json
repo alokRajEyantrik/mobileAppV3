@@ -1,0 +1,285 @@
+let sampleData={
+    "loanTransaction": {
+        "loanName": "Business Loan", // [changed "LoanName" to "loanName"]  //done
+        "loanType": "New Loan", // [changed "LoanType" to "loanType"] // used
+        "unSecureLoanType": "Business Loan", // done
+        "existingLoan": "Yes, in the form of loans", // done
+        // page-2 (selection)
+        "ITRAvailable": "Yes",  // done
+        "haveCurrentAccount": "Yes",  // done
+        "gstRegistration": "Yes",   // done
+        "GSTNumber": "27ABCDE1234F1Z5", // [changed "gstNumber" to "GSTNumber"]  // done 
+        "applicantIsNRI": "No",   // [changed "ApplicantIsNRI" to "applicantIsNRI"] // done
+         // page-3 (residenceLocationPage)
+        "residenceStateName": "Andhra Pradesh", // done
+        "residenceCityName": "Guntur", // done
+        "addressSameOrNot": "Yes",  // done
+        "businessStateName": "Andhra Pradesh", // done
+        "businessCityName": "Guntur", // done
+        "banksOfCurrentAccount": [  // done
+            "HDFC Bank",
+            "State Bank of India",
+            "ICICI Bank",
+            "Axis Bank",
+            "Central Bank of India",
+            "Bank of Maharashtra",
+            "Bank of Baroda",
+            "Bank of India",
+            "Canara Bank",
+            "IDBI Bank"
+        ],
+        // page-3 (tellUsApplyingPage)
+        "tellUsApplying": "Individual", 
+        "businessType": "Manufacturing", 
+        "typeOfCompany": "select company name", 
+        "companyContinuouslyProfit": "Yes", 
+        "numberOfDirectorOrApplicant": null,  
+        "mortgageYear": 4, //not used yet
+        "SpecificLoanRequirement": "Yes", // not use yet
+        "tableLoanEntries": [
+            {
+                "loanType": "Loan Against Property",
+                "bankName": "Dhanlaxmi Bank",
+                "selectedToClose": "Keep Running",
+                "emi": "1200",
+                "emiFormatted": "1,200",
+                "totalLimit": "",
+                "totalLimitFormatted": "",
+                "tenure": "8",
+                "interestRate": "21",
+                "remainingLimit": "",
+                "remainingLimitFormatted": "",
+                "remainingTenure": "",
+                "utilizedAmountFormatted": "",
+                "utilizedAmount": ""
+            },
+            {
+                "loanType": "Business Loan - Unsecured",
+                "bankName": "Bank of Baroda",
+                "selectedToClose": "Keep Running",
+                "emi": "14000",
+                "emiFormatted": "14,000",
+                "totalLimit": "",
+                "totalLimitFormatted": "",
+                "tenure": "8",
+                "interestRate": "8",
+                "remainingLimit": "",
+                "remainingLimitFormatted": "",
+                "remainingTenure": "",
+                "utilizedAmountFormatted": "",
+                "utilizedAmount": ""
+            }
+        ], // not use yet
+        "tableLimitEntries": [
+            {
+                "loanType": "OD Limit",
+                "bankName": "Canara Bank",
+                "selectedToClose": "Keep Running",
+                "emi": "",
+                "emiFormatted": "",
+                "totalLimit": "130000",
+                "totalLimitFormatted": "1,30,000",
+                "tenure": "12",
+                "interestRate": "8",
+                "remainingLimit": "",
+                "remainingLimitFormatted": "",
+                "remainingTenure": "",
+                "utilizedAmountFormatted": "",
+                "utilizedAmount": ""
+            },
+            {
+                "loanType": "CC Limit",
+                "bankName": "Bajaj Finserv",
+                "selectedToClose": "Keep Running",
+                "emi": "",
+                "emiFormatted": "",
+                "totalLimit": "140000",
+                "totalLimitFormatted": "1,40,000",
+                "tenure": "12",
+                "interestRate": "12",
+                "remainingLimit": "",
+                "remainingLimitFormatted": "",
+                "remainingTenure": "",
+                "utilizedAmountFormatted": "",
+                "utilizedAmount": ""
+            }
+        ], // not use yet
+         "RequiredLoanAmount":3000000, // not use yet
+    },
+    "allApplicantDetails": [
+        {
+            "title": "Mr.", // not use yet
+            "companyName": "eyantrik", // added this "key: value" myself  
+            "dateOfIncorporation": 5,  // added this "key: value" myself  
+            "fullNameOfApplicant": "mkmfbf", 
+            "TypeOfResidence": "Self owned", 
+            "selectedAge": 33, 
+            "EmploymentType": "Self-employed(Businessman)",
+            "OfficePremises": "Self owned",
+            "netProfitArray": [ 
+                1500000,
+                1500000,
+                1500000
+            ],
+            "depreciationArray": [
+                1000000,
+                1000000,
+                1000000
+            ],
+            "creditScore": "750-779",
+            "totalEMIs": 15200,
+            "totalLimit": 270000
+        }
+    ]
+}
+
+let sampleData_bt = {
+    "loanTransaction": {
+        "LoanName": "Business Loan",
+        "LoanType": "Balance Transfer",
+        "unSecureLoanType": "Business Loan",
+        "existingLoan": "Yes, in the form of loans",
+        "ITRAvailable": "Yes",
+        "haveCurrentAccount": "Yes",
+        "gstRegistration": "Yes",
+        "gstNumber": "27ABCDE1234F1Z5",
+        "ApplicantIsNRI": "No",
+        "residenceStateName": "Andhra Pradesh",
+        "residenceCityName": "Guntur",
+        "addressSameOrNot": "Yes",
+        "businessStateName": "Andhra Pradesh",
+        "businessCityName": "Guntur",
+        "banksOfCurrentAccount": [
+            "HDFC Bank",
+            "State Bank of India",
+            "ICICI Bank",
+            "Axis Bank",
+            "Central Bank of India",
+            "Bank of Maharashtra",
+            "Bank of Baroda",
+            "Bank of India",
+            "Canara Bank",
+            "IDBI Bank",
+            "Indian Overseas Bank",
+            "Karnataka Bank"
+        ],
+        "tellUsApplying": "Individual",
+        "businessType": "Manufacturing",
+        "typeOfCompany": "select company name",
+        "companyContinuouslyProfit": "Yes",
+        "numberOfDirectorOrApplicant": null,
+        "mortgageYear": 5,
+        "LoanActivity": "No",
+        "principalOutstanding": 1722623,
+        "tableLoanEntries": [
+            {
+                "loanType": "Loan Against Property",
+                "bankName": "Bank of Maharashtra",
+                "selectedToClose": "Closed by this loan",
+                "emi": "45000",
+                "emiFormatted": "45,000",
+                "totalLimit": "",
+                "totalLimitFormatted": "",
+                "tenure": "48",
+                "interestRate": "12",
+                "remainingLimit": "",
+                "remainingLimitFormatted": "",
+                "remainingTenure": "",
+                "utilizedAmountFormatted": "",
+                "utilizedAmount": "",
+                "principalOutStanding": 1708828
+            },
+            {
+                "loanType": "Business Loan - Secured",
+                "bankName": "Federal Bank",
+                "selectedToClose": "Closed by this loan",
+                "emi": "1200",
+                "emiFormatted": "1,200",
+                "totalLimit": "",
+                "totalLimitFormatted": "",
+                "tenure": "12",
+                "interestRate": "8",
+                "remainingLimit": "",
+                "remainingLimitFormatted": "",
+                "remainingTenure": "",
+                "utilizedAmountFormatted": "",
+                "utilizedAmount": "",
+                "principalOutStanding": 13795
+            },
+            {
+                "loanType": "Loan Against Property",
+                "bankName": "Bank of India",
+                "selectedToClose": "Keep Running",
+                "emi": "12000",
+                "emiFormatted": "12,000",
+                "totalLimit": "",
+                "totalLimitFormatted": "",
+                "tenure": "8",
+                "interestRate": "12",
+                "remainingLimit": "",
+                "remainingLimitFormatted": "",
+                "remainingTenure": "",
+                "utilizedAmountFormatted": "",
+                "utilizedAmount": "",
+                "principalOutStanding": 91820
+            }
+        ],
+        "tableLimitEntries": [
+            {
+                "loanType": "OD Limit",
+                "bankName": "Dhanlaxmi Bank",
+                "selectedToClose": "Keep Running",
+                "emi": "",
+                "emiFormatted": "",
+                "totalLimit": "130000",
+                "totalLimitFormatted": "1,30,000",
+                "tenure": "8",
+                "interestRate": "12",
+                "remainingLimit": "",
+                "remainingLimitFormatted": "",
+                "remainingTenure": "",
+                "utilizedAmountFormatted": "",
+                "utilizedAmount": ""
+            },
+            {
+                "loanType": "OD Limit",
+                "bankName": "HDFC Bank",
+                "selectedToClose": "Keep Running",
+                "emi": "",
+                "emiFormatted": "",
+                "totalLimit": "123000",
+                "totalLimitFormatted": "1,23,000",
+                "tenure": "12",
+                "interestRate": "9",
+                "remainingLimit": "",
+                "remainingLimitFormatted": "",
+                "remainingTenure": "",
+                "utilizedAmountFormatted": "",
+                "utilizedAmount": ""
+            }
+        ]
+    },
+    "allApplicantDetails": [
+        {
+            "title": "Mr.",
+            "fullNameOfApplicant": "dffdfdfh",
+            "TypeOfResidence": "Self owned",
+            "selectedAge": 34,
+            "EmploymentType": "Self-employed(Businessman)",
+            "OfficePremises": "Self owned",
+            "netProfitArray": [
+                1600000,
+                1600000,
+                1600000
+            ],
+            "depreciationArray": [
+                1600000,
+                1600000,
+                1600000
+            ],
+            "creditScore": "780-799",
+            "totalEMIs": 12000,
+            "totalLimit": 253000
+        }
+    ]
+}
