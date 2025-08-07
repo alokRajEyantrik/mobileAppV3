@@ -124,7 +124,7 @@
 		},
 		{
 			"id": "collateral_free_selectionPage",
-			"title": "Non-Collateral Loan Details",
+			"title": "A few check points !",
 			"nextButtonVisibility": { "mode": ["allRequiredAnswered"] },
 			"questions": [
 				{
@@ -266,9 +266,9 @@
 					}
 				},
 				{
-					"id": "q5_applicantIsNRI",
-					"bindsTo_template": "applicantIsNRI",
-					"contextKey": "applicantIsNRI",
+					"id": "q5_isApplicantIsNRI",
+					"bindsTo_template": "ApplicantIsNRI",
+					"contextKey": "ApplicantIsNRI",
 					"type": "radio",
 					"uiGroup": "loan_details",
 					"required": true,
@@ -277,16 +277,19 @@
 						{
 							"label": "Yes",
 							"value": "Yes",
-							"flagKey": { "applicantIsNRI": true }
+							"flagKey": { "isApplicantIsNRI": true }
 						},
 						{
 							"label": "No",
 							"value": "No",
-							"flagKey": { "applicantIsNRI": false }
+							"flagKey": { "isApplicantIsNRI": false }
 						}
 					],
 					"showWhen": {
-						"!=": [{ "var": "GSTNumber" }, ""]
+						"and": [
+							{ "!=": [{ "var": "GSTNumber" }, ""] },
+							{ "or": [{ "var": "loanName" }, ["Professional Loan", "Business Loan"]] }
+						]
 					},
 					"errorMessage": {
 						"required": true,
@@ -294,7 +297,7 @@
 					},
 					"validation": {
 						"condition": {
-							"==": [{ "var": "applicantIsNRI" }, "Yes"]
+							"==": [{ "var": "ApplicantIsNRI" }, "Yes"]
 						},
 						"message": "validateisNRI"
 					}
@@ -387,7 +390,7 @@
 						}
 					],
 					"showWhen": {
-						"in": [{ "var": "unSecureLoanType" }, ["Personal Loan"]]
+						"in": [{ "var": "loanName" }, ["Personal Loan"]]
 					},
 					"errorMessage": {
 						"required": true,
@@ -474,7 +477,6 @@
 							{ "!=": [{ "var": "residenceCityName" }, ""] }
 						]
 					}
-					
 				},
 				{
 					"id": "q4_businessStateName",
