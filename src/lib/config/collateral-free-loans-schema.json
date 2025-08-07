@@ -5,7 +5,11 @@
 		{
 			"id": "firstPage",
 			"title": "Let's Rock!",
-			"nextButtonVisibility": { "mode": ["allRequiredAnswered"] },
+			"nextButtonVisibility": {
+				"mode": [
+					"allRequiredAnswered"
+				]
+			},
 			"questions": [
 				{
 					"id": "q1_loanName",
@@ -20,32 +24,50 @@
 						{
 							"label": "Home Loan",
 							"value": "Home Loan",
-							"flagKey": { "isSecuredLoan": true, "isHomeLoan": true }
+							"flagKey": {
+								"isSecuredLoan": true,
+								"isHomeLoan": true
+							}
 						},
 						{
 							"label": "Plot Loan",
 							"value": "Plot Loan",
-							"flagKey": { "isSecuredLoan": true, "isPlotLoan": true }
+							"flagKey": {
+								"isSecuredLoan": true,
+								"isPlotLoan": true
+							}
 						},
 						{
 							"label": "Loan Against Property (LAP)",
 							"value": "Loan Against Property",
-							"flagKey": { "isSecuredLoan": true, "isLAP": true }
+							"flagKey": {
+								"isSecuredLoan": true,
+								"isLAP": true
+							}
 						},
 						{
 							"label": "Business Loan",
 							"value": "Business Loan",
-							"flagKey": { "isUnsecuredLoan": true, "isBusinessLoan": true }
+							"flagKey": {
+								"isUnsecuredLoan": true,
+								"isBusinessLoan": true
+							}
 						},
 						{
 							"label": "Professional Loan",
 							"value": "Professional Loan",
-							"flagKey": { "isUnsecuredLoan": true, "isProfessionalLoan": true }
+							"flagKey": {
+								"isUnsecuredLoan": true,
+								"isProfessionalLoan": true
+							}
 						},
 						{
 							"label": "Personal Loan",
 							"value": "Personal Loan",
-							"flagKey": { "isUnsecuredLoan": true, "isPersonalLoan": true }
+							"flagKey": {
+								"isUnsecuredLoan": true,
+								"isPersonalLoan": true
+							}
 						}
 					]
 				},
@@ -59,11 +81,30 @@
 					"question": "Select the form in which you want to avail this unsecured loan.",
 					"description": "This helps us identify the most suitable loan structure for you. For details, check our Drop-line Overdraft (DOD) Page.",
 					"options": [
-						{ "label": { "var": "q1_loanName" }, "value": { "var": "q1_loanName" } },
-						{ "label": "Drop-line Overdraft (DOD)", "value": "Drop-line OverDraft (DOD)" }
+						{
+							"label": {
+								"var": "q1_loanName"
+							},
+							"value": {
+								"var": "q1_loanName"
+							}
+						},
+						{
+							"label": "Drop-line Overdraft (DOD)",
+							"value": "Drop-line OverDraft (DOD)"
+						}
 					],
 					"showWhen": {
-						"in": [{ "var": "loanName" }, ["Personal Loan", "Professional Loan", "Business Loan"]]
+						"in": [
+							{
+								"var": "loanName"
+							},
+							[
+								"Personal Loan",
+								"Professional Loan",
+								"Business Loan"
+							]
+						]
 					}
 				},
 				{
@@ -79,14 +120,29 @@
 						{
 							"label": "Yes",
 							"value": "Yes",
-							"flagKey": { "isObligation": true }
+							"flagKey": {
+								"isObligation": true
+							}
 						},
-						{ "label": "No", "value": "No", "flagKey": { "isObligation": false } }
+						{
+							"label": "No",
+							"value": "No",
+							"flagKey": {
+								"isObligation": false
+							}
+						}
 					],
 					"showWhen": {
 						"in": [
-							{ "var": "unSecureLoanType" },
-							["Personal Loan", "Professional Loan", "Business Loan", "Drop-line OverDraft (DOD)"]
+							{
+								"var": "unSecureLoanType"
+							},
+							[
+								"Personal Loan",
+								"Professional Loan",
+								"Business Loan",
+								"Drop-line OverDraft (DOD)"
+							]
 						]
 					}
 				},
@@ -100,7 +156,10 @@
 					"question": "How you'd like to proceed with your loan?",
 					"description": "Tell us if you’re applying for a fresh loan or want to consolidate your current loans—fully or partially—with or without extra borrowing. If you only want debt consolidation, you can enter zero as the additional funds, later.",
 					"options": [
-						{ "label": "Start Fresh with New Loan", "value": "Start Fresh with New Loan" },
+						{
+							"label": "Start Fresh with New Loan",
+							"value": "Start Fresh with New Loan"
+						},
 						{
 							"label": "Debt Consolidation with Extra Funds",
 							"value": "Debt Consolidation with Extra Funds"
@@ -110,12 +169,23 @@
 						"and": [
 							{
 								"in": [
-									{ "var": "unSecureLoanType" },
-									["Personal Loan", "Professional Loan", "Business Loan"]
+									{
+										"var": "unSecureLoanType"
+									},
+									[
+										"Personal Loan",
+										"Professional Loan",
+										"Business Loan"
+									]
 								]
 							},
 							{
-								"==": [{ "var": "existingLoan" }, "Yes"]
+								"==": [
+									{
+										"var": "existingLoan"
+									},
+									"Yes"
+								]
 							}
 						]
 					}
@@ -125,7 +195,11 @@
 		{
 			"id": "collateral_free_selectionPage",
 			"title": "Non-Collateral Loan Details",
-			"nextButtonVisibility": { "mode": ["allRequiredAnswered"] },
+			"nextButtonVisibility": {
+				"mode": [
+					"allRequiredAnswered"
+				]
+			},
 			"questions": [
 				{
 					"id": "q1_ITRAvailable",
@@ -139,16 +213,28 @@
 						{
 							"label": "Yes",
 							"value": "Yes",
-							"flagKey": { "isITRAvailable": true }
+							"flagKey": {
+								"isITRAvailable": true
+							}
 						},
 						{
 							"label": "No",
 							"value": "No",
-							"flagKey": { "isITRAvailable": false }
+							"flagKey": {
+								"isITRAvailable": false
+							}
 						}
 					],
 					"showWhen": {
-						"in": [{ "var": "unSecureLoanType" }, ["Business Loan", "Professional Loan"]]
+						"in": [
+							{
+								"var": "unSecureLoanType"
+							},
+							[
+								"Business Loan",
+								"Professional Loan"
+							]
+						]
 					},
 					"errorMessage": {
 						"required": true,
@@ -156,7 +242,12 @@
 					},
 					"validation": {
 						"condition": {
-							"!=": [{ "var": "ITRAvailable" }, "Yes"]
+							"!=": [
+								{
+									"var": "ITRAvailable"
+								},
+								"Yes"
+							]
 						}
 					}
 				},
@@ -172,18 +263,36 @@
 						{
 							"label": "Yes",
 							"value": "Yes",
-							"flagKey": { "haveCurrentAccount": true }
+							"flagKey": {
+								"haveCurrentAccount": true
+							}
 						},
 						{
 							"label": "No",
 							"value": "No",
-							"flagKey": { "haveCurrentAccount": false }
+							"flagKey": {
+								"haveCurrentAccount": false
+							}
 						}
 					],
 					"showWhen": {
 						"and": [
-							{ "!=": [{ "var": "ITRAvailable" }, ""] },
-							{ "==": [{ "var": "ITRAvailable" }, "Yes"] }
+							{
+								"!=": [
+									{
+										"var": "ITRAvailable"
+									},
+									""
+								]
+							},
+							{
+								"==": [
+									{
+										"var": "ITRAvailable"
+									},
+									"Yes"
+								]
+							}
 						]
 					},
 					"errorMessage": {
@@ -192,7 +301,12 @@
 					},
 					"validation": {
 						"condition": {
-							"!=": [{ "var": "haveCurrentAccount" }, "Yes"]
+							"!=": [
+								{
+									"var": "haveCurrentAccount"
+								},
+								"Yes"
+							]
 						}
 					}
 				},
@@ -208,18 +322,36 @@
 						{
 							"label": "Yes",
 							"value": "Yes",
-							"flagKey": { "isGstRegistration": true }
+							"flagKey": {
+								"isGstRegistration": true
+							}
 						},
 						{
 							"label": "No",
 							"value": "No",
-							"flagKey": { "isGstRegistration": false }
+							"flagKey": {
+								"isGstRegistration": false
+							}
 						}
 					],
 					"showWhen": {
 						"and": [
-							{ "!=": [{ "var": "haveCurrentAccount" }, ""] },
-							{ "==": [{ "var": "haveCurrentAccount" }, "Yes"] }
+							{
+								"!=": [
+									{
+										"var": "haveCurrentAccount"
+									},
+									""
+								]
+							},
+							{
+								"==": [
+									{
+										"var": "haveCurrentAccount"
+									},
+									"Yes"
+								]
+							}
 						]
 					},
 					"errorMessage": {
@@ -228,7 +360,12 @@
 					},
 					"validation": {
 						"condition": {
-							"!=": [{ "var": "gstRegistration" }, "Yes"]
+							"!=": [
+								{
+									"var": "gstRegistration"
+								},
+								"Yes"
+							]
 						}
 					}
 				},
@@ -245,8 +382,22 @@
 					"question": "Please enter your GST Number?",
 					"showWhen": {
 						"and": [
-							{ "!=": [{ "var": "gstRegistration" }, ""] },
-							{ "==": [{ "var": "gstRegistration" }, "Yes"] }
+							{
+								"!=": [
+									{
+										"var": "gstRegistration"
+									},
+									""
+								]
+							},
+							{
+								"==": [
+									{
+										"var": "gstRegistration"
+									},
+									"Yes"
+								]
+							}
 						]
 					},
 					"errorMessage": {
@@ -258,8 +409,22 @@
 					"validation": {
 						"condition": {
 							"or": [
-								{ "==": [{ "var": "GSTNumber" }, ""] },
-								{ "!=": [{ "var": "GSTNumber.length" }, 15] }
+								{
+									"==": [
+										{
+											"var": "GSTNumber"
+										},
+										""
+									]
+								},
+								{
+									"!=": [
+										{
+											"var": "GSTNumber.length"
+										},
+										15
+									]
+								}
 							]
 						},
 						"message": "validateGSTState"
@@ -277,16 +442,25 @@
 						{
 							"label": "Yes",
 							"value": "Yes",
-							"flagKey": { "applicantIsNRI": true }
+							"flagKey": {
+								"applicantIsNRI": true
+							}
 						},
 						{
 							"label": "No",
 							"value": "No",
-							"flagKey": { "applicantIsNRI": false }
+							"flagKey": {
+								"applicantIsNRI": false
+							}
 						}
 					],
 					"showWhen": {
-						"!=": [{ "var": "GSTNumber" }, ""]
+						"!=": [
+							{
+								"var": "GSTNumber"
+							},
+							""
+						]
 					},
 					"errorMessage": {
 						"required": true,
@@ -294,12 +468,16 @@
 					},
 					"validation": {
 						"condition": {
-							"==": [{ "var": "applicantIsNRI" }, "Yes"]
+							"==": [
+								{
+									"var": "applicantIsNRI"
+								},
+								"Yes"
+							]
 						},
 						"message": "validateisNRI"
 					}
 				},
-
 				{
 					"id": "q_isPaySlipAvailable",
 					"bindsTo_template": "payslips",
@@ -312,16 +490,27 @@
 						{
 							"label": "Yes",
 							"value": "Yes",
-							"flagKey": { "isPaySlipAvailable": true }
+							"flagKey": {
+								"isPaySlipAvailable": true
+							}
 						},
 						{
 							"label": "No",
 							"value": "No",
-							"flagKey": { "isPaySlipAvailable": false }
+							"flagKey": {
+								"isPaySlipAvailable": false
+							}
 						}
 					],
 					"showWhen": {
-						"in": [{ "var": "unSecureLoanType" }, ["Personal Loan"]]
+						"in": [
+							{
+								"var": "unSecureLoanType"
+							},
+							[
+								"Personal Loan"
+							]
+						]
 					},
 					"errorMessage": {
 						"required": true,
@@ -329,7 +518,12 @@
 					},
 					"validation": {
 						"condition": {
-							"!=": [{ "var": "payslips" }, "Yes"]
+							"!=": [
+								{
+									"var": "payslips"
+								},
+								"Yes"
+							]
 						}
 					}
 				},
@@ -345,16 +539,27 @@
 						{
 							"label": "Yes",
 							"value": "Yes",
-							"flagKey": { "isForm16Available": true }
+							"flagKey": {
+								"isForm16Available": true
+							}
 						},
 						{
 							"label": "No",
 							"value": "No",
-							"flagKey": { "isForm16Available": false }
+							"flagKey": {
+								"isForm16Available": false
+							}
 						}
 					],
 					"showWhen": {
-						"in": [{ "var": "unSecureLoanType" }, ["Personal Loan"]]
+						"in": [
+							{
+								"var": "unSecureLoanType"
+							},
+							[
+								"Personal Loan"
+							]
+						]
 					},
 					"errorMessage": {
 						"required": true,
@@ -362,7 +567,12 @@
 					},
 					"validation": {
 						"condition": {
-							"!=": [{ "var": "Form16Available" }, "Yes"]
+							"!=": [
+								{
+									"var": "Form16Available"
+								},
+								"Yes"
+							]
 						}
 					}
 				},
@@ -378,16 +588,27 @@
 						{
 							"label": "Yes",
 							"value": "Yes",
-							"flagKey": { "isApplicantIsNRI": true }
+							"flagKey": {
+								"isApplicantIsNRI": true
+							}
 						},
 						{
 							"label": "No",
 							"value": "No",
-							"flagKey": { "isApplicantIsNRI": false }
+							"flagKey": {
+								"isApplicantIsNRI": false
+							}
 						}
 					],
 					"showWhen": {
-						"in": [{ "var": "unSecureLoanType" }, ["Personal Loan"]]
+						"in": [
+							{
+								"var": "unSecureLoanType"
+							},
+							[
+								"Personal Loan"
+							]
+						]
 					},
 					"errorMessage": {
 						"required": true,
@@ -395,7 +616,12 @@
 					},
 					"validation": {
 						"condition": {
-							"!=": [{ "var": "ApplicantIsNRI" }, "Yes"]
+							"!=": [
+								{
+									"var": "ApplicantIsNRI"
+								},
+								"Yes"
+							]
 						}
 					}
 				}
@@ -404,7 +630,11 @@
 		{
 			"id": "locationPage",
 			"title": "Business Location",
-			"nextButtonVisibility": { "mode": ["allRequiredAnswered"] },
+			"nextButtonVisibility": {
+				"mode": [
+					"allRequiredAnswered"
+				]
+			},
 			"questions": [
 				{
 					"id": "q1_residenceStateName",
@@ -420,11 +650,21 @@
 					"question": "Location for Business verification ?",
 					"required": true,
 					"showWhen": {
-						"==": [{ "var": "applicantIsNRI" }, "No"]
+						"==": [
+							{
+								"var": "applicantIsNRI"
+							},
+							"No"
+						]
 					},
 					"validation": {
 						"condition": {
-							"in": [{ "var": "residenceStateName" }, ""]
+							"in": [
+								{
+									"var": "residenceStateName"
+								},
+								""
+							]
 						}
 					}
 				},
@@ -440,11 +680,21 @@
 					"description": "City name",
 					"required": true,
 					"showWhen": {
-						"!=": [{ "var": "residenceStateName" }, ""]
+						"!=": [
+							{
+								"var": "residenceStateName"
+							},
+							""
+						]
 					},
 					"validation": {
 						"condition": {
-							"in": [{ "var": "residenceCityName" }, ""]
+							"in": [
+								{
+									"var": "residenceCityName"
+								},
+								""
+							]
 						}
 					}
 				},
@@ -460,21 +710,38 @@
 						{
 							"label": "Yes",
 							"value": "Yes",
-							"flagKey": { "isAddressSame": true }
+							"flagKey": {
+								"isAddressSame": true
+							}
 						},
 						{
 							"label": "No",
 							"value": "No",
-							"flagKey": { "isAddressSame": false }
+							"flagKey": {
+								"isAddressSame": false
+							}
 						}
 					],
 					"showWhen": {
 						"and": [
-							{ "!=": [{ "var": "residenceStateName" }, ""] },
-							{ "!=": [{ "var": "residenceCityName" }, ""] }
+							{
+								"!=": [
+									{
+										"var": "residenceStateName"
+									},
+									""
+								]
+							},
+							{
+								"!=": [
+									{
+										"var": "residenceCityName"
+									},
+									""
+								]
+							}
 						]
 					}
-					
 				},
 				{
 					"id": "q4_businessStateName",
@@ -489,14 +756,19 @@
 					"question": "Select location for your actual business",
 					"required": true,
 					"showWhen": {
-						"==": [{ "var": "addressSameOrNot" }, "No"]
+						"==": [
+							{
+								"var": "addressSameOrNot"
+							},
+							"No"
+						]
 					}
 				},
 				{
 					"id": "q5_businessCityName",
 					"bindsTo_template": "businessCityName",
 					"contextKey": "businessCityName",
-					"type": "dynamicSelect",
+					"type": "derivedSelect",
 					"uiGroup": "select_fields",
 					"uiMeta": {
 						"placeholder": "Select a City"
@@ -504,15 +776,39 @@
 					"description": "city name",
 					"required": true,
 					"showWhen": {
-						"!=": [{ "var": "businessStateName" }, ""]
+						"and": [
+							{
+								"==": [
+									{
+										"var": "addressSameOrNot"
+									},
+									"No"
+								]
+							},
+							{
+								"!=": [
+									{
+										"var": "businessStateName"
+									},
+									""
+								]
+							}
+						]
 					},
 					"errorMessage": {
-						"required": true,
+						"required": "City is required",
 						"message": "Kindly select a different city or update your earlier answer."
 					},
 					"validation": {
 						"condition": {
-							"==": [{ "var": "businessCityName" }, { "var": "residenceCityName" }]
+							"==": [
+								{
+									"var": "businessCityName"
+								},
+								{
+									"var": "residenceCityName"
+								}
+							]
 						}
 					}
 				},
@@ -529,14 +825,38 @@
 					"question": "Which of these banks have you used for a Current Account, Overdraft (OD), or Cash Credit (CC)?",
 					"description": "Select the banks which you use to receive the payments from your customers. Bank statements of these will verify your business income and cash flow.",
 					"options": [
-						{ "label": "HDFC Bank", "value": "HDFC Bank" },
-						{ "label": "SBI Bank", "value": "SBI Bank" },
-						{ "label": "Axis Bank", "value": "Axis Bank" },
-						{ "label": "ICICI Bank", "value": "ICICI Bank" },
-						{ "label": "Canara Bank", "value": "Canara Bank" },
-						{ "label": "Bank of Baroda", "value": "Bank of Baroda" },
-						{ "label": "Citi Bank", "value": "Citi Bank" },
-						{ "label": "Union Bank", "value": "Union Bank" }
+						{
+							"label": "HDFC Bank",
+							"value": "HDFC Bank"
+						},
+						{
+							"label": "SBI Bank",
+							"value": "SBI Bank"
+						},
+						{
+							"label": "Axis Bank",
+							"value": "Axis Bank"
+						},
+						{
+							"label": "ICICI Bank",
+							"value": "ICICI Bank"
+						},
+						{
+							"label": "Canara Bank",
+							"value": "Canara Bank"
+						},
+						{
+							"label": "Bank of Baroda",
+							"value": "Bank of Baroda"
+						},
+						{
+							"label": "Citi Bank",
+							"value": "Citi Bank"
+						},
+						{
+							"label": "Union Bank",
+							"value": "Union Bank"
+						}
 					],
 					"errorMessage": {
 						"required": "Please select at least one bank",
@@ -545,17 +865,70 @@
 					"validation": {
 						"condition": {
 							"or": [
-								{ "==": [{ "var": "banksOfCurrentAccount" }, ""] },
-								{ "==": [{ "var": "banksOfCurrentAccount.length" }, 0] }
+								{
+									"==": [
+										{
+											"var": "banksOfCurrentAccount"
+										},
+										""
+									]
+								},
+								{
+									"==": [
+										{
+											"reduce": [
+												{
+													"var": "banksOfCurrentAccount"
+												},
+												"length",
+												0
+											]
+										},
+										0
+									]
+								}
 							]
 						},
 						"message": "validateMinSelections"
 					},
 					"showWhen": {
-						"and": [
-							{ "in": [{ "var": "addressSameOrNot" }, ["Yes", "No"]] },
-							{ "!=": [{ "var": "businessStateName" }, ""] },
-							{ "!=": [{ "var": "businessCityName" }, ""] }
+						"or": [
+							{
+								"==": [
+									{
+										"var": "addressSameOrNot"
+									},
+									"Yes"
+								]
+							},
+							{
+								"and": [
+									{
+										"==": [
+											{
+												"var": "addressSameOrNot"
+											},
+											"No"
+										]
+									},
+									{
+										"!=": [
+											{
+												"var": "businessStateName"
+											},
+											""
+										]
+									},
+									{
+										"!=": [
+											{
+												"var": "businessCityName"
+											},
+											""
+										]
+									}
+								]
+							}
 						]
 					}
 				}
@@ -564,7 +937,11 @@
 		{
 			"id": "applicantPage",
 			"title": "Applicant Type",
-			"nextButtonVisibility": { "mode": ["allRequiredAnswered"] },
+			"nextButtonVisibility": {
+				"mode": [
+					"allRequiredAnswered"
+				]
+			},
 			"questions": [
 				{
 					"id": "q1_tellUsApplying",
@@ -578,16 +955,25 @@
 						{
 							"label": "Sole-Proprietorship",
 							"value": "Sole-Proprietorship",
-							"flagKey": { "isIndividual": true }
+							"flagKey": {
+								"isIndividual": true
+							}
 						},
 						{
 							"label": "Company (Non-individual entity)",
 							"value": "Company (Non-individual entity)",
-							"flagKey": { "isCompany": true }
+							"flagKey": {
+								"isCompany": true
+							}
 						}
 					],
 					"showWhen": {
-						"!=": [{ "var": "banksOfCurrentAccount" }, ""]
+						"!=": [
+							{
+								"var": "banksOfCurrentAccount"
+							},
+							""
+						]
 					}
 				},
 				{
@@ -603,28 +989,41 @@
 						{
 							"label": "Manufacturing",
 							"value": "Manufacturing",
-							"flagKey": { "isManufacturing": true }
+							"flagKey": {
+								"isManufacturing": true
+							}
 						},
 						{
 							"label": "Service industry",
 							"value": "Service industry",
-							"flagKey": { "isServiceIndustry": true }
+							"flagKey": {
+								"isServiceIndustry": true
+							}
 						},
 						{
 							"label": "Retail",
 							"value": "Retail",
-							"flagKey": { "isRetail": true }
+							"flagKey": {
+								"isRetail": true
+							}
 						},
 						{
 							"label": "Trading",
 							"value": "Trading",
-							"flagKey": { "isTrading": true }
+							"flagKey": {
+								"isTrading": true
+							}
 						}
 					],
 					"showWhen": {
 						"in": [
-							{ "var": "tellUsApplying" },
-							["Sole-Proprietorship", "Company (Non-individual entity)"]
+							{
+								"var": "tellUsApplying"
+							},
+							[
+								"Sole-Proprietorship",
+								"Company (Non-individual entity)"
+							]
 						]
 					},
 					"validation": {
@@ -646,31 +1045,53 @@
 						{
 							"label": "One Person Company (OPC)",
 							"value": "One Person Company (OPC)",
-							"flagKey": { "isCompanyTypeOPC": true }
+							"flagKey": {
+								"isCompanyTypeOPC": true
+							}
 						},
 						{
 							"label": "Partnership firm",
 							"value": "Partnership firm",
-							"flagKey": { "isCompanyTypePartnership": false }
+							"flagKey": {
+								"isCompanyTypePartnership": false
+							}
 						},
 						{
 							"label": "Limited Liability Partnership (LLP)",
 							"value": "Limited Liability Partnership (LLP)",
-							"flagKey": { "isCompanyTypeLLP": false }
+							"flagKey": {
+								"isCompanyTypeLLP": false
+							}
 						},
 						{
 							"label": "Private Limited Company (Pvt. Ltd.)",
 							"value": "Private Limited Company (Pvt. Ltd.)",
-							"flagKey": { "isCompanyTypePrivate": false }
+							"flagKey": {
+								"isCompanyTypePrivate": false
+							}
 						}
 					],
 					"showWhen": {
 						"and": [
-							{ "==": [{ "var": "tellUsApplying" }, "Company (Non-individual entity)"] },
+							{
+								"==": [
+									{
+										"var": "tellUsApplying"
+									},
+									"Company (Non-individual entity)"
+								]
+							},
 							{
 								"in": [
-									{ "var": "businessType" },
-									["Manufacturing", "Service industry", "Retail", "Trading"]
+									{
+										"var": "businessType"
+									},
+									[
+										"Manufacturing",
+										"Service industry",
+										"Retail",
+										"Trading"
+									]
 								]
 							}
 						]
@@ -691,35 +1112,74 @@
 						{
 							"label": "Yes",
 							"value": "Yes",
-							"flagKey": { "isCompanyProfit": true }
+							"flagKey": {
+								"isCompanyProfit": true
+							}
 						},
 						{
 							"label": "No",
 							"value": "No",
-							"flagKey": { "isCompanyProfit": false }
+							"flagKey": {
+								"isCompanyProfit": false
+							}
 						}
 					],
 					"showWhen": {
 						"or": [
 							{
 								"and": [
-									{ "==": [{ "var": "tellUsApplying" }, "Sole-Proprietorship"] },
+									{
+										"==": [
+											{
+												"var": "tellUsApplying"
+											},
+											"Sole-Proprietorship"
+										]
+									},
 									{
 										"in": [
-											{ "var": "businessType" },
-											["Manufacturing", "Service industry", "Retail", "Trading"]
+											{
+												"var": "businessType"
+											},
+											[
+												"Manufacturing",
+												"Service industry",
+												"Retail",
+												"Trading"
+											]
 										]
 									}
 								]
 							},
 							{
 								"and": [
-									{ "==": [{ "var": "tellUsApplying" }, "Company (Non-individual entity)"] },
-									{ "!=": [{ "var": "typeOfCompany" }, ""] },
+									{
+										"==": [
+											{
+												"var": "tellUsApplying"
+											},
+											"Company (Non-individual entity)"
+										]
+									},
+									{
+										"!=": [
+											{
+												"var": "typeOfCompany"
+											},
+											""
+										]
+									},
 									{
 										"in": [
-											{ "var": "businessType" },
-											["Manufacturing", "Service industry", "Retail", "Trading"]
+											{
+												"var": "businessType"
+											},
+											[
+												"Manufacturing",
+												"Service industry",
+												"Retail",
+												"Trading"
+											]
 										]
 									}
 								]
@@ -744,16 +1204,32 @@
 					"description": "As the property is being purchased in the name of the company, it will be the primary applicant and all the Directors/Partners will be co-applicants on the loan.",
 					"showWhen": {
 						"and": [
-							{ "==": [{ "var": "tellUsApplying" }, "Company (Non-individual entity)"] },
 							{
-								"in": [
-									{ "var": "businessType" },
-									["Manufacturing", "Service industry", "Retail", "Trading"]
+								"==": [
+									{
+										"var": "tellUsApplying"
+									},
+									"Company (Non-individual entity)"
 								]
 							},
 							{
 								"in": [
-									{ "var": "typeOfCompany" },
+									{
+										"var": "businessType"
+									},
+									[
+										"Manufacturing",
+										"Service industry",
+										"Retail",
+										"Trading"
+									]
+								]
+							},
+							{
+								"in": [
+									{
+										"var": "typeOfCompany"
+									},
 									[
 										"Partnership firm",
 										"Limited Liability Partnership (LLP)",
@@ -761,15 +1237,39 @@
 									]
 								]
 							},
-							{ "in": [{ "var": "companyContinuouslyProfit" }, ["Yes", "No"]] }
+							{
+								"in": [
+									{
+										"var": "companyContinuouslyProfit"
+									},
+									[
+										"Yes",
+										"No"
+									]
+								]
+							}
 						]
 					},
 					"validation": {
 						"required": true,
 						"condition": {
 							"or": [
-								{ "==": [{ "var": "numberOfDirectorOrApplicant" }, ""] },
-								{ "<": [{ "var": "numberOfDirectorOrApplicant" }, 2] }
+								{
+									"==": [
+										{
+											"var": "numberOfDirectorOrApplicant"
+										},
+										""
+									]
+								},
+								{
+									"<": [
+										{
+											"var": "numberOfDirectorOrApplicant"
+										},
+										2
+									]
+								}
 							]
 						},
 						"message": "Enter a number greater than one."
@@ -780,7 +1280,11 @@
 		{
 			"id": "basicInfoPage",
 			"title": "Income and Obligations",
-			"nextButtonVisibility": { "mode": ["allRequiredAnswered"] },
+			"nextButtonVisibility": {
+				"mode": [
+					"allRequiredAnswered"
+				]
+			},
 			"questions": [
 				{
 					"id": "q1_fullNameOfApplicant",
@@ -795,7 +1299,12 @@
 					"question": "What's the full name of the Applicant?",
 					"description": "How it appears on PAN, Passport, Aadhaar or Driving license",
 					"showWhen": {
-						"==": [{ "var": "tellUsApplying" }, "Sole-Proprietorship"]
+						"==": [
+							{
+								"var": "tellUsApplying"
+							},
+							"Sole-Proprietorship"
+						]
 					},
 					"validation": {
 						"required": true
@@ -814,7 +1323,12 @@
 					"question": "What's the company name?",
 					"description": "How it appears on company PAN",
 					"showWhen": {
-						"==": [{ "var": "tellUsApplying" }, "Company (Non-individual entity)"]
+						"==": [
+							{
+								"var": "tellUsApplying"
+							},
+							"Company (Non-individual entity)"
+						]
 					},
 					"validation": {
 						"required": true
@@ -836,23 +1350,43 @@
 						{
 							"label": "Self owned",
 							"value": "Self owned",
-							"flagKey": { "isSelfOwned": true }
+							"flagKey": {
+								"isSelfOwned": true
+							}
 						},
 						{
 							"label": "Family owned",
 							"value": "Family owned",
-							"flagKey": { "isFamilyOwned": false }
+							"flagKey": {
+								"isFamilyOwned": false
+							}
 						},
 						{
 							"label": "Rented",
 							"value": "Rented",
-							"flagKey": { "isRented": false }
+							"flagKey": {
+								"isRented": false
+							}
 						}
 					],
 					"showWhen": {
 						"and": [
-							{ "==": [{ "var": "tellUsApplying" }, "Sole-Proprietorship"] },
-							{ "!=": [{ "var": "fullNameOfApplicant" }, ""] }
+							{
+								"==": [
+									{
+										"var": "tellUsApplying"
+									},
+									"Sole-Proprietorship"
+								]
+							},
+							{
+								"!=": [
+									{
+										"var": "fullNameOfApplicant"
+									},
+									""
+								]
+							}
 						]
 					},
 					"validation": {
@@ -874,20 +1408,47 @@
 						{
 							"label": "Self owned",
 							"value": "Self owned",
-							"flagKey": { "isSelfOwnedOffice": true }
+							"flagKey": {
+								"isSelfOwnedOffice": true
+							}
 						},
 						{
 							"label": "Rented",
 							"value": "Rented",
-							"flagKey": { "isRentedOffice": false }
+							"flagKey": {
+								"isRentedOffice": false
+							}
 						}
 					],
 					"showWhen": {
 						"and": [
-							{ "==": [{ "var": "tellUsApplying" }, "Sole-Proprietorship"] },
-							{ "!=": [{ "var": "fullNameOfApplicant" }, ""] },
 							{
-								"in": [{ "var": "TypeOfResidence" }, ["Self owned", "Family owned", "Rented"]]
+								"==": [
+									{
+										"var": "tellUsApplying"
+									},
+									"Sole-Proprietorship"
+								]
+							},
+							{
+								"!=": [
+									{
+										"var": "fullNameOfApplicant"
+									},
+									""
+								]
+							},
+							{
+								"in": [
+									{
+										"var": "TypeOfResidence"
+									},
+									[
+										"Self owned",
+										"Family owned",
+										"Rented"
+									]
+								]
 							}
 						]
 					},
@@ -907,18 +1468,55 @@
 					"required": true,
 					"question": "What is the current age? (Select completed years only)",
 					"options": [
-						{ "label": "19", "value": "19" },
-						{ "label": "20", "value": "20" }
+						{
+							"label": "19",
+							"value": "19"
+						},
+						{
+							"label": "20",
+							"value": "20"
+						}
 					],
 					"showWhen": {
 						"and": [
-							{ "==": [{ "var": "tellUsApplying" }, "Sole-Proprietorship"] },
-							{ "!=": [{ "var": "fullNameOfApplicant" }, ""] },
 							{
-								"in": [{ "var": "TypeOfResidence" }, ["Self owned", "Family owned", "Rented"]]
+								"==": [
+									{
+										"var": "tellUsApplying"
+									},
+									"Sole-Proprietorship"
+								]
 							},
 							{
-								"in": [{ "var": "OfficePremises" }, ["Self owned", "Rented"]]
+								"!=": [
+									{
+										"var": "fullNameOfApplicant"
+									},
+									""
+								]
+							},
+							{
+								"in": [
+									{
+										"var": "TypeOfResidence"
+									},
+									[
+										"Self owned",
+										"Family owned",
+										"Rented"
+									]
+								]
+							},
+							{
+								"in": [
+									{
+										"var": "OfficePremises"
+									},
+									[
+										"Self owned",
+										"Rented"
+									]
+								]
 							}
 						]
 					},
@@ -938,14 +1536,37 @@
 					"required": true,
 					"question": "How many years has your company been in business?",
 					"options": [
-						{ "label": "3", "value": "3" },
-						{ "label": "5", "value": "5" },
-						{ "label": "10", "value": "10" }
+						{
+							"label": "3",
+							"value": "3"
+						},
+						{
+							"label": "5",
+							"value": "5"
+						},
+						{
+							"label": "10",
+							"value": "10"
+						}
 					],
 					"showWhen": {
 						"and": [
-							{ "==": [{ "var": "tellUsApplying" }, "Company (Non-individual entity)"] },
-							{ "!=": [{ "var": "companyName" }, ""] }
+							{
+								"==": [
+									{
+										"var": "tellUsApplying"
+									},
+									"Company (Non-individual entity)"
+								]
+							},
+							{
+								"!=": [
+									{
+										"var": "companyName"
+									},
+									""
+								]
+							}
 						]
 					},
 					"validation": {
@@ -959,7 +1580,11 @@
 					"type": "number",
 					"uiGroup": "inputNumber",
 					"uiMeta": {
-						"placeholder": ["FY2023-24", "FY2022-23", "FY2021-22"]
+						"placeholder": [
+							"FY2023-24",
+							"FY2022-23",
+							"FY2021-22"
+						]
 					},
 					"required": true,
 					"question": "What were the Net Profits for the last three financial years?",
@@ -967,20 +1592,65 @@
 						"or": [
 							{
 								"and": [
-									{ "!=": [{ "var": "companyName" }, ""] },
-									{ "!=": [{ "var": "dateOfIncorporation" }, ""] }
+									{
+										"!=": [
+											{
+												"var": "companyName"
+											},
+											""
+										]
+									},
+									{
+										"!=": [
+											{
+												"var": "dateOfIncorporation"
+											},
+											""
+										]
+									}
 								]
 							},
 							{
 								"and": [
-									{ "!=": [{ "var": "fullNameOfApplicant" }, ""] },
 									{
-										"in": [{ "var": "TypeOfResidence" }, ["Self owned", "Family owned", "Rented"]]
+										"!=": [
+											{
+												"var": "fullNameOfApplicant"
+											},
+											""
+										]
 									},
 									{
-										"in": [{ "var": "OfficePremises" }, ["Self owned", "Rented"]]
+										"in": [
+											{
+												"var": "TypeOfResidence"
+											},
+											[
+												"Self owned",
+												"Family owned",
+												"Rented"
+											]
+										]
 									},
-									{ "!=": [{ "var": "selectedAge" }, ""] }
+									{
+										"in": [
+											{
+												"var": "OfficePremises"
+											},
+											[
+												"Self owned",
+												"Rented"
+											]
+										]
+									},
+									{
+										"!=": [
+											{
+												"var": "selectedAge"
+											},
+											""
+										]
+									}
 								]
 							}
 						]
@@ -999,7 +1669,11 @@
 					"type": "number",
 					"uiGroup": "inputNumber",
 					"uiMeta": {
-						"placeholder": ["FY2023-24", "FY2022-23", "FY2021-22"]
+						"placeholder": [
+							"FY2023-24",
+							"FY2022-23",
+							"FY2021-22"
+						]
 					},
 					"required": true,
 					"question": "What's the sum of 'Depreciation' and 'Interest on Loans' as per profit-loss statement?",
@@ -1008,22 +1682,81 @@
 						"or": [
 							{
 								"and": [
-									{ "!=": [{ "var": "companyName" }, ""] },
-									{ "!=": [{ "var": "dateOfIncorporation" }, ""] },
-									{ "!=": [{ "var": "netProfitArray" }, ""] }
+									{
+										"!=": [
+											{
+												"var": "companyName"
+											},
+											""
+										]
+									},
+									{
+										"!=": [
+											{
+												"var": "dateOfIncorporation"
+											},
+											""
+										]
+									},
+									{
+										"!=": [
+											{
+												"var": "netProfitArray"
+											},
+											""
+										]
+									}
 								]
 							},
 							{
 								"and": [
-									{ "!=": [{ "var": "fullNameOfApplicant" }, ""] },
 									{
-										"in": [{ "var": "TypeOfResidence" }, ["Self owned", "Family owned", "Rented"]]
+										"!=": [
+											{
+												"var": "fullNameOfApplicant"
+											},
+											""
+										]
 									},
 									{
-										"in": [{ "var": "OfficePremises" }, ["Self owned", "Rented"]]
+										"in": [
+											{
+												"var": "TypeOfResidence"
+											},
+											[
+												"Self owned",
+												"Family owned",
+												"Rented"
+											]
+										]
 									},
-									{ "!=": [{ "var": "selectedAge" }, ""] },
-									{ "!=": [{ "var": "netProfitArray" }, ""] }
+									{
+										"in": [
+											{
+												"var": "OfficePremises"
+											},
+											[
+												"Self owned",
+												"Rented"
+											]
+										]
+									},
+									{
+										"!=": [
+											{
+												"var": "selectedAge"
+											},
+											""
+										]
+									},
+									{
+										"!=": [
+											{
+												"var": "netProfitArray"
+											},
+											""
+										]
+									}
 								]
 							}
 						]
@@ -1048,36 +1781,130 @@
 					"question": "What's the Credit Score?",
 					"description": "The credit score is a crucial factor that lenders consider to determine your creditworthiness A higher credit score is essential for securing more favorable loan terms and interest rates, directly influencing loan eligibility and approval.",
 					"options": [
-						{ "label": "No CIBIL", "value": "No CIBIL" },
-						{ "label": "650-699", "value": "650-699" },
-						{ "label": "700-729", "value": "700-729" },
-						{ "label": "730-749", "value": "730-749" },
-						{ "label": "750-779", "value": "750-779" },
-						{ "label": "780-799", "value": "780-799" },
-						{ "label": "more than 800", "value": "more than 800" }
+						{
+							"label": "No CIBIL",
+							"value": "No CIBIL"
+						},
+						{
+							"label": "650-699",
+							"value": "650-699"
+						},
+						{
+							"label": "700-729",
+							"value": "700-729"
+						},
+						{
+							"label": "730-749",
+							"value": "730-749"
+						},
+						{
+							"label": "750-779",
+							"value": "750-779"
+						},
+						{
+							"label": "780-799",
+							"value": "780-799"
+						},
+						{
+							"label": "more than 800",
+							"value": "more than 800"
+						}
 					],
 					"showWhen": {
 						"or": [
 							{
 								"and": [
-									{ "!=": [{ "var": "companyName" }, ""] },
-									{ "!=": [{ "var": "dateOfIncorporation" }, ""] },
-									{ "!=": [{ "var": "netProfitArray" }, ""] },
-									{ "!=": [{ "var": "depreciationArray" }, ""] }
+									{
+										"!=": [
+											{
+												"var": "companyName"
+											},
+											""
+										]
+									},
+									{
+										"!=": [
+											{
+												"var": "dateOfIncorporation"
+											},
+											""
+										]
+									},
+									{
+										"!=": [
+											{
+												"var": "netProfitArray"
+											},
+											""
+										]
+									},
+									{
+										"!=": [
+											{
+												"var": "depreciationArray"
+											},
+											""
+										]
+									}
 								]
 							},
 							{
 								"and": [
-									{ "!=": [{ "var": "fullNameOfApplicant" }, ""] },
 									{
-										"in": [{ "var": "TypeOfResidence" }, ["Self owned", "Family owned", "Rented"]]
+										"!=": [
+											{
+												"var": "fullNameOfApplicant"
+											},
+											""
+										]
 									},
 									{
-										"in": [{ "var": "OfficePremises" }, ["Self owned", "Rented"]]
+										"in": [
+											{
+												"var": "TypeOfResidence"
+											},
+											[
+												"Self owned",
+												"Family owned",
+												"Rented"
+											]
+										]
 									},
-									{ "!=": [{ "var": "selectedAge" }, ""] },
-									{ "!=": [{ "var": "netProfitArray" }, ""] },
-									{ "!=": [{ "var": "depreciationArray" }, ""] }
+									{
+										"in": [
+											{
+												"var": "OfficePremises"
+											},
+											[
+												"Self owned",
+												"Rented"
+											]
+										]
+									},
+									{
+										"!=": [
+											{
+												"var": "selectedAge"
+											},
+											""
+										]
+									},
+									{
+										"!=": [
+											{
+												"var": "netProfitArray"
+											},
+											""
+										]
+									},
+									{
+										"!=": [
+											{
+												"var": "depreciationArray"
+											},
+											""
+										]
+									}
 								]
 							}
 						]

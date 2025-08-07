@@ -393,7 +393,7 @@
             required={question.required ?? false}
             disabled={question.uiMeta?.readonly ?? false}
           />
-        {:else if question.type === 'dynamicSelect'}
+        {:else if question.type === 'derivedSelect'}
           <DerivedSelect
             id={question.id}
             label={question.question}
