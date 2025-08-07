@@ -324,7 +324,7 @@
 					},
 					"validation": {
 						"condition": {
-							"!=": [{ "var": "residenceStateName" }, ""]
+							"in": [{ "var": "residenceStateName" }, ""]
 						}
 					}
 				},
@@ -344,7 +344,7 @@
 					},
 					"validation": {
 						"condition": {
-							"!=": [{ "var": "residenceCityName" }, ""]
+							"in": [{ "var": "residenceCityName" }, ""]
 						}
 					}
 				},
@@ -374,6 +374,7 @@
 							{ "!=": [{ "var": "residenceCityName" }, ""] }
 						]
 					}
+					
 				},
 				{
 					"id": "q4_businessStateName",
