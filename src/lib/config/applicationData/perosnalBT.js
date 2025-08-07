@@ -1,0 +1,121 @@
+let sampleData_bt={
+    "loanTransaction": {
+        "LoanName": "Personal Loan",
+        "LoanType": "Balance Transfer",
+        "unSecureLoanType": "Personal Loan",
+        "existingLoan": "Yes, in the form of loans",
+        "payslips": "Yes",
+        "Form16Available": "Yes",
+        "ApplicantIsNRI": "No",
+        "residenceStateName": "Jammu And kashmir",
+        "residenceCityName": "Srinagar",
+        "salariedBankName": "Nainital Bank",
+        "tellUsApplying": "Individual",
+        "mortgageYear": 2,
+        "LoanActivity": "No",
+        "principalOutstanding": 211820,
+        "totalPrincipalOfLimits": 120000,
+        "tableLoanEntries": [
+            {
+                "loanType": "Loan Against Property",
+                "bankName": "HDB Financial Services",
+                "selectedToClose": "Keep Running",
+                "emi": "1000",
+                "emiFormatted": "1,000",
+                "totalLimit": "",
+                "totalLimitFormatted": "",
+                "tenure": "8",
+                "interestRate": "9",
+                "remainingLimit": "",
+                "remainingLimitFormatted": "",
+                "remainingTenure": "",
+                "utilizedAmountFormatted": "",
+                "utilizedAmount": "",
+                "principalOutStanding": 7737
+            },
+            {
+                "loanType": "Personal Loan",
+                "bankName": "Bank of Baroda",
+                "selectedToClose": "Keep Running",
+                "emi": "2000",
+                "emiFormatted": "2,000",
+                "totalLimit": "",
+                "totalLimitFormatted": "",
+                "tenure": "8",
+                "interestRate": "12",
+                "remainingLimit": "",
+                "remainingLimitFormatted": "",
+                "remainingTenure": "",
+                "utilizedAmountFormatted": "",
+                "utilizedAmount": "",
+                "principalOutStanding": 15303
+            },
+            {
+                "loanType": "Vehicle Loan",
+                "bankName": "Bank of Maharashtra",
+                "selectedToClose": "Closed by this loan",
+                "emi": "12000",
+                "emiFormatted": "12,000",
+                "totalLimit": "",
+                "totalLimitFormatted": "",
+                "tenure": "8",
+                "interestRate": "12",
+                "remainingLimit": "",
+                "remainingLimitFormatted": "",
+                "remainingTenure": "",
+                "utilizedAmountFormatted": "",
+                "utilizedAmount": "",
+                "principalOutStanding": 91820
+            }
+        ],
+        "tableLimitEntries": [
+            {
+                "loanType": "OD Limit",
+                "bankName": "GIC Housing Finance",
+                "selectedToClose": "Keep Running",
+                "emi": "",
+                "emiFormatted": "",
+                "totalLimit": "120000",
+                "totalLimitFormatted": "1,20,000",
+                "tenure": "8",
+                "interestRate": "12",
+                "remainingLimit": "",
+                "remainingLimitFormatted": "",
+                "remainingTenure": "",
+                "utilizedAmountFormatted": "",
+                "utilizedAmount": ""
+            },
+            {
+                "loanType": "OD Limit",
+                "bankName": "HDB Financial Services",
+                "selectedToClose": "Closed by this loan",
+                "emi": "",
+                "emiFormatted": "",
+                "totalLimit": "120000",
+                "totalLimitFormatted": "1,20,000",
+                "tenure": "8",
+                "interestRate": "12",
+                "remainingLimit": "",
+                "remainingLimitFormatted": "",
+                "remainingTenure": "",
+                "utilizedAmountFormatted": "",
+                "utilizedAmount": ""
+            }
+        ]
+    },
+    "allApplicantDetails": [
+        {
+            "title": "Mr.",
+            "fullNameOfApplicant": "mkmk",
+            "TypeOfResidence": "Self owned",
+            "selectedAge": 30,
+            "EmploymentType": "Employed(Government)",
+            "creditScore": "800",
+            "fixedSalary": 90000,
+            "grossIncome": 100000,
+            "monthlyOtherIncome": 0,
+            "totalEMIs": 3000,
+            "totalLimit": 120000
+        }
+    ]
+}

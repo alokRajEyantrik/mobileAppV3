@@ -17,39 +17,39 @@
   import MultipleSelectField from '$lib/components/MultipleSelectField.svelte';
   import DerivedSelect from '$lib/components/DerivedSelect.svelte';
 
-  // Enhanced type definitions to support additional input types, including multiple-select
-  interface Question {
-    id: string;
-    type:
-      | 'text'
-      | 'radio'
-      | 'select'
-      | 'checkbox'
-      | 'textarea'
-      | 'date'
-      | 'number'
-      | 'dynamicSelect'
-      | 'multiple-select';
-    question: string;
-    bindsTo?: string;
-    bindsTo_template?: string;
-    options?: Array<{
-      label: string | { var: string };
-      value: string | { var: string } | number | boolean;
-    }>;
-    required?: boolean;
-    showWhen?: any; // JSON Logic expression
-    validation?: { condition: any; message: string };
-    errorMessage?: Record<string, string>;
-    uiMeta?: {
-      readonly?: boolean;
-      placeholder?: string;
-      rows?: number;
-      min?: string | number;
-      max?: string | number;
-      step?: number | 'any';
-    };
-  }
+	// Enhanced type definitions to support additional input types, including multiple-select
+	interface Question {
+		id: string;
+		type:
+			| 'text'
+			| 'radio'
+			| 'select'
+			| 'checkbox'
+			| 'textarea'
+			| 'date'
+			| 'number'
+			| 'derivedSelect'
+			| 'multiple-select';
+		question: string;
+		bindsTo?: string;
+		bindsTo_template?: string;
+		options?: Array<{
+			label: string | { var: string };
+			value: string | { var: string } | number | boolean;
+		}>;
+		required?: boolean;
+		showWhen?: any; // JSON Logic expression
+		validation?: { condition: any; message: string };
+		errorMessage?: Record<string, string>;
+		uiMeta?: {
+			readonly?: boolean;
+			placeholder?: string;
+			rows?: number;
+			min?: string | number;
+			max?: string | number;
+			step?: number | 'any';
+		};
+	}
 
   interface Page {
     questions: Question[];

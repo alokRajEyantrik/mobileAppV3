@@ -123,8 +123,8 @@
 			]
 		},
 		{
-			"id": "selectionPage",
-			"title": "A few check points !",
+			"id": "collateral_free_selectionPage",
+			"title": "Non-Collateral Loan Details",
 			"nextButtonVisibility": { "mode": ["allRequiredAnswered"] },
 			"questions": [
 				{
@@ -298,6 +298,106 @@
 						},
 						"message": "validateisNRI"
 					}
+				},
+
+				{
+					"id": "q_isPaySlipAvailable",
+					"bindsTo_template": "payslips",
+					"contextKey": "payslips",
+					"type": "radio",
+					"uiGroup": "loan_details",
+					"required": true,
+					"question": "If payslips are available for last 6 months ?",
+					"options": [
+						{
+							"label": "Yes",
+							"value": "Yes",
+							"flagKey": { "isPaySlipAvailable": true }
+						},
+						{
+							"label": "No",
+							"value": "No",
+							"flagKey": { "isPaySlipAvailable": false }
+						}
+					],
+					"showWhen": {
+						"in": [{ "var": "unSecureLoanType" }, ["Personal Loan"]]
+					},
+					"errorMessage": {
+						"required": true,
+						"message": "We regret to inform you that we are unable to process you request at this time due to the following reasons: Payslips not available."
+					},
+					"validation": {
+						"condition": {
+							"!=": [{ "var": "payslips" }, "Yes"]
+						}
+					}
+				},
+				{
+					"id": "q_isForm16Available",
+					"bindsTo_template": "Form16Available",
+					"contextKey": "Form16Available",
+					"type": "radio",
+					"uiGroup": "loan_details",
+					"required": true,
+					"question": "If latest Form-16 is available ?",
+					"options": [
+						{
+							"label": "Yes",
+							"value": "Yes",
+							"flagKey": { "isForm16Available": true }
+						},
+						{
+							"label": "No",
+							"value": "No",
+							"flagKey": { "isForm16Available": false }
+						}
+					],
+					"showWhen": {
+						"in": [{ "var": "unSecureLoanType" }, ["Personal Loan"]]
+					},
+					"errorMessage": {
+						"required": true,
+						"message": "We regret to inform you that we are unable to process you request at this time due to the following reasons: From16 not available."
+					},
+					"validation": {
+						"condition": {
+							"!=": [{ "var": "Form16Available" }, "Yes"]
+						}
+					}
+				},
+				{
+					"id": "q_isApplicantIsNRI",
+					"bindsTo_template": "ApplicantIsNRI",
+					"contextKey": "ApplicantIsNRI",
+					"type": "radio",
+					"uiGroup": "loan_details",
+					"required": true,
+					"question": "If applicant or any of the co-applicants is NRI?",
+					"options": [
+						{
+							"label": "Yes",
+							"value": "Yes",
+							"flagKey": { "isApplicantIsNRI": true }
+						},
+						{
+							"label": "No",
+							"value": "No",
+							"flagKey": { "isApplicantIsNRI": false }
+						}
+					],
+					"showWhen": {
+						"in": [{ "var": "unSecureLoanType" }, ["Personal Loan"]]
+					},
+					"errorMessage": {
+						"required": true,
+						"message": "We regret to inform you that we are unable to process you request at this time due to the following reasons: Applicant is NRI."
+					},
+					"validation": {
+						"condition": {
+							"!=": [{ "var": "ApplicantIsNRI" }, "Yes"]
+						}
+					}
 				}
 			]
 		},
@@ -332,7 +432,7 @@
 					"id": "q2_residenceCityName",
 					"bindsTo_template": "residenceCityName",
 					"contextKey": "residenceCityName",
-					"type": "dynamicSelect",
+					"type": "derivedSelect",
 					"uiGroup": "select_fields",
 					"uiMeta": {
 						"placeholder": "Select City name"
