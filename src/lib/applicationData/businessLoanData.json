@@ -9,7 +9,7 @@ let sampleData={
         "haveCurrentAccount": "Yes",  // done
         "gstRegistration": "Yes",   // done
         "GSTNumber": "27ABCDE1234F1Z5", // [changed "gstNumber" to "GSTNumber"]  // done 
-        "applicantIsNRI": "No",   // [changed "ApplicantIsNRI" to "applicantIsNRI"] // done
+        "ApplicantIsNRI": "No",   // done
          // page-3 (residenceLocationPage)
         "residenceStateName": "Andhra Pradesh", // done
         "residenceCityName": "Guntur", // done
@@ -104,7 +104,7 @@ let sampleData={
                 "utilizedAmount": ""
             }
         ], // not use yet
-         "RequiredLoanAmount":3000000, // not use yet
+         "RequiredLoanAmount":3000000, 
     },
     "allApplicantDetails": [
         {
@@ -128,7 +128,7 @@ let sampleData={
             ],
             "creditScore": "750-779", // done
             "whyLowCredit": "select reason of why low credit score", // added this "key: value" myself  
-             "isDefaulter": "No",
+             "isDefaulter": "No", // added this "key: value" myself  
             "totalEMIs": 15200,
             "totalLimit": 270000
         }
