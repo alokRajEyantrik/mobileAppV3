@@ -495,13 +495,15 @@
 						id={question.id}
 						label={question.question}
 						value={(currentAnswers[resolveBindsTo(question, combinedAnswers, selectedLoan)] as
+							| number[]
 							| number
 							| null) ?? null}
+						placeholder={question.uiMeta?.placeholder || ""}
 						min={question.uiMeta?.min as number}
 						max={question.uiMeta?.max as number}
 						step={question.uiMeta?.step ?? 1}
 						error={getValidationErrorMessage(question, combinedAnswers)}
-						onInput={(value: number | null) => updateAnswer(question, value ?? 0)}
+						onInput={(value: number | number[] | null) => updateAnswer(question, value ?? 0)}
 						required={question.required ?? false}
 					/>
 				{:else if question.type === 'multiple-select'}

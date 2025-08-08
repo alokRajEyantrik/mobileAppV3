@@ -1,39 +1,79 @@
 <script lang="ts">
   export let id: string;
   export let label: string;
-  export let value: number | null = null;
+  export let value: number[] | number | null = null;
   export let error: string | null = null;
   export let min: number | undefined = undefined;
   export let max: number | undefined = undefined;
   export let step: number | 'any' = 1;
   export let disabled: boolean = false;
   export let required: boolean = false;
-  export let onInput: (value: number | null) => void = () => {};
+  export let placeholder: string | string[] = "";
+  export let onInput: (value: number | number[] | null) => void = () => {};
 
-  function handleInput(event: Event) {
+  function handleInput(event: Event, index?: number) {
     const target = event.target as HTMLInputElement;
-    onInput(target.value ? parseFloat(target.value) : null);
+    const newValue = target.value ? parseFloat(target.value) : null;
+    
+    if (Array.isArray(placeholder)) {
+      const currentValue = Array.isArray(value) ? [...value] : new Array(placeholder.length).fill(null);
+      if (index !== undefined) {
+        currentValue[index] = newValue;
+      }
+      onInput(currentValue);
+    } else {
+      onInput(newValue);
+    }
   }
+
+  $: isMultiInput = Array.isArray(placeholder);
 </script>
 
 <div class="mb-4">
-  <label for={id} class="block text-sm font-medium text-gray-700 mb-1">
+  <label class="block text-sm font-medium text-gray-700 mb-1">
     {label}
     {#if required}<span class="text-red-500">*</span>{/if}
   </label>
-  <input
-    {id}
-    type="number"
-    bind:value
-    {min}
-    {max}
-    {step}
-    {disabled}
-    {required}
-    on:input={handleInput}
-    class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-    class:error={error}
-  />
+
+  {#if isMultiInput}
+    <div class="space-y-2">
+      {#each placeholder as ph, i}
+        <div class="flex items-center space-x-2">
+          <input
+            id={`${id}_${i}`}
+            type="number"
+            value={Array.isArray(value) ? value[i] : null}
+            {min}
+            {max}
+            {step}
+            {disabled}
+            {required}
+            placeholder={ph}
+            on:input={(e) => handleInput(e, i)}
+            class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+            class:error={error}
+          />
+          <span class="text-sm text-gray-500">{ph}</span>
+        </div>
+      {/each}
+    </div>
+  {:else}
+    <input
+      {id}
+      type="number"
+      value={Array.isArray(value) ? value[0] : value}
+      {min}
+      {max}
+      {step}
+      {disabled}
+      {required}
+      placeholder={placeholder as string}
+      on:input={(e) => handleInput(e)}
+      class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+      class:error={error}
+    />
+  {/if}
+
   {#if error}
     <p class="mt-1 text-sm text-red-600">{error}</p>
   {/if}
