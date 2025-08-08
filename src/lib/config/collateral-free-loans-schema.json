@@ -6,9 +6,7 @@
 			"id": "firstPage",
 			"title": "Let's Rock!",
 			"nextButtonVisibility": {
-				"mode": [
-					"allRequiredAnswered"
-				]
+				"mode": ["allRequiredAnswered"]
 			},
 			"questions": [
 				{
@@ -99,11 +97,7 @@
 							{
 								"var": "loanName"
 							},
-							[
-								"Personal Loan",
-								"Professional Loan",
-								"Business Loan"
-							]
+							["Personal Loan", "Professional Loan", "Business Loan"]
 						]
 					}
 				},
@@ -137,12 +131,7 @@
 							{
 								"var": "unSecureLoanType"
 							},
-							[
-								"Personal Loan",
-								"Professional Loan",
-								"Business Loan",
-								"Drop-line OverDraft (DOD)"
-							]
+							["Personal Loan", "Professional Loan", "Business Loan", "Drop-line OverDraft (DOD)"]
 						]
 					}
 				},
@@ -172,11 +161,7 @@
 									{
 										"var": "unSecureLoanType"
 									},
-									[
-										"Personal Loan",
-										"Professional Loan",
-										"Business Loan"
-									]
+									["Personal Loan", "Professional Loan", "Business Loan"]
 								]
 							},
 							{
@@ -196,9 +181,7 @@
 			"id": "collateral_free_selectionPage",
 			"title": "Non-Collateral Loan Details",
 			"nextButtonVisibility": {
-				"mode": [
-					"allRequiredAnswered"
-				]
+				"mode": ["allRequiredAnswered"]
 			},
 			"questions": [
 				{
@@ -230,10 +213,7 @@
 							{
 								"var": "unSecureLoanType"
 							},
-							[
-								"Business Loan",
-								"Professional Loan"
-							]
+							["Business Loan", "Professional Loan"]
 						]
 					},
 					"errorMessage": {
@@ -395,54 +375,6 @@
 					}
 				},
 				{
-					"id": "q5_applicantIsNRI",
-					"bindsTo_template": "applicantIsNRI",
-					"contextKey": "applicantIsNRI",
-					"type": "radio",
-					"uiGroup": "loan_details",
-					"required": true,
-					"question": "If applicant or any of the co-applicants is NRI?",
-					"options": [
-						{
-							"label": "Yes",
-							"value": "Yes",
-							"flagKey": {
-								"applicantIsNRI": true
-							}
-						},
-						{
-							"label": "No",
-							"value": "No",
-							"flagKey": {
-								"applicantIsNRI": false
-							}
-						}
-					],
-					"showWhen": {
-						"!=": [
-							{
-								"var": "GSTNumber"
-							},
-							""
-						]
-					},
-					"errorMessage": {
-						"required": true,
-						"message": "We regret to inform you that we are unable to process your request at this time due to the following reasons: Applicant is an NRI."
-					},
-					"validation": {
-						"condition": {
-							"==": [
-								{
-									"var": "applicantIsNRI"
-								},
-								"Yes"
-							]
-						},
-						"message": "validateisNRI"
-					}
-				},
-				{
 					"id": "q_isPaySlipAvailable",
 					"bindsTo_template": "payslips",
 					"contextKey": "payslips",
@@ -471,9 +403,7 @@
 							{
 								"var": "unSecureLoanType"
 							},
-							[
-								"Personal Loan"
-							]
+							["Personal Loan"]
 						]
 					},
 					"errorMessage": {
@@ -520,9 +450,7 @@
 							{
 								"var": "unSecureLoanType"
 							},
-							[
-								"Personal Loan"
-							]
+							["Personal Loan"]
 						]
 					},
 					"errorMessage": {
@@ -541,9 +469,9 @@
 					}
 				},
 				{
-					"id": "q_isApplicantIsNRI",
-					"bindsTo_template": "ApplicantIsNRI",
-					"contextKey": "ApplicantIsNRI",
+					"id": "q5_applicantIsNRI",
+					"bindsTo_template": "applicantIsNRI",
+					"contextKey": "applicantIsNRI",
 					"type": "radio",
 					"uiGroup": "loan_details",
 					"required": true,
@@ -553,40 +481,39 @@
 							"label": "Yes",
 							"value": "Yes",
 							"flagKey": {
-								"isApplicantIsNRI": true
+								"applicantIsNRI": true
 							}
 						},
 						{
 							"label": "No",
 							"value": "No",
 							"flagKey": {
-								"isApplicantIsNRI": false
+								"applicantIsNRI": false
 							}
 						}
 					],
 					"showWhen": {
-						"in": [
+						"!=": [
 							{
-								"var": "unSecureLoanType"
+								"var": "GSTNumber"
 							},
-							[
-								"Personal Loan"
-							]
+							""
 						]
 					},
 					"errorMessage": {
 						"required": true,
-						"message": "We regret to inform you that we are unable to process you request at this time due to the following reasons: Applicant is NRI."
+						"message": "We regret to inform you that we are unable to process your request at this time due to the following reasons: Applicant is an NRI."
 					},
 					"validation": {
 						"condition": {
-							"!=": [
+							"==": [
 								{
-									"var": "ApplicantIsNRI"
+									"var": "applicantIsNRI"
 								},
 								"Yes"
 							]
-						}
+						},
+						"message": "validateisNRI"
 					}
 				}
 			]
@@ -595,9 +522,7 @@
 			"id": "locationPage",
 			"title": "Business Location",
 			"nextButtonVisibility": {
-				"mode": [
-					"allRequiredAnswered"
-				]
+				"mode": ["allRequiredAnswered"]
 			},
 			"questions": [
 				{
@@ -616,20 +541,10 @@
 					"showWhen": {
 						"!=": [
 							{
-								"var": "ApplicantIsNRI"
+								"var": "applicantIsNRI"
 							},
 							""
 						]
-					},
-					"validation": {
-						"condition": {
-							"in": [
-								{
-									"var": "residenceStateName"
-								},
-								""
-							]
-						}
 					}
 				},
 				{
@@ -822,7 +737,6 @@
 							"value": "Union Bank"
 						}
 					],
-
 					"showWhen": {
 						"or": [
 							{
@@ -870,9 +784,7 @@
 			"id": "applicantPage",
 			"title": "Applicant Type",
 			"nextButtonVisibility": {
-				"mode": [
-					"allRequiredAnswered"
-				]
+				"mode": ["allRequiredAnswered"]
 			},
 			"questions": [
 				{
@@ -952,14 +864,8 @@
 							{
 								"var": "tellUsApplying"
 							},
-							[
-								"Sole-Proprietorship",
-								"Company (Non-individual entity)"
-							]
+							["Sole-Proprietorship", "Company (Non-individual entity)"]
 						]
-					},
-					"validation": {
-						"required": true
 					}
 				},
 				{
@@ -1018,18 +924,10 @@
 									{
 										"var": "businessType"
 									},
-									[
-										"Manufacturing",
-										"Service industry",
-										"Retail",
-										"Trading"
-									]
+									["Manufacturing", "Service industry", "Retail", "Trading"]
 								]
 							}
 						]
-					},
-					"validation": {
-						"required": true
 					}
 				},
 				{
@@ -1073,12 +971,7 @@
 											{
 												"var": "businessType"
 											},
-											[
-												"Manufacturing",
-												"Service industry",
-												"Retail",
-												"Trading"
-											]
+											["Manufacturing", "Service industry", "Retail", "Trading"]
 										]
 									}
 								]
@@ -1106,20 +999,12 @@
 											{
 												"var": "businessType"
 											},
-											[
-												"Manufacturing",
-												"Service industry",
-												"Retail",
-												"Trading"
-											]
+											["Manufacturing", "Service industry", "Retail", "Trading"]
 										]
 									}
 								]
 							}
 						]
-					},
-					"validation": {
-						"required": true
 					}
 				},
 				{
@@ -1149,12 +1034,7 @@
 									{
 										"var": "businessType"
 									},
-									[
-										"Manufacturing",
-										"Service industry",
-										"Retail",
-										"Trading"
-									]
+									["Manufacturing", "Service industry", "Retail", "Trading"]
 								]
 							},
 							{
@@ -1174,10 +1054,7 @@
 									{
 										"var": "companyContinuouslyProfit"
 									},
-									[
-										"Yes",
-										"No"
-									]
+									["Yes", "No"]
 								]
 							}
 						]
@@ -1213,9 +1090,7 @@
 			"id": "basicInfoPage",
 			"title": "Income and Obligations",
 			"nextButtonVisibility": {
-				"mode": [
-					"allRequiredAnswered"
-				]
+				"mode": ["allRequiredAnswered"]
 			},
 			"questions": [
 				{
@@ -1258,9 +1133,6 @@
 							},
 							"Company (Non-individual entity)"
 						]
-					},
-					"validation": {
-						"required": true
 					}
 				},
 				{
@@ -1317,9 +1189,6 @@
 								]
 							}
 						]
-					},
-					"validation": {
-						"required": true
 					}
 				},
 				{
@@ -1370,19 +1239,12 @@
 							{
 								"in": [
 									{
-										"var": "typeOfResidence"
+										"var": "TypeOfResidence"
 									},
-									[
-										"Self owned",
-										"Family owned",
-										"Rented"
-									]
+									["Self owned", "Family owned", "Rented"]
 								]
 							}
 						]
-					},
-					"validation": {
-						"required": true
 					}
 				},
 				{
@@ -1427,13 +1289,9 @@
 							{
 								"in": [
 									{
-										"var": "typeOfResidence"
+										"var": "TypeOfResidence"
 									},
-									[
-										"Self owned",
-										"Family owned",
-										"Rented"
-									]
+									["Self owned", "Family owned", "Rented"]
 								]
 							},
 							{
@@ -1441,16 +1299,10 @@
 									{
 										"var": "OfficePremises"
 									},
-									[
-										"Self owned",
-										"Rented"
-									]
+									["Self owned", "Rented"]
 								]
 							}
 						]
-					},
-					"validation": {
-						"required": true
 					}
 				},
 				{
@@ -1497,9 +1349,6 @@
 								]
 							}
 						]
-					},
-					"validation": {
-						"required": true
 					}
 				},
 				{
@@ -1509,11 +1358,7 @@
 					"type": "number",
 					"uiGroup": "inputNumber",
 					"uiMeta": {
-						"placeholder": [
-							"FY2023-24",
-							"FY2022-23",
-							"FY2021-22"
-						]
+						"placeholder": ["FY2023-24", "FY2022-23", "FY2021-22"]
 					},
 					"required": true,
 					"question": "What were the Net Profits for the last three financial years?",
@@ -1552,13 +1397,9 @@
 									{
 										"in": [
 											{
-												"var": "typeOfResidence"
+												"var": "TypeOfResidence"
 											},
-											[
-												"Self owned",
-												"Family owned",
-												"Rented"
-											]
+											["Self owned", "Family owned", "Rented"]
 										]
 									},
 									{
@@ -1566,10 +1407,7 @@
 											{
 												"var": "OfficePremises"
 											},
-											[
-												"Self owned",
-												"Rented"
-											]
+											["Self owned", "Rented"]
 										]
 									},
 									{
@@ -1583,12 +1421,6 @@
 								]
 							}
 						]
-					},
-					"validation": {
-						"required": true,
-						"minItems": 3,
-						"maxLength": 12,
-						"errorMessage": "Please enter Net Profit for all 3 years"
 					}
 				},
 				{
@@ -1598,11 +1430,7 @@
 					"type": "number",
 					"uiGroup": "inputNumber",
 					"uiMeta": {
-						"placeholder": [
-							"FY2023-24",
-							"FY2022-23",
-							"FY2021-22"
-						]
+						"placeholder": ["FY2023-24", "FY2022-23", "FY2021-22"]
 					},
 					"required": true,
 					"question": "What's the sum of 'Depreciation' and 'Interest on Loans' as per profit-loss statement?",
@@ -1650,13 +1478,9 @@
 									{
 										"in": [
 											{
-												"var": "typeOfResidence"
+												"var": "TypeOfResidence"
 											},
-											[
-												"Self owned",
-												"Family owned",
-												"Rented"
-											]
+											["Self owned", "Family owned", "Rented"]
 										]
 									},
 									{
@@ -1664,10 +1488,7 @@
 											{
 												"var": "OfficePremises"
 											},
-											[
-												"Self owned",
-												"Rented"
-											]
+											["Self owned", "Rented"]
 										]
 									},
 									{
@@ -1689,12 +1510,6 @@
 								]
 							}
 						]
-					},
-					"validation": {
-						"required": true,
-						"minItems": 3,
-						"maxLength": 12,
-						"errorMessage": "Please enter 'sum of Depreciation' or 'Interest on Loans' for all 3 years"
 					}
 				},
 				{
@@ -1790,13 +1605,9 @@
 									{
 										"in": [
 											{
-												"var": "typeOfResidence"
+												"var": "TypeOfResidence"
 											},
-											[
-												"Self owned",
-												"Family owned",
-												"Rented"
-											]
+											["Self owned", "Family owned", "Rented"]
 										]
 									},
 									{
@@ -1804,10 +1615,7 @@
 											{
 												"var": "OfficePremises"
 											},
-											[
-												"Self owned",
-												"Rented"
-											]
+											["Self owned", "Rented"]
 										]
 									},
 									{
@@ -1837,9 +1645,297 @@
 								]
 							}
 						]
+					}
+				},
+				{
+					"id": "q8_isDefaulter",
+					"bindsTo_template": "isDefaulter",
+					"contextKey": "isDefaulter",
+					"type": "select",
+					"uiGroup": "selectButton",
+					"required": true,
+					"question": "Have you ever been defaulter",
+					"description": "description",
+					"options": [
+						{
+							"label": "Yes",
+							"value": "Yes"
+						},
+						{
+							"label": "No",
+							"value": "No"
+						}
+					],
+					"showWhen": {
+						"or": [
+							{
+								"and": [
+									{
+										"!=": [
+											{
+												"var": "companyName"
+											},
+											""
+										]
+									},
+									{
+										"!=": [
+											{
+												"var": "dateOfIncorporation"
+											},
+											""
+										]
+									},
+									{
+										"!=": [
+											{
+												"var": "netProfitArray"
+											},
+											""
+										]
+									},
+									{
+										"!=": [
+											{
+												"var": "depreciationArray"
+											},
+											""
+										]
+									}
+								]
+							},
+							{
+								"and": [
+									{
+										"!=": [
+											{
+												"var": "fullNameOfApplicant"
+											},
+											""
+										]
+									},
+									{
+										"in": [
+											{
+												"var": "typeOfResidence"
+											},
+											["Self owned", "Family owned", "Rented"]
+										]
+									},
+									{
+										"in": [
+											{
+												"var": "OfficePremises"
+											},
+											["Self owned", "Rented"]
+										]
+									},
+									{
+										"!=": [
+											{
+												"var": "selectedAge"
+											},
+											""
+										]
+									},
+									{
+										"!=": [
+											{
+												"var": "netProfitArray"
+											},
+											""
+										]
+									},
+									{
+										"!=": [
+											{
+												"var": "depreciationArray"
+											},
+											""
+										]
+									}
+								]
+							}
+						]
+					}
+				},
+				{
+					"id": "q9_whyLowCredit",
+					"bindsTo_template": "whyLowCredit",
+					"contextKey": "whyLowCredit",
+					"type": "multiple-select",
+					"uiGroup": "select_fields",
+					"uiMeta": {
+						"placeholder": "Select the reason why you have low credit score"
 					},
-					"validation": {
-						"required": true
+					"required": true,
+					"question": "What are the possible reasons behind your low CIBIL score?",
+					"description": "select all the applicable reasons to help us understand what may be impacting your credit score",
+					"options": [
+						{
+							"label": "Delayed EMI",
+							"value": "Delayed EMI"
+						},
+						{
+							"label": "High credit card utilization",
+							"value": "High credit card utilization"
+						},
+						{
+							"label": "No credit history",
+							"value": "No credit history"
+						},
+						{
+							"label": "Frequent use of full credit limit",
+							"value": "Frequent use of full credit limit"
+						},
+						{
+							"label": "Delayed credit card payments",
+							"value": "Delayed credit card payments"
+						},
+						{
+							"label": "Multiple recent loan enquiries",
+							"value": "Multiple recent loan enquiries"
+						},
+						{
+							"label": "Co-applicant default",
+							"value": "Co-applicant default"
+						},
+						{
+							"label": "Loan default",
+							"value": "Loan default"
+						},
+						{
+							"label": "Only unsecured loans in profile",
+							"value": "Only unsecured loans in profile"
+						},
+						{
+							"label": "Minimum due payments only on credit card",
+							"value": "Minimum due payments only on credit card"
+						}
+					],
+					"showWhen": {
+						"or": [
+							{
+								"and": [
+									{
+										"!=": [
+											{
+												"var": "companyName"
+											},
+											""
+										]
+									},
+									{
+										"!=": [
+											{
+												"var": "dateOfIncorporation"
+											},
+											""
+										]
+									},
+									{
+										"!=": [
+											{
+												"var": "netProfitArray"
+											},
+											""
+										]
+									},
+									{
+										"!=": [
+											{
+												"var": "depreciationArray"
+											},
+											""
+										]
+									},
+									{
+										"in": [
+											{
+												"var": "creditScore"
+											},
+											["No CIBIL", "650-699"]
+										]
+									},
+									{
+										"in": [
+											{
+												"var": "isDefaulter"
+											},
+											["Yes", "No"]
+										]
+									}
+								]
+							},
+							{
+								"and": [
+									{
+										"!=": [
+											{
+												"var": "fullNameOfApplicant"
+											},
+											""
+										]
+									},
+									{
+										"in": [
+											{
+												"var": "typeOfResidence"
+											},
+											["Self owned", "Family owned", "Rented"]
+										]
+									},
+									{
+										"in": [
+											{
+												"var": "OfficePremises"
+											},
+											["Self owned", "Rented"]
+										]
+									},
+									{
+										"!=": [
+											{
+												"var": "selectedAge"
+											},
+											""
+										]
+									},
+									{
+										"!=": [
+											{
+												"var": "netProfitArray"
+											},
+											""
+										]
+									},
+									{
+										"!=": [
+											{
+												"var": "depreciationArray"
+											},
+											""
+										]
+									},
+									{
+										"in": [
+											{
+												"var": "creditScore"
+											},
+											["No CIBIL", "650-699"]
+										]
+									},
+									{
+										"in": [
+											{
+												"var": "isDefaulter"
+											},
+											["Yes", "No"]
+										]
+									}
+								]
+							}
+						]
 					}
 				}
 			]
@@ -1850,7 +1946,14 @@
 			"nextButtonVisibility": {
 				"mode": ["allRequiredAnswered"]
 			},
-			"showWhen": { "==": [{ "var": "existingLoan" }, "Yes"] },
+			"showWhen": {
+				"==": [
+					{
+						"var": "existingLoan"
+					},
+					"Yes"
+				]
+			},
 			"questions": [
 				{
 					"id": "q1_loanType",
@@ -1864,18 +1967,55 @@
 					"required": true,
 					"description": "loan type",
 					"options": [
-						{ "label": "Business Loan - Unsecured", "value": "Business Loan - Unsecured" },
-						{ "label": "Business Loan - Secured", "value": "Business Loan - Secured" },
-						{ "label": "Loan Against Property", "value": "Loan Against Property" },
-						{ "label": "Machinery Loan", "value": "Machinery Loan" },
-						{ "label": "Vehicle Loan", "value": "Vehicle Loan" },
-						{ "label": "Property Loan", "value": "Property Loan" },
-						{ "label": "OD Limit", "value": "OD Limit" },
-						{ "label": "CC Limit", "value": "CC Limit" },
-						{ "label": "Dropline OD", "value": "Dropline OD" },
-						{ "label": "Other Type Loan", "value": "Other Type Loan" }
+						{
+							"label": "Business Loan - Unsecured",
+							"value": "Business Loan - Unsecured"
+						},
+						{
+							"label": "Business Loan - Secured",
+							"value": "Business Loan - Secured"
+						},
+						{
+							"label": "Loan Against Property",
+							"value": "Loan Against Property"
+						},
+						{
+							"label": "Machinery Loan",
+							"value": "Machinery Loan"
+						},
+						{
+							"label": "Vehicle Loan",
+							"value": "Vehicle Loan"
+						},
+						{
+							"label": "Property Loan",
+							"value": "Property Loan"
+						},
+						{
+							"label": "OD Limit",
+							"value": "OD Limit"
+						},
+						{
+							"label": "CC Limit",
+							"value": "CC Limit"
+						},
+						{
+							"label": "Dropline OD",
+							"value": "Dropline OD"
+						},
+						{
+							"label": "Other Type Loan",
+							"value": "Other Type Loan"
+						}
 					],
-					"showWhen": { "==": [{ "var": "existingLoan" }, "Yes"] }
+					"showWhen": {
+						"==": [
+							{
+								"var": "existingLoan"
+							},
+							"Yes"
+						]
+					}
 				},
 				{
 					"id": "q2_bankName",
@@ -1924,8 +2064,22 @@
 					],
 					"showWhen": {
 						"and": [
-							{ "==": [{ "var": "existingLoan" }, "Yes"] },
-							{ "!=": [{ "var": "tableLoanEntries.loanType" }, ""] }
+							{
+								"==": [
+									{
+										"var": "existingLoan"
+									},
+									"Yes"
+								]
+							},
+							{
+								"!=": [
+									{
+										"var": "tableLoanEntries.loanType"
+									},
+									""
+								]
+							}
 						]
 					}
 				},
@@ -1956,9 +2110,30 @@
 					],
 					"showWhen": {
 						"and": [
-							{ "==": [{ "var": "existingLoan" }, "Yes"] },
-							{ "!=": [{ "var": "tableLoanEntries.loanType" }, ""] },
-							{ "!=": [{ "var": "tableLoanEntries.bankName" }, ""] }
+							{
+								"==": [
+									{
+										"var": "existingLoan"
+									},
+									"Yes"
+								]
+							},
+							{
+								"!=": [
+									{
+										"var": "tableLoanEntries.loanType"
+									},
+									""
+								]
+							},
+							{
+								"!=": [
+									{
+										"var": "tableLoanEntries.bankName"
+									},
+									""
+								]
+							}
 						]
 					}
 				},
@@ -1975,10 +2150,46 @@
 					"description": "EMI (monthly)",
 					"showWhen": {
 						"and": [
-							{ "==": [{ "var": "existingLoan" }, "Yes"] },
-							{ "!=": [{ "var": "tableLoanEntries.loanType" }, ""] },
-							{ "!=": [{ "var": "tableLoanEntries.bankName" }, ""] },
-							{ "!=": [{ "var": "tableLoanEntries.selectedToClose" }, ""] }
+							{
+								"==": [
+									{
+										"var": "existingLoan"
+									},
+									"Yes"
+								]
+							},
+							{
+								"in": [
+									{
+										"var": "tableLoanEntries.loanType"
+									},
+									[
+										"Business Loan - Unsecured",
+										"Business Loan - Secured",
+										"Loan Against Property",
+										"Machinery Loan",
+										"Vehicle Loan",
+										"Property Loan",
+										"Other Type Loan"
+									]
+								]
+							},
+							{
+								"!=": [
+									{
+										"var": "tableLoanEntries.bankName"
+									},
+									""
+								]
+							},
+							{
+								"!=": [
+									{
+										"var": "tableLoanEntries.selectedToClose"
+									},
+									""
+								]
+							}
 						]
 					}
 				},
@@ -1995,16 +2206,451 @@
 					"description": "remaining tenure",
 					"showWhen": {
 						"and": [
-							{ "==": [{ "var": "existingLoan" }, "Yes"] },
-							{ "!=": [{ "var": "tableLoanEntries.loanType" }, ""] },
-							{ "!=": [{ "var": "tableLoanEntries.bankName" }, ""] },
-							{ "!=": [{ "var": "tableLoanEntries.selectedToClose" }, ""] },
-							{ "!=": [{ "var": "tableLoanEntries.emi" }, ""] }
+							{
+								"==": [
+									{
+										"var": "existingLoan"
+									},
+									"Yes"
+								]
+							},
+							{
+								"in": [
+									{
+										"var": "tableLoanEntries.loanType"
+									},
+									[
+										"Business Loan - Unsecured",
+										"Business Loan - Secured",
+										"Loan Against Property",
+										"Machinery Loan",
+										"Vehicle Loan",
+										"Property Loan",
+										"Other Type Loan"
+									]
+								]
+							},
+							{
+								"!=": [
+									{
+										"var": "tableLoanEntries.bankName"
+									},
+									""
+								]
+							},
+							{
+								"!=": [
+									{
+										"var": "tableLoanEntries.selectedToClose"
+									},
+									""
+								]
+							},
+							{
+								"!=": [
+									{
+										"var": "tableLoanEntries.emi"
+									},
+									""
+								]
+							}
 						]
 					}
 				},
 				{
-					"id": "q6_interestRate",
+					"id": "q6_totalLimit",
+					"bindsTo_template": "tableLoanEntries.totalLimit",
+					"contextKey": "tableLoanEntries.totalLimit",
+					"type": "text",
+					"uiGroup": "text_fields",
+					"uiMeta": {
+						"placeholder": "Enter total limit"
+					},
+					"required": true,
+					"description": "total limit",
+					"showWhen": {
+						"and": [
+							{
+								"==": [
+									{
+										"var": "existingLoan"
+									},
+									"Yes"
+								]
+							},
+							{
+								"in": [
+									{
+										"var": "tableLoanEntries.loanType"
+									},
+									["OD Limit", "CC Limit"]
+								]
+							},
+							{
+								"!=": [
+									{
+										"var": "tableLoanEntries.bankName"
+									},
+									""
+								]
+							},
+							{
+								"!=": [
+									{
+										"var": "tableLoanEntries.selectedToClose"
+									},
+									""
+								]
+							}
+						]
+					}
+				},
+				{
+					"id": "q7_sanctionedLimit",
+					"bindsTo_template": "tableLoanEntries.sanctionedLimit",
+					"contextKey": "tableLoanEntries.sanctionedLimit",
+					"type": "text",
+					"uiGroup": "text_fields",
+					"uiMeta": {
+						"placeholder": "Enter total limit"
+					},
+					"required": true,
+					"description": "sanctioned limit (at the time of start)",
+					"showWhen": {
+						"and": [
+							{
+								"==": [
+									{
+										"var": "existingLoan"
+									},
+									"Yes"
+								]
+							},
+							{
+								"==": [
+									{
+										"var": "tableLoanEntries.loanType"
+									},
+									"Dropline OD"
+								]
+							},
+							{
+								"!=": [
+									{
+										"var": "tableLoanEntries.bankName"
+									},
+									""
+								]
+							},
+							{
+								"!=": [
+									{
+										"var": "tableLoanEntries.selectedToClose"
+									},
+									""
+								]
+							}
+						]
+					}
+				},
+				{
+					"id": "q8_remainingLimit",
+					"bindsTo_template": "tableLoanEntries.remainingLimit",
+					"contextKey": "tableLoanEntries.remainingLimit",
+					"type": "text",
+					"uiGroup": "text_fields",
+					"uiMeta": {
+						"placeholder": "Enter total limit"
+					},
+					"required": true,
+					"description": "remaining limit (current)",
+					"showWhen": {
+						"and": [
+							{
+								"==": [
+									{
+										"var": "existingLoan"
+									},
+									"Yes"
+								]
+							},
+							{
+								"==": [
+									{
+										"var": "tableLoanEntries.loanType"
+									},
+									"Dropline OD"
+								]
+							},
+							{
+								"!=": [
+									{
+										"var": "tableLoanEntries.bankName"
+									},
+									""
+								]
+							},
+							{
+								"!=": [
+									{
+										"var": "tableLoanEntries.selectedToClose"
+									},
+									""
+								]
+							},
+							{
+								"!=": [
+									{
+										"var": "tableLoanEntries.sanctionedLimit"
+									},
+									""
+								]
+							}
+						]
+					}
+				},
+				{
+					"id": "q9_sanctionedTenure",
+					"bindsTo_template": "tableLoanEntries.sanctionedTenure",
+					"contextKey": "tableLoanEntries.sanctionedTenure",
+					"type": "text",
+					"uiGroup": "text_fields",
+					"uiMeta": {
+						"placeholder": "in months"
+					},
+					"required": true,
+					"description": "sanctioned tenure",
+					"showWhen": {
+						"and": [
+							{
+								"==": [
+									{
+										"var": "existingLoan"
+									},
+									"Yes"
+								]
+							},
+							{
+								"in": [
+									{
+										"var": "tableLoanEntries.loanType"
+									},
+									["OD Limit", "CC Limit", "Dropline OD"]
+								]
+							},
+							{
+								"!=": [
+									{
+										"var": "tableLoanEntries.bankName"
+									},
+									""
+								]
+							},
+							{
+								"!=": [
+									{
+										"var": "tableLoanEntries.selectedToClose"
+									},
+									""
+								]
+							},
+							{
+								"or": [
+									{
+										"!=": [
+											{
+												"var": "tableLoanEntries.totalLimit"
+											},
+											""
+										]
+									},
+									{
+										"and": [
+											{
+												"!=": [
+													{
+														"var": "tableLoanEntries.sanctionedLimit"
+													},
+													""
+												]
+											},
+											{
+												"!=": [
+													{
+														"var": "tableLoanEntries.remainingLimit"
+													},
+													""
+												]
+											}
+										]
+									}
+								]
+							},
+							{
+								"!=": [
+									{
+										"var": "tableLoanEntries.totalLimit"
+									},
+									""
+								]
+							}
+						]
+					}
+				},
+				{
+					"id": "q10_remainingTenure",
+					"bindsTo_template": "tableLoanEntries.remainingTenure",
+					"contextKey": "tableLoanEntries.remainingTenure",
+					"type": "text",
+					"uiGroup": "text_fields",
+					"uiMeta": {
+						"placeholder": "in months"
+					},
+					"required": true,
+					"description": "remaining tenure",
+					"showWhen": {
+						"and": [
+							{
+								"==": [
+									{
+										"var": "existingLoan"
+									},
+									"Yes"
+								]
+							},
+							{
+								"==": [
+									{
+										"var": "tableLoanEntries.loanType"
+									},
+									"Dropline OD"
+								]
+							},
+							{
+								"!=": [
+									{
+										"var": "tableLoanEntries.bankName"
+									},
+									""
+								]
+							},
+							{
+								"!=": [
+									{
+										"var": "tableLoanEntries.selectedToClose"
+									},
+									""
+								]
+							},
+							{
+								"!=": [
+									{
+										"var": "tableLoanEntries.sanctionedLimit"
+									},
+									""
+								]
+							},
+							{
+								"!=": [
+									{
+										"var": "tableLoanEntries.remainingLimit"
+									},
+									""
+								]
+							},
+							{
+								"!=": [
+									{
+										"var": "tableLoanEntries.sanctionedTenure"
+									},
+									""
+								]
+							}
+						]
+					}
+				},
+				{
+					"id": "q11_utilizedAmount",
+					"bindsTo_template": "tableLoanEntries.utilizedAmount",
+					"contextKey": "tableLoanEntries.utilizedAmount",
+					"type": "text",
+					"uiGroup": "text_fields",
+					"uiMeta": {
+						"placeholder": "Enter total limit"
+					},
+					"required": true,
+					"description": "utilized amount",
+					"showWhen": {
+						"and": [
+							{
+								"==": [
+									{
+										"var": "existingLoan"
+									},
+									"Yes"
+								]
+							},
+							{
+								"==": [
+									{
+										"var": "tableLoanEntries.loanType"
+									},
+									"Dropline OD"
+								]
+							},
+							{
+								"!=": [
+									{
+										"var": "tableLoanEntries.bankName"
+									},
+									""
+								]
+							},
+							{
+								"!=": [
+									{
+										"var": "tableLoanEntries.selectedToClose"
+									},
+									""
+								]
+							},
+							{
+								"!=": [
+									{
+										"var": "tableLoanEntries.sanctionedLimit"
+									},
+									""
+								]
+							},
+							{
+								"!=": [
+									{
+										"var": "tableLoanEntries.remainingLimit"
+									},
+									""
+								]
+							},
+							{
+								"!=": [
+									{
+										"var": "tableLoanEntries.sanctionedTenure"
+									},
+									""
+								]
+							},
+							{
+								"!=": [
+									{
+										"var": "tableLoanEntries.remainingTenure"
+									},
+									""
+								]
+							}
+						]
+					}
+				},
+				{
+					"id": "q12_interestRate",
 					"bindsTo_template": "tableLoanEntries.interestRate",
 					"contextKey": "tableLoanEntries.interestRate",
 					"type": "text",
@@ -2016,12 +2662,106 @@
 					"description": "interest rate (p.a.)",
 					"showWhen": {
 						"and": [
-							{ "==": [{ "var": "existingLoan" }, "Yes"] },
-							{ "!=": [{ "var": "tableLoanEntries.loanType" }, ""] },
-							{ "!=": [{ "var": "tableLoanEntries.bankName" }, ""] },
-							{ "!=": [{ "var": "tableLoanEntries.selectedToClose" }, ""] },
-							{ "!=": [{ "var": "tableLoanEntries.emi" }, ""] },
-							{ "!=": [{ "var": "tableLoanEntries.tenure" }, ""] }
+							{
+								"==": [
+									{
+										"var": "existingLoan"
+									},
+									"Yes"
+								]
+							},
+							{
+								"!=": [
+									{
+										"var": "tableLoanEntries.loanType"
+									},
+									""
+								]
+							},
+							{
+								"!=": [
+									{
+										"var": "tableLoanEntries.bankName"
+									},
+									""
+								]
+							},
+							{
+								"!=": [
+									{
+										"var": "tableLoanEntries.selectedToClose"
+									},
+									""
+								]
+							},
+							{
+								"or": [
+									{
+										"!=": [
+											{
+												"var": "tableLoanEntries.emi"
+											},
+											""
+										]
+									},
+									{
+										"!=": [
+											{
+												"var": "tableLoanEntries.totalLimit"
+											},
+											""
+										]
+									},
+									{
+										"and": [
+											{
+												"!=": [
+													{
+														"var": "tableLoanEntries.sanctionedLimit"
+													},
+													""
+												]
+											},
+											{
+												"!=": [
+													{
+														"var": "tableLoanEntries.remainingLimit"
+													},
+													""
+												]
+											}
+										]
+									}
+								]
+							},
+							{
+								"or": [
+									{
+										"!=": [
+											{
+												"var": "tableLoanEntries.tenure"
+											},
+											""
+										]
+									},
+									{
+										"!=": [
+											{
+												"var": "tableLoanEntries.sanctionedTenure"
+											},
+											""
+										]
+									},
+									{
+										"!=": [
+											{
+												"var": "tableLoanEntries.remainingTenure"
+											},
+											""
+										]
+									}
+								]
+							}
 						]
 					}
 				}

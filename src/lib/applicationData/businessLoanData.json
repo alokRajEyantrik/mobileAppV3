@@ -43,12 +43,14 @@ let sampleData={
                 "selectedToClose": "Keep Running", //...
                 "emi": "1200", //...
                 "emiFormatted": "1,200",
-                "totalLimit": "",
+                "totalLimit": "", // ...
                 "totalLimitFormatted": "",
                 "tenure": "8", //...
-                "interestRate": "21",
+                "interestRate": "21", //...
+                "sanctionedLimit": "", //...  // added this "key: value" myself  
                 "remainingLimit": "",
                 "remainingLimitFormatted": "",
+                "sanctionedTenure": "", //...  // added this "key: value" myself  
                 "remainingTenure": "",
                 "utilizedAmountFormatted": "",
                 "utilizedAmount": ""
@@ -79,7 +81,7 @@ let sampleData={
                 "emiFormatted": "",
                 "totalLimit": "130000",
                 "totalLimitFormatted": "1,30,000",
-                "tenure": "12",
+                "tenure": "12",  
                 "interestRate": "8",
                 "remainingLimit": "",
                 "remainingLimitFormatted": "",
