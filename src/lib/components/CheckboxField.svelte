@@ -1,4 +1,3 @@
-// CheckboxField.svelte - A reusable checkbox component with TypeScript support
 <script lang="ts">
   export let id: string;
   export let label: string;

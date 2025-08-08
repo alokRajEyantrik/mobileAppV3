@@ -1,4 +1,3 @@
-// DateField.svelte - A reusable date input component with TypeScript support
 <script lang="ts">
   export let id: string;
   export let label: string;
