@@ -2813,9 +2813,9 @@
 					]
 				},
 				{
-					"id": "q2_SpecificLoanRequirement",
-					"bindsTo_template": "SpecificLoanRequirement",
-					"contextKey": "SpecificLoanRequirement",
+					"id": "q2_hasSpecificAmount",
+					"bindsTo_template": "hasSpecificAmount",
+					"contextKey": "hasSpecificAmount",
 					"type": "radio",
 					"uiGroup": "loan_details",
 					"required": true,
@@ -2836,9 +2836,9 @@
 					}
 				},
 				{
-					"id": "q3_SpecificLoanRequirement",
-					"bindsTo_template": "SpecificLoanRequirement",
-					"contextKey": "SpecificLoanRequirement",
+					"id": "q3_loanAmount",
+					"bindsTo_template": "loanAmount",
+					"contextKey": "loanAmount",
 					"type": "number",
 					"uiGroup": "number_fields",
 					"uiMeta": {
@@ -2855,7 +2855,7 @@
 								"!=": [{ "var": "mortgageYear" }, ""]
 							},
 							{
-								"==": [{ "var": "SpecificLoanRequirement" }, "Yes"]
+								"==": [{ "var": "hasSpecificAmount" }, "Yes"]
 							}
 						]
 					}

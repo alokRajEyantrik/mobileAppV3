@@ -7,6 +7,7 @@
 	import gstStateCodes from '$lib/config/gstStateCodes.json';
 	import pincode_IN_Selected from '$lib/config/pincode_IN_Selected.json';
 	import { writable, get, type Writable } from 'svelte/store';
+	import { goto } from '$app/navigation';
 	import TextField from '$lib/components/TextField.svelte';
 	import RadioField from '$lib/components/RadioField.svelte';
 	import SelectField from '$lib/components/SelectField.svelte';
@@ -16,6 +17,7 @@
 	import NumberField from '$lib/components/NumberField.svelte';
 	import MultipleSelectField from '$lib/components/MultipleSelectField.svelte';
 	import DerivedSelect from '$lib/components/DerivedSelect.svelte';
+	import { submitApplication } from '$lib/services/api';
 
 	// Enhanced type definitions to support additional input types, including multiple-select
 	interface Question {
@@ -69,7 +71,37 @@
 	let selectedLoan: string = '';
 	let currentPageIndex: number = 0;
 	let schema: Schema;
+	let isSubmitting = false;
+	let submitError: string | null = null;
 	const gstStateError: Writable<string> = writable('');
+
+	async function handleSubmit() {
+		try {
+			isSubmitting = true;
+			submitError = null;
+
+			// Prepare the payload
+			const payload = {
+				...combinedAnswers,
+				submissionDate: new Date().toISOString(),
+				loanType: selectedLoan
+			};
+
+			const result = await submitApplication(payload);
+			
+			// Clear form data from store after successful submission
+			loanData.set({});
+			
+			// Redirect to success page
+			await goto(`/application-success?id=${result.applicationId}`);
+
+		} catch (error) {
+			console.error('Submission error:', error);
+			submitError = error instanceof Error ? error.message : 'Failed to submit application. Please try again.';
+		} finally {
+			isSubmitting = false;
+		}
+	}
 
 	// Dynamic state options from pincode data
 	$: stateOptions = Object.keys(pincode_IN_Selected).map((state) => ({
@@ -134,10 +166,24 @@
 					} else {
 						combined[key] = currentAnswers[key] ?? '';
 					}
+
+					// Also store without contextKey prefix for visibility checks
+					if (key.includes('_')) {
+						const shortKey = key.split('_').pop() || '';
+						combined[shortKey] = combined[key];
+					}
+
+					// Store context keys
+					if (q.contextKey) {
+						combined[q.contextKey] = combined[key];
+					}
 				}
 			}
 		}
 		combined['q1_loanName'] = selectedLoan;
+		combined['loanName'] = selectedLoan;  // Also store without prefix
+		
+		console.log('Combined answers:', combined);
 		return combined;
 	})();
 
@@ -216,6 +262,7 @@
 		question: Question,
 		value: string | number | boolean | (string | number)[]
 	): void {
+		console.log('Updating answer:', { questionId: question.id, value });
 		if (question.id === 'q1_loanName') {
 			selectedLoan = value as string;
 			schema = preprocessSchemaBindings(formSchema, selectedLoan) as Schema;
@@ -261,6 +308,16 @@
 			normalizedData[key.toUpperCase()] = value;
 			// Also store with first letter capitalized
 			normalizedData[key.charAt(0).toUpperCase() + key.slice(1).toLowerCase()] = value;
+			
+			// Store for keys without contextKey prefix
+			if (key.includes('_')) {
+				const shortKey = key.split('_').pop() || '';
+				normalizedData[shortKey] = value;
+				normalizedData[shortKey.toLowerCase()] = value;
+				normalizedData[shortKey.toUpperCase()] = value;
+				normalizedData[shortKey.charAt(0).toUpperCase() + shortKey.slice(1).toLowerCase()] = value;
+			}
+			
 			// Store type-specific variations
 			if (key.includes('Type')) {
 				const withoutType = key.replace('Type', '');
@@ -270,9 +327,27 @@
 			}
 		}
 
+		// Store bindsTo values separately
+		if (question.bindsTo_template) {
+			const key = resolveBindsTo(question, formData, formData.q1_loanName as string);
+			const value = formData[key];
+			if (value !== undefined) {
+				normalizedData[key] = value;
+				normalizedData[key.toLowerCase()] = value;
+				normalizedData[key.toUpperCase()] = value;
+			}
+		}
+
 		// Log visibility check for debugging
-		console.log('Checking visibility for:', question.id, question.showWhen, normalizedData);
-		return jsonLogic.apply(question.showWhen, normalizedData);
+		console.log('Question:', question.id);
+		console.log('ShowWhen condition:', question.showWhen);
+		console.log('Form data:', formData);
+		console.log('Normalized data:', normalizedData);
+		
+		const isVisible = jsonLogic.apply(question.showWhen, normalizedData);
+		console.log('Visibility result:', isVisible);
+		
+		return isVisible;
 	}
 
 	// Navigation functions
@@ -382,6 +457,29 @@
 			}
 		}
 		return enabled;
+	})();
+
+	$: isLastPage = currentPageIndex === schema.pages.length - 1;
+
+	$: canSubmit = (() => {
+		if (!isLastPage) return false;
+		
+		// Check all pages for required questions and validation
+		return schema.pages.every(page => {
+			const visibleQuestions = page.questions.filter(q => isQuestionVisible(q, combinedAnswers));
+			return visibleQuestions.every(q => {
+				const key = resolveBindsTo(q, combinedAnswers, selectedLoan);
+				const val = currentAnswers[key];
+				
+				if (!q.required) return true;
+				
+				if (q.type === 'multiple-select') {
+					return Array.isArray(val) && val.length > 0;
+				}
+				
+				return val !== undefined && val !== null && (typeof val !== 'string' || val !== '');
+			});
+		});
 	})();
 </script>
 
@@ -539,26 +637,49 @@
 
 		<!-- Navigation buttons with improved accessibility -->
 		<div class="flex flex-col sm:flex-row justify-between mt-8 space-y-4 sm:space-y-0 sm:space-x-4">
-			{#if currentPageIndex > 0}
-				<button
-					on:click={goPrev}
-					class="bg-gray-500 hover:bg-gray-600 text-white font-semibold py-2 px-4 rounded-md transition duration-200 ease-in-out"
-					aria-label="Previous page"
-				>
-					Previous
-				</button>
-			{/if}
-			{#if currentPageIndex < schema.pages.length - 1}
-				<button
-					disabled={!isNextEnabled}
-					class="bg-green-500 hover:bg-green-600 text-white font-semibold py-2 px-4 rounded-md transition duration-200 ease-in-out disabled:opacity-50 disabled:cursor-not-allowed"
-					on:click={goNext}
-					aria-label="Next page"
-					aria-disabled={!isNextEnabled}
-				>
-					Next
-				</button>
-			{/if}
+			<div>
+				{#if currentPageIndex > 0}
+					<button
+						on:click={goPrev}
+						class="bg-gray-500 hover:bg-gray-600 text-white font-semibold py-2 px-4 rounded-md transition duration-200 ease-in-out"
+						aria-label="Previous page"
+					>
+						Previous
+					</button>
+				{/if}
+			</div>
+			
+			<div class="flex flex-col items-center">
+				{#if submitError}
+					<p class="text-red-600 mb-2">{submitError}</p>
+				{/if}
+				
+				{#if isLastPage}
+					<button
+						disabled={!canSubmit || isSubmitting}
+						class="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-8 rounded-md transition duration-200 ease-in-out disabled:opacity-50 disabled:cursor-not-allowed"
+						on:click={handleSubmit}
+						aria-label="Submit application"
+						aria-disabled={!canSubmit || isSubmitting}
+					>
+						{#if isSubmitting}
+							Submitting...
+						{:else}
+							Submit Application
+						{/if}
+					</button>
+				{:else if currentPageIndex < schema.pages.length - 1}
+					<button
+						disabled={!isNextEnabled}
+						class="bg-green-500 hover:bg-green-600 text-white font-semibold py-2 px-4 rounded-md transition duration-200 ease-in-out disabled:opacity-50 disabled:cursor-not-allowed"
+						on:click={goNext}
+						aria-label="Next page"
+						aria-disabled={!isNextEnabled}
+					>
+						Next
+					</button>
+				{/if}
+			</div>
 		</div>
 	</div>
 
