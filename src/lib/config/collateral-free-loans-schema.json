@@ -276,23 +276,11 @@
 						}
 					],
 					"showWhen": {
-						"and": [
+						"!=": [
 							{
-								"!=": [
-									{
-										"var": "ITRAvailable"
-									},
-									""
-								]
+								"var": "ITRAvailable"
 							},
-							{
-								"==": [
-									{
-										"var": "ITRAvailable"
-									},
-									"Yes"
-								]
-							}
+							""
 						]
 					},
 					"errorMessage": {
@@ -335,23 +323,11 @@
 						}
 					],
 					"showWhen": {
-						"and": [
+						"!=": [
 							{
-								"!=": [
-									{
-										"var": "haveCurrentAccount"
-									},
-									""
-								]
+								"var": "haveCurrentAccount"
 							},
-							{
-								"==": [
-									{
-										"var": "haveCurrentAccount"
-									},
-									"Yes"
-								]
-							}
+							""
 						]
 					},
 					"errorMessage": {
@@ -381,23 +357,11 @@
 					"required": true,
 					"question": "Please enter your GST Number?",
 					"showWhen": {
-						"and": [
+						"!=": [
 							{
-								"!=": [
-									{
-										"var": "gstRegistration"
-									},
-									""
-								]
+								"var": "gstRegistration"
 							},
-							{
-								"==": [
-									{
-										"var": "gstRegistration"
-									},
-									"Yes"
-								]
-							}
+							""
 						]
 					},
 					"errorMessage": {
@@ -650,11 +614,11 @@
 					"question": "Location for Business verification ?",
 					"required": true,
 					"showWhen": {
-						"==": [
+						"!=": [
 							{
 								"var": "ApplicantIsNRI"
 							},
-							"No"
+							""
 						]
 					},
 					"validation": {
@@ -1886,74 +1850,181 @@
 			"nextButtonVisibility": {
 				"mode": ["allRequiredAnswered"]
 			},
+			"showWhen": { "==": [{ "var": "existingLoan" }, "Yes"] },
 			"questions": [
-					{
-						"id": "q1_whyLowCredit",
-						"bindsTo_template": "whyLowCredit",
-						"contextKey": "creditScore",
-						"type": "multiple-select",
-						"uiGroup": "select_fields",
-						"uiMeta": {
-							"placeholder": "Select the reason why you have low credit score"
+				{
+					"id": "q1_loanType",
+					"bindsTo_template": "tableLoanEntries.loanType",
+					"contextKey": "tableLoanEntries.loanType",
+					"type": "select",
+					"uiGroup": "select_fields",
+					"uiMeta": {
+						"placeholder": "Select loan type"
+					},
+					"required": true,
+					"description": "loan type",
+					"options": [
+						{ "label": "Business Loan - Unsecured", "value": "Business Loan - Unsecured" },
+						{ "label": "Business Loan - Secured", "value": "Business Loan - Secured" },
+						{ "label": "Loan Against Property", "value": "Loan Against Property" },
+						{ "label": "Machinery Loan", "value": "Machinery Loan" },
+						{ "label": "Vehicle Loan", "value": "Vehicle Loan" },
+						{ "label": "Property Loan", "value": "Property Loan" },
+						{ "label": "OD Limit", "value": "OD Limit" },
+						{ "label": "CC Limit", "value": "CC Limit" },
+						{ "label": "Dropline OD", "value": "Dropline OD" },
+						{ "label": "Other Type Loan", "value": "Other Type Loan" }
+					],
+					"showWhen": { "==": [{ "var": "existingLoan" }, "Yes"] }
+				},
+				{
+					"id": "q2_bankName",
+					"bindsTo_template": "tableLoanEntries.bankName",
+					"contextKey": "tableLoanEntries.bankName",
+					"type": "select",
+					"uiGroup": "select_fields",
+					"uiMeta": {
+						"placeholder": "Select bank name"
+					},
+					"required": true,
+					"description": "bank name",
+					"options": [
+						{
+							"label": "HDFC Bank",
+							"value": "HDFC Bank"
 						},
-						"required": true,
-						"question": "What are the possible reasons behind your low CIBIL score?",
-						"description": "select all the applicable reasons to help us understand what may be impacting your credit score",
-						"options": [
-							{ "label": "Delayed EMI", "value": "Delayed EMI" },
-							{ "label": "High credit card utilization", "value": "High credit card utilization" },
-							{ "label": "No credit history", "value": "No credit history" },
-							{
-								"label": "Frequent use of full credit limit",
-								"value": "Frequent use of full credit limit"
-							},
-							{ "label": "Delayed credit card payments", "value": "Delayed credit card payments" },
-							{
-								"label": "Multiple recent loan enquiries",
-								"value": "Multiple recent loan enquiries"
-							},
-							{ "label": "Co-applicant default", "value": "Co-applicant default" },
-							{ "label": "Loan default", "value": "Loan default" },
-							{
-								"label": "Only unsecured loans in profile",
-								"value": "Only unsecured loans in profile"
-							},
-							{
-								"label": "Minimum due payments only on credit card",
-								"value": "Minimum due payments only on credit card"
-							}
-						],
-						"showWhen": {
-							"or": [
-								{
-									"and": [
-										{ "!=": [{ "var": "companyName" }, ""] },
-										{ "!=": [{ "var": "dateOfIncorporation" }, ""] },
-										{ "!=": [{ "var": "netProfitArray" }, ""] },
-										{ "!=": [{ "var": "depreciationArray" }, ""] },
-										{ "in": [{ "var": "creditScore" }, ["No CIBIL", "650-699"]] },
-										{ "in": [{ "var": "isDefaulter" }, ["Yes", "No"]] }
-									]
-								},
-								{
-									"and": [
-										{ "!=": [{ "var": "fullNameOfApplicant" }, ""] },
-										{
-											"in": [{ "var": "typeOfResidence" }, ["Self owned", "Family owned", "Rented"]]
-										},
-										{
-											"in": [{ "var": "OfficePremises" }, ["Self owned", "Rented"]]
-										},
-										{ "!=": [{ "var": "selectedAge" }, ""] },
-										{ "!=": [{ "var": "netProfitArray" }, ""] },
-										{ "!=": [{ "var": "depreciationArray" }, ""] },
-										{ "in": [{ "var": "creditScore" }, ["No CIBIL", "650-699"]] },
-										{ "in": [{ "var": "isDefaulter" }, ["Yes", "No"]] }
-									]
-								}
-							]
+						{
+							"label": "SBI Bank",
+							"value": "SBI Bank"
+						},
+						{
+							"label": "Axis Bank",
+							"value": "Axis Bank"
+						},
+						{
+							"label": "ICICI Bank",
+							"value": "ICICI Bank"
+						},
+						{
+							"label": "Canara Bank",
+							"value": "Canara Bank"
+						},
+						{
+							"label": "Bank of Baroda",
+							"value": "Bank of Baroda"
+						},
+						{
+							"label": "Citi Bank",
+							"value": "Citi Bank"
+						},
+						{
+							"label": "Union Bank",
+							"value": "Union Bank"
 						}
+					],
+					"showWhen": {
+						"and": [
+							{ "==": [{ "var": "existingLoan" }, "Yes"] },
+							{ "!=": [{ "var": "tableLoanEntries.loanType" }, ""] }
+						]
 					}
+				},
+				{
+					"id": "q3_selectedToClose",
+					"bindsTo_template": "tableLoanEntries.selectedToClose",
+					"contextKey": "tableLoanEntries.selectedToClose",
+					"type": "select",
+					"uiGroup": "select_fields",
+					"uiMeta": {
+						"placeholder": "Select closure plan"
+					},
+					"required": true,
+					"description": "closure plan",
+					"options": [
+						{
+							"label": "Self-funded (before loan disbursement)",
+							"value": "Self-funded (before loan disbursement)"
+						},
+						{
+							"label": "will be closed by this loan",
+							"value": "will be closed by this loan"
+						},
+						{
+							"label": "continue running as it is",
+							"value": "continue running as it is"
+						}
+					],
+					"showWhen": {
+						"and": [
+							{ "==": [{ "var": "existingLoan" }, "Yes"] },
+							{ "!=": [{ "var": "tableLoanEntries.loanType" }, ""] },
+							{ "!=": [{ "var": "tableLoanEntries.bankName" }, ""] }
+						]
+					}
+				},
+				{
+					"id": "q4_emi",
+					"bindsTo_template": "tableLoanEntries.emi",
+					"contextKey": "tableLoanEntries.emi",
+					"type": "text",
+					"uiGroup": "text_fields",
+					"uiMeta": {
+						"placeholder": "Enter EMI"
+					},
+					"required": true,
+					"description": "EMI (monthly)",
+					"showWhen": {
+						"and": [
+							{ "==": [{ "var": "existingLoan" }, "Yes"] },
+							{ "!=": [{ "var": "tableLoanEntries.loanType" }, ""] },
+							{ "!=": [{ "var": "tableLoanEntries.bankName" }, ""] },
+							{ "!=": [{ "var": "tableLoanEntries.selectedToClose" }, ""] }
+						]
+					}
+				},
+				{
+					"id": "q5_tenure",
+					"bindsTo_template": "tableLoanEntries.tenure",
+					"contextKey": "tableLoanEntries.tenure",
+					"type": "text",
+					"uiGroup": "text_fields",
+					"uiMeta": {
+						"placeholder": "in months"
+					},
+					"required": true,
+					"description": "remaining tenure",
+					"showWhen": {
+						"and": [
+							{ "==": [{ "var": "existingLoan" }, "Yes"] },
+							{ "!=": [{ "var": "tableLoanEntries.loanType" }, ""] },
+							{ "!=": [{ "var": "tableLoanEntries.bankName" }, ""] },
+							{ "!=": [{ "var": "tableLoanEntries.selectedToClose" }, ""] },
+							{ "!=": [{ "var": "tableLoanEntries.emi" }, ""] }
+						]
+					}
+				},
+				{
+					"id": "q6_interestRate",
+					"bindsTo_template": "tableLoanEntries.interestRate",
+					"contextKey": "tableLoanEntries.interestRate",
+					"type": "text",
+					"uiGroup": "text_fields",
+					"uiMeta": {
+						"placeholder": "enter interest rate"
+					},
+					"required": true,
+					"description": "interest rate (p.a.)",
+					"showWhen": {
+						"and": [
+							{ "==": [{ "var": "existingLoan" }, "Yes"] },
+							{ "!=": [{ "var": "tableLoanEntries.loanType" }, ""] },
+							{ "!=": [{ "var": "tableLoanEntries.bankName" }, ""] },
+							{ "!=": [{ "var": "tableLoanEntries.selectedToClose" }, ""] },
+							{ "!=": [{ "var": "tableLoanEntries.emi" }, ""] },
+							{ "!=": [{ "var": "tableLoanEntries.tenure" }, ""] }
+						]
+					}
+				}
 			]
 		}
 	]

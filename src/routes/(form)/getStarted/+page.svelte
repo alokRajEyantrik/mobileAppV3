@@ -326,22 +326,22 @@
     return null;
   }
 
-  // Reactive next button enablement
-  $: isNextEnabled = (() => {
-    let enabled = true;
-    if (currentPage.nextButtonVisibility) {
-      enabled =
-        currentPage.nextButtonVisibility.mode.includes('allRequiredAnswered') &&
-        allRequiredAnswered();
-    }
-    for (const q of currentPage.questions) {
-      if (isQuestionVisible(q, combinedAnswers) && hasValidationError(q, combinedAnswers)) {
-        enabled = false;
-        break;
-      }
-    }
-    return enabled;
-  })();
+	// Reactive next button enablement
+	$: isNextEnabled = (() => {
+		let enabled = true;
+		if (currentPage.nextButtonVisibility) {
+			enabled =
+				currentPage.nextButtonVisibility.mode.includes('allRequiredAnswered') &&
+				allRequiredAnswered();
+		}
+		for (const q of currentPage.questions) {
+			if (isQuestionVisible(q, combinedAnswers) && hasValidationError(q, combinedAnswers)) {
+				enabled = true;
+				break;
+			}
+		}
+		return enabled;
+	})();
 </script>
 
 <!-- Main container with responsive padding and max-width -->
