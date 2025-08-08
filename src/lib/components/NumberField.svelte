@@ -1,4 +1,3 @@
-// NumberField.svelte - A reusable number input component with TypeScript support (useful for amounts in loan forms)
 <script lang="ts">
   export let id: string;
   export let label: string;
