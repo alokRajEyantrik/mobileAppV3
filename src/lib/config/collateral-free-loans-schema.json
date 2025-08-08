@@ -1717,7 +1717,7 @@
 									{
 										"in": [
 											{
-												"var": "typeOfResidence"
+												"var": "TypeOfResidence"
 											},
 											["Self owned", "Family owned", "Rented"]
 										]
@@ -1880,7 +1880,7 @@
 									{
 										"in": [
 											{
-												"var": "typeOfResidence"
+												"var": "TypeOfResidence"
 											},
 											["Self owned", "Family owned", "Rented"]
 										]
@@ -2761,6 +2761,93 @@
 										]
 									}
 								]
+							}
+						]
+					}
+				}
+			]
+		},
+		{
+			"id": "loanRequirementPage",
+			"title": "Your Loan Requirements",
+			"nextButtonVisibility": {
+				"mode": ["allRequiredAnswered"]
+			},
+			"questions": [
+				{
+					"id": "q1_mortgageYear",
+					"bindsTo_template": "mortgageYear",
+					"contextKey": "mortgageYear",
+					"type": "select",
+					"uiGroup": "select_fields",
+					"uiMeta": {
+						"placeholder": "Select loan type"
+					},
+					"required": true,
+					"question": "How long would you like your loan term to be?",
+					"description": "years. A longer term means you'll have lower monthly payments, but you'll pay more interest over time. Don't worry, you can change your mind later. 5 years. A longer term means you'll have lower monthly payments, but you'll pay more interest over time. Don't worry, you can change your mind later.",
+					"options": [
+						{
+							"label": "1",
+							"value": "1"
+						},
+						{
+							"label": "2",
+							"value": "2"
+						},
+						{
+							"label": "3",
+							"value": "3"
+						},
+						{
+							"label": "4",
+							"value": "4"
+						},
+						{
+							"label": "5",
+							"value": "5"
+						}
+					]
+				},
+				{
+					"id": "q2_SpecificLoanRequirement",
+					"bindsTo_template": "SpecificLoanRequirement",
+					"contextKey": "SpecificLoanRequirement",
+					"type": "radio",
+					"uiGroup": "loan_details",
+					"required": true,
+					"question": "Any specific loan requirement?",
+					"description": "description",
+					"options": [
+						{
+							"label": "Yes",
+							"value": "Yes"
+						},
+						{
+							"label": "No",
+							"value": "No"
+						}
+					],
+					"showWhen": {
+						"!=": [{ "var": "mortgageYear" }, ""]
+					}
+				},
+				{
+					"id": "q3_SpecificLoanRequirement",
+					"bindsTo_template": "SpecificLoanRequirement",
+					"contextKey": "SpecificLoanRequirement",
+					"type": "text",
+					"uiGroup": "text_fields",
+					"required": true,
+					"question": "Please specify your desired loan amount, you can enter up to 1,39,15,400",
+					"description": "description",
+					"showWhen": {
+						"and": [
+							{
+								"!=": [{ "var": "mortgageYear" }, ""]
+							},
+							{
+								"==": [{ "var": "SpecificLoanRequirement" }, "Yes"]
 							}
 						]
 					}

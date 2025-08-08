@@ -34,8 +34,8 @@ let sampleData={
         "typeOfCompany": "select company name", // done
         "companyContinuouslyProfit": "Yes", // done
         "numberOfDirectorOrApplicant": null,  // done
-        "mortgageYear": 4, 
-        "SpecificLoanRequirement": "Yes", 
+        "mortgageYear": 4, // done
+        "SpecificLoanRequirement": "Yes",  // done
         "tableLoanEntries": [
             {
                 "loanType": "Loan Against Property", //...
@@ -48,12 +48,12 @@ let sampleData={
                 "tenure": "8", //...
                 "interestRate": "21", //...
                 "sanctionedLimit": "", //...  // added this "key: value" myself  
-                "remainingLimit": "",
+                "remainingLimit": "", //...
                 "remainingLimitFormatted": "",
                 "sanctionedTenure": "", //...  // added this "key: value" myself  
                 "remainingTenure": "",
                 "utilizedAmountFormatted": "",
-                "utilizedAmount": ""
+                "utilizedAmount": "" //...
             },
             {
                 "loanType": "Business Loan - Unsecured",
@@ -71,7 +71,7 @@ let sampleData={
                 "utilizedAmountFormatted": "",
                 "utilizedAmount": ""
             }
-        ], // not use yet
+        ], 
         "tableLimitEntries": [
             {
                 "loanType": "OD Limit",
@@ -105,7 +105,7 @@ let sampleData={
                 "utilizedAmountFormatted": "",
                 "utilizedAmount": ""
             }
-        ], // not use yet
+        ], 
          "RequiredLoanAmount":3000000, 
     },
     "allApplicantDetails": [
