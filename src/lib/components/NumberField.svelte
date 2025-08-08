@@ -42,7 +42,9 @@
   {#if isMultiInput}
     <div class="space-y-2">
       {#each placeholder as ph, i}
+      
         <div class="flex items-center space-x-2">
+          
           <input
             id={`${id}_${i}`}
             type="number"
@@ -57,7 +59,7 @@
             class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
             class:error={error}
           />
-          <span class="text-sm text-gray-500">{ph}</span>
+          
         </div>
       {/each}
     </div>

@@ -565,7 +565,7 @@
 	<hr class="my-8 border-gray-300" />
 
 	<!-- Debug info (consider removing in production) -->
-	<div class="bg-gray-900 text-white p-6 rounded-lg shadow-md">
+	<!-- <div class="bg-gray-900 text-white p-6 rounded-lg shadow-md">
 		<h3 class="text-lg font-semibold mb-4">Debug: currentAnswers</h3>
 		<pre class="bg-gray-800 p-4 rounded-md overflow-auto">{JSON.stringify(
 				currentAnswers,
@@ -580,5 +580,5 @@
 			)}</pre>
 		<h3 class="text-lg font-semibold mb-4 mt-6">Debug: GST State Error</h3>
 		<pre class="bg-gray-800 p-4 rounded-md overflow-auto">{$gstStateError}</pre>
-	</div>
+	</div> -->
 </div>
