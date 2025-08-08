@@ -347,7 +347,7 @@
 		}
 		for (const q of currentPage.questions) {
 			if (isQuestionVisible(q, combinedAnswers) && hasValidationError(q, combinedAnswers)) {
-				enabled = false;
+				enabled = true;
 				break;
 			}
 		}
@@ -358,6 +358,7 @@
 <!-- Main container with responsive padding and max-width -->
 <div class="max-w-4xl mx-auto px-4 py-8 sm:px-6 lg:px-8">
 	<!-- Form title or header can be added here if needed -->
+	 
 	<div class="bg-white shadow-md rounded-lg p-6">
 		<!-- Render visible questions with support for new input types -->
 		<div class="mb-6">

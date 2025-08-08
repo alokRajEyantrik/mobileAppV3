@@ -38,14 +38,14 @@ let sampleData={
         "SpecificLoanRequirement": "Yes", 
         "tableLoanEntries": [
             {
-                "loanType": "Loan Against Property",
-                "bankName": "Dhanlaxmi Bank",
-                "selectedToClose": "Keep Running",
-                "emi": "1200",
+                "loanType": "Loan Against Property", //...
+                "bankName": "Dhanlaxmi Bank", //...
+                "selectedToClose": "Keep Running", //...
+                "emi": "1200", //...
                 "emiFormatted": "1,200",
                 "totalLimit": "",
                 "totalLimitFormatted": "",
-                "tenure": "8",
+                "tenure": "8", //...
                 "interestRate": "21",
                 "remainingLimit": "",
                 "remainingLimitFormatted": "",
