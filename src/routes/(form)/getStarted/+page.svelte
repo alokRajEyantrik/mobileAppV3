@@ -142,6 +142,7 @@
 
 	$: currentPage = schema.pages[currentPageIndex];
 	$: visibleQuestions = currentPage.questions.filter((q) => isQuestionVisible(q, combinedAnswers));
+  $:console.log('Visible Questions:', visibleQuestions);
 
 	// Get dynamic option value (enhanced for multiple types)
 	function getOptionValue(
@@ -223,6 +224,11 @@
 		const key = resolveBindsTo(question, currentAnswers, selectedLoan);
 		updateAnswerByKey(key, value);
 
+		// Also update with correct casing if it's the NRI question
+		if (key === 'applicantIsNRI') {
+			updateAnswerByKey('ApplicantIsNRI', value);
+		}
+
 		if (key === 'GSTNumber') {
 			updateStateFromGST(value as string);
 		}
@@ -231,6 +237,9 @@
 			updateAnswerByKey('residenceCityName', '');
 		} else if (key === 'businessStateName') {
 			updateAnswerByKey('businessCityName', '');
+		} else if (key === 'TypeOfResidence') {
+			// Also update lowercase version for visibility conditions
+			updateAnswerByKey('typeOfResidence', value);
 		} else if (key === 'addressSameOrNot' && value === 'Yes') {
 			// Copy residence address to business address when "Yes" is selected
 			updateAnswerByKey('businessStateName', currentAnswers['residenceStateName'] || '');
@@ -241,7 +250,28 @@
 	// Visibility check
 	function isQuestionVisible(question: Question, formData: Answers): boolean {
 		if (!question.showWhen) return true;
-		return jsonLogic.apply(question.showWhen, formData);
+
+		// Create case-insensitive version of form data
+		const normalizedData: Record<string, any> = {};
+		for (const [key, value] of Object.entries(formData)) {
+			// Store value under all possible casings
+			normalizedData[key] = value;
+			normalizedData[key.toLowerCase()] = value;
+			normalizedData[key.toUpperCase()] = value;
+			// Also store with first letter capitalized
+			normalizedData[key.charAt(0).toUpperCase() + key.slice(1).toLowerCase()] = value;
+			// Store type-specific variations
+			if (key.includes('Type')) {
+				const withoutType = key.replace('Type', '');
+				normalizedData[withoutType.toLowerCase()] = value;
+				normalizedData[withoutType.toUpperCase()] = value;
+				normalizedData[withoutType.charAt(0).toUpperCase() + withoutType.slice(1).toLowerCase()] = value;
+			}
+		}
+
+		// Log visibility check for debugging
+		console.log('Checking visibility for:', question.id, question.showWhen, normalizedData);
+		return jsonLogic.apply(question.showWhen, normalizedData);
 	}
 
 	// Navigation functions
@@ -357,11 +387,12 @@
 <!-- Main container with responsive padding and max-width -->
 <div class="max-w-4xl mx-auto px-4 py-8 sm:px-6 lg:px-8">
 	<!-- Form title or header can be added here if needed -->
+
 	<div class="bg-white shadow-md rounded-lg p-6">
-		<!-- Render visible questions with support for new input types -->
 		<div class="mb-6">
 			<h2 class="font-bold text-3xl">{currentPage.title}</h2>
 		</div>
+		<!-- Render visible questions with support for new input types -->
 		{#each visibleQuestions as question (question.id)}
 			<div class="mb-6">
 				{#if question.type === 'radio'}
