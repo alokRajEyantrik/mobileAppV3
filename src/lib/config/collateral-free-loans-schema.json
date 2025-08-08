@@ -1962,10 +1962,11 @@
 					"type": "select",
 					"uiGroup": "select_fields",
 					"uiMeta": {
-						"placeholder": "Select loan type"
+						"placeholder": "Choose your existing loan type"
 					},
 					"required": true,
-					"description": "loan type",
+					"question": "What type of existing loan do you have?",
+					"description": "Select the type of loan you currently have. This helps us understand your existing financial commitments better.",
 					"options": [
 						{
 							"label": "Business Loan - Unsecured",
@@ -2024,10 +2025,11 @@
 					"type": "select",
 					"uiGroup": "select_fields",
 					"uiMeta": {
-						"placeholder": "Select bank name"
+						"placeholder": "Select your bank"
 					},
 					"required": true,
-					"description": "bank name",
+					"question": "Which bank is your existing loan with?",
+					"description": "Choose the bank where you have your current loan. This information helps us coordinate the loan takeover process if needed.",
 					"options": [
 						{
 							"label": "HDFC Bank",
@@ -2090,10 +2092,11 @@
 					"type": "select",
 					"uiGroup": "select_fields",
 					"uiMeta": {
-						"placeholder": "Select closure plan"
+						"placeholder": "How do you plan to close this loan?"
 					},
 					"required": true,
-					"description": "closure plan",
+					"question": "How would you like to handle this existing loan?",
+					"description": "Let us know if you'll close this loan yourself or if you'd like us to help with the closure process as part of your new loan.",
 					"options": [
 						{
 							"label": "Self-funded (before loan disbursement)",
@@ -2781,11 +2784,11 @@
 					"type": "select",
 					"uiGroup": "select_fields",
 					"uiMeta": {
-						"placeholder": "Select loan type"
+						"placeholder": "Select loan tenure in years"
 					},
 					"required": true,
 					"question": "How long would you like your loan term to be?",
-					"description": "years. A longer term means you'll have lower monthly payments, but you'll pay more interest over time. Don't worry, you can change your mind later. 5 years. A longer term means you'll have lower monthly payments, but you'll pay more interest over time. Don't worry, you can change your mind later.",
+					"description": "Choose your preferred loan duration. A longer term means lower monthly payments but more interest over time. You can adjust this later based on your eligibility.",
 					"options": [
 						{
 							"label": "1",
@@ -2816,8 +2819,8 @@
 					"type": "radio",
 					"uiGroup": "loan_details",
 					"required": true,
-					"question": "Any specific loan requirement?",
-					"description": "description",
+					"question": "Do you have a specific loan amount in mind?",
+					"description": "Let us know if you have a particular loan amount requirement. This helps us tailor our offerings to your needs.",
 					"options": [
 						{
 							"label": "Yes",
@@ -2837,10 +2840,15 @@
 					"bindsTo_template": "SpecificLoanRequirement",
 					"contextKey": "SpecificLoanRequirement",
 					"type": "number",
-					"uiGroup": "",
+					"uiGroup": "number_fields",
+					"uiMeta": {
+						"placeholder": "Enter amount in rupees",
+						"min": 100000,
+						"max": 13915400
+					},
 					"required": true,
-					"question": "Please specify your desired loan amount, you can enter up to 1,39,15,400",
-					"description": "description",
+					"question": "Enter your desired loan amount",
+					"description": "You can request a loan amount up to ₹1,39,15,400. Enter a value that aligns with your requirements and repayment capacity.",
 					"showWhen": {
 						"and": [
 							{
