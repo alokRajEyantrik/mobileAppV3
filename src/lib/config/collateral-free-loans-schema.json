@@ -652,7 +652,7 @@
 					"showWhen": {
 						"==": [
 							{
-								"var": "applicantIsNRI"
+								"var": "ApplicantIsNRI"
 							},
 							"No"
 						]
@@ -858,39 +858,7 @@
 							"value": "Union Bank"
 						}
 					],
-					"errorMessage": {
-						"required": "Please select at least one bank",
-						"minSelections": "Please select at least one bank"
-					},
-					"validation": {
-						"condition": {
-							"or": [
-								{
-									"==": [
-										{
-											"var": "banksOfCurrentAccount"
-										},
-										""
-									]
-								},
-								{
-									"==": [
-										{
-											"reduce": [
-												{
-													"var": "banksOfCurrentAccount"
-												},
-												"length",
-												0
-											]
-										},
-										0
-									]
-								}
-							]
-						},
-						"message": "validateMinSelections"
-					},
+
 					"showWhen": {
 						"or": [
 							{
@@ -1305,9 +1273,6 @@
 							},
 							"Sole-Proprietorship"
 						]
-					},
-					"validation": {
-						"required": true
 					}
 				},
 				{
@@ -1441,7 +1406,7 @@
 							{
 								"in": [
 									{
-										"var": "TypeOfResidence"
+										"var": "typeOfResidence"
 									},
 									[
 										"Self owned",
@@ -1498,7 +1463,7 @@
 							{
 								"in": [
 									{
-										"var": "TypeOfResidence"
+										"var": "typeOfResidence"
 									},
 									[
 										"Self owned",
@@ -1623,7 +1588,7 @@
 									{
 										"in": [
 											{
-												"var": "TypeOfResidence"
+												"var": "typeOfResidence"
 											},
 											[
 												"Self owned",
@@ -1721,7 +1686,7 @@
 									{
 										"in": [
 											{
-												"var": "TypeOfResidence"
+												"var": "typeOfResidence"
 											},
 											[
 												"Self owned",
@@ -1861,7 +1826,7 @@
 									{
 										"in": [
 											{
-												"var": "TypeOfResidence"
+												"var": "typeOfResidence"
 											},
 											[
 												"Self owned",
@@ -1913,6 +1878,82 @@
 						"required": true
 					}
 				}
+			]
+		},
+		{
+			"id": "existingDetailsPage",
+			"title": "Existing Details",
+			"nextButtonVisibility": {
+				"mode": ["allRequiredAnswered"]
+			},
+			"questions": [
+					{
+						"id": "q1_whyLowCredit",
+						"bindsTo_template": "whyLowCredit",
+						"contextKey": "creditScore",
+						"type": "multiple-select",
+						"uiGroup": "select_fields",
+						"uiMeta": {
+							"placeholder": "Select the reason why you have low credit score"
+						},
+						"required": true,
+						"question": "What are the possible reasons behind your low CIBIL score?",
+						"description": "select all the applicable reasons to help us understand what may be impacting your credit score",
+						"options": [
+							{ "label": "Delayed EMI", "value": "Delayed EMI" },
+							{ "label": "High credit card utilization", "value": "High credit card utilization" },
+							{ "label": "No credit history", "value": "No credit history" },
+							{
+								"label": "Frequent use of full credit limit",
+								"value": "Frequent use of full credit limit"
+							},
+							{ "label": "Delayed credit card payments", "value": "Delayed credit card payments" },
+							{
+								"label": "Multiple recent loan enquiries",
+								"value": "Multiple recent loan enquiries"
+							},
+							{ "label": "Co-applicant default", "value": "Co-applicant default" },
+							{ "label": "Loan default", "value": "Loan default" },
+							{
+								"label": "Only unsecured loans in profile",
+								"value": "Only unsecured loans in profile"
+							},
+							{
+								"label": "Minimum due payments only on credit card",
+								"value": "Minimum due payments only on credit card"
+							}
+						],
+						"showWhen": {
+							"or": [
+								{
+									"and": [
+										{ "!=": [{ "var": "companyName" }, ""] },
+										{ "!=": [{ "var": "dateOfIncorporation" }, ""] },
+										{ "!=": [{ "var": "netProfitArray" }, ""] },
+										{ "!=": [{ "var": "depreciationArray" }, ""] },
+										{ "in": [{ "var": "creditScore" }, ["No CIBIL", "650-699"]] },
+										{ "in": [{ "var": "isDefaulter" }, ["Yes", "No"]] }
+									]
+								},
+								{
+									"and": [
+										{ "!=": [{ "var": "fullNameOfApplicant" }, ""] },
+										{
+											"in": [{ "var": "typeOfResidence" }, ["Self owned", "Family owned", "Rented"]]
+										},
+										{
+											"in": [{ "var": "OfficePremises" }, ["Self owned", "Rented"]]
+										},
+										{ "!=": [{ "var": "selectedAge" }, ""] },
+										{ "!=": [{ "var": "netProfitArray" }, ""] },
+										{ "!=": [{ "var": "depreciationArray" }, ""] },
+										{ "in": [{ "var": "creditScore" }, ["No CIBIL", "650-699"]] },
+										{ "in": [{ "var": "isDefaulter" }, ["Yes", "No"]] }
+									]
+								}
+							]
+						}
+					}
 			]
 		}
 	]
