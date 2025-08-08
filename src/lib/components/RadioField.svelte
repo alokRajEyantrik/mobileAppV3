@@ -2,6 +2,7 @@
 	export let id = '';
 	export let name = '';
 	export let label = '';
+	export let description = '';
 	export let options = [];
 	export let value = '';
 	export let error = null;
@@ -15,7 +16,10 @@
 </script>
 
 <div class="flex flex-col gap-2">
-	<label for={id}>{label}</label>
+	<label for={id} class="text-sm font-medium text-gray-700">{label}</label>
+	{#if description}
+		<p class="text-sm text-gray-500 mb-2">{description}</p>
+	{/if}
 	<div class="flex flex-col gap-2">
 		{#each options as opt}
 			<label

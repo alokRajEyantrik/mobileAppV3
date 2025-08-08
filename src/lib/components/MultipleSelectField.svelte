@@ -6,6 +6,7 @@
 
 	export let id: string = '';
 	export let label: string = '';
+	export let description: string | undefined = undefined;
 	export let options: Option[] = [];
 	export let selectedValues: (string | number)[] = [];
 	export let error: string | null = null;
@@ -34,6 +35,9 @@
 			<span class="text-red-500">*</span>
 		{/if}
 	</label>
+	{#if description}
+		<p class="text-sm text-gray-500 mb-2">{description}</p>
+	{/if}
 	<div
 		class="w-full border border-gray-300 rounded-md focus-within:ring-2 focus-within:ring-blue-500 focus-within:border-blue-500"
 		class:error={!!error}

@@ -1,6 +1,7 @@
 <script>
     export let id = '';
     export let label = '';
+    export let description = '';
     export let value = '';
     export let readonly = false;
     export let error = null;
@@ -12,7 +13,10 @@
 </script>
 
 <div class="flex flex-col gap-2">
-    <label for={id}>{label}</label>
+    <label for={id} class="text-sm font-medium text-gray-700">{label}</label>
+    {#if description}
+        <p class="text-sm text-gray-500 -mt-1 mb-1">{description}</p>
+    {/if}
     <input
         {id}
         type="text"

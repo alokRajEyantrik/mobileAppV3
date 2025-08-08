@@ -1,6 +1,7 @@
 <script lang="ts">
   export let id: string;
   export let label: string;
+  export let description: string | undefined = undefined;
   export let value: string = '';
   export let error: string | null = null;
   export let rows: number = 4;
@@ -19,6 +20,9 @@
     {label}
     {#if required}<span class="text-red-500">*</span>{/if}
   </label>
+  {#if description}
+    <p class="text-sm text-gray-500 mb-2">{description}</p>
+  {/if}
   <textarea
     {id}
     bind:value

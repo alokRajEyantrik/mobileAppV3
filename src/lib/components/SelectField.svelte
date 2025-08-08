@@ -8,6 +8,7 @@
 
   export let id: string;
   export let label: string;
+  export let description: string | undefined = undefined;
   export let options: Option[] = [];
   export let value: string | number = '';
   export let error: string | null = null;
@@ -27,6 +28,9 @@
     {label}
     {#if required}<span class="text-red-500">*</span>{/if}
   </label>
+  {#if description}
+    <p class="text-sm text-gray-500 mb-2">{description}</p>
+  {/if}
   <select
     {id}
     {disabled}

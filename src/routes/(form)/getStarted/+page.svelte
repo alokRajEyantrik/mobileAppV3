@@ -31,6 +31,7 @@
 			| 'derivedSelect'
 			| 'multiple-select';
 		question: string;
+		description?: string;
 		bindsTo?: string;
 		bindsTo_template?: string;
 		options?: Array<{
@@ -43,7 +44,7 @@
 		errorMessage?: Record<string, string>;
 		uiMeta?: {
 			readonly?: boolean;
-			placeholder?: string;
+			placeholder?: string | string[];
 			rows?: number;
 			min?: string | number;
 			max?: string | number;
@@ -400,6 +401,7 @@
 						id={question.id}
 						name={question.id}
 						label={question.question}
+						description={question.description}
 						options={question.options ?? []}
 						value={currentAnswers[
 							resolveBindsTo(question, combinedAnswers, selectedLoan)
@@ -416,6 +418,7 @@
 					<TextField
 						id={question.id}
 						label={question.question}
+						description={question.description}
 						value={currentAnswers[
 							resolveBindsTo(question, combinedAnswers, selectedLoan)
 						]?.toString() || ''}
@@ -427,6 +430,7 @@
 					<SelectField
 						id={question.id}
 						label={question.question}
+						description={question.description}
 						options={question.id === 'q1_residenceStateName' ||
 						question.id === 'q4_businessStateName'
 							? stateOptions
@@ -469,6 +473,7 @@
 					<TextareaField
 						id={question.id}
 						label={question.question}
+						description={question.description}
 						value={currentAnswers[
 							resolveBindsTo(question, combinedAnswers, selectedLoan)
 						]?.toString() || ''}
@@ -494,6 +499,7 @@
 					<NumberField
 						id={question.id}
 						label={question.question}
+						description={question.description}
 						value={(currentAnswers[resolveBindsTo(question, combinedAnswers, selectedLoan)] as
 							| number[]
 							| number
@@ -510,6 +516,7 @@
 					<MultipleSelectField
 						id={question.id}
 						label={question.question}
+						description={question.description}
 						options={question.options?.map((opt) => ({
 							label: opt.label as string,
 							value: opt.value as string | number

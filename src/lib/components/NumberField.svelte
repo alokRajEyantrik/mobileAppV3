@@ -1,6 +1,7 @@
 <script lang="ts">
   export let id: string;
   export let label: string;
+  export let description: string | undefined = undefined;
   export let value: number[] | number | null = null;
   export let error: string | null = null;
   export let min: number | undefined = undefined;
@@ -34,6 +35,9 @@
     {label}
     {#if required}<span class="text-red-500">*</span>{/if}
   </label>
+  {#if description}
+    <p class="text-sm text-gray-500 mb-2">{description}</p>
+  {/if}
 
   {#if isMultiInput}
     <div class="space-y-2">
