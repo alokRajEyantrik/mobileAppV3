@@ -187,9 +187,15 @@
 		return combined;
 	})();
 
-	$: currentPage = schema.pages[currentPageIndex];
-	$: visibleQuestions = currentPage.questions.filter((q) => isQuestionVisible(q, combinedAnswers));
-  $:console.log('Visible Questions:', visibleQuestions);
+	// Filter out pages that should be hidden based on showWhen conditions
+	$: visiblePages = schema.pages.filter(page => !page.showWhen || jsonLogic.apply(page.showWhen, combinedAnswers));
+	
+	// Map current page index to visible pages array index
+	$: currentPageIndex = Math.min(currentPageIndex, visiblePages.length - 1);
+	
+	$: currentPage = visiblePages[currentPageIndex];
+	$: visibleQuestions = currentPage?.questions.filter((q) => isQuestionVisible(q, combinedAnswers)) ?? [];
+	$:console.log('Visible Questions:', visibleQuestions);
 
 	// Get dynamic option value (enhanced for multiple types)
 	function getOptionValue(
@@ -352,7 +358,7 @@
 
 	// Navigation functions
 	function goNext(): void {
-		if (currentPageIndex < schema.pages.length - 1) currentPageIndex += 1;
+		if (currentPageIndex < visiblePages.length - 1) currentPageIndex += 1;
 	}
 
 	function goPrev(): void {
@@ -459,13 +465,13 @@
 		return enabled;
 	})();
 
-	$: isLastPage = currentPageIndex === schema.pages.length - 1;
+	$: isLastPage = currentPageIndex === visiblePages.length - 1;
 
 	$: canSubmit = (() => {
 		if (!isLastPage) return false;
 		
-		// Check all pages for required questions and validation
-		return schema.pages.every(page => {
+		// Check all visible pages for required questions and validation
+		return visiblePages.every(page => {
 			const visibleQuestions = page.questions.filter(q => isQuestionVisible(q, combinedAnswers));
 			return visibleQuestions.every(q => {
 				const key = resolveBindsTo(q, combinedAnswers, selectedLoan);
@@ -686,7 +692,7 @@
 	<hr class="my-8 border-gray-300" />
 
 	<!-- Debug info (consider removing in production) -->
-	<!-- <div class="bg-gray-900 text-white p-6 rounded-lg shadow-md">
+	<div class="bg-gray-900 text-white p-6 rounded-lg shadow-md">
 		<h3 class="text-lg font-semibold mb-4">Debug: currentAnswers</h3>
 		<pre class="bg-gray-800 p-4 rounded-md overflow-auto">{JSON.stringify(
 				currentAnswers,
@@ -701,5 +707,5 @@
 			)}</pre>
 		<h3 class="text-lg font-semibold mb-4 mt-6">Debug: GST State Error</h3>
 		<pre class="bg-gray-800 p-4 rounded-md overflow-auto">{$gstStateError}</pre>
-	</div> -->
+	</div>
 </div>
