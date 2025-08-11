@@ -185,196 +185,6 @@
 			},
 			"questions": [
 				{
-					"id": "q1_ITRAvailable",
-					"bindsTo_template": "ITRAvailable",
-					"contextKey": "ITRAvailable",
-					"type": "radio",
-					"uiGroup": "loan_details",
-					"required": true,
-					"question": "Have you filed Income Tax Returns (ITRs) for the last 3 financial years?",
-					"options": [
-						{
-							"label": "Yes",
-							"value": "Yes",
-							"flagKey": {
-								"isITRAvailable": true
-							}
-						},
-						{
-							"label": "No",
-							"value": "No",
-							"flagKey": {
-								"isITRAvailable": false
-							}
-						}
-					],
-					"showWhen": {
-						"in": [
-							{
-								"var": "unSecureLoanType"
-							},
-							["Business Loan", "Professional Loan"]
-						]
-					},
-					"errorMessage": {
-						"required": true,
-						"message": "We regret to inform you that we are unable to process your request at this time due to the following reasons: ITR for last 3 years not available."
-					},
-					"validation": {
-						"condition": {
-							"!=": [
-								{
-									"var": "ITRAvailable"
-								},
-								"Yes"
-							]
-						}
-					}
-				},
-				{
-					"id": "q2_haveCurrentAccount",
-					"bindsTo_template": "haveCurrentAccount",
-					"contextKey": "haveCurrentAccount",
-					"type": "radio",
-					"uiGroup": "loan_details",
-					"required": true,
-					"question": "Do you have Current, OD, or CC accounts in any bank with a total active history of 3 years or more?",
-					"options": [
-						{
-							"label": "Yes",
-							"value": "Yes",
-							"flagKey": {
-								"haveCurrentAccount": true
-							}
-						},
-						{
-							"label": "No",
-							"value": "No",
-							"flagKey": {
-								"haveCurrentAccount": false
-							}
-						}
-					],
-					"showWhen": {
-						"!=": [
-							{
-								"var": "ITRAvailable"
-							},
-							""
-						]
-					},
-					"errorMessage": {
-						"required": true,
-						"message": "We regret to inform you that we are unable to process your request at this time due to the following reasons: You do not have a current Account, Overdraft (OD), or Cash Credit (CC)."
-					},
-					"validation": {
-						"condition": {
-							"!=": [
-								{
-									"var": "haveCurrentAccount"
-								},
-								"Yes"
-							]
-						}
-					}
-				},
-				{
-					"id": "q3_gstRegistration",
-					"bindsTo_template": "gstRegistration",
-					"contextKey": "gstRegistration",
-					"type": "radio",
-					"uiGroup": "loan_details",
-					"required": true,
-					"question": "Is the GST registration with the current account three years old?",
-					"options": [
-						{
-							"label": "Yes",
-							"value": "Yes",
-							"flagKey": {
-								"isGstRegistration": true
-							}
-						},
-						{
-							"label": "No",
-							"value": "No",
-							"flagKey": {
-								"isGstRegistration": false
-							}
-						}
-					],
-					"showWhen": {
-						"!=": [
-							{
-								"var": "haveCurrentAccount"
-							},
-							""
-						]
-					},
-					"errorMessage": {
-						"required": true,
-						"message": "We regret to inform you that we are unable to process you request at this time due to the following reasons: GST registration with current account not three year old."
-					},
-					"validation": {
-						"condition": {
-							"!=": [
-								{
-									"var": "gstRegistration"
-								},
-								"Yes"
-							]
-						}
-					}
-				},
-				{
-					"id": "q4_GSTNumber",
-					"bindsTo_template": "GSTNumber",
-					"contextKey": "GSTNumber",
-					"type": "text",
-					"uiGroup": "text_fields",
-					"uiMeta": {
-						"placeholder": "Enter your GST Number"
-					},
-					"required": true,
-					"question": "Please enter your GST Number?",
-					"showWhen": {
-						"!=": [
-							{
-								"var": "gstRegistration"
-							},
-							""
-						]
-					},
-					"errorMessage": {
-						"required": "GST Number is required",
-						"lengthError": "GST Number must be exactly 15 characters long.",
-						"message": "We regret to inform you that we are unable to process your request at this time due to the following reasons: GST registration with current account not three years old.",
-						"stateNotServed": "We're not serve their"
-					},
-					"validation": {
-						"condition": {
-							"or": [
-								{
-									"==": [
-										{
-											"var": "GSTNumber"
-										},
-										""
-									]
-								},
-								{
-									"!=": [
-										{
-											"var": "GSTNumber.length"
-										},
-										15
-									]
-								}
-							]
-						},
-						"message": "validateGSTState"
-					}
-				},
-				{
 					"id": "q_isPaySlipAvailable",
 					"bindsTo_template": "payslips",
 					"contextKey": "payslips",
@@ -399,11 +209,11 @@
 						}
 					],
 					"showWhen": {
-						"in": [
+						"==": [
 							{
 								"var": "unSecureLoanType"
 							},
-							["Personal Loan"]
+							"Personal Loan"
 						]
 					},
 					"errorMessage": {
@@ -446,11 +256,11 @@
 						}
 					],
 					"showWhen": {
-						"in": [
+						"!=": [
 							{
-								"var": "unSecureLoanType"
+								"var": "payslips"
 							},
-							["Personal Loan"]
+							""
 						]
 					},
 					"errorMessage": {
@@ -495,7 +305,7 @@
 					"showWhen": {
 						"!=": [
 							{
-								"var": "GSTNumber"
+								"var": "Form16Available"
 							},
 							""
 						]
@@ -520,7 +330,7 @@
 		},
 		{
 			"id": "locationPage",
-			"title": "Business Location",
+			"title": "Residence Location",
 			"nextButtonVisibility": {
 				"mode": ["allRequiredAnswered"]
 			},
@@ -532,11 +342,10 @@
 					"type": "select",
 					"uiGroup": "select_fields",
 					"uiMeta": {
-						"placeholder": "State (auto-filled from GST Number)",
-						"readonly": true
+						"placeholder": "Select Residence State"
 					},
-					"description": "state name",
-					"question": "Location for Business verification ?",
+					"description": "Where would you like to process your loan application from? Select the location that’s most convenient for you, ensuring smooth coordination with the bank for residence and office verifications, and completing loan formalities without disrupting your schedule.",
+					"question": "Location for residence verification ?",
 					"required": true,
 					"showWhen": {
 						"!=": [
@@ -578,131 +387,17 @@
 					}
 				},
 				{
-					"id": "q3_addressSameOrNot",
-					"bindsTo_template": "addressSameOrNot",
-					"contextKey": "addressSameOrNot",
-					"type": "radio",
-					"uiGroup": "loan_details",
-					"required": true,
-					"question": "Is your GST registered address the same as your actual business address?",
-					"options": [
-						{
-							"label": "Yes",
-							"value": "Yes",
-							"flagKey": {
-								"isAddressSame": true
-							}
-						},
-						{
-							"label": "No",
-							"value": "No",
-							"flagKey": {
-								"isAddressSame": false
-							}
-						}
-					],
-					"showWhen": {
-						"and": [
-							{
-								"!=": [
-									{
-										"var": "residenceStateName"
-									},
-									""
-								]
-							},
-							{
-								"!=": [
-									{
-										"var": "residenceCityName"
-									},
-									""
-								]
-							}
-						]
-					}
-				},
-				{
-					"id": "q4_businessStateName",
-					"bindsTo_template": "businessStateName",
-					"contextKey": "businessStateName",
+					"id": "q6_salariedBankName",
+					"bindsTo_template": "salariedBankName",
+					"contextKey": "salariedBankName",
 					"type": "select",
 					"uiGroup": "select_fields",
 					"uiMeta": {
-						"placeholder": "Select a State"
-					},
-					"description": "state name",
-					"question": "Select location for your actual business",
-					"required": true,
-					"showWhen": {
-						"==": [
-							{
-								"var": "addressSameOrNot"
-							},
-							"No"
-						]
-					}
-				},
-				{
-					"id": "q5_businessCityName",
-					"bindsTo_template": "businessCityName",
-					"contextKey": "businessCityName",
-					"type": "derivedSelect",
-					"uiGroup": "select_fields",
-					"uiMeta": {
-						"placeholder": "Select a City"
-					},
-					"question": "city name",
-					"required": true,
-					"showWhen": {
-						"and": [
-							{
-								"==": [
-									{
-										"var": "addressSameOrNot"
-									},
-									"No"
-								]
-							},
-							{
-								"!=": [
-									{
-										"var": "businessStateName"
-									},
-									""
-								]
-							}
-						]
-					},
-					"errorMessage": {
-						"required": "City is required",
-						"message": "Kindly select a different city or update your earlier answer."
-					},
-					"validation": {
-						"condition": {
-							"==": [
-								{
-									"var": "businessCityName"
-								},
-								{
-									"var": "residenceCityName"
-								}
-							]
-						}
-					}
-				},
-				{
-					"id": "q6_banksOfCurrentAccount",
-					"bindsTo_template": "banksOfCurrentAccount",
-					"contextKey": "banksOfCurrentAccount",
-					"type": "multiple-select",
-					"uiGroup": "select_fields",
-					"uiMeta": {
-						"placeholder": "Select banks"
+						"placeholder": "Select bank name"
 					},
 					"required": true,
-					"question": "Which of these banks have you used for a Current Account, Overdraft (OD), or Cash Credit (CC)?",
-					"description": "Select the banks which you use to receive the payments from your customers. Bank statements of these will verify your business income and cash flow.",
+					"question": "Please select the bank associated with your active salary account.",
+					"description": "Please select the bank where you have an active salary account that has been open for at least 12 months.",
 					"options": [
 						{
 							"label": "HDFC Bank",
@@ -738,350 +433,24 @@
 						}
 					],
 					"showWhen": {
-						"or": [
-							{
-								"==": [
-									{
-										"var": "addressSameOrNot"
-									},
-									"Yes"
-								]
-							},
-							{
-								"and": [
-									{
-										"==": [
-											{
-												"var": "addressSameOrNot"
-											},
-											"No"
-										]
-									},
-									{
-										"!=": [
-											{
-												"var": "businessStateName"
-											},
-											""
-										]
-									},
-									{
-										"!=": [
-											{
-												"var": "businessCityName"
-											},
-											""
-										]
-									}
-								]
-							}
-						]
-					}
-				}
-			]
-		},
-		{
-			"id": "applicantPage",
-			"title": "Applicant Type",
-			"nextButtonVisibility": {
-				"mode": ["allRequiredAnswered"]
-			},
-			"questions": [
-				{
-					"id": "q1_tellUsApplying",
-					"bindsTo_template": "tellUsApplying",
-					"contextKey": "tellUsApplying",
-					"type": "radio",
-					"uiGroup": "loan_details",
-					"required": true,
-					"question": "Tell us who's applying",
-					"options": [
-						{
-							"label": "Sole-Proprietorship",
-							"value": "Sole-Proprietorship",
-							"flagKey": {
-								"isIndividual": true
-							}
-						},
-						{
-							"label": "Company (Non-individual entity)",
-							"value": "Company (Non-individual entity)",
-							"flagKey": {
-								"isCompany": true
-							}
-						}
-					],
-					"showWhen": {
-						"!=": [
-							{
-								"var": "banksOfCurrentAccount"
-							},
-							""
-						]
-					}
-				},
-				{
-					"id": "q2_businessType",
-					"bindsTo_template": "businessType",
-					"contextKey": "businessType",
-					"type": "radio",
-					"uiGroup": "loan_details",
-					"required": true,
-					"question": "Please specify the type of Business.",
-					"description": "Lenders evaluate loan applications differently based on the business type selected. If you choose Manufacturing, a CA-audited stock report will be required. However, if your manufacturing is done on a job work basis (i.e., no stock is maintained), please select Service industry instead. Kindly choose the option that best describes your business.",
-					"options": [
-						{
-							"label": "Manufacturing",
-							"value": "Manufacturing",
-							"flagKey": {
-								"isManufacturing": true
-							}
-						},
-						{
-							"label": "Service industry",
-							"value": "Service industry",
-							"flagKey": {
-								"isServiceIndustry": true
-							}
-						},
-						{
-							"label": "Retail",
-							"value": "Retail",
-							"flagKey": {
-								"isRetail": true
-							}
-						},
-						{
-							"label": "Trading",
-							"value": "Trading",
-							"flagKey": {
-								"isTrading": true
-							}
-						}
-					],
-					"showWhen": {
-						"in": [
-							{
-								"var": "tellUsApplying"
-							},
-							["Sole-Proprietorship", "Company (Non-individual entity)"]
-						]
-					}
-				},
-				{
-					"id": "q3_typeOfCompany",
-					"bindsTo_template": "typeOfCompany",
-					"contextKey": "typeOfCompany",
-					"type": "select",
-					"uiGroup": "selectButton",
-					"uiMeta": {
-						"placeholder": "Select company type"
-					},
-					"required": true,
-					"question": "What's company type?",
-					"options": [
-						{
-							"label": "One Person Company (OPC)",
-							"value": "One Person Company (OPC)",
-							"flagKey": {
-								"isCompanyTypeOPC": true
-							}
-						},
-						{
-							"label": "Partnership firm",
-							"value": "Partnership firm",
-							"flagKey": {
-								"isCompanyTypePartnership": false
-							}
-						},
-						{
-							"label": "Limited Liability Partnership (LLP)",
-							"value": "Limited Liability Partnership (LLP)",
-							"flagKey": {
-								"isCompanyTypeLLP": false
-							}
-						},
-						{
-							"label": "Private Limited Company (Pvt. Ltd.)",
-							"value": "Private Limited Company (Pvt. Ltd.)",
-							"flagKey": {
-								"isCompanyTypePrivate": false
-							}
-						}
-					],
-					"showWhen": {
 						"and": [
 							{
-								"==": [
+								"!=": [
 									{
-										"var": "tellUsApplying"
+										"var": "residenceStateName"
 									},
-									"Company (Non-individual entity)"
+									""
 								]
 							},
 							{
-								"in": [
+								"!=": [
 									{
-										"var": "businessType"
+										"var": "residenceCityName"
 									},
-									["Manufacturing", "Service industry", "Retail", "Trading"]
+									""
 								]
 							}
 						]
-					}
-				},
-				{
-					"id": "q4_companyContinuouslyProfit",
-					"bindsTo_template": "companyContinuouslyProfit",
-					"contextKey": "companyContinuouslyProfit",
-					"type": "radio",
-					"uiGroup": "loan_details",
-					"required": true,
-					"question": "If the company is continuously in profit for last three financial years?",
-					"options": [
-						{
-							"label": "Yes",
-							"value": "Yes",
-							"flagKey": {
-								"isCompanyProfit": true
-							}
-						},
-						{
-							"label": "No",
-							"value": "No",
-							"flagKey": {
-								"isCompanyProfit": false
-							}
-						}
-					],
-					"showWhen": {
-						"or": [
-							{
-								"and": [
-									{
-										"==": [
-											{
-												"var": "tellUsApplying"
-											},
-											"Sole-Proprietorship"
-										]
-									},
-									{
-										"in": [
-											{
-												"var": "businessType"
-											},
-											["Manufacturing", "Service industry", "Retail", "Trading"]
-										]
-									}
-								]
-							},
-							{
-								"and": [
-									{
-										"==": [
-											{
-												"var": "tellUsApplying"
-											},
-											"Company (Non-individual entity)"
-										]
-									},
-									{
-										"!=": [
-											{
-												"var": "typeOfCompany"
-											},
-											""
-										]
-									},
-									{
-										"in": [
-											{
-												"var": "businessType"
-											},
-											["Manufacturing", "Service industry", "Retail", "Trading"]
-										]
-									}
-								]
-							}
-						]
-					}
-				},
-				{
-					"id": "q5_numberOfDirectorOrApplicant",
-					"bindsTo_template": "numberOfDirectorOrApplicant",
-					"contextKey": "numberOfDirectorOrApplicant",
-					"type": "text",
-					"uiGroup": "text_fields",
-					"uiMeta": {
-						"placeholder": "Enter the number"
-					},
-					"required": true,
-					"question": "How many Directors/Partners are there in the company?",
-					"description": "As the property is being purchased in the name of the company, it will be the primary applicant and all the Directors/Partners will be co-applicants on the loan.",
-					"showWhen": {
-						"and": [
-							{
-								"==": [
-									{
-										"var": "tellUsApplying"
-									},
-									"Company (Non-individual entity)"
-								]
-							},
-							{
-								"in": [
-									{
-										"var": "businessType"
-									},
-									["Manufacturing", "Service industry", "Retail", "Trading"]
-								]
-							},
-							{
-								"in": [
-									{
-										"var": "typeOfCompany"
-									},
-									[
-										"Partnership firm",
-										"Limited Liability Partnership (LLP)",
-										"Private Limited Company (Pvt. Ltd.)"
-									]
-								]
-							},
-							{
-								"in": [
-									{
-										"var": "companyContinuouslyProfit"
-									},
-									["Yes", "No"]
-								]
-							}
-						]
-					},
-					"validation": {
-						"required": true,
-						"condition": {
-							"or": [
-								{
-									"==": [
-										{
-											"var": "numberOfDirectorOrApplicant"
-										},
-										""
-									]
-								},
-								{
-									"<": [
-										{
-											"var": "numberOfDirectorOrApplicant"
-										},
-										2
-									]
-								}
-							]
-						},
-						"message": "Enter a number greater than one."
 					}
 				}
 			]
@@ -1106,32 +475,11 @@
 					"question": "What's the full name of the Applicant?",
 					"description": "How it appears on PAN, Passport, Aadhaar or Driving license",
 					"showWhen": {
-						"==": [
+						"!=": [
 							{
-								"var": "tellUsApplying"
+								"var": "salariedBankName"
 							},
-							"Sole-Proprietorship"
-						]
-					}
-				},
-				{
-					"id": "q1_companyName",
-					"bindsTo_template": "companyName",
-					"contextKey": "companyName",
-					"type": "text",
-					"uiGroup": "text_fields",
-					"uiMeta": {
-						"placeholder": "Enter full name"
-					},
-					"required": true,
-					"question": "What's the company name?",
-					"description": "How it appears on company PAN",
-					"showWhen": {
-						"==": [
-							{
-								"var": "tellUsApplying"
-							},
-							"Company (Non-individual entity)"
+							""
 						]
 					}
 				},
@@ -1171,63 +519,43 @@
 						}
 					],
 					"showWhen": {
-						"and": [
+						"!=": [
 							{
-								"==": [
-									{
-										"var": "tellUsApplying"
-									},
-									"Sole-Proprietorship"
-								]
+								"var": "fullNameOfApplicant"
 							},
-							{
-								"!=": [
-									{
-										"var": "fullNameOfApplicant"
-									},
-									""
-								]
-							}
+							""
 						]
 					}
 				},
 				{
-					"id": "q3_OfficePremises",
-					"bindsTo_template": "OfficePremises",
-					"contextKey": "OfficePremises",
+					"id": "q3_EmploymentType",
+					"bindsTo_template": "EmploymentType",
+					"contextKey": "EmploymentType",
 					"type": "select",
 					"uiGroup": "selectButton",
 					"uiMeta": {
-						"placeholder": "Select office premises"
+						"placeholder": "Select employment type"
 					},
 					"required": true,
-					"question": "And what about office premises?",
+					"question": "What's your employment status?",
 					"options": [
 						{
-							"label": "Self owned",
-							"value": "Self owned",
+							"label": "Employed (Government)",
+							"value": "Employed (Government)",
 							"flagKey": {
-								"isSelfOwnedOffice": true
+								"isGovernmentEmployee": true
 							}
 						},
 						{
-							"label": "Rented",
-							"value": "Rented",
+							"label": "Employed (Private)",
+							"value": "Employed (Private)",
 							"flagKey": {
-								"isRentedOffice": false
+								"isPrivateEmployee": true
 							}
 						}
 					],
 					"showWhen": {
 						"and": [
-							{
-								"==": [
-									{
-										"var": "tellUsApplying"
-									},
-									"Sole-Proprietorship"
-								]
-							},
 							{
 								"!=": [
 									{
@@ -1258,6 +586,7 @@
 					},
 					"required": true,
 					"question": "What is the current age? (Select completed years only)",
+					"description": "It is required to assess your loan eligibility and tenure for the loan",
 					"options": [
 						{
 							"label": "19",
@@ -1270,14 +599,6 @@
 					],
 					"showWhen": {
 						"and": [
-							{
-								"==": [
-									{
-										"var": "tellUsApplying"
-									},
-									"Sole-Proprietorship"
-								]
-							},
 							{
 								"!=": [
 									{
@@ -1297,53 +618,62 @@
 							{
 								"in": [
 									{
-										"var": "OfficePremises"
+										"var": "EmploymentType"
 									},
-									["Self owned", "Rented"]
+									["Employed (Private)", "Employed (Government)"]
 								]
 							}
 						]
 					}
 				},
 				{
-					"id": "q4_dateOfIncorporation",
-					"bindsTo_template": "dateOfIncorporation",
-					"contextKey": "dateOfIncorporation",
-					"type": "select",
-					"uiGroup": "selectButton",
-					"uiMeta": {
-						"placeholder": "Select Age"
-					},
+					"id": "q_companyType",
+					"bindsTo_template": "companyType",
+					"contextKey": "companyType",
+					"type": "radio",
+					"uiGroup": "loan_details",
 					"required": true,
-					"question": "How many years has your company been in business?",
+					"question": "Please specify the type of your company?",
 					"options": [
 						{
-							"label": "3",
-							"value": "3"
+							"label": "Private Limited Company",
+							"value": "Private Limited Company"
 						},
 						{
-							"label": "5",
-							"value": "5"
-						},
-						{
-							"label": "10",
-							"value": "10"
+							"label": "Private Limited",
+							"value": "Private Limited"
 						}
 					],
 					"showWhen": {
 						"and": [
 							{
+								"!=": [
+									{
+										"var": "fullNameOfApplicant"
+									},
+									""
+								]
+							},
+							{
+								"in": [
+									{
+										"var": "TypeOfResidence"
+									},
+									["Self owned", "Family owned", "Rented"]
+								]
+							},
+							{
 								"==": [
 									{
-										"var": "tellUsApplying"
+										"var": "EmploymentType"
 									},
-									"Company (Non-individual entity)"
+									["Employed (Private)"]
 								]
 							},
 							{
 								"!=": [
 									{
-										"var": "companyName"
+										"var": "selectedAge"
 									},
 									""
 								]
@@ -1352,161 +682,490 @@
 					}
 				},
 				{
-					"id": "q5_netProfitArray",
-					"bindsTo_template": "netProfitArray",
-					"contextKey": "netProfitArray",
-					"type": "number",
-					"uiGroup": "inputNumber",
-					"uiMeta": {
-						"placeholder": ["FY2023-24", "FY2022-23", "FY2021-22"]
-					},
+					"id": "q_totalEmployees",
+					"bindsTo_template": "totalEmployees",
+					"contextKey": "totalEmployees",
+					"type": "select",
+					"uiGroup": "selectButton",
 					"required": true,
-					"question": "What were the Net Profits for the last three financial years?",
+					"question": "What is the total number of employees in the company?",
+					"options": [
+						{
+							"label": "Less than 100",
+							"value": "Less than 100"
+						},
+						{
+							"label": "100 - 250",
+							"value": "100 - 250"
+						},
+						{
+							"label": "251 - 500",
+							"value": "251 - 500"
+						},
+						{
+							"label": "More than 500",
+							"value": "More than 500"
+						}
+					],
 					"showWhen": {
-						"or": [
+						"and": [
 							{
-								"and": [
+								"!=": [
 									{
-										"!=": [
-											{
-												"var": "companyName"
-											},
-											""
-										]
+										"var": "fullNameOfApplicant"
 									},
-									{
-										"!=": [
-											{
-												"var": "dateOfIncorporation"
-											},
-											""
-										]
-									}
+									""
 								]
 							},
 							{
-								"and": [
+								"in": [
 									{
-										"!=": [
-											{
-												"var": "fullNameOfApplicant"
-											},
-											""
-										]
+										"var": "TypeOfResidence"
 									},
+									["Self owned", "Family owned", "Rented"]
+								]
+							},
+							{
+								"==": [
 									{
-										"in": [
-											{
-												"var": "TypeOfResidence"
-											},
-											["Self owned", "Family owned", "Rented"]
-										]
+										"var": "EmploymentType"
 									},
+									["Employed (Private)"]
+								]
+							},
+							{
+								"==": [
 									{
-										"in": [
-											{
-												"var": "OfficePremises"
-											},
-											["Self owned", "Rented"]
-										]
+										"var": "companyType"
 									},
+									["Private Limited Company"]
+								]
+							},
+							{
+								"!=": [
 									{
-										"!=": [
-											{
-												"var": "selectedAge"
-											},
-											""
-										]
-									}
+										"var": "selectedAge"
+									},
+									""
 								]
 							}
 						]
 					}
 				},
 				{
-					"id": "q6_depreciationArray",
-					"bindsTo_template": "depreciationArray",
-					"contextKey": "depreciationArray",
-					"type": "number",
-					"uiGroup": "inputNumber",
+					"id": "q_PFDeducted",
+					"bindsTo_template": "PFDeducted",
+					"contextKey": "PFDeducted",
+					"type": "radio",
+					"uiGroup": "loan_details",
+					"required": true,
+					"question": "What is the total number of employees in the company?",
+					"options": [
+						{
+							"label": "Yes",
+							"value": "Yes"
+						},
+						{
+							"label": "No",
+							"value": "No"
+						}
+					],
+					"showWhen": {
+						"and": [
+							{
+								"!=": [
+									{
+										"var": "fullNameOfApplicant"
+									},
+									""
+								]
+							},
+							{
+								"in": [
+									{
+										"var": "TypeOfResidence"
+									},
+									["Self owned", "Family owned", "Rented"]
+								]
+							},
+							{
+								"==": [
+									{
+										"var": "EmploymentType"
+									},
+									["Employed (Private)"]
+								]
+							},
+							{
+								"==": [
+									{
+										"var": "companyType"
+									},
+									["Private Limited Company"]
+								]
+							},
+							{
+								"!=": [
+									{
+										"var": "totalEmployees"
+									},
+									""
+								]
+							},
+							{
+								"!=": [
+									{
+										"var": "selectedAge"
+									},
+									""
+								]
+							}
+						]
+					}
+				},
+				{
+					"id": "q4_grossIncome",
+					"bindsTo_template": "grossIncome",
+					"contextKey": "grossIncome",
+					"type": "text",
+					"uiGroup": "text_fields",
 					"uiMeta": {
-						"placeholder": ["FY2023-24", "FY2022-23", "FY2021-22"]
+						"placeholder": "Enter gross income"
 					},
 					"required": true,
-					"question": "What's the sum of 'Depreciation' and 'Interest on Loans' as per profit-loss statement?",
-					"description": "This sum will be included in your eligibility calculation, as these expenses are regarded as non-cash",
+					"question": "What is the monthly gross income?",
+					"description": "Gross income is your total monthly earnings before deductions (tax, PF, NPS, etc) A few banks use it to assess your loan eligibility",
 					"showWhen": {
-						"or": [
+						"and": [
 							{
-								"and": [
+								"!=": [
 									{
-										"!=": [
+										"var": "fullNameOfApplicant"
+									},
+									""
+								]
+							},
+							{
+								"in": [
+									{
+										"var": "TypeOfResidence"
+									},
+									["Self owned", "Family owned", "Rented"]
+								]
+							},
+							{
+								"or": [
+									{
+										"==": [
 											{
-												"var": "companyName"
+												"var": "EmploymentType"
 											},
-											""
+											["Employed (Government)"]
 										]
 									},
 									{
-										"!=": [
+										"and": [
 											{
-												"var": "dateOfIncorporation"
+												"==": [
+													{
+														"var": "EmploymentType"
+													},
+													["Employed (Private)"]
+												]
 											},
-											""
-										]
-									},
-									{
-										"!=": [
 											{
-												"var": "netProfitArray"
-											},
-											""
+												"or": [
+													{
+														"==": [
+															{
+																"var": "companyType"
+															},
+															["Private Limited"]
+														]
+													},
+													{
+														"and": [
+															{
+																"==": [
+																	{
+																		"var": "companyType"
+																	},
+																	["Private Limited Company"]
+																]
+															},
+															{
+																"!=": [
+																	{
+																		"var": "totalEmployees"
+																	},
+																	""
+																]
+															},
+															{
+																"!=": [
+																	{
+																		"var": "PFDeducted"
+																	},
+																	""
+																]
+															}
+														]
+													}
+												]
+											}
 										]
 									}
 								]
 							},
 							{
-								"and": [
+								"!=": [
 									{
-										"!=": [
+										"var": "selectedAge"
+									},
+									""
+								]
+							}
+						]
+					}
+				},
+				{
+					"id": "q5_fixedSalary",
+					"bindsTo_template": "fixedSalary",
+					"contextKey": "fixedSalary",
+					"type": "text",
+					"uiGroup": "text_fields",
+					"uiMeta": {
+						"placeholder": "Enter fixed monthly salary"
+					},
+					"required": true,
+					"question": "What is the monthly net income?",
+					"description": "Net income is your monthly earnings after deductions (tax, PF, NPS, etc) It is the amount you receive in your bank account as salary",
+					"errorMessage": {
+						"required": true,
+						"message": "Gross income should be greater than or equal to fixed salary"
+					},
+					"validation": {
+						"condition": {
+							"<": [{ "var": "grossIncome" }, { "var": "fixedSalary" }]
+						}
+					},
+					"showWhen": {
+						"and": [
+							{
+								"!=": [
+									{
+										"var": "fullNameOfApplicant"
+									},
+									""
+								]
+							},
+							{
+								"in": [
+									{
+										"var": "TypeOfResidence"
+									},
+									["Self owned", "Family owned", "Rented"]
+								]
+							},
+							{
+								"or": [
+									{
+										"==": [
 											{
-												"var": "fullNameOfApplicant"
+												"var": "EmploymentType"
 											},
-											""
+											["Employed (Government)"]
 										]
 									},
 									{
-										"in": [
+										"and": [
 											{
-												"var": "TypeOfResidence"
+												"==": [
+													{
+														"var": "EmploymentType"
+													},
+													["Employed (Private)"]
+												]
 											},
-											["Self owned", "Family owned", "Rented"]
-										]
-									},
-									{
-										"in": [
 											{
-												"var": "OfficePremises"
-											},
-											["Self owned", "Rented"]
-										]
-									},
-									{
-										"!=": [
-											{
-												"var": "selectedAge"
-											},
-											""
-										]
-									},
-									{
-										"!=": [
-											{
-												"var": "netProfitArray"
-											},
-											""
+												"or": [
+													{
+														"==": [
+															{
+																"var": "companyType"
+															},
+															["Private Limited"]
+														]
+													},
+													{
+														"and": [
+															{
+																"==": [
+																	{
+																		"var": "companyType"
+																	},
+																	["Private Limited Company"]
+																]
+															},
+															{
+																"!=": [
+																	{
+																		"var": "totalEmployees"
+																	},
+																	""
+																]
+															},
+															{
+																"!=": [
+																	{
+																		"var": "PFDeducted"
+																	},
+																	""
+																]
+															}
+														]
+													}
+												]
+											}
 										]
 									}
+								]
+							},
+							{
+								"!=": [
+									{
+										"var": "selectedAge"
+									},
+									""
+								]
+							},
+							{
+								"!=": [
+									{
+										"var": "grossIncome"
+									},
+									""
+								]
+							}
+						]
+					}
+				},
+				{
+					"id": "q6_monthlyOtherIncome",
+					"bindsTo_template": "monthlyOtherIncome",
+					"contextKey": "monthlyOtherIncome",
+					"type": "text",
+					"uiGroup": "text_fields",
+					"uiMeta": {
+						"placeholder": "extra monthly income"
+					},
+					"required": true,
+					"question": "What's the additional monthly income from bonuses, incentives, and rental earnings?",
+					"description": "This includes the average monthly bonus received in the latest financial year (total bonus divided by 12) and the average monthly incentive received in the latest 6 months (total incentive divided by 6). You will need to submit a valid rent agreement, and the rent amount should be reflected in your bank statement Enter zero (0) if there is no additional income",
+					"showWhen": {
+						"and": [
+							{
+								"!=": [
+									{
+										"var": "fullNameOfApplicant"
+									},
+									""
+								]
+							},
+							{
+								"in": [
+									{
+										"var": "TypeOfResidence"
+									},
+									["Self owned", "Family owned", "Rented"]
+								]
+							},
+							{
+								"or": [
+									{
+										"==": [
+											{
+												"var": "EmploymentType"
+											},
+											["Employed (Government)"]
+										]
+									},
+									{
+										"and": [
+											{
+												"==": [
+													{
+														"var": "EmploymentType"
+													},
+													["Employed (Private)"]
+												]
+											},
+											{
+												"or": [
+													{
+														"==": [
+															{
+																"var": "companyType"
+															},
+															["Private Limited"]
+														]
+													},
+													{
+														"and": [
+															{
+																"==": [
+																	{
+																		"var": "companyType"
+																	},
+																	["Private Limited Company"]
+																]
+															},
+															{
+																"!=": [
+																	{
+																		"var": "totalEmployees"
+																	},
+																	""
+																]
+															},
+															{
+																"!=": [
+																	{
+																		"var": "PFDeducted"
+																	},
+																	""
+																]
+															}
+														]
+													}
+												]
+											}
+										]
+									}
+								]
+							},
+							{
+								"!=": [
+									{
+										"var": "selectedAge"
+									},
+									""
+								]
+							},
+							{
+								"!=": [
+									{
+										"var": "grossIncome"
+									},
+									""
+								]
+							},
+							{
+								"!=": [
+									{
+										"var": "fixedSalary"
+									},
+									""
 								]
 							}
 						]
@@ -1555,93 +1214,117 @@
 						}
 					],
 					"showWhen": {
-						"or": [
+						"and": [
 							{
-								"and": [
+								"!=": [
 									{
-										"!=": [
+										"var": "fullNameOfApplicant"
+									},
+									""
+								]
+							},
+							{
+								"in": [
+									{
+										"var": "TypeOfResidence"
+									},
+									["Self owned", "Family owned", "Rented"]
+								]
+							},
+							{
+								"or": [
+									{
+										"==": [
 											{
-												"var": "companyName"
+												"var": "EmploymentType"
 											},
-											""
+											["Employed (Government)"]
 										]
 									},
 									{
-										"!=": [
+										"and": [
 											{
-												"var": "dateOfIncorporation"
+												"==": [
+													{
+														"var": "EmploymentType"
+													},
+													["Employed (Private)"]
+												]
 											},
-											""
-										]
-									},
-									{
-										"!=": [
 											{
-												"var": "netProfitArray"
-											},
-											""
-										]
-									},
-									{
-										"!=": [
-											{
-												"var": "depreciationArray"
-											},
-											""
+												"or": [
+													{
+														"==": [
+															{
+																"var": "companyType"
+															},
+															["Private Limited"]
+														]
+													},
+													{
+														"and": [
+															{
+																"==": [
+																	{
+																		"var": "companyType"
+																	},
+																	["Private Limited Company"]
+																]
+															},
+															{
+																"!=": [
+																	{
+																		"var": "totalEmployees"
+																	},
+																	""
+																]
+															},
+															{
+																"!=": [
+																	{
+																		"var": "PFDeducted"
+																	},
+																	""
+																]
+															}
+														]
+													}
+												]
+											}
 										]
 									}
 								]
 							},
 							{
-								"and": [
+								"!=": [
 									{
-										"!=": [
-											{
-												"var": "fullNameOfApplicant"
-											},
-											""
-										]
+										"var": "selectedAge"
 									},
+									""
+								]
+							},
+							{
+								"!=": [
 									{
-										"in": [
-											{
-												"var": "TypeOfResidence"
-											},
-											["Self owned", "Family owned", "Rented"]
-										]
+										"var": "grossIncome"
 									},
+									""
+								]
+							},
+							{
+								"!=": [
 									{
-										"in": [
-											{
-												"var": "OfficePremises"
-											},
-											["Self owned", "Rented"]
-										]
+										"var": "fixedSalary"
 									},
+									""
+								]
+							},
+							{
+								"!=": [
 									{
-										"!=": [
-											{
-												"var": "selectedAge"
-											},
-											""
-										]
+										"var": "monthlyOtherIncome"
 									},
-									{
-										"!=": [
-											{
-												"var": "netProfitArray"
-											},
-											""
-										]
-									},
-									{
-										"!=": [
-											{
-												"var": "depreciationArray"
-											},
-											""
-										]
-									}
+									""
 								]
 							}
 						]
@@ -1655,6 +1338,7 @@
 					"uiGroup": "selectButton",
 					"required": true,
 					"question": "Have you ever been defaulter",
+					"description": "description",
 					"options": [
 						{
 							"label": "Yes",
@@ -1666,109 +1350,125 @@
 						}
 					],
 					"showWhen": {
-						"or": [
+						"and": [
 							{
-								"and": [
+								"!=": [
 									{
-										"!=": [
+										"var": "fullNameOfApplicant"
+									},
+									""
+								]
+							},
+							{
+								"in": [
+									{
+										"var": "TypeOfResidence"
+									},
+									["Self owned", "Family owned", "Rented"]
+								]
+							},
+							{
+								"or": [
+									{
+										"==": [
 											{
-												"var": "companyName"
+												"var": "EmploymentType"
 											},
-											""
+											["Employed (Government)"]
 										]
 									},
 									{
-										"!=": [
+										"and": [
 											{
-												"var": "dateOfIncorporation"
+												"==": [
+													{
+														"var": "EmploymentType"
+													},
+													["Employed (Private)"]
+												]
 											},
-											""
-										]
-									},
-									{
-										"!=": [
 											{
-												"var": "netProfitArray"
-											},
-											""
-										]
-									},
-									{
-										"!=": [
-											{
-												"var": "depreciationArray"
-											},
-											""
-										]
-									},
-									{
-										"!=": [
-											{
-												"var": "creditScore"
-											},
-											""
+												"or": [
+													{
+														"==": [
+															{
+																"var": "companyType"
+															},
+															["Private Limited"]
+														]
+													},
+													{
+														"and": [
+															{
+																"==": [
+																	{
+																		"var": "companyType"
+																	},
+																	["Private Limited Company"]
+																]
+															},
+															{
+																"!=": [
+																	{
+																		"var": "totalEmployees"
+																	},
+																	""
+																]
+															},
+															{
+																"!=": [
+																	{
+																		"var": "PFDeducted"
+																	},
+																	""
+																]
+															}
+														]
+													}
+												]
+											}
 										]
 									}
 								]
 							},
 							{
-								"and": [
+								"!=": [
 									{
-										"!=": [
-											{
-												"var": "fullNameOfApplicant"
-											},
-											""
-										]
+										"var": "selectedAge"
 									},
+									""
+								]
+							},
+							{
+								"!=": [
 									{
-										"in": [
-											{
-												"var": "TypeOfResidence"
-											},
-											["Self owned", "Family owned", "Rented"]
-										]
+										"var": "grossIncome"
 									},
+									""
+								]
+							},
+							{
+								"!=": [
 									{
-										"in": [
-											{
-												"var": "OfficePremises"
-											},
-											["Self owned", "Rented"]
-										]
+										"var": "fixedSalary"
 									},
+									""
+								]
+							},
+							{
+								"!=": [
 									{
-										"!=": [
-											{
-												"var": "selectedAge"
-											},
-											""
-										]
+										"var": "monthlyOtherIncome"
 									},
+									""
+								]
+							},
+							{
+								"!=": [
 									{
-										"!=": [
-											{
-												"var": "netProfitArray"
-											},
-											""
-										]
+										"var": "creditScore"
 									},
-									{
-										"!=": [
-											{
-												"var": "depreciationArray"
-											},
-											""
-										]
-									},
-									{
-										"!=": [
-											{
-												"var": "creditScore"
-											},
-											""
-										]
-									}
+									""
 								]
 							}
 						]
@@ -1829,125 +1529,133 @@
 						}
 					],
 					"showWhen": {
-						"or": [
+						"and": [
 							{
-								"and": [
+								"!=": [
 									{
-										"!=": [
+										"var": "fullNameOfApplicant"
+									},
+									""
+								]
+							},
+							{
+								"in": [
+									{
+										"var": "TypeOfResidence"
+									},
+									["Self owned", "Family owned", "Rented"]
+								]
+							},
+							{
+								"or": [
+									{
+										"==": [
 											{
-												"var": "companyName"
+												"var": "EmploymentType"
 											},
-											""
+											["Employed (Government)"]
 										]
 									},
 									{
-										"!=": [
+										"and": [
 											{
-												"var": "dateOfIncorporation"
+												"==": [
+													{
+														"var": "EmploymentType"
+													},
+													["Employed (Private)"]
+												]
 											},
-											""
-										]
-									},
-									{
-										"!=": [
 											{
-												"var": "netProfitArray"
-											},
-											""
-										]
-									},
-									{
-										"!=": [
-											{
-												"var": "depreciationArray"
-											},
-											""
-										]
-									},
-									{
-										"in": [
-											{
-												"var": "creditScore"
-											},
-											["No CIBIL", "650-699"]
-										]
-									},
-									{
-										"in": [
-											{
-												"var": "isDefaulter"
-											},
-											["Yes", "No"]
+												"or": [
+													{
+														"==": [
+															{
+																"var": "companyType"
+															},
+															["Private Limited"]
+														]
+													},
+													{
+														"and": [
+															{
+																"==": [
+																	{
+																		"var": "companyType"
+																	},
+																	["Private Limited Company"]
+																]
+															},
+															{
+																"!=": [
+																	{
+																		"var": "totalEmployees"
+																	},
+																	""
+																]
+															},
+															{
+																"!=": [
+																	{
+																		"var": "PFDeducted"
+																	},
+																	""
+																]
+															}
+														]
+													}
+												]
+											}
 										]
 									}
 								]
 							},
 							{
-								"and": [
+								"!=": [
 									{
-										"!=": [
-											{
-												"var": "fullNameOfApplicant"
-											},
-											""
-										]
+										"var": "selectedAge"
 									},
+									""
+								]
+							},
+							{
+								"!=": [
 									{
-										"in": [
-											{
-												"var": "TypeOfResidence"
-											},
-											["Self owned", "Family owned", "Rented"]
-										]
+										"var": "grossIncome"
 									},
+									""
+								]
+							},
+							{
+								"!=": [
 									{
-										"in": [
-											{
-												"var": "OfficePremises"
-											},
-											["Self owned", "Rented"]
-										]
+										"var": "fixedSalary"
 									},
+									""
+								]
+							},
+							{
+								"!=": [
 									{
-										"!=": [
-											{
-												"var": "selectedAge"
-											},
-											""
-										]
+										"var": "monthlyOtherIncome"
 									},
+									""
+								]
+							},
+							{
+								"in": [
 									{
-										"!=": [
-											{
-												"var": "netProfitArray"
-											},
-											""
-										]
+										"var": "creditScore"
 									},
+									["No CIBIL", "650-699"]
+								]
+							},
+							{
+								"in": [
 									{
-										"!=": [
-											{
-												"var": "depreciationArray"
-											},
-											""
-										]
+										"var": "isDefaulter"
 									},
-									{
-										"in": [
-											{
-												"var": "creditScore"
-											},
-											["No CIBIL", "650-699"]
-										]
-									},
-									{
-										"in": [
-											{
-												"var": "isDefaulter"
-											},
-											["Yes", "No"]
-										]
-									}
+									["Yes", "No"]
 								]
 							}
 						]
@@ -1969,7 +1677,6 @@
 					"Yes"
 				]
 			},
-
 			"questions": [
 				{
 					"id": "q1_loanType",
@@ -1985,28 +1692,44 @@
 					"description": "Select the type of loan you currently have. This helps us understand your existing financial commitments better.",
 					"options": [
 						{
-							"label": "Business Loan - Unsecured",
-							"value": "Business Loan - Unsecured"
+							"label": "Home Loan",
+							"value": "Home Loan"
 						},
 						{
-							"label": "Business Loan - Secured",
-							"value": "Business Loan - Secured"
+							"label": "Plot and Construction Loan",
+							"value": "Plot and Construction Loan"
 						},
 						{
 							"label": "Loan Against Property",
 							"value": "Loan Against Property"
 						},
 						{
-							"label": "Machinery Loan",
-							"value": "Machinery Loan"
+							"label": "Personal Loan",
+							"value": "Personal Loan"
 						},
 						{
 							"label": "Vehicle Loan",
 							"value": "Vehicle Loan"
 						},
 						{
-							"label": "Property Loan",
-							"value": "Property Loan"
+							"label": "Gold Loan",
+							"value": "Gold Loan"
+						},
+						{
+							"label": "Credit Card Loan",
+							"value": "Credit Card Loan"
+						},
+						{
+							"label": "Consumer Durable Loan",
+							"value": "Consumer Durable Loan"
+						},
+						{
+							"label": "Insta Loan",
+							"value": "Insta Loan"
+						},
+						{
+							"label": "Education Loan",
+							"value": "Education Loan"
 						},
 						{
 							"label": "OD Limit",
@@ -2148,12 +1871,16 @@
 										"var": "tableLoanEntries.loanType"
 									},
 									[
-										"Business Loan - Unsecured",
-										"Business Loan - Secured",
+										"Home Loan",
+										"Plot and Construction Loan",
 										"Loan Against Property",
-										"Machinery Loan",
+										"Personal Loan",
 										"Vehicle Loan",
-										"Property Loan",
+										"Gold Loan",
+										"Credit Card Loan",
+										"Consumer Durable Loan",
+										"Insta Loan",
+										"Education Loan",
 										"Other Type Loan"
 									]
 								]
@@ -2187,7 +1914,7 @@
 						"placeholder": "in months"
 					},
 					"required": true,
-					"question": "remaining tenure",
+					"description": "remaining tenure",
 					"showWhen": {
 						"and": [
 							{
@@ -2196,12 +1923,16 @@
 										"var": "tableLoanEntries.loanType"
 									},
 									[
-										"Business Loan - Unsecured",
-										"Business Loan - Secured",
+										"Home Loan",
+										"Plot and Construction Loan",
 										"Loan Against Property",
-										"Machinery Loan",
+										"Personal Loan",
 										"Vehicle Loan",
-										"Property Loan",
+										"Gold Loan",
+										"Credit Card Loan",
+										"Consumer Durable Loan",
+										"Insta Loan",
+										"Education Loan",
 										"Other Type Loan"
 									]
 								]
@@ -2243,7 +1974,7 @@
 						"placeholder": "Enter total limit"
 					},
 					"required": true,
-					"question": "total limit",
+					"description": "total limit",
 					"showWhen": {
 						"and": [
 							{
@@ -2283,7 +2014,7 @@
 						"placeholder": "Enter total limit"
 					},
 					"required": true,
-					"question": "sanctioned limit (at the time of start)",
+					"description": "sanctioned limit (at the time of start)",
 					"showWhen": {
 						"and": [
 							{
@@ -2323,7 +2054,7 @@
 						"placeholder": "Enter total limit"
 					},
 					"required": true,
-					"question": "remaining limit (current)",
+					"description": "remaining limit (current)",
 					"showWhen": {
 						"and": [
 							{
@@ -2371,7 +2102,7 @@
 						"placeholder": "in months"
 					},
 					"required": true,
-					"question": "sanctioned tenure",
+					"description": "sanctioned tenure",
 					"showWhen": {
 						"and": [
 							{
@@ -2443,7 +2174,7 @@
 						"placeholder": "in months"
 					},
 					"required": true,
-					"question": "remaining tenure",
+					"description": "remaining tenure",
 					"showWhen": {
 						"and": [
 							{
@@ -2507,7 +2238,7 @@
 						"placeholder": "Enter total limit"
 					},
 					"required": true,
-					"question": "utilized amount",
+					"description": "utilized amount",
 					"showWhen": {
 						"and": [
 							{
@@ -2579,7 +2310,7 @@
 						"placeholder": "enter interest rate"
 					},
 					"required": true,
-					"question": "interest rate (p.a.)",
+					"description": "interest rate (p.a.)",
 					"showWhen": {
 						"and": [
 							{
