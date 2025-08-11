@@ -568,7 +568,7 @@
 					},
 					"validation": {
 						"condition": {
-							"in": [
+							"==": [
 								{
 									"var": "residenceCityName"
 								},
@@ -1946,25 +1946,14 @@
 				"mode": ["allRequiredAnswered"]
 			},
 			"showWhen": {
-				"or": [
+				"==": [
 					{
-						"==": [
-							{
-								"var": "existingLoan"
-							},
-							"Yes"
-						]
+						"var": "existingLoan"
 					},
-					{
-						"==": [
-							{
-								"var": "loanType"
-							},
-							"Debt Consolidation with Extra Funds"
-						]
-					}
+					"Yes"
 				]
 			},
+
 			"questions": [
 				{
 					"id": "q1_loanType",
@@ -2019,27 +2008,7 @@
 							"label": "Other Type Loan",
 							"value": "Other Type Loan"
 						}
-					],
-					"showWhen": {
-						"or": [
-							{
-								"==": [
-									{
-										"var": "existingLoan"
-									},
-									"Yes"
-								]
-							},
-							{
-								"==": [
-									{
-										"var": "loanType"
-									},
-									"Debt Consolidation with Extra Funds"
-								]
-							}
-						]
-					}
+					]
 				},
 				{
 					"id": "q2_bankName",
@@ -2090,23 +2059,11 @@
 					"showWhen": {
 						"and": [
 							{
-								"or": [
+								"==": [
 									{
-										"==": [
-											{
-												"var": "existingLoan"
-											},
-											"Yes"
-										]
+										"var": "existingLoan"
 									},
-									{
-										"==": [
-											{
-												"var": "loanType"
-											},
-											"Debt Consolidation with Extra Funds"
-										]
-									}
+									"Yes"
 								]
 							},
 							{
@@ -2190,23 +2147,11 @@
 					"showWhen": {
 						"and": [
 							{
-								"or": [
+								"==": [
 									{
-										"==": [
-											{
-												"var": "existingLoan"
-											},
-											"Yes"
-										]
+										"var": "existingLoan"
 									},
-									{
-										"==": [
-											{
-												"var": "loanType"
-											},
-											"Debt Consolidation with Extra Funds"
-										]
-									}
+									"Yes"
 								]
 							},
 							{
@@ -2258,23 +2203,11 @@
 					"showWhen": {
 						"and": [
 							{
-								"or": [
+								"==": [
 									{
-										"==": [
-											{
-												"var": "existingLoan"
-											},
-											"Yes"
-										]
+										"var": "existingLoan"
 									},
-									{
-										"==": [
-											{
-												"var": "loanType"
-											},
-											"Debt Consolidation with Extra Funds"
-										]
-									}
+									"Yes"
 								]
 							},
 							{
@@ -2334,23 +2267,11 @@
 					"showWhen": {
 						"and": [
 							{
-								"or": [
+								"==": [
 									{
-										"==": [
-											{
-												"var": "existingLoan"
-											},
-											"Yes"
-										]
+										"var": "existingLoan"
 									},
-									{
-										"==": [
-											{
-												"var": "loanType"
-											},
-											"Debt Consolidation with Extra Funds"
-										]
-									}
+									"Yes"
 								]
 							},
 							{
@@ -2394,23 +2315,11 @@
 					"showWhen": {
 						"and": [
 							{
-								"or": [
+								"==": [
 									{
-										"==": [
-											{
-												"var": "existingLoan"
-											},
-											"Yes"
-										]
+										"var": "existingLoan"
 									},
-									{
-										"==": [
-											{
-												"var": "loanType"
-											},
-											"Debt Consolidation with Extra Funds"
-										]
-									}
+									"Yes"
 								]
 							},
 							{
@@ -2453,26 +2362,14 @@
 					"question": "remaining limit (current)",
 					"showWhen": {
 						"and": [
-							{
-								"or": [
-									{
-										"==": [
-											{
-												"var": "existingLoan"
-											},
-											"Yes"
-										]
-									},
-									{
-										"==": [
-											{
-												"var": "loanType"
-											},
-											"Debt Consolidation with Extra Funds"
-										]
-									}
-								]
-							},
+{
+	"==": [
+		{
+			"var": "existingLoan"
+		},
+		"Yes"
+	]
+},
 							{
 								"==": [
 									{
@@ -2521,26 +2418,14 @@
 					"question": "sanctioned tenure",
 					"showWhen": {
 						"and": [
-							{
-								"or": [
-									{
-										"==": [
-											{
-												"var": "existingLoan"
-											},
-											"Yes"
-										]
-									},
-									{
-										"==": [
-											{
-												"var": "loanType"
-											},
-											"Debt Consolidation with Extra Funds"
-										]
-									}
-								]
-							},
+{
+	"==": [
+		{
+			"var": "existingLoan"
+		},
+		"Yes"
+	]
+},
 							{
 								"in": [
 									{
@@ -2621,26 +2506,14 @@
 					"question": "remaining tenure",
 					"showWhen": {
 						"and": [
-							{
-								"or": [
-									{
-										"==": [
-											{
-												"var": "existingLoan"
-											},
-											"Yes"
-										]
-									},
-									{
-										"==": [
-											{
-												"var": "loanType"
-											},
-											"Debt Consolidation with Extra Funds"
-										]
-									}
-								]
-							},
+{
+	"==": [
+		{
+			"var": "existingLoan"
+		},
+		"Yes"
+	]
+},
 							{
 								"==": [
 									{
@@ -2705,26 +2578,14 @@
 					"question": "utilized amount",
 					"showWhen": {
 						"and": [
-							{
-								"or": [
-									{
-										"==": [
-											{
-												"var": "existingLoan"
-											},
-											"Yes"
-										]
-									},
-									{
-										"==": [
-											{
-												"var": "loanType"
-											},
-											"Debt Consolidation with Extra Funds"
-										]
-									}
-								]
-							},
+{
+	"==": [
+		{
+			"var": "existingLoan"
+		},
+		"Yes"
+	]
+},
 							{
 								"==": [
 									{
@@ -2798,23 +2659,11 @@
 					"showWhen": {
 						"and": [
 							{
-								"or": [
+								"==": [
 									{
-										"==": [
-											{
-												"var": "existingLoan"
-											},
-											"Yes"
-										]
+										"var": "existingLoan"
 									},
-									{
-										"==": [
-											{
-												"var": "loanType"
-											},
-											"Debt Consolidation with Extra Funds"
-										]
-									}
+									"Yes"
 								]
 							},
 							{
