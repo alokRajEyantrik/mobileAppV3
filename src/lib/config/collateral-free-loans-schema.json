@@ -2107,6 +2107,40 @@
 							"value": "continue running as it is"
 						}
 					],
+					"errorMessage": {
+						"required": true,
+						"message": "Please select a different reason for the closure plan. You have currently chosen “New Loan” as the reason. However, if your intention is to close this existing loan by consolidating it with a new debt consolidation loan, you need to go back and select the debt consolidation option instead. This is necessary because only the debt consolidation option allows you to close existing loans through this process."
+					},
+					"validation": {
+						"condition": {
+							"and": [
+								{
+									"==": [
+										{
+											"var": "existingLoan"
+										},
+										"Yes"
+									]
+								},
+								{
+									"!=": [
+										{
+											"var": "loanType"
+										},
+										"Debt Consolidation with Extra Funds"
+									]
+								},
+								{
+									"==": [
+										{
+											"var": "tableLoanEntries.selectedToClose"
+										},
+										"will be closed by this loan"
+									]
+								}
+							]
+						}
+					},
 					"showWhen": {
 						"and": [
 							{
