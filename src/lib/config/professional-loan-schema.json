@@ -1,0 +1,1842 @@
+{
+	"formId": "loanForm_v1",
+	"title": "Loan Application",
+	"pages": [
+		{
+			"id": "firstPage",
+			"title": "Let's Rock!",
+			"nextButtonVisibility": {
+				"mode": ["allRequiredAnswered"]
+			},
+			"questions": [
+				{
+					"id": "q1_loanName",
+					"bindsTo_template": "loanName",
+					"contextKey": "loanName",
+					"type": "radio",
+					"uiGroup": "loan_details",
+					"required": true,
+					"question": "What are you looking for?",
+					"description": "Get started by letting us know a little bit about what you need",
+					"options": [
+						{
+							"label": "Home Loan",
+							"value": "Home Loan",
+							"flagKey": {
+								"isSecuredLoan": true,
+								"isHomeLoan": true
+							}
+						},
+						{
+							"label": "Plot Loan",
+							"value": "Plot Loan",
+							"flagKey": {
+								"isSecuredLoan": true,
+								"isPlotLoan": true
+							}
+						},
+						{
+							"label": "Loan Against Property (LAP)",
+							"value": "Loan Against Property",
+							"flagKey": {
+								"isSecuredLoan": true,
+								"isLAP": true
+							}
+						},
+						{
+							"label": "Business Loan",
+							"value": "Business Loan",
+							"flagKey": {
+								"isUnsecuredLoan": true,
+								"isBusinessLoan": true
+							}
+						},
+						{
+							"label": "Professional Loan",
+							"value": "Professional Loan",
+							"flagKey": {
+								"isUnsecuredLoan": true,
+								"isProfessionalLoan": true
+							}
+						},
+						{
+							"label": "Personal Loan",
+							"value": "Personal Loan",
+							"flagKey": {
+								"isUnsecuredLoan": true,
+								"isPersonalLoan": true
+							}
+						}
+					]
+				},
+				{
+					"id": "q2_unSecureLoanType",
+					"bindsTo_template": "unSecureLoanType",
+					"contextKey": "unSecureLoanType",
+					"type": "radio",
+					"uiGroup": "loan_details",
+					"required": true,
+					"question": "Select the form in which you want to avail this unsecured loan.",
+					"description": "This helps us identify the most suitable loan structure for you. For details, check our Drop-line Overdraft (DOD) Page.",
+					"options": [
+						{
+							"label": {
+								"var": "q1_loanName"
+							},
+							"value": {
+								"var": "q1_loanName"
+							}
+						},
+						{
+							"label": "Drop-line Overdraft (DOD)",
+							"value": "Drop-line OverDraft (DOD)"
+						}
+					],
+					"showWhen": {
+						"in": [
+							{
+								"var": "loanName"
+							},
+							["Personal Loan", "Professional Loan", "Business Loan"]
+						]
+					}
+				},
+				{
+					"id": "q3_existingLoan",
+					"bindsTo_template": "existingLoan",
+					"contextKey": "existingLoan",
+					"type": "radio",
+					"uiGroup": "loan_details",
+					"required": true,
+					"question": "Do you have any existing obligations?",
+					"description": "This includes all types of loans and credit limits you may have, such as personal loans, home loans, car loans, credit card loans (excluding monthly dues), gold loans, consumer durable loans, DODs, CCs, ODs, and any other ongoing liabilities.",
+					"options": [
+						{
+							"label": "Yes",
+							"value": "Yes",
+							"flagKey": {
+								"isObligation": true
+							}
+						},
+						{
+							"label": "No",
+							"value": "No",
+							"flagKey": {
+								"isObligation": false
+							}
+						}
+					],
+					"showWhen": {
+						"in": [
+							{
+								"var": "unSecureLoanType"
+							},
+							["Personal Loan", "Professional Loan", "Business Loan", "Drop-line OverDraft (DOD)"]
+						]
+					}
+				},
+				{
+					"id": "q4_loanType",
+					"bindsTo_template": "loanType",
+					"contextKey": "loanType",
+					"type": "radio",
+					"uiGroup": "loan_details",
+					"required": true,
+					"question": "How you'd like to proceed with your loan?",
+					"description": "Tell us if you’re applying for a fresh loan or want to consolidate your current loans—fully or partially—with or without extra borrowing. If you only want debt consolidation, you can enter zero as the additional funds, later.",
+					"options": [
+						{
+							"label": "Start Fresh with New Loan",
+							"value": "Start Fresh with New Loan"
+						},
+						{
+							"label": "Debt Consolidation with Extra Funds",
+							"value": "Debt Consolidation with Extra Funds"
+						}
+					],
+					"showWhen": {
+						"and": [
+							{
+								"in": [
+									{
+										"var": "unSecureLoanType"
+									},
+									["Personal Loan", "Professional Loan", "Business Loan"]
+								]
+							},
+							{
+								"==": [
+									{
+										"var": "existingLoan"
+									},
+									"Yes"
+								]
+							}
+						]
+					}
+				}
+			]
+		},
+		{
+			"id": "collateral_free_selectionPage",
+			"title": "A few check points !",
+			"nextButtonVisibility": {
+				"mode": ["allRequiredAnswered"]
+			},
+			"questions": [
+				{
+					"id": "q1_ITRAvailable",
+					"bindsTo_template": "ITRAvailable",
+					"contextKey": "ITRAvailable",
+					"type": "radio",
+					"uiGroup": "loan_details",
+					"required": true,
+					"question": "Have you filed Income Tax Returns (ITRs) for the last 3 financial years?",
+					"options": [
+						{
+							"label": "Yes",
+							"value": "Yes",
+							"flagKey": {
+								"isITRAvailable": true
+							}
+						},
+						{
+							"label": "No",
+							"value": "No",
+							"flagKey": {
+								"isITRAvailable": false
+							}
+						}
+					],
+					"showWhen": {
+						"==": [
+							{
+								"var": "unSecureLoanType"
+							},
+							["Professional Loan"]
+						]
+					},
+					"errorMessage": {
+						"required": true,
+						"message": "We regret to inform you that we are unable to process your request at this time due to the following reasons: ITR for last 3 years not available."
+					},
+					"validation": {
+						"condition": {
+							"!=": [
+								{
+									"var": "ITRAvailable"
+								},
+								"Yes"
+							]
+						}
+					}
+				},
+				{
+					"id": "q2_haveCurrentAccount",
+					"bindsTo_template": "haveCurrentAccount",
+					"contextKey": "haveCurrentAccount",
+					"type": "radio",
+					"uiGroup": "loan_details",
+					"required": true,
+					"question": "Do you have Current, OD, or CC accounts in any bank with a total active history of 3 years or more?",
+					"options": [
+						{
+							"label": "Yes",
+							"value": "Yes",
+							"flagKey": {
+								"haveCurrentAccount": true
+							}
+						},
+						{
+							"label": "No",
+							"value": "No",
+							"flagKey": {
+								"haveCurrentAccount": false
+							}
+						}
+					],
+					"showWhen": {
+						"!=": [
+							{
+								"var": "ITRAvailable"
+							},
+							""
+						]
+					},
+					"errorMessage": {
+						"required": true,
+						"message": "We regret to inform you that we are unable to process your request at this time due to the following reasons: You do not have a current Account, Overdraft (OD), or Cash Credit (CC)."
+					},
+					"validation": {
+						"condition": {
+							"!=": [
+								{
+									"var": "haveCurrentAccount"
+								},
+								"Yes"
+							]
+						}
+					}
+				},
+				{
+					"id": "q5_applicantIsNRI",
+					"bindsTo_template": "applicantIsNRI",
+					"contextKey": "applicantIsNRI",
+					"type": "radio",
+					"uiGroup": "loan_details",
+					"required": true,
+					"question": "If applicant or any of the co-applicants is NRI?",
+					"options": [
+						{
+							"label": "Yes",
+							"value": "Yes",
+							"flagKey": {
+								"applicantIsNRI": true
+							}
+						},
+						{
+							"label": "No",
+							"value": "No",
+							"flagKey": {
+								"applicantIsNRI": false
+							}
+						}
+					],
+					"showWhen": {
+						"!=": [
+							{
+								"var": "haveCurrentAccount"
+							},
+							""
+						]
+					},
+					"errorMessage": {
+						"required": true,
+						"message": "We regret to inform you that we are unable to process your request at this time due to the following reasons: Applicant is an NRI."
+					},
+					"validation": {
+						"condition": {
+							"==": [
+								{
+									"var": "applicantIsNRI"
+								},
+								"Yes"
+							]
+						},
+						"message": "validateisNRI"
+					}
+				}
+			]
+		},
+		{
+			"id": "locationPage",
+			"title": "Business Location",
+			"nextButtonVisibility": {
+				"mode": ["allRequiredAnswered"]
+			},
+			"questions": [
+				{
+					"id": "q4_businessStateName",
+					"bindsTo_template": "businessStateName",
+					"contextKey": "businessStateName",
+					"type": "select",
+					"uiGroup": "select_fields",
+					"uiMeta": {
+						"placeholder": "Select a State"
+					},
+					"description": "state name",
+					"question": "Location for Business verification ?",
+					"required": true,
+					"showWhen": {
+						"!=": [
+							{
+								"var": "applicantIsNRI"
+							},
+							""
+						]
+					}
+				},
+				{
+					"id": "q5_businessCityName",
+					"bindsTo_template": "businessCityName",
+					"contextKey": "businessCityName",
+					"type": "derivedSelect",
+					"uiGroup": "select_fields",
+					"uiMeta": {
+						"placeholder": "Select a City"
+					},
+					"question": "city name",
+					"required": true,
+					"showWhen": {
+						"!=": [
+							{
+								"var": "businessStateName"
+							},
+							""
+						]
+					}
+				},
+				{
+					"id": "q6_banksOfCurrentAccount",
+					"bindsTo_template": "banksOfCurrentAccount",
+					"contextKey": "banksOfCurrentAccount",
+					"type": "multiple-select",
+					"uiGroup": "select_fields",
+					"uiMeta": {
+						"placeholder": "Select banks"
+					},
+					"required": true,
+					"question": "Which of these banks have you used for a Current Account, Overdraft (OD), or Cash Credit (CC)?",
+					"description": "Select the banks which you use to receive the payments from your customers. Bank statements of these will verify your business income and cash flow.",
+					"options": [
+						{
+							"label": "HDFC Bank",
+							"value": "HDFC Bank"
+						},
+						{
+							"label": "SBI Bank",
+							"value": "SBI Bank"
+						},
+						{
+							"label": "Axis Bank",
+							"value": "Axis Bank"
+						},
+						{
+							"label": "ICICI Bank",
+							"value": "ICICI Bank"
+						},
+						{
+							"label": "Canara Bank",
+							"value": "Canara Bank"
+						},
+						{
+							"label": "Bank of Baroda",
+							"value": "Bank of Baroda"
+						},
+						{
+							"label": "Citi Bank",
+							"value": "Citi Bank"
+						},
+						{
+							"label": "Union Bank",
+							"value": "Union Bank"
+						}
+					],
+					"showWhen": {
+						"and": [
+							{
+								"!=": [
+									{
+										"var": "businessStateName"
+									},
+									""
+								]
+							},
+							{
+								"!=": [
+									{
+										"var": "businessCityName"
+									},
+									""
+								]
+							}
+						]
+					}
+				}
+			]
+		},
+		{
+			"id": "basicInfoPage",
+			"title": "Income and Obligations",
+			"nextButtonVisibility": {
+				"mode": ["allRequiredAnswered"]
+			},
+			"questions": [
+				{
+					"id": "q1_fullNameOfApplicant",
+					"bindsTo_template": "fullNameOfApplicant",
+					"contextKey": "fullNameOfApplicant",
+					"type": "text",
+					"uiGroup": "text_fields",
+					"uiMeta": {
+						"placeholder": "Enter full name"
+					},
+					"required": true,
+					"question": "What's the full name of the Applicant?",
+					"description": "How it appears on PAN, Passport, Aadhaar or Driving license",
+					"showWhen": {
+						"!=": [
+							{
+								"var": "banksOfCurrentAccount"
+							},
+							""
+						]
+					}
+				},
+
+				{
+					"id": "q2_TypeOfResidence",
+					"bindsTo_template": "TypeOfResidence",
+					"contextKey": "TypeOfResidence",
+					"type": "select",
+					"uiGroup": "selectButton",
+					"uiMeta": {
+						"placeholder": "Select residence type"
+					},
+					"required": true,
+					"question": "Please select type of residence",
+					"description": "Having your own home or a family-owned residence strengthens your loan application, making it more attractive to lenders",
+					"options": [
+						{
+							"label": "Self owned",
+							"value": "Self owned",
+							"flagKey": {
+								"isSelfOwned": true
+							}
+						},
+						{
+							"label": "Family owned",
+							"value": "Family owned",
+							"flagKey": {
+								"isFamilyOwned": false
+							}
+						},
+						{
+							"label": "Rented",
+							"value": "Rented",
+							"flagKey": {
+								"isRented": false
+							}
+						}
+					],
+					"showWhen": {
+						"!=": [
+							{
+								"var": "fullNameOfApplicant"
+							},
+							""
+						]
+					}
+				},
+				{
+					"id": "q4_selectedAge",
+					"bindsTo_template": "selectedAge",
+					"contextKey": "selectedAge",
+					"type": "select",
+					"uiGroup": "selectButton",
+					"uiMeta": {
+						"placeholder": "Select Age"
+					},
+					"required": true,
+					"question": "What is the current age? (Select completed years only)",
+					"options": [
+						{
+							"label": "19",
+							"value": "19"
+						},
+						{
+							"label": "20",
+							"value": "20"
+						}
+					],
+					"showWhen": {
+						"and": [
+							{
+								"!=": [
+									{
+										"var": "fullNameOfApplicant"
+									},
+									""
+								]
+							},
+							{
+								"in": [
+									{
+										"var": "TypeOfResidence"
+									},
+									["Self owned", "Family owned", "Rented"]
+								]
+							}
+						]
+					}
+				},
+				{
+					"id": "q4_selectedProfession",
+					"bindsTo_template": "selectedProfession",
+					"contextKey": "selectedProfession",
+					"type": "select",
+					"uiGroup": "selectButton",
+					"uiMeta": {
+						"placeholder": "Select Age"
+					},
+					"required": true,
+					"question": "Please select your profession",
+					"description": "Banks will require you to provide relevant certificates or degrees during the loan application process",
+					"options": [
+						{
+							"label": "Lawyer",
+							"value": "Lawyer"
+						},
+						{
+							"label": "Charted Accountant",
+							"value": "Charted Accountant"
+						},
+						{
+							"label": "MBBS Doctor",
+							"value": "MBBS Doctor"
+						},
+						{
+							"label": "Architect",
+							"value": "Architect"
+						}
+					],
+					"showWhen": {
+						"and": [
+							{
+								"!=": [
+									{
+										"var": "fullNameOfApplicant"
+									},
+									""
+								]
+							},
+							{
+								"in": [
+									{
+										"var": "TypeOfResidence"
+									},
+									["Self owned", "Family owned", "Rented"]
+								]
+							},
+							{
+								"!=": [
+									{
+										"var": "selectedAge"
+									},
+									""
+								]
+							}
+						]
+					}
+				},
+				{
+					"id": "q_grossReceiptArray",
+					"bindsTo_template": "grossReceiptArray",
+					"contextKey": "grossReceiptArray",
+					"type": "number",
+					"uiGroup": "inputNumber",
+					"uiMeta": {
+						"placeholder": ["FY2023-24", "FY2022-23", "FY2021-22"]
+					},
+					"required": true,
+					"question": "What were the Gross Receipts in the last three financial years?",
+					"showWhen": {
+						"and": [
+							{
+								"!=": [
+									{
+										"var": "fullNameOfApplicant"
+									},
+									""
+								]
+							},
+							{
+								"in": [
+									{
+										"var": "TypeOfResidence"
+									},
+									["Self owned", "Family owned", "Rented"]
+								]
+							},
+							{
+								"!=": [
+									{
+										"var": "selectedAge"
+									},
+									""
+								]
+							},
+							{
+								"!=": [
+									{
+										"var": "selectedProfession"
+									},
+									""
+								]
+							}
+						]
+					}
+				},
+				{
+					"id": "q5_netProfitArray",
+					"bindsTo_template": "netProfitArray",
+					"contextKey": "netProfitArray",
+					"type": "number",
+					"uiGroup": "inputNumber",
+					"uiMeta": {
+						"placeholder": ["FY2023-24", "FY2022-23", "FY2021-22"]
+					},
+					"required": true,
+					"question": "What were the Net Profits for the last three financial years?",
+					"showWhen": {
+						"and": [
+							{
+								"!=": [
+									{
+										"var": "fullNameOfApplicant"
+									},
+									""
+								]
+							},
+							{
+								"in": [
+									{
+										"var": "TypeOfResidence"
+									},
+									["Self owned", "Family owned", "Rented"]
+								]
+							},
+							{
+								"!=": [
+									{
+										"var": "selectedAge"
+									},
+									""
+								]
+							},
+							{
+								"!=": [
+									{
+										"var": "selectedProfession"
+									},
+									""
+								]
+							},
+							{
+								"!=": [
+									{
+										"var": "grossReceiptArray"
+									},
+									""
+								]
+							}
+						]
+					}
+				},
+				{
+					"id": "q7_creditScore",
+					"bindsTo_template": "creditScore",
+					"contextKey": "creditScore",
+					"type": "select",
+					"uiGroup": "selectButton",
+					"uiMeta": {
+						"placeholder": "Select credit score"
+					},
+					"required": true,
+					"question": "What's the Credit Score?",
+					"description": "The credit score is a crucial factor that lenders consider to determine your creditworthiness A higher credit score is essential for securing more favorable loan terms and interest rates, directly influencing loan eligibility and approval.",
+					"options": [
+						{
+							"label": "No CIBIL",
+							"value": "No CIBIL"
+						},
+						{
+							"label": "650-699",
+							"value": "650-699"
+						},
+						{
+							"label": "700-729",
+							"value": "700-729"
+						},
+						{
+							"label": "730-749",
+							"value": "730-749"
+						},
+						{
+							"label": "750-779",
+							"value": "750-779"
+						},
+						{
+							"label": "780-799",
+							"value": "780-799"
+						},
+						{
+							"label": "more than 800",
+							"value": "more than 800"
+						}
+					],
+					"showWhen": {
+						"and": [
+							{
+								"!=": [
+									{
+										"var": "fullNameOfApplicant"
+									},
+									""
+								]
+							},
+							{
+								"in": [
+									{
+										"var": "TypeOfResidence"
+									},
+									["Self owned", "Family owned", "Rented"]
+								]
+							},
+							{
+								"!=": [
+									{
+										"var": "selectedAge"
+									},
+									""
+								]
+							},
+							{
+								"!=": [
+									{
+										"var": "selectedProfession"
+									},
+									""
+								]
+							},
+							{
+								"!=": [
+									{
+										"var": "grossReceiptArray"
+									},
+									""
+								]
+							},
+							{
+								"!=": [
+									{
+										"var": "netProfitArray"
+									},
+									""
+								]
+							}
+						]
+					}
+				},
+				{
+					"id": "q8_isDefaulter",
+					"bindsTo_template": "isDefaulter",
+					"contextKey": "isDefaulter",
+					"type": "select",
+					"uiGroup": "selectButton",
+					"required": true,
+					"question": "Have you ever been defaulter",
+					"options": [
+						{
+							"label": "Yes",
+							"value": "Yes"
+						},
+						{
+							"label": "No",
+							"value": "No"
+						}
+					],
+					"showWhen": {
+						"and": [
+							{
+								"!=": [
+									{
+										"var": "fullNameOfApplicant"
+									},
+									""
+								]
+							},
+							{
+								"in": [
+									{
+										"var": "TypeOfResidence"
+									},
+									["Self owned", "Family owned", "Rented"]
+								]
+							},
+							{
+								"!=": [
+									{
+										"var": "selectedAge"
+									},
+									""
+								]
+							},
+							{
+								"!=": [
+									{
+										"var": "selectedProfession"
+									},
+									""
+								]
+							},
+							{
+								"!=": [
+									{
+										"var": "grossReceiptArray"
+									},
+									""
+								]
+							},
+							{
+								"!=": [
+									{
+										"var": "netProfitArray"
+									},
+									""
+								]
+							},
+							{
+								"!=": [
+									{
+										"var": "creditScore"
+									},
+									""
+								]
+							}
+						]
+					}
+				},
+				{
+					"id": "q9_whyLowCredit",
+					"bindsTo_template": "whyLowCredit",
+					"contextKey": "whyLowCredit",
+					"type": "multiple-select",
+					"uiGroup": "select_fields",
+					"uiMeta": {
+						"placeholder": "Select the reason why you have low credit score"
+					},
+					"required": true,
+					"question": "What are the possible reasons behind your low CIBIL score?",
+					"description": "select all the applicable reasons to help us understand what may be impacting your credit score",
+					"options": [
+						{
+							"label": "Delayed EMI",
+							"value": "Delayed EMI"
+						},
+						{
+							"label": "High credit card utilization",
+							"value": "High credit card utilization"
+						},
+						{
+							"label": "No credit history",
+							"value": "No credit history"
+						},
+						{
+							"label": "Frequent use of full credit limit",
+							"value": "Frequent use of full credit limit"
+						},
+						{
+							"label": "Delayed credit card payments",
+							"value": "Delayed credit card payments"
+						},
+						{
+							"label": "Multiple recent loan enquiries",
+							"value": "Multiple recent loan enquiries"
+						},
+						{
+							"label": "Co-applicant default",
+							"value": "Co-applicant default"
+						},
+						{
+							"label": "Loan default",
+							"value": "Loan default"
+						},
+						{
+							"label": "Only unsecured loans in profile",
+							"value": "Only unsecured loans in profile"
+						},
+						{
+							"label": "Minimum due payments only on credit card",
+							"value": "Minimum due payments only on credit card"
+						}
+					],
+					"showWhen": {
+						"and": [
+							{
+								"!=": [
+									{
+										"var": "fullNameOfApplicant"
+									},
+									""
+								]
+							},
+							{
+								"in": [
+									{
+										"var": "TypeOfResidence"
+									},
+									["Self owned", "Family owned", "Rented"]
+								]
+							},
+							{
+								"!=": [
+									{
+										"var": "selectedAge"
+									},
+									""
+								]
+							},
+							{
+								"!=": [
+									{
+										"var": "selectedProfession"
+									},
+									""
+								]
+							},
+							{
+								"!=": [
+									{
+										"var": "grossReceiptArray"
+									},
+									""
+								]
+							},
+							{
+								"!=": [
+									{
+										"var": "netProfitArray"
+									},
+									""
+								]
+							},
+							{
+								"in": [
+									{
+										"var": "creditScore"
+									},
+									["No CIBIL", "650-699"]
+								]
+							},
+							{
+								"in": [
+									{
+										"var": "isDefaulter"
+									},
+									["Yes", "No"]
+								]
+							}
+						]
+					}
+				}
+			]
+		},
+		{
+			"id": "existingDetailsPage",
+			"title": "Existing Details",
+			"nextButtonVisibility": {
+				"mode": ["allRequiredAnswered"]
+			},
+			"showWhen": {
+				"==": [
+					{
+						"var": "existingLoan"
+					},
+					"Yes"
+				]
+			},
+
+			"questions": [
+				{
+					"id": "q1_loanType",
+					"bindsTo_template": "tableLoanEntries.loanType",
+					"contextKey": "tableLoanEntries.loanType",
+					"type": "select",
+					"uiGroup": "select_fields",
+					"uiMeta": {
+						"placeholder": "Choose your existing loan type"
+					},
+					"required": true,
+					"question": "What type of existing loan do you have?",
+					"description": "Select the type of loan you currently have. This helps us understand your existing financial commitments better.",
+					"options": [
+						{
+							"label": "Business Loan - Unsecured",
+							"value": "Business Loan - Unsecured"
+						},
+						{
+							"label": "Business Loan - Secured",
+							"value": "Business Loan - Secured"
+						},
+						{
+							"label": "Loan Against Property",
+							"value": "Loan Against Property"
+						},
+						{
+							"label": "Machinery Loan",
+							"value": "Machinery Loan"
+						},
+						{
+							"label": "Vehicle Loan",
+							"value": "Vehicle Loan"
+						},
+						{
+							"label": "Property Loan",
+							"value": "Property Loan"
+						},
+						{
+							"label": "OD Limit",
+							"value": "OD Limit"
+						},
+						{
+							"label": "CC Limit",
+							"value": "CC Limit"
+						},
+						{
+							"label": "Dropline OD",
+							"value": "Dropline OD"
+						},
+						{
+							"label": "Other Type Loan",
+							"value": "Other Type Loan"
+						}
+					]
+				},
+				{
+					"id": "q2_bankName",
+					"bindsTo_template": "tableLoanEntries.bankName",
+					"contextKey": "tableLoanEntries.bankName",
+					"type": "select",
+					"uiGroup": "select_fields",
+					"uiMeta": {
+						"placeholder": "Select your bank"
+					},
+					"required": true,
+					"question": "Which bank is your existing loan with?",
+					"description": "Choose the bank where you have your current loan. This information helps us coordinate the loan takeover process if needed.",
+					"options": [
+						{
+							"label": "HDFC Bank",
+							"value": "HDFC Bank"
+						},
+						{
+							"label": "SBI Bank",
+							"value": "SBI Bank"
+						},
+						{
+							"label": "Axis Bank",
+							"value": "Axis Bank"
+						},
+						{
+							"label": "ICICI Bank",
+							"value": "ICICI Bank"
+						},
+						{
+							"label": "Canara Bank",
+							"value": "Canara Bank"
+						},
+						{
+							"label": "Bank of Baroda",
+							"value": "Bank of Baroda"
+						},
+						{
+							"label": "Citi Bank",
+							"value": "Citi Bank"
+						},
+						{
+							"label": "Union Bank",
+							"value": "Union Bank"
+						}
+					],
+					"showWhen": {
+						"!=": [
+							{
+								"var": "tableLoanEntries.loanType"
+							},
+							""
+						]
+					}
+				},
+				{
+					"id": "q3_selectedToClose",
+					"bindsTo_template": "tableLoanEntries.selectedToClose",
+					"contextKey": "tableLoanEntries.selectedToClose",
+					"type": "select",
+					"uiGroup": "select_fields",
+					"uiMeta": {
+						"placeholder": "How do you plan to close this loan?"
+					},
+					"required": true,
+					"question": "How would you like to handle this existing loan?",
+					"description": "Let us know if you'll close this loan yourself or if you'd like us to help with the closure process as part of your new loan.",
+					"options": [
+						{
+							"label": "Self-funded (before loan disbursement)",
+							"value": "Self-funded (before loan disbursement)"
+						},
+						{
+							"label": "will be closed by this loan",
+							"value": "will be closed by this loan"
+						},
+						{
+							"label": "continue running as it is",
+							"value": "continue running as it is"
+						}
+					],
+					"showWhen": {
+						"and": [
+							{
+								"!=": [
+									{
+										"var": "tableLoanEntries.loanType"
+									},
+									""
+								]
+							},
+							{
+								"!=": [
+									{
+										"var": "tableLoanEntries.bankName"
+									},
+									""
+								]
+							}
+						]
+					}
+				},
+				{
+					"id": "q4_emi",
+					"bindsTo_template": "tableLoanEntries.emi",
+					"contextKey": "tableLoanEntries.emi",
+					"type": "text",
+					"uiGroup": "text_fields",
+					"uiMeta": {
+						"placeholder": "Enter EMI"
+					},
+					"required": true,
+					"question": "What is the EMI for this existing loan?",
+					"description": "EMI (monthly)",
+					"showWhen": {
+						"and": [
+							{
+								"in": [
+									{
+										"var": "tableLoanEntries.loanType"
+									},
+									[
+										"Business Loan - Unsecured",
+										"Business Loan - Secured",
+										"Loan Against Property",
+										"Machinery Loan",
+										"Vehicle Loan",
+										"Property Loan",
+										"Other Type Loan"
+									]
+								]
+							},
+							{
+								"!=": [
+									{
+										"var": "tableLoanEntries.bankName"
+									},
+									""
+								]
+							},
+							{
+								"!=": [
+									{
+										"var": "tableLoanEntries.selectedToClose"
+									},
+									""
+								]
+							}
+						]
+					}
+				},
+				{
+					"id": "q5_tenure",
+					"bindsTo_template": "tableLoanEntries.tenure",
+					"contextKey": "tableLoanEntries.tenure",
+					"type": "text",
+					"uiGroup": "text_fields",
+					"uiMeta": {
+						"placeholder": "in months"
+					},
+					"required": true,
+					"question": "remaining tenure",
+					"showWhen": {
+						"and": [
+							{
+								"in": [
+									{
+										"var": "tableLoanEntries.loanType"
+									},
+									[
+										"Business Loan - Unsecured",
+										"Business Loan - Secured",
+										"Loan Against Property",
+										"Machinery Loan",
+										"Vehicle Loan",
+										"Property Loan",
+										"Other Type Loan"
+									]
+								]
+							},
+							{
+								"!=": [
+									{
+										"var": "tableLoanEntries.bankName"
+									},
+									""
+								]
+							},
+							{
+								"!=": [
+									{
+										"var": "tableLoanEntries.selectedToClose"
+									},
+									""
+								]
+							},
+							{
+								"!=": [
+									{
+										"var": "tableLoanEntries.emi"
+									},
+									""
+								]
+							}
+						]
+					}
+				},
+				{
+					"id": "q6_totalLimit",
+					"bindsTo_template": "tableLoanEntries.totalLimit",
+					"contextKey": "tableLoanEntries.totalLimit",
+					"type": "text",
+					"uiGroup": "text_fields",
+					"uiMeta": {
+						"placeholder": "Enter total limit"
+					},
+					"required": true,
+					"question": "total limit",
+					"showWhen": {
+						"and": [
+							{
+								"in": [
+									{
+										"var": "tableLoanEntries.loanType"
+									},
+									["OD Limit", "CC Limit"]
+								]
+							},
+							{
+								"!=": [
+									{
+										"var": "tableLoanEntries.bankName"
+									},
+									""
+								]
+							},
+							{
+								"!=": [
+									{
+										"var": "tableLoanEntries.selectedToClose"
+									},
+									""
+								]
+							}
+						]
+					}
+				},
+				{
+					"id": "q7_sanctionedLimit",
+					"bindsTo_template": "tableLoanEntries.sanctionedLimit",
+					"contextKey": "tableLoanEntries.sanctionedLimit",
+					"type": "text",
+					"uiGroup": "text_fields",
+					"uiMeta": {
+						"placeholder": "Enter total limit"
+					},
+					"required": true,
+					"question": "sanctioned limit (at the time of start)",
+					"showWhen": {
+						"and": [
+							{
+								"==": [
+									{
+										"var": "tableLoanEntries.loanType"
+									},
+									"Dropline OD"
+								]
+							},
+							{
+								"!=": [
+									{
+										"var": "tableLoanEntries.bankName"
+									},
+									""
+								]
+							},
+							{
+								"!=": [
+									{
+										"var": "tableLoanEntries.selectedToClose"
+									},
+									""
+								]
+							}
+						]
+					}
+				},
+				{
+					"id": "q8_remainingLimit",
+					"bindsTo_template": "tableLoanEntries.remainingLimit",
+					"contextKey": "tableLoanEntries.remainingLimit",
+					"type": "text",
+					"uiGroup": "text_fields",
+					"uiMeta": {
+						"placeholder": "Enter total limit"
+					},
+					"required": true,
+					"question": "remaining limit (current)",
+					"showWhen": {
+						"and": [
+							{
+								"==": [
+									{
+										"var": "tableLoanEntries.loanType"
+									},
+									"Dropline OD"
+								]
+							},
+							{
+								"!=": [
+									{
+										"var": "tableLoanEntries.bankName"
+									},
+									""
+								]
+							},
+							{
+								"!=": [
+									{
+										"var": "tableLoanEntries.selectedToClose"
+									},
+									""
+								]
+							},
+							{
+								"!=": [
+									{
+										"var": "tableLoanEntries.sanctionedLimit"
+									},
+									""
+								]
+							}
+						]
+					}
+				},
+				{
+					"id": "q9_sanctionedTenure",
+					"bindsTo_template": "tableLoanEntries.sanctionedTenure",
+					"contextKey": "tableLoanEntries.sanctionedTenure",
+					"type": "text",
+					"uiGroup": "text_fields",
+					"uiMeta": {
+						"placeholder": "in months"
+					},
+					"required": true,
+					"question": "sanctioned tenure",
+					"showWhen": {
+						"and": [
+							{
+								"in": [
+									{
+										"var": "tableLoanEntries.loanType"
+									},
+									["OD Limit", "CC Limit", "Dropline OD"]
+								]
+							},
+							{
+								"!=": [
+									{
+										"var": "tableLoanEntries.bankName"
+									},
+									""
+								]
+							},
+							{
+								"!=": [
+									{
+										"var": "tableLoanEntries.selectedToClose"
+									},
+									""
+								]
+							},
+							{
+								"or": [
+									{
+										"!=": [
+											{
+												"var": "tableLoanEntries.totalLimit"
+											},
+											""
+										]
+									},
+									{
+										"and": [
+											{
+												"!=": [
+													{
+														"var": "tableLoanEntries.sanctionedLimit"
+													},
+													""
+												]
+											},
+											{
+												"!=": [
+													{
+														"var": "tableLoanEntries.remainingLimit"
+													},
+													""
+												]
+											}
+										]
+									}
+								]
+							}
+						]
+					}
+				},
+				{
+					"id": "q10_remainingTenure",
+					"bindsTo_template": "tableLoanEntries.remainingTenure",
+					"contextKey": "tableLoanEntries.remainingTenure",
+					"type": "text",
+					"uiGroup": "text_fields",
+					"uiMeta": {
+						"placeholder": "in months"
+					},
+					"required": true,
+					"question": "remaining tenure",
+					"showWhen": {
+						"and": [
+							{
+								"==": [
+									{
+										"var": "tableLoanEntries.loanType"
+									},
+									"Dropline OD"
+								]
+							},
+							{
+								"!=": [
+									{
+										"var": "tableLoanEntries.bankName"
+									},
+									""
+								]
+							},
+							{
+								"!=": [
+									{
+										"var": "tableLoanEntries.selectedToClose"
+									},
+									""
+								]
+							},
+							{
+								"!=": [
+									{
+										"var": "tableLoanEntries.sanctionedLimit"
+									},
+									""
+								]
+							},
+							{
+								"!=": [
+									{
+										"var": "tableLoanEntries.remainingLimit"
+									},
+									""
+								]
+							},
+							{
+								"!=": [
+									{
+										"var": "tableLoanEntries.sanctionedTenure"
+									},
+									""
+								]
+							}
+						]
+					}
+				},
+				{
+					"id": "q11_utilizedAmount",
+					"bindsTo_template": "tableLoanEntries.utilizedAmount",
+					"contextKey": "tableLoanEntries.utilizedAmount",
+					"type": "text",
+					"uiGroup": "text_fields",
+					"uiMeta": {
+						"placeholder": "Enter total limit"
+					},
+					"required": true,
+					"question": "utilized amount",
+					"showWhen": {
+						"and": [
+							{
+								"==": [
+									{
+										"var": "tableLoanEntries.loanType"
+									},
+									"Dropline OD"
+								]
+							},
+							{
+								"!=": [
+									{
+										"var": "tableLoanEntries.bankName"
+									},
+									""
+								]
+							},
+							{
+								"!=": [
+									{
+										"var": "tableLoanEntries.selectedToClose"
+									},
+									""
+								]
+							},
+							{
+								"!=": [
+									{
+										"var": "tableLoanEntries.sanctionedLimit"
+									},
+									""
+								]
+							},
+							{
+								"!=": [
+									{
+										"var": "tableLoanEntries.remainingLimit"
+									},
+									""
+								]
+							},
+							{
+								"!=": [
+									{
+										"var": "tableLoanEntries.sanctionedTenure"
+									},
+									""
+								]
+							},
+							{
+								"!=": [
+									{
+										"var": "tableLoanEntries.remainingTenure"
+									},
+									""
+								]
+							}
+						]
+					}
+				},
+				{
+					"id": "q12_interestRate",
+					"bindsTo_template": "tableLoanEntries.interestRate",
+					"contextKey": "tableLoanEntries.interestRate",
+					"type": "text",
+					"uiGroup": "text_fields",
+					"uiMeta": {
+						"placeholder": "enter interest rate"
+					},
+					"required": true,
+					"question": "interest rate (p.a.)",
+					"showWhen": {
+						"and": [
+							{
+								"!=": [
+									{
+										"var": "tableLoanEntries.loanType"
+									},
+									""
+								]
+							},
+							{
+								"!=": [
+									{
+										"var": "tableLoanEntries.bankName"
+									},
+									""
+								]
+							},
+							{
+								"!=": [
+									{
+										"var": "tableLoanEntries.selectedToClose"
+									},
+									""
+								]
+							},
+							{
+								"or": [
+									{
+										"!=": [
+											{
+												"var": "tableLoanEntries.emi"
+											},
+											""
+										]
+									},
+									{
+										"!=": [
+											{
+												"var": "tableLoanEntries.totalLimit"
+											},
+											""
+										]
+									},
+									{
+										"and": [
+											{
+												"!=": [
+													{
+														"var": "tableLoanEntries.sanctionedLimit"
+													},
+													""
+												]
+											},
+											{
+												"!=": [
+													{
+														"var": "tableLoanEntries.remainingLimit"
+													},
+													""
+												]
+											}
+										]
+									}
+								]
+							},
+							{
+								"or": [
+									{
+										"!=": [
+											{
+												"var": "tableLoanEntries.tenure"
+											},
+											""
+										]
+									},
+									{
+										"!=": [
+											{
+												"var": "tableLoanEntries.sanctionedTenure"
+											},
+											""
+										]
+									},
+									{
+										"!=": [
+											{
+												"var": "tableLoanEntries.remainingTenure"
+											},
+											""
+										]
+									}
+								]
+							}
+						]
+					}
+				}
+			]
+		},
+		{
+			"id": "loanRequirementPage",
+			"title": "Your Loan Requirements",
+			"nextButtonVisibility": {
+				"mode": ["allRequiredAnswered"]
+			},
+			"questions": [
+				{
+					"id": "q1_mortgageYear",
+					"bindsTo_template": "mortgageYear",
+					"contextKey": "mortgageYear",
+					"type": "select",
+					"uiGroup": "select_fields",
+					"uiMeta": {
+						"placeholder": "Select loan tenure in years"
+					},
+					"required": true,
+					"question": "How long would you like your loan term to be?",
+					"description": "Choose your preferred loan duration. A longer term means lower monthly payments but more interest over time. You can adjust this later based on your eligibility.",
+					"options": [
+						{
+							"label": "1",
+							"value": "1"
+						},
+						{
+							"label": "2",
+							"value": "2"
+						},
+						{
+							"label": "3",
+							"value": "3"
+						},
+						{
+							"label": "4",
+							"value": "4"
+						},
+						{
+							"label": "5",
+							"value": "5"
+						}
+					]
+				},
+				{
+					"id": "q2_hasSpecificAmount",
+					"bindsTo_template": "hasSpecificAmount",
+					"contextKey": "hasSpecificAmount",
+					"type": "radio",
+					"uiGroup": "loan_details",
+					"required": true,
+					"question": "Do you have a specific loan amount in mind?",
+					"description": "Let us know if you have a particular loan amount requirement. This helps us tailor our offerings to your needs.",
+					"options": [
+						{
+							"label": "Yes",
+							"value": "Yes"
+						},
+						{
+							"label": "No",
+							"value": "No"
+						}
+					],
+					"showWhen": {
+						"!=": [{ "var": "mortgageYear" }, ""]
+					}
+				},
+				{
+					"id": "q3_loanAmount",
+					"bindsTo_template": "loanAmount",
+					"contextKey": "loanAmount",
+					"type": "number",
+					"uiGroup": "number_fields",
+					"uiMeta": {
+						"placeholder": "Enter amount in rupees",
+						"min": 100000,
+						"max": 13915400
+					},
+					"required": true,
+					"question": "Enter your desired loan amount",
+					"description": "You can request a loan amount up to ₹1,39,15,400. Enter a value that aligns with your requirements and repayment capacity.",
+					"showWhen": {
+						"and": [
+							{
+								"!=": [{ "var": "mortgageYear" }, ""]
+							},
+							{
+								"==": [{ "var": "hasSpecificAmount" }, "Yes"]
+							}
+						]
+					}
+				}
+			]
+		}
+	]
+}
