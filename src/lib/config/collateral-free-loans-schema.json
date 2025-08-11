@@ -179,7 +179,7 @@
 		},
 		{
 			"id": "collateral_free_selectionPage",
-			"title": "Non-Collateral Loan Details",
+			"title": "A few check points !",
 			"nextButtonVisibility": {
 				"mode": ["allRequiredAnswered"]
 			},
@@ -556,7 +556,7 @@
 					"uiMeta": {
 						"placeholder": "Select City name"
 					},
-					"description": "City name",
+					"question": "City name",
 					"required": true,
 					"showWhen": {
 						"!=": [
@@ -652,7 +652,7 @@
 					"uiMeta": {
 						"placeholder": "Select a City"
 					},
-					"description": "city name",
+					"question": "city name",
 					"required": true,
 					"showWhen": {
 						"and": [
@@ -1655,7 +1655,6 @@
 					"uiGroup": "selectButton",
 					"required": true,
 					"question": "Have you ever been defaulter",
-					"description": "description",
 					"options": [
 						{
 							"label": "Yes",
@@ -1947,11 +1946,23 @@
 				"mode": ["allRequiredAnswered"]
 			},
 			"showWhen": {
-				"==": [
+				"or": [
 					{
-						"var": "existingLoan"
+						"==": [
+							{
+								"var": "existingLoan"
+							},
+							"Yes"
+						]
 					},
-					"Yes"
+					{
+						"==": [
+							{
+								"var": "loanType"
+							},
+							"Debt Consolidation with Extra Funds"
+						]
+					}
 				]
 			},
 			"questions": [
@@ -2010,11 +2021,23 @@
 						}
 					],
 					"showWhen": {
-						"==": [
+						"or": [
 							{
-								"var": "existingLoan"
+								"==": [
+									{
+										"var": "existingLoan"
+									},
+									"Yes"
+								]
 							},
-							"Yes"
+							{
+								"==": [
+									{
+										"var": "loanType"
+									},
+									"Debt Consolidation with Extra Funds"
+								]
+							}
 						]
 					}
 				},
@@ -2067,11 +2090,23 @@
 					"showWhen": {
 						"and": [
 							{
-								"==": [
+								"or": [
 									{
-										"var": "existingLoan"
+										"==": [
+											{
+												"var": "existingLoan"
+											},
+											"Yes"
+										]
 									},
-									"Yes"
+									{
+										"==": [
+											{
+												"var": "loanType"
+											},
+											"Debt Consolidation with Extra Funds"
+										]
+									}
 								]
 							},
 							{
@@ -2150,15 +2185,28 @@
 						"placeholder": "Enter EMI"
 					},
 					"required": true,
+					"question": "What is the EMI for this existing loan?",
 					"description": "EMI (monthly)",
 					"showWhen": {
 						"and": [
 							{
-								"==": [
+								"or": [
 									{
-										"var": "existingLoan"
+										"==": [
+											{
+												"var": "existingLoan"
+											},
+											"Yes"
+										]
 									},
-									"Yes"
+									{
+										"==": [
+											{
+												"var": "loanType"
+											},
+											"Debt Consolidation with Extra Funds"
+										]
+									}
 								]
 							},
 							{
@@ -2206,15 +2254,27 @@
 						"placeholder": "in months"
 					},
 					"required": true,
-					"description": "remaining tenure",
+					"question": "remaining tenure",
 					"showWhen": {
 						"and": [
 							{
-								"==": [
+								"or": [
 									{
-										"var": "existingLoan"
+										"==": [
+											{
+												"var": "existingLoan"
+											},
+											"Yes"
+										]
 									},
-									"Yes"
+									{
+										"==": [
+											{
+												"var": "loanType"
+											},
+											"Debt Consolidation with Extra Funds"
+										]
+									}
 								]
 							},
 							{
@@ -2270,15 +2330,27 @@
 						"placeholder": "Enter total limit"
 					},
 					"required": true,
-					"description": "total limit",
+					"question": "total limit",
 					"showWhen": {
 						"and": [
 							{
-								"==": [
+								"or": [
 									{
-										"var": "existingLoan"
+										"==": [
+											{
+												"var": "existingLoan"
+											},
+											"Yes"
+										]
 									},
-									"Yes"
+									{
+										"==": [
+											{
+												"var": "loanType"
+											},
+											"Debt Consolidation with Extra Funds"
+										]
+									}
 								]
 							},
 							{
@@ -2318,15 +2390,27 @@
 						"placeholder": "Enter total limit"
 					},
 					"required": true,
-					"description": "sanctioned limit (at the time of start)",
+					"question": "sanctioned limit (at the time of start)",
 					"showWhen": {
 						"and": [
 							{
-								"==": [
+								"or": [
 									{
-										"var": "existingLoan"
+										"==": [
+											{
+												"var": "existingLoan"
+											},
+											"Yes"
+										]
 									},
-									"Yes"
+									{
+										"==": [
+											{
+												"var": "loanType"
+											},
+											"Debt Consolidation with Extra Funds"
+										]
+									}
 								]
 							},
 							{
@@ -2366,15 +2450,27 @@
 						"placeholder": "Enter total limit"
 					},
 					"required": true,
-					"description": "remaining limit (current)",
+					"question": "remaining limit (current)",
 					"showWhen": {
 						"and": [
 							{
-								"==": [
+								"or": [
 									{
-										"var": "existingLoan"
+										"==": [
+											{
+												"var": "existingLoan"
+											},
+											"Yes"
+										]
 									},
-									"Yes"
+									{
+										"==": [
+											{
+												"var": "loanType"
+											},
+											"Debt Consolidation with Extra Funds"
+										]
+									}
 								]
 							},
 							{
@@ -2422,15 +2518,27 @@
 						"placeholder": "in months"
 					},
 					"required": true,
-					"description": "sanctioned tenure",
+					"question": "sanctioned tenure",
 					"showWhen": {
 						"and": [
 							{
-								"==": [
+								"or": [
 									{
-										"var": "existingLoan"
+										"==": [
+											{
+												"var": "existingLoan"
+											},
+											"Yes"
+										]
 									},
-									"Yes"
+									{
+										"==": [
+											{
+												"var": "loanType"
+											},
+											"Debt Consolidation with Extra Funds"
+										]
+									}
 								]
 							},
 							{
@@ -2510,15 +2618,27 @@
 						"placeholder": "in months"
 					},
 					"required": true,
-					"description": "remaining tenure",
+					"question": "remaining tenure",
 					"showWhen": {
 						"and": [
 							{
-								"==": [
+								"or": [
 									{
-										"var": "existingLoan"
+										"==": [
+											{
+												"var": "existingLoan"
+											},
+											"Yes"
+										]
 									},
-									"Yes"
+									{
+										"==": [
+											{
+												"var": "loanType"
+											},
+											"Debt Consolidation with Extra Funds"
+										]
+									}
 								]
 							},
 							{
@@ -2582,15 +2702,27 @@
 						"placeholder": "Enter total limit"
 					},
 					"required": true,
-					"description": "utilized amount",
+					"question": "utilized amount",
 					"showWhen": {
 						"and": [
 							{
-								"==": [
+								"or": [
 									{
-										"var": "existingLoan"
+										"==": [
+											{
+												"var": "existingLoan"
+											},
+											"Yes"
+										]
 									},
-									"Yes"
+									{
+										"==": [
+											{
+												"var": "loanType"
+											},
+											"Debt Consolidation with Extra Funds"
+										]
+									}
 								]
 							},
 							{
@@ -2662,15 +2794,27 @@
 						"placeholder": "enter interest rate"
 					},
 					"required": true,
-					"description": "interest rate (p.a.)",
+					"question": "interest rate (p.a.)",
 					"showWhen": {
 						"and": [
 							{
-								"==": [
+								"or": [
 									{
-										"var": "existingLoan"
+										"==": [
+											{
+												"var": "existingLoan"
+											},
+											"Yes"
+										]
 									},
-									"Yes"
+									{
+										"==": [
+											{
+												"var": "loanType"
+											},
+											"Debt Consolidation with Extra Funds"
+										]
+									}
 								]
 							},
 							{
