@@ -17,6 +17,7 @@
 	import NumberField from '$lib/components/NumberField.svelte';
 	import MultipleSelectField from '$lib/components/MultipleSelectField.svelte';
 	import DerivedSelect from '$lib/components/DerivedSelect.svelte';
+	import GroupFields from '$lib/components/GroupFields.svelte';
 	import { submitApplication } from '$lib/services/api';
 
 	// Enhanced type definitions to support additional input types, including multiple-select
@@ -152,7 +153,10 @@
 	$: currentAnswers = $loanData[selectedLoan] ?? ({} as Answers);
 
 	$: combinedAnswers = (() => {
-		const combined: Answers = {};
+		// Start with all current answers to ensure we include dynamically added collections
+		const combined: Answers = { ...currentAnswers };
+		
+		// Process schema questions
 		for (const page of schema.pages) {
 			for (const q of page.questions) {
 				const key = resolveBindsTo(q, currentAnswers, selectedLoan);
@@ -180,6 +184,8 @@
 				}
 			}
 		}
+		
+		// Ensure important fields are always present
 		combined['q1_loanName'] = selectedLoan;
 		combined['loanName'] = selectedLoan;  // Also store without prefix
 		
@@ -206,9 +212,9 @@
 	}
 
 	// Update answer in store (enhanced for type safety with generics, including arrays)
-	function updateAnswerByKey<T extends string | number | boolean | (string | number)[]>(
+	function updateAnswerByKey(
 		key: string,
-		value: T
+		value: any
 	): void {
 		loanData.update((data) => {
 			if (!data[selectedLoan]) data[selectedLoan] = {};
@@ -226,6 +232,91 @@
 			return null;
 		}
 	};
+
+	// Handlers for grouped entries (arrays of objects)
+	function addGroupEntry(collectionKey: string, entry: any) {
+		try {
+			// Special handling for specific collections based on the schema
+			const isExistingLoanCollection = collectionKey === 'existingLoans' || 
+				collectionKey.includes('loanType') ||
+				collectionKey === 'tableLoanEntries';
+			
+			// Use a standardized collection key for loan details
+			const finalCollectionKey = isExistingLoanCollection ? 'q1_loanType_collection' : collectionKey;
+			
+			console.log(`Adding entry to collection ${collectionKey} (standardized to: ${finalCollectionKey})`, entry);
+			
+			// Get existing entries or initialize empty array
+			const existingEntries = currentAnswers[finalCollectionKey] || [];
+			
+			// Check if existingEntries is an array, if not convert to array
+			const validEntries = Array.isArray(existingEntries) ? existingEntries : [];
+			
+			// Create new array with the new entry
+			const updatedEntries = [...validEntries, entry];
+			console.log('Updated entries:', updatedEntries);
+			
+			// Update the store with the new array
+			updateAnswerByKey(finalCollectionKey, updatedEntries);
+			
+			// Force a refresh of the reactive store
+			setTimeout(() => {
+				loanData.update(data => {
+					// Make sure we preserve the updated entries in the store
+					const updatedData = { ...data };
+					if (isExistingLoanCollection) {
+						// Ensure the standardized key is properly updated
+						updatedData[finalCollectionKey] = updatedEntries;
+					}
+					return updatedData;
+				});
+				
+				// Log current store state for debugging
+				console.log('Current store state after update:', get(loanData));
+			}, 10);
+		} catch (error) {
+			console.error('Error adding group entry:', error);
+			alert('Failed to add entry. Please try again.');
+		}
+	}	function deleteGroupEntry(collectionKey: string, index: number) {
+		console.log('Deleting entry at index', index, 'from collection:', collectionKey);
+		
+		// Special handling for specific collections based on the schema
+		const isExistingLoanCollection = collectionKey === 'existingLoans' || collectionKey.includes('loanType');
+		
+		// Use a standardized collection key for loan details
+		const finalCollectionKey = isExistingLoanCollection ? 'q1_loanType_collection' : collectionKey;
+		
+		// Safely get the current entries array
+		let prev = currentAnswers[finalCollectionKey];
+		
+		// Validate the collection is an array
+		if (!Array.isArray(prev)) {
+			console.warn('Cannot delete from non-array:', prev);
+			return;
+		}
+		
+		// Make sure the index is valid
+		if (index < 0 || index >= prev.length) {
+			console.warn('Invalid index for deletion:', index, 'in array of length', prev.length);
+			return;
+		}
+		
+		// Create a new array without the deleted entry
+		const next = [...prev.slice(0, index), ...prev.slice(index + 1)];
+		console.log('New entries after deletion:', next);
+		
+		// Update the store
+		updateAnswerByKey(finalCollectionKey, next);
+		
+		// Force a refresh of the reactive store
+		setTimeout(() => {
+			loanData.update(data => {
+				// This creates a new reference to trigger reactivity
+				return { ...data };
+			});
+		}, 10);
+	}
 
 	// GST validation function with improved error handling
 	function validateGSTState(gstNumber: string): string | null {
@@ -365,9 +456,23 @@
 		if (currentPageIndex > 0) currentPageIndex -= 1;
 	}
 
+	// Helper: flatten questions, expanding any group wrappers into their inner questions
+	function flattenQuestions(questions: any[]): any[] {
+		const out: any[] = [];
+		for (const q of questions) {
+			if ('group' in q && Array.isArray((q as any).group)) {
+				for (const inner of (q as any).group as any[]) out.push(inner);
+			} else {
+				out.push(q);
+			}
+		}
+		return out;
+	}
+
 	// Check if all required questions are answered (enhanced for new types, including arrays)
 	function allRequiredAnswered(): boolean {
-		return currentPage.questions
+		const flat = flattenQuestions(currentPage.questions);
+		return flat
 			.filter((q) => q.required && isQuestionVisible(q, combinedAnswers))
 			.every((q) => {
 				const key = resolveBindsTo(q, combinedAnswers, selectedLoan);
@@ -438,7 +543,7 @@
 		}
 
 		// Business address validation
-		if (question.id.startsWith('q4_business') || question.id.startsWith('q5_business')) {
+		if (typeof question.id === 'string' && (question.id.startsWith('q4_business') || question.id.startsWith('q5_business'))) {
 			const addressSameOrNot = answers['addressSameOrNot'];
 			if (addressSameOrNot === 'No' && (!val || (typeof val === 'string' && val === ''))) {
 				return question.errorMessage?.required ?? 'This field is required';
@@ -456,7 +561,7 @@
 				currentPage.nextButtonVisibility.mode.includes('allRequiredAnswered') &&
 				allRequiredAnswered();
 		}
-		for (const q of currentPage.questions) {
+		for (const q of flattenQuestions(currentPage.questions)) {
 			if (isQuestionVisible(q, combinedAnswers) && hasValidationError(q, combinedAnswers)) {
 				enabled = true;
 				break;
@@ -472,7 +577,7 @@
 		
 		// Check all visible pages for required questions and validation
 		return visiblePages.every(page => {
-			const visibleQuestions = page.questions.filter(q => isQuestionVisible(q, combinedAnswers));
+			const visibleQuestions = flattenQuestions(page.questions).filter(q => isQuestionVisible(q, combinedAnswers));
 			return visibleQuestions.every(q => {
 				const key = resolveBindsTo(q, combinedAnswers, selectedLoan);
 				const val = currentAnswers[key];
@@ -500,7 +605,17 @@
 		<!-- Render visible questions with support for new input types -->
 		{#each visibleQuestions as question (question.id)}
 			<div class="mb-6">
-				{#if question.type === 'radio'}
+				{#if 'group' in question && Array.isArray((question as any).group)}
+					<GroupFields
+						groupedQuestions={(question as any).group}
+						collectionTemplate={currentPage.bindsTo_template}
+						combinedAnswers={combinedAnswers}
+						selectedLoan={selectedLoan}
+						updateAnswer={updateAnswer}
+						addGroupEntry={addGroupEntry}
+						deleteGroupEntry={deleteGroupEntry}
+					/>
+				{:else if question.type === 'radio'}
 					<RadioField
 						id={question.id}
 						name={question.id}

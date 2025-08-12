@@ -1,16 +1,19 @@
-<script>
-	export let id = '';
-	export let name = '';
-	export let label = '';
-	export let description = '';
-	export let options = [];
-	export let value = '';
-	export let error = null;
-	export let onChange = () => {};
-	export let getOptionValue = (opt) => opt.value;
-	export let getOptionLabel = (opt) => opt.label;
+<script lang="ts">
+	type Option = { label: string | { var: string }; value: string | number };
 
-	function handleChange(optValue) {
+	export let id: string = '';
+	export let name: string = '';
+	export let label: string = '';
+	export let description: string = '';
+	export let options: Option[] = [];
+	export let value: string | number = '';
+	export let error: string | null = null;
+	export let onChange: (value: string | number) => void = () => {};
+	export let getOptionValue: (opt: Option) => string | number = (opt) => opt.value;
+	export let getOptionLabel: (opt: Option) => string = (opt) =>
+    typeof opt.label === 'object' && (opt.label as any).var ? (opt.label as any).var : (opt.label as string);
+
+	function handleChange(optValue: string | number) {
 		onChange(optValue);
 	}
 </script>
