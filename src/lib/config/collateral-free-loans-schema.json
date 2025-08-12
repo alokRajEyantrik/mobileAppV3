@@ -211,7 +211,7 @@
 					"showWhen": {
 						"in": [
 							{
-								"var": "unSecureLoanType"
+								"var": "loanName"
 							},
 							["Business Loan", "Professional Loan"]
 						]
@@ -401,7 +401,7 @@
 					"showWhen": {
 						"in": [
 							{
-								"var": "unSecureLoanType"
+								"var": "loanName"
 							},
 							["Personal Loan"]
 						]
@@ -448,7 +448,7 @@
 					"showWhen": {
 						"in": [
 							{
-								"var": "unSecureLoanType"
+								"var": "loanName"
 							},
 							["Personal Loan"]
 						]

@@ -1,0 +1,209 @@
+export let bankData=[
+    { "Classification": "firstIndex",
+        "Name": 'Select bank name'},
+
+    {
+        "Classification": "PVT",
+        "Name": "HDFC Bank"
+    },
+    {
+        "Classification": "GOV",
+        "Name": "State Bank of India"
+    },
+    {
+        "Classification": "PVT",
+        "Name": "ICICI Bank"
+    },
+    {
+        "Classification": "NBFC",
+        "Name": "Bajaj Finserv"
+    },
+    {
+        "Classification": "PVT",
+        "Name": "Axis Bank"
+    },
+    {
+        "Classification": "GOV",
+        "Name": "Central Bank of India"
+    },
+    {
+        "Classification": "GOV",
+        "Name": "Bank of Maharashtra"
+    },
+    {
+        "Classification": "GOV",
+        "Name": "Bank of Baroda"
+    },
+    {
+        "Classification": "GOV",
+        "Name": "Bank of India"
+    },
+    {
+        "Classification": "GOV",
+        "Name": "Canara Bank"
+    },
+    {
+        "Classification": "GOV",
+        "Name": "IDBI Bank"
+    },
+    {
+        "Classification": "GOV",
+        "Name": "Indian Overseas Bank"
+    },
+    {
+        "Classification": "PVT",
+        "Name": "Karnataka Bank"
+    },
+    { "Classification": "PVT", "Name": "Jammu & Kashmir Bank" },
+    {
+        "Classification": "GOV",
+        "Name": "Punjab & Sind Bank"
+    },
+    { "Classification": "PVT", "Name": "Nainital Bank" },
+    {
+        "Classification": "GOV",
+        "Name": "Punjab National Bank"
+    },
+    {
+        "Classification": "GOV",
+        "Name": "UCO Bank"
+    },
+     { "Classification": "PVT", "Name": "Suryoday Small Finance Bank" },
+
+    { "Classification": "PVT", "Name": "TMB (Tamilnad Mercantile Bank)" } ,
+     
+    {
+        "Classification": "GOV",
+        "Name": "Union Bank of India"
+    },
+    {
+        "Classification": "NBFC",
+        "Name": "Aadhar Housing Finance"
+    },
+    {
+        "Classification": "NBFC",
+        "Name": "Aditya Birla Capital"
+    },
+    {
+        "Classification": "NBFC",
+        "Name": "GIC Housing Finance"
+    },
+    {
+        "Classification": "NBFC",
+        "Name": "Godrej Housing Finance"
+    },
+    {
+        "Classification": "NBFC",
+        "Name": "HDB Financial Services"
+    },
+    {
+        "Classification": "NBFC",
+        "Name": "Hero Housing Finance"
+    },
+    {
+        "Classification": "NBFC",
+        "Name": "ICICI Home Finance"
+    },
+    {
+        "Classification": "NBFC",
+        "Name": "IIFL Home Finance"
+    },
+    {
+        "Classification": "NBFC",
+        "Name": "Indiabulls Housing Finance"
+    },
+    {
+        "Classification": "NBFC",
+        "Name": "L&T Finance Limited"
+    },
+    {
+        "Classification": "NBFC",
+        "Name": "LIC Housing Finance"
+    },
+    {
+        "Classification": "NBFC",
+        "Name": "Muthoot Home Finance"
+    },
+    {
+        "Classification": "NBFC",
+        "Name": "Piramal Capital & Housing Finance"
+    },
+    {
+        "Classification": "NBFC",
+        "Name": "PNB Housing Finance"
+    },
+    {
+        "Classification": "NBFC",
+        "Name": "Poonawala Fincorp"
+    },
+    {
+        "Classification": "NBFC",
+        "Name": "Tata Capital Housing Finance"
+    },
+    {
+        "Classification": "PVT",
+        "Name": "Bandhan Bank"
+    },
+    {
+        "Classification": "PVT",
+        "Name": "Dhanlaxmi Bank"
+    },
+    {
+        "Classification": "PVT",
+        "Name": "Federal Bank"
+    },
+    {
+        "Classification": "PVT",
+        "Name": "HSBC"
+    },
+    {
+        "Classification": "PVT",
+        "Name": "IDFC First Bank"
+    },
+    {
+        "Classification": "PVT",
+        "Name": "Indusind Bank"
+    },
+     { "Classification": "PVT", "Name": "Yes Bank" },
+    {
+        "Classification": "PVT",
+        "Name": "Karur Vysya Bank"
+    },
+    {
+        "Classification": "PVT",
+        "Name": "Kotak Mahindra Bank"
+    },
+    {
+        "Classification": "PVT",
+        "Name": "RBL Bank"
+    },
+    {
+        "Classification": "PVT",
+        "Name": "Shinhan Bank"
+    },
+    { "Classification": "PVT", "Name": "City Union Bank" },
+    {
+        "Classification": "PVT",
+        "Name": "South Indian Bank"
+    },
+    { 
+        "Classification": "GOV",
+         "Name": "Indian Bank"
+     },
+
+    { "Classification": "PVT", "Name": "CSB Bank (Catholic Syrian Bank)" },
+
+    {
+        "Classification": "PVT",
+        "Name": "Standard Chartered Bank"
+    },
+    { "Classification": "PVT", "Name": "DCB Bank (Development Credit Bank)" },
+    {
+        "Classification": "PVT",
+        "Name": "Tamilnad Mercantile Bank"
+    },
+    {
+        "Classification": "",
+        "Name": "Other"
+    }
+]
