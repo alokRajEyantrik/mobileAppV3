@@ -1680,8 +1680,8 @@
 			"questions": [
 				{
 					"id": "q1_loanType",
-					"bindsTo_template": "tableLoanEntries.loanType",
-					"contextKey": "tableLoanEntries.loanType",
+					"bindsTo_template": "tableLoanEntriesloanType",
+					"contextKey": "tableLoanEntriesloanType",
 					"type": "select",
 					"uiGroup": "select_fields",
 					"uiMeta": {
@@ -1751,8 +1751,8 @@
 				},
 				{
 					"id": "q2_bankName",
-					"bindsTo_template": "tableLoanEntries.bankName",
-					"contextKey": "tableLoanEntries.bankName",
+					"bindsTo_template": "tableLoanEntriesbankName",
+					"contextKey": "tableLoanEntriesbankName",
 					"type": "select",
 					"uiGroup": "select_fields",
 					"uiMeta": {
@@ -1798,7 +1798,7 @@
 					"showWhen": {
 						"!=": [
 							{
-								"var": "tableLoanEntries.loanType"
+								"var": "tableLoanEntriesloanType"
 							},
 							""
 						]
@@ -1806,8 +1806,8 @@
 				},
 				{
 					"id": "q3_selectedToClose",
-					"bindsTo_template": "tableLoanEntries.selectedToClose",
-					"contextKey": "tableLoanEntries.selectedToClose",
+					"bindsTo_template": "tableLoanEntriesselectedToClose",
+					"contextKey": "tableLoanEntriesselectedToClose",
 					"type": "select",
 					"uiGroup": "select_fields",
 					"uiMeta": {
@@ -1856,7 +1856,7 @@
 								{
 									"==": [
 										{
-											"var": "tableLoanEntries.selectedToClose"
+											"var": "tableLoanEntriesselectedToClose"
 										},
 										"will be closed by this loan"
 									]
@@ -1869,7 +1869,7 @@
 							{
 								"!=": [
 									{
-										"var": "tableLoanEntries.loanType"
+										"var": "tableLoanEntriesloanType"
 									},
 									""
 								]
@@ -1877,7 +1877,7 @@
 							{
 								"!=": [
 									{
-										"var": "tableLoanEntries.bankName"
+										"var": "tableLoanEntriesbankName"
 									},
 									""
 								]
@@ -1887,8 +1887,8 @@
 				},
 				{
 					"id": "q4_emi",
-					"bindsTo_template": "tableLoanEntries.emi",
-					"contextKey": "tableLoanEntries.emi",
+					"bindsTo_template": "tableLoanEntriesemi",
+					"contextKey": "tableLoanEntriesemi",
 					"type": "text",
 					"uiGroup": "text_fields",
 					"uiMeta": {
@@ -1902,7 +1902,7 @@
 							{
 								"in": [
 									{
-										"var": "tableLoanEntries.loanType"
+										"var": "tableLoanEntriesloanType"
 									},
 									[
 										"Home Loan",
@@ -1922,7 +1922,7 @@
 							{
 								"!=": [
 									{
-										"var": "tableLoanEntries.bankName"
+										"var": "tableLoanEntriesbankName"
 									},
 									""
 								]
@@ -1930,7 +1930,7 @@
 							{
 								"!=": [
 									{
-										"var": "tableLoanEntries.selectedToClose"
+										"var": "tableLoanEntriesselectedToClose"
 									},
 									""
 								]
@@ -1940,8 +1940,8 @@
 				},
 				{
 					"id": "q5_tenure",
-					"bindsTo_template": "tableLoanEntries.tenure",
-					"contextKey": "tableLoanEntries.tenure",
+					"bindsTo_template": "tableLoanEntriestenure",
+					"contextKey": "tableLoanEntriestenure",
 					"type": "text",
 					"uiGroup": "text_fields",
 					"uiMeta": {
@@ -1954,7 +1954,7 @@
 							{
 								"in": [
 									{
-										"var": "tableLoanEntries.loanType"
+										"var": "tableLoanEntriesloanType"
 									},
 									[
 										"Home Loan",
@@ -1974,7 +1974,7 @@
 							{
 								"!=": [
 									{
-										"var": "tableLoanEntries.bankName"
+										"var": "tableLoanEntriesbankName"
 									},
 									""
 								]
@@ -1982,7 +1982,7 @@
 							{
 								"!=": [
 									{
-										"var": "tableLoanEntries.selectedToClose"
+										"var": "tableLoanEntriesselectedToClose"
 									},
 									""
 								]
@@ -1990,7 +1990,7 @@
 							{
 								"!=": [
 									{
-										"var": "tableLoanEntries.emi"
+										"var": "tableLoanEntriesemi"
 									},
 									""
 								]
@@ -2000,8 +2000,8 @@
 				},
 				{
 					"id": "q6_totalLimit",
-					"bindsTo_template": "tableLoanEntries.totalLimit",
-					"contextKey": "tableLoanEntries.totalLimit",
+					"bindsTo_template": "tableLoanEntriestotalLimit",
+					"contextKey": "tableLoanEntriestotalLimit",
 					"type": "text",
 					"uiGroup": "text_fields",
 					"uiMeta": {
@@ -2014,7 +2014,7 @@
 							{
 								"in": [
 									{
-										"var": "tableLoanEntries.loanType"
+										"var": "tableLoanEntriesloanType"
 									},
 									["OD Limit", "CC Limit"]
 								]
@@ -2022,7 +2022,7 @@
 							{
 								"!=": [
 									{
-										"var": "tableLoanEntries.bankName"
+										"var": "tableLoanEntriesbankName"
 									},
 									""
 								]
@@ -2030,7 +2030,7 @@
 							{
 								"!=": [
 									{
-										"var": "tableLoanEntries.selectedToClose"
+										"var": "tableLoanEntriesselectedToClose"
 									},
 									""
 								]
@@ -2040,8 +2040,8 @@
 				},
 				{
 					"id": "q7_sanctionedLimit",
-					"bindsTo_template": "tableLoanEntries.sanctionedLimit",
-					"contextKey": "tableLoanEntries.sanctionedLimit",
+					"bindsTo_template": "tableLoanEntriessanctionedLimit",
+					"contextKey": "tableLoanEntriessanctionedLimit",
 					"type": "text",
 					"uiGroup": "text_fields",
 					"uiMeta": {
@@ -2054,7 +2054,7 @@
 							{
 								"==": [
 									{
-										"var": "tableLoanEntries.loanType"
+										"var": "tableLoanEntriesloanType"
 									},
 									"Dropline OD"
 								]
@@ -2062,7 +2062,7 @@
 							{
 								"!=": [
 									{
-										"var": "tableLoanEntries.bankName"
+										"var": "tableLoanEntriesbankName"
 									},
 									""
 								]
@@ -2070,7 +2070,7 @@
 							{
 								"!=": [
 									{
-										"var": "tableLoanEntries.selectedToClose"
+										"var": "tableLoanEntriesselectedToClose"
 									},
 									""
 								]
@@ -2080,8 +2080,8 @@
 				},
 				{
 					"id": "q8_remainingLimit",
-					"bindsTo_template": "tableLoanEntries.remainingLimit",
-					"contextKey": "tableLoanEntries.remainingLimit",
+					"bindsTo_template": "tableLoanEntriesremainingLimit",
+					"contextKey": "tableLoanEntriesremainingLimit",
 					"type": "text",
 					"uiGroup": "text_fields",
 					"uiMeta": {
@@ -2094,7 +2094,7 @@
 							{
 								"==": [
 									{
-										"var": "tableLoanEntries.loanType"
+										"var": "tableLoanEntriesloanType"
 									},
 									"Dropline OD"
 								]
@@ -2102,7 +2102,7 @@
 							{
 								"!=": [
 									{
-										"var": "tableLoanEntries.bankName"
+										"var": "tableLoanEntriesbankName"
 									},
 									""
 								]
@@ -2110,7 +2110,7 @@
 							{
 								"!=": [
 									{
-										"var": "tableLoanEntries.selectedToClose"
+										"var": "tableLoanEntriesselectedToClose"
 									},
 									""
 								]
@@ -2118,7 +2118,7 @@
 							{
 								"!=": [
 									{
-										"var": "tableLoanEntries.sanctionedLimit"
+										"var": "tableLoanEntriessanctionedLimit"
 									},
 									""
 								]
@@ -2128,8 +2128,8 @@
 				},
 				{
 					"id": "q9_sanctionedTenure",
-					"bindsTo_template": "tableLoanEntries.sanctionedTenure",
-					"contextKey": "tableLoanEntries.sanctionedTenure",
+					"bindsTo_template": "tableLoanEntriessanctionedTenure",
+					"contextKey": "tableLoanEntriessanctionedTenure",
 					"type": "text",
 					"uiGroup": "text_fields",
 					"uiMeta": {
@@ -2142,7 +2142,7 @@
 							{
 								"in": [
 									{
-										"var": "tableLoanEntries.loanType"
+										"var": "tableLoanEntriesloanType"
 									},
 									["OD Limit", "CC Limit", "Dropline OD"]
 								]
@@ -2150,7 +2150,7 @@
 							{
 								"!=": [
 									{
-										"var": "tableLoanEntries.bankName"
+										"var": "tableLoanEntriesbankName"
 									},
 									""
 								]
@@ -2158,7 +2158,7 @@
 							{
 								"!=": [
 									{
-										"var": "tableLoanEntries.selectedToClose"
+										"var": "tableLoanEntriesselectedToClose"
 									},
 									""
 								]
@@ -2168,7 +2168,7 @@
 									{
 										"!=": [
 											{
-												"var": "tableLoanEntries.totalLimit"
+												"var": "tableLoanEntriestotalLimit"
 											},
 											""
 										]
@@ -2178,7 +2178,7 @@
 											{
 												"!=": [
 													{
-														"var": "tableLoanEntries.sanctionedLimit"
+														"var": "tableLoanEntriessanctionedLimit"
 													},
 													""
 												]
@@ -2186,7 +2186,7 @@
 											{
 												"!=": [
 													{
-														"var": "tableLoanEntries.remainingLimit"
+														"var": "tableLoanEntriesremainingLimit"
 													},
 													""
 												]
@@ -2200,8 +2200,8 @@
 				},
 				{
 					"id": "q10_remainingTenure",
-					"bindsTo_template": "tableLoanEntries.remainingTenure",
-					"contextKey": "tableLoanEntries.remainingTenure",
+					"bindsTo_template": "tableLoanEntriesremainingTenure",
+					"contextKey": "tableLoanEntriesremainingTenure",
 					"type": "text",
 					"uiGroup": "text_fields",
 					"uiMeta": {
@@ -2214,7 +2214,7 @@
 							{
 								"==": [
 									{
-										"var": "tableLoanEntries.loanType"
+										"var": "tableLoanEntriesloanType"
 									},
 									"Dropline OD"
 								]
@@ -2222,7 +2222,7 @@
 							{
 								"!=": [
 									{
-										"var": "tableLoanEntries.bankName"
+										"var": "tableLoanEntriesbankName"
 									},
 									""
 								]
@@ -2230,7 +2230,7 @@
 							{
 								"!=": [
 									{
-										"var": "tableLoanEntries.selectedToClose"
+										"var": "tableLoanEntriesselectedToClose"
 									},
 									""
 								]
@@ -2238,7 +2238,7 @@
 							{
 								"!=": [
 									{
-										"var": "tableLoanEntries.sanctionedLimit"
+										"var": "tableLoanEntriessanctionedLimit"
 									},
 									""
 								]
@@ -2246,7 +2246,7 @@
 							{
 								"!=": [
 									{
-										"var": "tableLoanEntries.remainingLimit"
+										"var": "tableLoanEntriesremainingLimit"
 									},
 									""
 								]
@@ -2254,7 +2254,7 @@
 							{
 								"!=": [
 									{
-										"var": "tableLoanEntries.sanctionedTenure"
+										"var": "tableLoanEntriessanctionedTenure"
 									},
 									""
 								]
@@ -2264,8 +2264,8 @@
 				},
 				{
 					"id": "q11_utilizedAmount",
-					"bindsTo_template": "tableLoanEntries.utilizedAmount",
-					"contextKey": "tableLoanEntries.utilizedAmount",
+					"bindsTo_template": "tableLoanEntriesutilizedAmount",
+					"contextKey": "tableLoanEntriesutilizedAmount",
 					"type": "text",
 					"uiGroup": "text_fields",
 					"uiMeta": {
@@ -2278,7 +2278,7 @@
 							{
 								"==": [
 									{
-										"var": "tableLoanEntries.loanType"
+										"var": "tableLoanEntriesloanType"
 									},
 									"Dropline OD"
 								]
@@ -2286,7 +2286,7 @@
 							{
 								"!=": [
 									{
-										"var": "tableLoanEntries.bankName"
+										"var": "tableLoanEntriesbankName"
 									},
 									""
 								]
@@ -2294,7 +2294,7 @@
 							{
 								"!=": [
 									{
-										"var": "tableLoanEntries.selectedToClose"
+										"var": "tableLoanEntriesselectedToClose"
 									},
 									""
 								]
@@ -2302,7 +2302,7 @@
 							{
 								"!=": [
 									{
-										"var": "tableLoanEntries.sanctionedLimit"
+										"var": "tableLoanEntriessanctionedLimit"
 									},
 									""
 								]
@@ -2310,7 +2310,7 @@
 							{
 								"!=": [
 									{
-										"var": "tableLoanEntries.remainingLimit"
+										"var": "tableLoanEntriesremainingLimit"
 									},
 									""
 								]
@@ -2318,7 +2318,7 @@
 							{
 								"!=": [
 									{
-										"var": "tableLoanEntries.sanctionedTenure"
+										"var": "tableLoanEntriessanctionedTenure"
 									},
 									""
 								]
@@ -2326,7 +2326,7 @@
 							{
 								"!=": [
 									{
-										"var": "tableLoanEntries.remainingTenure"
+										"var": "tableLoanEntriesremainingTenure"
 									},
 									""
 								]
@@ -2336,8 +2336,8 @@
 				},
 				{
 					"id": "q12_interestRate",
-					"bindsTo_template": "tableLoanEntries.interestRate",
-					"contextKey": "tableLoanEntries.interestRate",
+					"bindsTo_template": "tableLoanEntriesinterestRate",
+					"contextKey": "tableLoanEntriesinterestRate",
 					"type": "text",
 					"uiGroup": "text_fields",
 					"uiMeta": {
@@ -2350,7 +2350,7 @@
 							{
 								"!=": [
 									{
-										"var": "tableLoanEntries.loanType"
+										"var": "tableLoanEntriesloanType"
 									},
 									""
 								]
@@ -2358,7 +2358,7 @@
 							{
 								"!=": [
 									{
-										"var": "tableLoanEntries.bankName"
+										"var": "tableLoanEntriesbankName"
 									},
 									""
 								]
@@ -2366,7 +2366,7 @@
 							{
 								"!=": [
 									{
-										"var": "tableLoanEntries.selectedToClose"
+										"var": "tableLoanEntriesselectedToClose"
 									},
 									""
 								]
@@ -2376,7 +2376,7 @@
 									{
 										"!=": [
 											{
-												"var": "tableLoanEntries.emi"
+												"var": "tableLoanEntriesemi"
 											},
 											""
 										]
@@ -2384,7 +2384,7 @@
 									{
 										"!=": [
 											{
-												"var": "tableLoanEntries.totalLimit"
+												"var": "tableLoanEntriestotalLimit"
 											},
 											""
 										]
@@ -2394,7 +2394,7 @@
 											{
 												"!=": [
 													{
-														"var": "tableLoanEntries.sanctionedLimit"
+														"var": "tableLoanEntriessanctionedLimit"
 													},
 													""
 												]
@@ -2402,7 +2402,7 @@
 											{
 												"!=": [
 													{
-														"var": "tableLoanEntries.remainingLimit"
+														"var": "tableLoanEntriesremainingLimit"
 													},
 													""
 												]
@@ -2416,7 +2416,7 @@
 									{
 										"!=": [
 											{
-												"var": "tableLoanEntries.tenure"
+												"var": "tableLoanEntriestenure"
 											},
 											""
 										]
@@ -2424,7 +2424,7 @@
 									{
 										"!=": [
 											{
-												"var": "tableLoanEntries.sanctionedTenure"
+												"var": "tableLoanEntriessanctionedTenure"
 											},
 											""
 										]
@@ -2432,7 +2432,7 @@
 									{
 										"!=": [
 											{
-												"var": "tableLoanEntries.remainingTenure"
+												"var": "tableLoanEntriesremainingTenure"
 											},
 											""
 										]
