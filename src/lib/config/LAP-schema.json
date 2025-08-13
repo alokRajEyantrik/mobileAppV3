@@ -1040,9 +1040,82 @@
 					"question": "What's the full name of the applicant ?",
 					"description": "How it appears on PAN, Passport, Aadhaar or Driving license.",
 					"showWhen": {
-						"!=": [
+						"==": [
 							{
 								"var": "tellUsApplying"
+							},
+							"Individual / Sole-Proprietor"
+						]
+					}
+				},
+				{
+					"id": "q_EmploymentType",
+					"bindsTo_template": "EmploymentType",
+					"contextKey": "EmploymentType",
+					"type": "select",
+					"uiGroup": "select_fields",
+					"uiMeta": {
+						"placeholder": "Select employment type"
+					},
+					"required": true,
+					"question": "What's your employment status?",
+					"options": [
+						{
+							"label": "Employed(Government)",
+							"value": "Employed(Government)"
+						},
+						{
+							"label": "Employed(Private)",
+							"value": "Employed(Private)"
+						},
+						{
+							"label": "Self-employed(Professional)",
+							"value": "Self-employed(Professional)"
+						},
+						{
+							"label": "Self-employed(Businessman)",
+							"value": "Self-employed(Businessman)"
+						},
+						{
+							"label": "Self-employed(Others)",
+							"value": "Self-employed(Others)"
+						}
+					],
+					"showWhen": {
+						"!=": [
+							{
+								"var": "fullNameOfApplicant"
+							},
+							""
+						]
+					}
+				},
+				{
+					"id": "q_selectedAge",
+					"bindsTo_template": "selectedAge",
+					"contextKey": "selectedAge",
+					"type": "select",
+					"uiGroup": "select_fields",
+					"uiMeta": {
+						"placeholder": "Select employment type"
+					},
+					"required": true,
+					"question": "What is your current age? (select completed years only)",
+					"description": "It is required to assess your loan eligibility and tenure for the loan.",
+					"options": [
+						{
+							"label": "19",
+							"value": "19"
+						},
+						{
+							"label": "20",
+							"value": "20"
+						}
+					],
+					"showWhen": {
+						"!=": [
+							{
+								"var": "EmploymentType"
 							},
 							""
 						]
