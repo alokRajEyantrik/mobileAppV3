@@ -1,0 +1,359 @@
+{
+	"formId": "homeLoanSchema",
+	"title": "Home Loan Application",
+	"pages": [
+		{
+			"nextButtonVisibility": {
+				"mode": ["allRequiredAnswered"]
+			},
+			"questions": [
+				{
+					"id": "q2_homeLoan",
+					"bindsTo_template": "homeLoanType",
+					"contextKey": "homeLoanType",
+					"type": "radio",
+					"uiGroup": "loan_details",
+					"required": true,
+					"question": "ye flow home loan se banega",
+					"description": "flow check ho raha hai home loan ka",
+					"options": [
+						{
+							"label": "New LoanSS",
+							"value": "New Loan"
+						},
+						{
+							"label": "Balance Transfer with Top-up",
+							"value": "Balance Transfer with Top-up"
+						},
+						{
+							"label": "Balance Transfer",
+							"value": "Balance Transfer"
+						},
+						{
+							"label": "Top-up only",
+							"value": "Top-up only"
+						}
+					]
+				},
+				{
+					"id": "queestion_hi_hai",
+					"bindsTo_template": "testLoan",
+					"contextKey": "testLoan",
+					"type": "radio",
+					"uiGroup": "loan_details",
+					"required": true,
+					"question": "next page question",
+					"description": "next page ka question hai ye",
+					"options": [
+						{
+							"label": "aaya haiS",
+							"value": "New Loan"
+						},
+						{
+							"label": "Balance Transfer with Top-up",
+							"value": "Balance Transfer with Top-up"
+						},
+						{
+							"label": "Balance Transfer",
+							"value": "Balance Transfer"
+						},
+						{
+							"label": "Top-up only",
+							"value": "Top-up only"
+						}
+					]
+				}
+			]
+		},
+		{
+			"id": "property_location_homeLoan",
+			"title": "Let's Rock!",
+			"nextButtonVisibility": {
+				"mode": ["allRequiredAnswered"]
+			},
+			"questions": [
+				{
+					"id": "q1_isPropertyIdentified",
+					"bindsTo_template": "isPropertyIdentified",
+					"contextKey": "isPropertyIdentified",
+					"type": "radio",
+					"uiGroup": "loan_details",
+					"required": true,
+					"question": "If the property has been identified?",
+					"options": [
+						{
+							"label": "Yes",
+							"value": "Yes"
+						},
+						{
+							"label": "No",
+							"value": "No"
+						}
+					]
+				}
+			]
+		},
+        {
+			"id": "locationPage",
+			"title": "Business Location",
+			"nextButtonVisibility": {
+				"mode": ["allRequiredAnswered"]
+			},
+			"questions": [
+				{
+					"id": "q1_residenceStateName",
+					"bindsTo_template": "residenceStateName",
+					"contextKey": "residenceStateName",
+					"type": "select",
+					"uiGroup": "select_fields",
+					"uiMeta": {
+						"placeholder": "State (auto-filled from GST Number)",
+						"readonly": true
+					},
+					"description": "state name",
+					"question": "Location for Business verification ?",
+					"required": true,
+					"showWhen": {
+						"!=": [
+							{
+								"var": "applicantIsNRI"
+							},
+							""
+						]
+					}
+				},
+				{
+					"id": "q2_residenceCityName",
+					"bindsTo_template": "residenceCityName",
+					"contextKey": "residenceCityName",
+					"type": "derivedSelect",
+					"uiGroup": "select_fields",
+					"uiMeta": {
+						"placeholder": "Select City name"
+					},
+					"question": "City name",
+					"required": true,
+					"showWhen": {
+						"!=": [
+							{
+								"var": "residenceStateName"
+							},
+							""
+						]
+					},
+					"validation": {
+						"condition": {
+							"==": [
+								{
+									"var": "residenceCityName"
+								},
+								""
+							]
+						}
+					}
+				},
+				{
+					"id": "q3_addressSameOrNot",
+					"bindsTo_template": "addressSameOrNot",
+					"contextKey": "addressSameOrNot",
+					"type": "radio",
+					"uiGroup": "loan_details",
+					"required": true,
+					"question": "Is your GST registered address the same as your actual business address?",
+					"options": [
+						{
+							"label": "Yes",
+							"value": "Yes",
+							"flagKey": {
+								"isAddressSame": true
+							}
+						},
+						{
+							"label": "No",
+							"value": "No",
+							"flagKey": {
+								"isAddressSame": false
+							}
+						}
+					],
+					"showWhen": {
+						"and": [
+							{
+								"!=": [
+									{
+										"var": "residenceStateName"
+									},
+									""
+								]
+							},
+							{
+								"!=": [
+									{
+										"var": "residenceCityName"
+									},
+									""
+								]
+							}
+						]
+					}
+				},
+				{
+					"id": "q4_businessStateName",
+					"bindsTo_template": "businessStateName",
+					"contextKey": "businessStateName",
+					"type": "select",
+					"uiGroup": "select_fields",
+					"uiMeta": {
+						"placeholder": "Select a State"
+					},
+					"description": "state name",
+					"question": "Select location for your actual business",
+					"required": true,
+					"showWhen": {
+						"==": [
+							{
+								"var": "addressSameOrNot"
+							},
+							"No"
+						]
+					}
+				},
+				{
+					"id": "q5_businessCityName",
+					"bindsTo_template": "businessCityName",
+					"contextKey": "businessCityName",
+					"type": "derivedSelect",
+					"uiGroup": "select_fields",
+					"uiMeta": {
+						"placeholder": "Select a City"
+					},
+					"question": "city name",
+					"required": true,
+					"showWhen": {
+						"and": [
+							{
+								"==": [
+									{
+										"var": "addressSameOrNot"
+									},
+									"No"
+								]
+							},
+							{
+								"!=": [
+									{
+										"var": "businessStateName"
+									},
+									""
+								]
+							}
+						]
+					},
+					"errorMessage": {
+						"required": "City is required",
+						"message": "Kindly select a different city or update your earlier answer."
+					},
+					"validation": {
+						"condition": {
+							"==": [
+								{
+									"var": "businessCityName"
+								},
+								{
+									"var": "residenceCityName"
+								}
+							]
+						}
+					}
+				},
+				{
+					"id": "q6_banksOfCurrentAccount",
+					"bindsTo_template": "banksOfCurrentAccount",
+					"contextKey": "banksOfCurrentAccount",
+					"type": "multiple-select",
+					"uiGroup": "select_fields",
+					"uiMeta": {
+						"placeholder": "Select banks"
+					},
+					"required": true,
+					"question": "Which of these banks have you used for a Current Account, Overdraft (OD), or Cash Credit (CC)?",
+					"description": "Select the banks which you use to receive the payments from your customers. Bank statements of these will verify your business income and cash flow.",
+					"options": [
+						{
+							"label": "HDFC Bank",
+							"value": "HDFC Bank"
+						},
+						{
+							"label": "SBI Bank",
+							"value": "SBI Bank"
+						},
+						{
+							"label": "Axis Bank",
+							"value": "Axis Bank"
+						},
+						{
+							"label": "ICICI Bank",
+							"value": "ICICI Bank"
+						},
+						{
+							"label": "Canara Bank",
+							"value": "Canara Bank"
+						},
+						{
+							"label": "Bank of Baroda",
+							"value": "Bank of Baroda"
+						},
+						{
+							"label": "Citi Bank",
+							"value": "Citi Bank"
+						},
+						{
+							"label": "Union Bank",
+							"value": "Union Bank"
+						}
+					],
+					"showWhen": {
+						"or": [
+							{
+								"==": [
+									{
+										"var": "addressSameOrNot"
+									},
+									"Yes"
+								]
+							},
+							{
+								"and": [
+									{
+										"==": [
+											{
+												"var": "addressSameOrNot"
+											},
+											"No"
+										]
+									},
+									{
+										"!=": [
+											{
+												"var": "businessStateName"
+											},
+											""
+										]
+									},
+									{
+										"!=": [
+											{
+												"var": "businessCityName"
+											},
+											""
+										]
+									}
+								]
+							}
+						]
+					}
+				}
+			]
+		},
+	]
+}
