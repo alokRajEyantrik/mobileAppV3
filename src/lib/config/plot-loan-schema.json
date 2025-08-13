@@ -1,0 +1,2982 @@
+{
+    "formId": "loanForm_v1",
+    "title": "Loan Application",
+    "pages": [
+        {
+            "id": "firstPage",
+            "title": "Let's Rock!",
+            "nextButtonVisibility": {
+                "mode": [
+                    "allRequiredAnswered"
+                ]
+            },
+            "questions": [
+                {
+                    "id": "q1_loanName",
+                    "bindsTo_template": "loanName",
+                    "contextKey": "loanName",
+                    "type": "radio",
+                    "uiGroup": "loan_details",
+                    "required": true,
+                    "question": "What are you looking for?",
+                    "description": "Get started by letting us know a little bit about what you need",
+                    "options": [
+                        {
+                            "label": "Home Loan",
+                            "value": "Home Loan",
+                            "flagKey": {
+                                "isSecuredLoan": true,
+                                "isHomeLoan": true
+                            }
+                        },
+                        {
+                            "label": "Plot Loan",
+                            "value": "Plot Loan",
+                            "flagKey": {
+                                "isSecuredLoan": true,
+                                "isPlotLoan": true
+                            }
+                        },
+                        {
+                            "label": "Loan Against Property (LAP)",
+                            "value": "Loan Against Property",
+                            "flagKey": {
+                                "isSecuredLoan": true,
+                                "isLAP": true
+                            }
+                        },
+                        {
+                            "label": "Business Loan",
+                            "value": "Business Loan",
+                            "flagKey": {
+                                "isUnsecuredLoan": true,
+                                "isBusinessLoan": true
+                            }
+                        },
+                        {
+                            "label": "Professional Loan",
+                            "value": "Professional Loan",
+                            "flagKey": {
+                                "isUnsecuredLoan": true,
+                                "isProfessionalLoan": true
+                            }
+                        },
+                        {
+                            "label": "Personal Loan",
+                            "value": "Personal Loan",
+                            "flagKey": {
+                                "isUnsecuredLoan": true,
+                                "isPersonalLoan": true
+                            }
+                        }
+                    ]
+                },
+                {
+                    "id": "q2_PlotLoanActivity",
+                    "bindsTo_template": "PlotLoanActivity",
+                    "contextKey": "PlotLoanActivity",
+                    "type": "radio",
+                    "uiGroup": "loan_details",
+                    "required": true,
+                    "question": "What type of loan are you planning?",
+                    "description": "It will help us to identify your requirements, specifically",
+                    "options": [
+                        {
+                            "label": "New Loan",
+                            "value": "New Loan"
+                        },
+                        {
+                            "label": "Balance Transfer Only",
+                            "value": "Balance Transfer Only"
+                        }
+                    ],
+                    "showWhen": {
+                        "==": [
+                            {
+                                "var": "loanName"
+                            },
+                            "Plot Loan"
+                        ]
+                    }
+                },
+                {
+                    "id": "q3_LoanType",
+                    "bindsTo_template": "LoanType",
+                    "contextKey": "LoanType",
+                    "type": "radio",
+                    "uiGroup": "loan_details",
+                    "required": true,
+                    "question": "Please select any one sub-category under Plot Loan.",
+                    "description": "Selecting the correct sub-category for plot loans is essential to avoid confusion in documentation, approval processes, and getting the best interest rates. The right option can simplify these aspects significantly.",
+                    "options": [
+                        {
+                            "label": "Plot Loan Only",
+                            "value": "Plot Loan Only"
+                        },
+                        {
+                            "label": "Plot & Construction Loan",
+                            "value": "Plot & Construction Loan"
+                        },
+                        {
+                            "label": "Plot & Equity Loan",
+                            "value": "Plot & Equity Loan"
+                        },
+                        {
+                            "label": "Construction Loan Only",
+                            "value": "Construction Loan Only"
+                        }
+                    ],
+                    "showWhen": {
+                        "==": [
+                            {
+                                "var": "PlotLoanActivity"
+                            },
+                            "New Loan"
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "id": "plot_loan_selectionPage",
+            "title": "A few check points !",
+            "nextButtonVisibility": {
+                "mode": [
+                    "allRequiredAnswered"
+                ]
+            },
+            "questions": [
+                {
+                    "id": "q_approvedByAuthority",
+                    "bindsTo_template": "approvedByAuthority",
+                    "contextKey": "approvedByAuthority",
+                    "type": "radio",
+                    "uiGroup": "loan_details",
+                    "required": true,
+                    "question": "Please confirm that selected property is situated in officially authorized area by the government?",
+                    "description": "Most of the lenders prefer that your property location should be approved from respective 'City's Development Authority' or 'Municipal Corporation'",
+                    "options": [
+                        {
+                            "label": "Yes",
+                            "value": "Yes",
+                            "flagKey": {
+                                "isApprovedByAuthority": true
+                            }
+                        },
+                        {
+                            "label": "No",
+                            "value": "No",
+                            "flagKey": {
+                                "isApprovedByAuthority": false
+                            }
+                        }
+                    ],
+                    "showWhen": {
+                        "==": [
+                            {
+                                "var": "loanName"
+                            },
+                            "Plot Loan"
+                        ]
+                    },
+                    "errorMessage": {
+                        "required": true,
+                        "message": "As your property is not as per map, only NBFC banks can approve your loan. You'll have to search which NBFC working in your location."
+                    },
+                    "validation": {
+                        "condition": {
+                            "!=": [
+                                {
+                                    "var": "approvedByAuthority"
+                                },
+                                "Yes"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "id": "q_asPerMap",
+                    "bindsTo_template": "asPerMap",
+                    "contextKey": "asPerMap",
+                    "type": "radio",
+                    "uiGroup": "loan_details",
+                    "required": true,
+                    "question": "Please ensure that the construction of the property would be according to the 'approved map' from the respective authority.",
+                    "description": "Lenders can reject loan application if map is not approved by respective authority. Also construction of the property should be as per the approved map.",
+                    "options": [
+                        {
+                            "label": "Yes",
+                            "value": "Yes",
+                            "flagKey": {
+                                "isAsPerMap": true
+                            }
+                        },
+                        {
+                            "label": "No",
+                            "value": "No",
+                            "flagKey": {
+                                "isAsPerMap": false
+                            }
+                        }
+                    ],
+                    "showWhen": {
+                        "!=": [
+                            {
+                                "var": "approvedByAuthority"
+                            },
+                            ""
+                        ]
+                    },
+                    "errorMessage": {
+                        "required": true,
+                        "message": "As your property is not as per map, only NBFC banks can approve your loan. You'll have to search which NBFC working in your location."
+                    },
+                    "validation": {
+                        "condition": {
+                            "!=": [
+                                {
+                                    "var": "asPerMap"
+                                },
+                                "Yes"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "id": "q5_applicantIsNRI",
+                    "bindsTo_template": "applicantIsNRI",
+                    "contextKey": "applicantIsNRI",
+                    "type": "radio",
+                    "uiGroup": "loan_details",
+                    "required": true,
+                    "question": "If applicant or any of the co-applicants is NRI?",
+                    "options": [
+                        {
+                            "label": "Yes",
+                            "value": "Yes",
+                            "flagKey": {
+                                "applicantIsNRI": true
+                            }
+                        },
+                        {
+                            "label": "No",
+                            "value": "No",
+                            "flagKey": {
+                                "applicantIsNRI": false
+                            }
+                        }
+                    ],
+                    "showWhen": {
+                        "!=": [
+                            {
+                                "var": "asPerMap"
+                            },
+                            ""
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "id": "propertyIdentification",
+            "title": "Let's start with Plot details",
+            "nextButtonVisibility": {
+                "mode": [
+                    "allRequiredAnswered"
+                ]
+            },
+            "questions": [
+                {
+                    "id": "q1_propertyType",
+                    "bindsTo_template": "propertyType",
+                    "contextKey": "propertyType",
+                    "type": "radio",
+                    "uiGroup": "loan_details",
+                    "description": "Lenders need to ensure that the property meets legal requirements and compliances related to ownership rights, land tenure, and property transfer.",
+                    "question": "Please indicate the type of ownership for the property?",
+                    "required": true,
+                    "options": [
+                        {
+                            "label": "Lease Hold",
+                            "value": "Lease Hold"
+                        },
+                        {
+                            "label": "Free Hold",
+                            "value": "Free Hold"
+                        }
+                    ],
+                    "showWhen": {
+                        "!=": [
+                            {
+                                "var": "applicantIsNRI"
+                            },
+                            ""
+                        ]
+                    }
+                },
+                {
+                    "id": "q2_ifPropertyRegistered",
+                    "bindsTo_template": "ifPropertyRegistered",
+                    "contextKey": "ifPropertyRegistered",
+                    "type": "radio",
+                    "uiGroup": "loan_details",
+                    "description": "If the property hasn't been registered, the transaction is termed as 'Endorsement' or 'Builder Transfer'. Legal requirements and disbursement procedures differ from registered property cases. If the seller hasn't completed registration, only selected lenders may approve your loan application (and in unregistered cases we don't provide our services.)",
+                    "question": "Please specify the nature of property purchase?",
+                    "required": true,
+                    "options": [
+                        {
+                            "label": "Yes",
+                            "value": "Yes",
+                            "flagKey": {
+                                "isIfPropertyRegistered": true
+                            }
+                        },
+                        {
+                            "label": "No",
+                            "value": "No",
+                            "flagKey": {
+                                "isIfPropertyRegistered": false
+                            }
+                        }
+                    ],
+                    "showWhen": {
+                        "!=": [
+                            {
+                                "var": "propertyType"
+                            },
+                            ""
+                        ]
+                    },
+                    "errorMessage": {
+                        "required": true,
+                        "message": "We regret to inform you that we are currently unable to proceed with your request due to our service constraints."
+                    },
+                    "validation": {
+                        "condition": {
+                            "!=": [
+                                {
+                                    "var": "propertyType"
+                                },
+                                "Yes"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "id": "q6_PlotArea",
+                    "bindsTo_template": "PlotArea",
+                    "contextKey": "PlotArea",
+                    "type": "number",
+                    "uiGroup": "text_fields",
+                    "uiMeta": {
+                        "placeholder": "Enter total area of plot"
+                    },
+                    "required": true,
+                    "question": "What is the total area of Plot?.",
+                    "showWhen": {
+                        "!=": [
+                            {
+                                "var": "propertyType"
+                            },
+                            ""
+                        ]
+                    }
+                },
+                {
+                    "id": "q1_propertyStateName",
+                    "bindsTo_template": "propertyStateName",
+                    "contextKey": "propertyStateName",
+                    "type": "select",
+                    "uiGroup": "select_fields",
+                    "uiMeta": {
+                        "placeholder": "State Property state"
+                    },
+                    "description": "state name",
+                    "question": "Where your property is located ?",
+                    "required": true,
+                    "showWhen": {
+                        "!=": [
+                            {
+                                "var": "PlotArea"
+                            },
+                            ""
+                        ]
+                    }
+                },
+                {
+                    "id": "q2_propertyCityName",
+                    "bindsTo_template": "propertyCityName",
+                    "contextKey": "propertyCityName",
+                    "type": "derivedSelect",
+                    "uiGroup": "select_fields",
+                    "uiMeta": {
+                        "placeholder": "Select City name"
+                    },
+                    "question": "City name",
+                    "required": true,
+                    "showWhen": {
+                        "!=": [
+                            {
+                                "var": "propertyStateName"
+                            },
+                            ""
+                        ]
+                    }
+                },
+                {
+                    "id": "q3_residenceOptionSame",
+                    "bindsTo_template": "residenceOptionSame",
+                    "contextKey": "residenceOptionSame",
+                    "type": "radio",
+                    "uiGroup": "loan_details",
+                    "required": true,
+                    "question": "If the residence location is the same as the property location?",
+                    "description": "For an NRI applicant, this should be addressed from the perspective of the GPA (Power of Attorney).",
+                    "options": [
+                        {
+                            "label": "Yes",
+                            "value": "Yes",
+                            "flagKey": {
+                                "isAddressSame": true
+                            }
+                        },
+                        {
+                            "label": "No",
+                            "value": "No",
+                            "flagKey": {
+                                "isAddressSame": false
+                            }
+                        }
+                    ],
+                    "showWhen": {
+                        "and": [
+                            {
+                                "!=": [
+                                    {
+                                        "var": "propertyStateName"
+                                    },
+                                    ""
+                                ]
+                            },
+                            {
+                                "!=": [
+                                    {
+                                        "var": "propertyCityName"
+                                    },
+                                    ""
+                                ]
+                            }
+                        ]
+                    }
+                },
+                {
+                    "id": "q4_residenceStateName",
+                    "bindsTo_template": "residenceStateName",
+                    "contextKey": "residenceStateName",
+                    "type": "select",
+                    "uiGroup": "select_fields",
+                    "uiMeta": {
+                        "placeholder": "Select residence state"
+                    },
+                    "description": "state name",
+                    "question": "Location for residence verification ?",
+                    "required": true,
+                    "showWhen": {
+                        "==": [
+                            {
+                                "var": "residenceOptionSame"
+                            },
+                            "No"
+                        ]
+                    }
+                },
+                {
+                    "id": "q5_residenceCityName",
+                    "bindsTo_template": "residenceCityName",
+                    "contextKey": "residenceCityName",
+                    "type": "derivedSelect",
+                    "uiGroup": "select_fields",
+                    "uiMeta": {
+                        "placeholder": "Select a City"
+                    },
+                    "question": "city name",
+                    "required": true,
+                    "showWhen": {
+                        "and": [
+                            {
+                                "==": [
+                                    {
+                                        "var": "residenceOptionSame"
+                                    },
+                                    "No"
+                                ]
+                            },
+                            {
+                                "!=": [
+                                    {
+                                        "var": "residenceStateName"
+                                    },
+                                    ""
+                                ]
+                            }
+                        ]
+                    },
+                    "errorMessage": {
+                        "required": "City is required",
+                        "message": "Kindly select a different city or update your earlier answer."
+                    },
+                    "validation": {
+                        "condition": {
+                            "==": [
+                                {
+                                    "var": "propertyCityName"
+                                },
+                                {
+                                    "var": "residenceCityName"
+                                }
+                            ]
+                        }
+                    }
+                }
+            ]
+        },
+        {
+            "id": "tellUsApplyingPage",
+            "title": "Applicant Type",
+            "nextButtonVisibility": {
+                "mode": [
+                    "allRequiredAnswered"
+                ]
+            },
+            "questions": [
+                {
+                    "id": "q1_tellUsApplying",
+                    "bindsTo_template": "tellUsApplying",
+                    "contextKey": "tellUsApplying",
+                    "type": "radio",
+                    "uiGroup": "loan_details",
+                    "uiMeta": {
+                        "placeholder": "Select value"
+                    },
+                    "required": true,
+                    "question": "Tell us who's applying",
+                    "description": "The applicants whose names are on the property will be included in the loan, as well as those who wish to contribute to loan repayments.",
+                    "options": [
+                        {
+                            "label": "Individual / Sole-Proprietor",
+                            "value": "Individual / Sole-Proprietor"
+                        },
+                        {
+                            "label": "Couple",
+                            "value": "Couple"
+                        },
+                        {
+                            "label": "Family",
+                            "value": "Family"
+                        },
+                        {
+                            "label": "Company (Non-individual entity)",
+                            "value": "Company (Non-individual entity)",
+                            "showWhen": {
+                                "==": [
+                                    {
+                                        "var": "applicantIsNRI"
+                                    },
+                                    "No"
+                                ]
+                            }
+                        }
+                    ],
+                    "showWhen": {
+                        "!=": [
+                            {
+                                "var": "constructionType"
+                            },
+                            ""
+                        ]
+                    }
+                },
+                {
+                    "id": "q_typeOfCompany",
+                    "bindsTo_template": "typeOfCompany",
+                    "contextKey": "typeOfCompany",
+                    "type": "select",
+                    "uiGroup": "select_fields",
+                    "uiMeta": {
+                        "placeholder": "Select company type"
+                    },
+                    "required": true,
+                    "question": "What's company type?",
+                    "description": "Select the type of company who is applying for the loan. Be informed, the property should be in the name of company and not in the name of owner or director.",
+                    "options": [
+                        {
+                            "label": "One Person Company (OPC)",
+                            "value": "One Person Company (OPC)",
+                            "flagKey": {
+                                "isCompanyTypeOPC": true
+                            }
+                        },
+                        {
+                            "label": "Partnership firm",
+                            "value": "Partnership firm",
+                            "flagKey": {
+                                "isCompanyTypePartnership": false
+                            }
+                        },
+                        {
+                            "label": "Limited Liability Partnership (LLP)",
+                            "value": "Limited Liability Partnership (LLP)",
+                            "flagKey": {
+                                "isCompanyTypeLLP": false
+                            }
+                        },
+                        {
+                            "label": "Private Limited Company (Pvt. Ltd.)",
+                            "value": "Private Limited Company (Pvt. Ltd.)",
+                            "flagKey": {
+                                "isCompanyTypePrivate": false
+                            }
+                        }
+                    ],
+                    "showWhen": {
+                        "==": [
+                            {
+                                "var": "tellUsApplying"
+                            },
+                            "Company (Non-individual entity)"
+                        ]
+                    }
+                },
+                {
+                    "id": "q_BasedOnITR",
+                    "bindsTo_template": "BasedOnITR",
+                    "contextKey": "BasedOnITR",
+                    "type": "radio",
+                    "uiGroup": "select_fields",
+                    "required": true,
+                    "question": "How would you like to assess your company’s loan eligibility?",
+                    "options": [
+                        {
+                            "label": "Based on 3 years of ITRs",
+                            "value": "Based on 3 years of ITRs"
+                        },
+                        {
+                            "label": "Book my appointment",
+                            "value": "Book my appointment"
+                        }
+                    ],
+                    "showWhen": {
+                        "and": [
+                            {
+                                "==": [
+                                    {
+                                        "var": "tellUsApplying"
+                                    },
+                                    "Company (Non-individual entity)"
+                                ]
+                            },
+                            {
+                                "!=": [
+                                    {
+                                        "var": "typeOfCompany"
+                                    },
+                                    ""
+                                ]
+                            }
+                        ]
+                    }
+                },
+                {
+                    "id": "q_numberOfDirectorOrApplicant",
+                    "bindsTo_template": "numberOfDirectorOrApplicant",
+                    "contextKey": "numberOfDirectorOrApplicant",
+                    "type": "number",
+                    "uiGroup": "loan_details",
+                    "uiMeta": {
+                        "placeholder": "Enter the number"
+                    },
+                    "required": true,
+                    "question": "How many family members are applying for the loan?",
+                    "description": "(including the primary applicant)",
+                    "showWhen": {
+                        "or": [
+                            {
+                                "==": [
+                                    {
+                                        "var": "tellUsApplying"
+                                    },
+                                    [
+                                        "Family"
+                                    ]
+                                ]
+                            },
+                            {
+                                "and": [
+                                    {
+                                        "==": [
+                                            {
+                                                "var": "tellUsApplying"
+                                            },
+                                            [
+                                                "Company (Non-individual entity)"
+                                            ]
+                                        ]
+                                    },
+                                    {
+                                        "!=": [
+                                            {
+                                                "var": "typeOfCompany"
+                                            },
+                                            "One Person Company (OPC)"
+                                        ]
+                                    }
+                                ]
+                            }
+                        ]
+                    },
+                    "errorMessage": {
+                        "required": true,
+                        "message": "Enter the number more than 1"
+                    },
+                    "validation": {
+                        "condition": {
+                            "<": [
+                                {
+                                    "var": "numberOfDirectorOrApplicant"
+                                },
+                                "2"
+                            ]
+                        }
+                    }
+                }
+            ]
+        },
+        {
+            "id": "basicInfoPage",
+            "title": "Income and Obligations",
+            "nextButtonVisibility": {
+                "mode": [
+                    "allRequiredAnswered"
+                ]
+            },
+            "questions": [
+                {
+                    "id": "q1_fullNameOfApplicant",
+                    "bindsTo_template": "fullNameOfApplicant",
+                    "contextKey": "fullNameOfApplicant",
+                    "type": "text",
+                    "uiGroup": "text_fields",
+                    "uiMeta": {
+                        "placeholder": "Enter full name"
+                    },
+                    "required": true,
+                    "question": "What's the full name of the Applicant?",
+                    "description": "How it appears on PAN, Passport, Aadhaar or Driving license",
+                    "showWhen": {
+                        "!=": [
+                            {
+                                "var": "salariedBankName"
+                            },
+                            ""
+                        ]
+                    }
+                },
+                {
+                    "id": "q2_TypeOfResidence",
+                    "bindsTo_template": "TypeOfResidence",
+                    "contextKey": "TypeOfResidence",
+                    "type": "select",
+                    "uiGroup": "selectButton",
+                    "uiMeta": {
+                        "placeholder": "Select residence type"
+                    },
+                    "required": true,
+                    "question": "Please select type of residence",
+                    "description": "Having your own home or a family-owned residence strengthens your loan application, making it more attractive to lenders",
+                    "options": [
+                        {
+                            "label": "Self owned",
+                            "value": "Self owned",
+                            "flagKey": {
+                                "isSelfOwned": true
+                            }
+                        },
+                        {
+                            "label": "Family owned",
+                            "value": "Family owned",
+                            "flagKey": {
+                                "isFamilyOwned": false
+                            }
+                        },
+                        {
+                            "label": "Rented",
+                            "value": "Rented",
+                            "flagKey": {
+                                "isRented": false
+                            }
+                        }
+                    ],
+                    "showWhen": {
+                        "!=": [
+                            {
+                                "var": "fullNameOfApplicant"
+                            },
+                            ""
+                        ]
+                    }
+                },
+                {
+                    "id": "q3_EmploymentType",
+                    "bindsTo_template": "EmploymentType",
+                    "contextKey": "EmploymentType",
+                    "type": "select",
+                    "uiGroup": "selectButton",
+                    "uiMeta": {
+                        "placeholder": "Select employment type"
+                    },
+                    "required": true,
+                    "question": "What's your employment status?",
+                    "options": [
+                        {
+                            "label": "Employed (Government)",
+                            "value": "Employed (Government)",
+                            "flagKey": {
+                                "isGovernmentEmployee": true
+                            }
+                        },
+                        {
+                            "label": "Employed (Private)",
+                            "value": "Employed (Private)",
+                            "flagKey": {
+                                "isPrivateEmployee": true
+                            }
+                        }
+                    ],
+                    "showWhen": {
+                        "and": [
+                            {
+                                "!=": [
+                                    {
+                                        "var": "fullNameOfApplicant"
+                                    },
+                                    ""
+                                ]
+                            },
+                            {
+                                "in": [
+                                    {
+                                        "var": "TypeOfResidence"
+                                    },
+                                    [
+                                        "Self owned",
+                                        "Family owned",
+                                        "Rented"
+                                    ]
+                                ]
+                            }
+                        ]
+                    }
+                },
+                {
+                    "id": "q4_selectedAge",
+                    "bindsTo_template": "selectedAge",
+                    "contextKey": "selectedAge",
+                    "type": "select",
+                    "uiGroup": "selectButton",
+                    "uiMeta": {
+                        "placeholder": "Select Age"
+                    },
+                    "required": true,
+                    "question": "What is the current age? (Select completed years only)",
+                    "description": "It is required to assess your loan eligibility and tenure for the loan",
+                    "options": [
+                        {
+                            "label": "19",
+                            "value": "19"
+                        },
+                        {
+                            "label": "20",
+                            "value": "20"
+                        }
+                    ],
+                    "showWhen": {
+                        "and": [
+                            {
+                                "!=": [
+                                    {
+                                        "var": "fullNameOfApplicant"
+                                    },
+                                    ""
+                                ]
+                            },
+                            {
+                                "in": [
+                                    {
+                                        "var": "TypeOfResidence"
+                                    },
+                                    [
+                                        "Self owned",
+                                        "Family owned",
+                                        "Rented"
+                                    ]
+                                ]
+                            },
+                            {
+                                "in": [
+                                    {
+                                        "var": "EmploymentType"
+                                    },
+                                    [
+                                        "Employed (Private)",
+                                        "Employed (Government)"
+                                    ]
+                                ]
+                            }
+                        ]
+                    }
+                },
+                {
+                    "id": "q_companyType",
+                    "bindsTo_template": "companyType",
+                    "contextKey": "companyType",
+                    "type": "radio",
+                    "uiGroup": "loan_details",
+                    "required": true,
+                    "question": "Please specify the type of your company?",
+                    "options": [
+                        {
+                            "label": "Private Limited Company",
+                            "value": "Private Limited Company"
+                        },
+                        {
+                            "label": "Private Limited",
+                            "value": "Private Limited"
+                        }
+                    ],
+                    "showWhen": {
+                        "and": [
+                            {
+                                "!=": [
+                                    {
+                                        "var": "fullNameOfApplicant"
+                                    },
+                                    ""
+                                ]
+                            },
+                            {
+                                "in": [
+                                    {
+                                        "var": "TypeOfResidence"
+                                    },
+                                    [
+                                        "Self owned",
+                                        "Family owned",
+                                        "Rented"
+                                    ]
+                                ]
+                            },
+                            {
+                                "==": [
+                                    {
+                                        "var": "EmploymentType"
+                                    },
+                                    [
+                                        "Employed (Private)"
+                                    ]
+                                ]
+                            },
+                            {
+                                "!=": [
+                                    {
+                                        "var": "selectedAge"
+                                    },
+                                    ""
+                                ]
+                            }
+                        ]
+                    }
+                },
+                {
+                    "id": "q_totalEmployees",
+                    "bindsTo_template": "totalEmployees",
+                    "contextKey": "totalEmployees",
+                    "type": "select",
+                    "uiGroup": "selectButton",
+                    "required": true,
+                    "question": "What is the total number of employees in the company?",
+                    "options": [
+                        {
+                            "label": "Less than 100",
+                            "value": "Less than 100"
+                        },
+                        {
+                            "label": "100 - 250",
+                            "value": "100 - 250"
+                        },
+                        {
+                            "label": "251 - 500",
+                            "value": "251 - 500"
+                        },
+                        {
+                            "label": "More than 500",
+                            "value": "More than 500"
+                        }
+                    ],
+                    "showWhen": {
+                        "and": [
+                            {
+                                "!=": [
+                                    {
+                                        "var": "fullNameOfApplicant"
+                                    },
+                                    ""
+                                ]
+                            },
+                            {
+                                "in": [
+                                    {
+                                        "var": "TypeOfResidence"
+                                    },
+                                    [
+                                        "Self owned",
+                                        "Family owned",
+                                        "Rented"
+                                    ]
+                                ]
+                            },
+                            {
+                                "==": [
+                                    {
+                                        "var": "EmploymentType"
+                                    },
+                                    [
+                                        "Employed (Private)"
+                                    ]
+                                ]
+                            },
+                            {
+                                "==": [
+                                    {
+                                        "var": "companyType"
+                                    },
+                                    [
+                                        "Private Limited Company"
+                                    ]
+                                ]
+                            },
+                            {
+                                "!=": [
+                                    {
+                                        "var": "selectedAge"
+                                    },
+                                    ""
+                                ]
+                            }
+                        ]
+                    }
+                },
+                {
+                    "id": "q_PFDeducted",
+                    "bindsTo_template": "PFDeducted",
+                    "contextKey": "PFDeducted",
+                    "type": "radio",
+                    "uiGroup": "loan_details",
+                    "required": true,
+                    "question": "What is the total number of employees in the company?",
+                    "options": [
+                        {
+                            "label": "Yes",
+                            "value": "Yes"
+                        },
+                        {
+                            "label": "No",
+                            "value": "No"
+                        }
+                    ],
+                    "showWhen": {
+                        "and": [
+                            {
+                                "!=": [
+                                    {
+                                        "var": "fullNameOfApplicant"
+                                    },
+                                    ""
+                                ]
+                            },
+                            {
+                                "in": [
+                                    {
+                                        "var": "TypeOfResidence"
+                                    },
+                                    [
+                                        "Self owned",
+                                        "Family owned",
+                                        "Rented"
+                                    ]
+                                ]
+                            },
+                            {
+                                "==": [
+                                    {
+                                        "var": "EmploymentType"
+                                    },
+                                    [
+                                        "Employed (Private)"
+                                    ]
+                                ]
+                            },
+                            {
+                                "==": [
+                                    {
+                                        "var": "companyType"
+                                    },
+                                    [
+                                        "Private Limited Company"
+                                    ]
+                                ]
+                            },
+                            {
+                                "!=": [
+                                    {
+                                        "var": "totalEmployees"
+                                    },
+                                    ""
+                                ]
+                            },
+                            {
+                                "!=": [
+                                    {
+                                        "var": "selectedAge"
+                                    },
+                                    ""
+                                ]
+                            }
+                        ]
+                    }
+                },
+                {
+                    "id": "q4_grossIncome",
+                    "bindsTo_template": "grossIncome",
+                    "contextKey": "grossIncome",
+                    "type": "text",
+                    "uiGroup": "text_fields",
+                    "uiMeta": {
+                        "placeholder": "Enter gross income"
+                    },
+                    "required": true,
+                    "question": "What is the monthly gross income?",
+                    "description": "Gross income is your total monthly earnings before deductions (tax, PF, NPS, etc) A few banks use it to assess your loan eligibility",
+                    "showWhen": {
+                        "and": [
+                            {
+                                "!=": [
+                                    {
+                                        "var": "fullNameOfApplicant"
+                                    },
+                                    ""
+                                ]
+                            },
+                            {
+                                "in": [
+                                    {
+                                        "var": "TypeOfResidence"
+                                    },
+                                    [
+                                        "Self owned",
+                                        "Family owned",
+                                        "Rented"
+                                    ]
+                                ]
+                            },
+                            {
+                                "or": [
+                                    {
+                                        "==": [
+                                            {
+                                                "var": "EmploymentType"
+                                            },
+                                            [
+                                                "Employed (Government)"
+                                            ]
+                                        ]
+                                    },
+                                    {
+                                        "and": [
+                                            {
+                                                "==": [
+                                                    {
+                                                        "var": "EmploymentType"
+                                                    },
+                                                    [
+                                                        "Employed (Private)"
+                                                    ]
+                                                ]
+                                            },
+                                            {
+                                                "or": [
+                                                    {
+                                                        "==": [
+                                                            {
+                                                                "var": "companyType"
+                                                            },
+                                                            [
+                                                                "Private Limited"
+                                                            ]
+                                                        ]
+                                                    },
+                                                    {
+                                                        "and": [
+                                                            {
+                                                                "==": [
+                                                                    {
+                                                                        "var": "companyType"
+                                                                    },
+                                                                    [
+                                                                        "Private Limited Company"
+                                                                    ]
+                                                                ]
+                                                            },
+                                                            {
+                                                                "!=": [
+                                                                    {
+                                                                        "var": "totalEmployees"
+                                                                    },
+                                                                    ""
+                                                                ]
+                                                            },
+                                                            {
+                                                                "!=": [
+                                                                    {
+                                                                        "var": "PFDeducted"
+                                                                    },
+                                                                    ""
+                                                                ]
+                                                            }
+                                                        ]
+                                                    }
+                                                ]
+                                            }
+                                        ]
+                                    }
+                                ]
+                            },
+                            {
+                                "!=": [
+                                    {
+                                        "var": "selectedAge"
+                                    },
+                                    ""
+                                ]
+                            }
+                        ]
+                    }
+                },
+                {
+                    "id": "q5_fixedSalary",
+                    "bindsTo_template": "fixedSalary",
+                    "contextKey": "fixedSalary",
+                    "type": "text",
+                    "uiGroup": "text_fields",
+                    "uiMeta": {
+                        "placeholder": "Enter fixed monthly salary"
+                    },
+                    "required": true,
+                    "question": "What is the monthly net income?",
+                    "description": "Net income is your monthly earnings after deductions (tax, PF, NPS, etc) It is the amount you receive in your bank account as salary",
+                    "errorMessage": {
+                        "required": true,
+                        "message": "Gross income should be greater than or equal to fixed salary"
+                    },
+                    "validation": {
+                        "condition": {
+                            "<": [
+                                {
+                                    "var": "grossIncome"
+                                },
+                                {
+                                    "var": "fixedSalary"
+                                }
+                            ]
+                        }
+                    },
+                    "showWhen": {
+                        "and": [
+                            {
+                                "!=": [
+                                    {
+                                        "var": "fullNameOfApplicant"
+                                    },
+                                    ""
+                                ]
+                            },
+                            {
+                                "in": [
+                                    {
+                                        "var": "TypeOfResidence"
+                                    },
+                                    [
+                                        "Self owned",
+                                        "Family owned",
+                                        "Rented"
+                                    ]
+                                ]
+                            },
+                            {
+                                "or": [
+                                    {
+                                        "==": [
+                                            {
+                                                "var": "EmploymentType"
+                                            },
+                                            [
+                                                "Employed (Government)"
+                                            ]
+                                        ]
+                                    },
+                                    {
+                                        "and": [
+                                            {
+                                                "==": [
+                                                    {
+                                                        "var": "EmploymentType"
+                                                    },
+                                                    [
+                                                        "Employed (Private)"
+                                                    ]
+                                                ]
+                                            },
+                                            {
+                                                "or": [
+                                                    {
+                                                        "==": [
+                                                            {
+                                                                "var": "companyType"
+                                                            },
+                                                            [
+                                                                "Private Limited"
+                                                            ]
+                                                        ]
+                                                    },
+                                                    {
+                                                        "and": [
+                                                            {
+                                                                "==": [
+                                                                    {
+                                                                        "var": "companyType"
+                                                                    },
+                                                                    [
+                                                                        "Private Limited Company"
+                                                                    ]
+                                                                ]
+                                                            },
+                                                            {
+                                                                "!=": [
+                                                                    {
+                                                                        "var": "totalEmployees"
+                                                                    },
+                                                                    ""
+                                                                ]
+                                                            },
+                                                            {
+                                                                "!=": [
+                                                                    {
+                                                                        "var": "PFDeducted"
+                                                                    },
+                                                                    ""
+                                                                ]
+                                                            }
+                                                        ]
+                                                    }
+                                                ]
+                                            }
+                                        ]
+                                    }
+                                ]
+                            },
+                            {
+                                "!=": [
+                                    {
+                                        "var": "selectedAge"
+                                    },
+                                    ""
+                                ]
+                            },
+                            {
+                                "!=": [
+                                    {
+                                        "var": "grossIncome"
+                                    },
+                                    ""
+                                ]
+                            }
+                        ]
+                    }
+                },
+                {
+                    "id": "q6_monthlyOtherIncome",
+                    "bindsTo_template": "monthlyOtherIncome",
+                    "contextKey": "monthlyOtherIncome",
+                    "type": "text",
+                    "uiGroup": "text_fields",
+                    "uiMeta": {
+                        "placeholder": "extra monthly income"
+                    },
+                    "required": true,
+                    "question": "What's the additional monthly income from bonuses, incentives, and rental earnings?",
+                    "description": "This includes the average monthly bonus received in the latest financial year (total bonus divided by 12) and the average monthly incentive received in the latest 6 months (total incentive divided by 6). You will need to submit a valid rent agreement, and the rent amount should be reflected in your bank statement Enter zero (0) if there is no additional income",
+                    "showWhen": {
+                        "and": [
+                            {
+                                "!=": [
+                                    {
+                                        "var": "fullNameOfApplicant"
+                                    },
+                                    ""
+                                ]
+                            },
+                            {
+                                "in": [
+                                    {
+                                        "var": "TypeOfResidence"
+                                    },
+                                    [
+                                        "Self owned",
+                                        "Family owned",
+                                        "Rented"
+                                    ]
+                                ]
+                            },
+                            {
+                                "or": [
+                                    {
+                                        "==": [
+                                            {
+                                                "var": "EmploymentType"
+                                            },
+                                            [
+                                                "Employed (Government)"
+                                            ]
+                                        ]
+                                    },
+                                    {
+                                        "and": [
+                                            {
+                                                "==": [
+                                                    {
+                                                        "var": "EmploymentType"
+                                                    },
+                                                    [
+                                                        "Employed (Private)"
+                                                    ]
+                                                ]
+                                            },
+                                            {
+                                                "or": [
+                                                    {
+                                                        "==": [
+                                                            {
+                                                                "var": "companyType"
+                                                            },
+                                                            [
+                                                                "Private Limited"
+                                                            ]
+                                                        ]
+                                                    },
+                                                    {
+                                                        "and": [
+                                                            {
+                                                                "==": [
+                                                                    {
+                                                                        "var": "companyType"
+                                                                    },
+                                                                    [
+                                                                        "Private Limited Company"
+                                                                    ]
+                                                                ]
+                                                            },
+                                                            {
+                                                                "!=": [
+                                                                    {
+                                                                        "var": "totalEmployees"
+                                                                    },
+                                                                    ""
+                                                                ]
+                                                            },
+                                                            {
+                                                                "!=": [
+                                                                    {
+                                                                        "var": "PFDeducted"
+                                                                    },
+                                                                    ""
+                                                                ]
+                                                            }
+                                                        ]
+                                                    }
+                                                ]
+                                            }
+                                        ]
+                                    }
+                                ]
+                            },
+                            {
+                                "!=": [
+                                    {
+                                        "var": "selectedAge"
+                                    },
+                                    ""
+                                ]
+                            },
+                            {
+                                "!=": [
+                                    {
+                                        "var": "grossIncome"
+                                    },
+                                    ""
+                                ]
+                            },
+                            {
+                                "!=": [
+                                    {
+                                        "var": "fixedSalary"
+                                    },
+                                    ""
+                                ]
+                            }
+                        ]
+                    }
+                },
+                {
+                    "id": "q7_creditScore",
+                    "bindsTo_template": "creditScore",
+                    "contextKey": "creditScore",
+                    "type": "select",
+                    "uiGroup": "selectButton",
+                    "uiMeta": {
+                        "placeholder": "Select credit score"
+                    },
+                    "required": true,
+                    "question": "What's the Credit Score?",
+                    "description": "The credit score is a crucial factor that lenders consider to determine your creditworthiness A higher credit score is essential for securing more favorable loan terms and interest rates, directly influencing loan eligibility and approval.",
+                    "options": [
+                        {
+                            "label": "No CIBIL",
+                            "value": "No CIBIL"
+                        },
+                        {
+                            "label": "650-699",
+                            "value": "650-699"
+                        },
+                        {
+                            "label": "700-729",
+                            "value": "700-729"
+                        },
+                        {
+                            "label": "730-749",
+                            "value": "730-749"
+                        },
+                        {
+                            "label": "750-779",
+                            "value": "750-779"
+                        },
+                        {
+                            "label": "780-799",
+                            "value": "780-799"
+                        },
+                        {
+                            "label": "more than 800",
+                            "value": "more than 800"
+                        }
+                    ],
+                    "showWhen": {
+                        "and": [
+                            {
+                                "!=": [
+                                    {
+                                        "var": "fullNameOfApplicant"
+                                    },
+                                    ""
+                                ]
+                            },
+                            {
+                                "in": [
+                                    {
+                                        "var": "TypeOfResidence"
+                                    },
+                                    [
+                                        "Self owned",
+                                        "Family owned",
+                                        "Rented"
+                                    ]
+                                ]
+                            },
+                            {
+                                "or": [
+                                    {
+                                        "==": [
+                                            {
+                                                "var": "EmploymentType"
+                                            },
+                                            [
+                                                "Employed (Government)"
+                                            ]
+                                        ]
+                                    },
+                                    {
+                                        "and": [
+                                            {
+                                                "==": [
+                                                    {
+                                                        "var": "EmploymentType"
+                                                    },
+                                                    [
+                                                        "Employed (Private)"
+                                                    ]
+                                                ]
+                                            },
+                                            {
+                                                "or": [
+                                                    {
+                                                        "==": [
+                                                            {
+                                                                "var": "companyType"
+                                                            },
+                                                            [
+                                                                "Private Limited"
+                                                            ]
+                                                        ]
+                                                    },
+                                                    {
+                                                        "and": [
+                                                            {
+                                                                "==": [
+                                                                    {
+                                                                        "var": "companyType"
+                                                                    },
+                                                                    [
+                                                                        "Private Limited Company"
+                                                                    ]
+                                                                ]
+                                                            },
+                                                            {
+                                                                "!=": [
+                                                                    {
+                                                                        "var": "totalEmployees"
+                                                                    },
+                                                                    ""
+                                                                ]
+                                                            },
+                                                            {
+                                                                "!=": [
+                                                                    {
+                                                                        "var": "PFDeducted"
+                                                                    },
+                                                                    ""
+                                                                ]
+                                                            }
+                                                        ]
+                                                    }
+                                                ]
+                                            }
+                                        ]
+                                    }
+                                ]
+                            },
+                            {
+                                "!=": [
+                                    {
+                                        "var": "selectedAge"
+                                    },
+                                    ""
+                                ]
+                            },
+                            {
+                                "!=": [
+                                    {
+                                        "var": "grossIncome"
+                                    },
+                                    ""
+                                ]
+                            },
+                            {
+                                "!=": [
+                                    {
+                                        "var": "fixedSalary"
+                                    },
+                                    ""
+                                ]
+                            },
+                            {
+                                "!=": [
+                                    {
+                                        "var": "monthlyOtherIncome"
+                                    },
+                                    ""
+                                ]
+                            }
+                        ]
+                    }
+                },
+                {
+                    "id": "q8_isDefaulter",
+                    "bindsTo_template": "isDefaulter",
+                    "contextKey": "isDefaulter",
+                    "type": "select",
+                    "uiGroup": "selectButton",
+                    "required": true,
+                    "question": "Have you ever been defaulter",
+                    "description": "description",
+                    "options": [
+                        {
+                            "label": "Yes",
+                            "value": "Yes"
+                        },
+                        {
+                            "label": "No",
+                            "value": "No"
+                        }
+                    ],
+                    "showWhen": {
+                        "and": [
+                            {
+                                "!=": [
+                                    {
+                                        "var": "fullNameOfApplicant"
+                                    },
+                                    ""
+                                ]
+                            },
+                            {
+                                "in": [
+                                    {
+                                        "var": "TypeOfResidence"
+                                    },
+                                    [
+                                        "Self owned",
+                                        "Family owned",
+                                        "Rented"
+                                    ]
+                                ]
+                            },
+                            {
+                                "or": [
+                                    {
+                                        "==": [
+                                            {
+                                                "var": "EmploymentType"
+                                            },
+                                            [
+                                                "Employed (Government)"
+                                            ]
+                                        ]
+                                    },
+                                    {
+                                        "and": [
+                                            {
+                                                "==": [
+                                                    {
+                                                        "var": "EmploymentType"
+                                                    },
+                                                    [
+                                                        "Employed (Private)"
+                                                    ]
+                                                ]
+                                            },
+                                            {
+                                                "or": [
+                                                    {
+                                                        "==": [
+                                                            {
+                                                                "var": "companyType"
+                                                            },
+                                                            [
+                                                                "Private Limited"
+                                                            ]
+                                                        ]
+                                                    },
+                                                    {
+                                                        "and": [
+                                                            {
+                                                                "==": [
+                                                                    {
+                                                                        "var": "companyType"
+                                                                    },
+                                                                    [
+                                                                        "Private Limited Company"
+                                                                    ]
+                                                                ]
+                                                            },
+                                                            {
+                                                                "!=": [
+                                                                    {
+                                                                        "var": "totalEmployees"
+                                                                    },
+                                                                    ""
+                                                                ]
+                                                            },
+                                                            {
+                                                                "!=": [
+                                                                    {
+                                                                        "var": "PFDeducted"
+                                                                    },
+                                                                    ""
+                                                                ]
+                                                            }
+                                                        ]
+                                                    }
+                                                ]
+                                            }
+                                        ]
+                                    }
+                                ]
+                            },
+                            {
+                                "!=": [
+                                    {
+                                        "var": "selectedAge"
+                                    },
+                                    ""
+                                ]
+                            },
+                            {
+                                "!=": [
+                                    {
+                                        "var": "grossIncome"
+                                    },
+                                    ""
+                                ]
+                            },
+                            {
+                                "!=": [
+                                    {
+                                        "var": "fixedSalary"
+                                    },
+                                    ""
+                                ]
+                            },
+                            {
+                                "!=": [
+                                    {
+                                        "var": "monthlyOtherIncome"
+                                    },
+                                    ""
+                                ]
+                            },
+                            {
+                                "!=": [
+                                    {
+                                        "var": "creditScore"
+                                    },
+                                    ""
+                                ]
+                            }
+                        ]
+                    }
+                },
+                {
+                    "id": "q9_whyLowCredit",
+                    "bindsTo_template": "whyLowCredit",
+                    "contextKey": "whyLowCredit",
+                    "type": "multiple-select",
+                    "uiGroup": "select_fields",
+                    "uiMeta": {
+                        "placeholder": "Select the reason why you have low credit score"
+                    },
+                    "required": true,
+                    "question": "What are the possible reasons behind your low CIBIL score?",
+                    "description": "select all the applicable reasons to help us understand what may be impacting your credit score",
+                    "options": [
+                        {
+                            "label": "Delayed EMI",
+                            "value": "Delayed EMI"
+                        },
+                        {
+                            "label": "High credit card utilization",
+                            "value": "High credit card utilization"
+                        },
+                        {
+                            "label": "No credit history",
+                            "value": "No credit history"
+                        },
+                        {
+                            "label": "Frequent use of full credit limit",
+                            "value": "Frequent use of full credit limit"
+                        },
+                        {
+                            "label": "Delayed credit card payments",
+                            "value": "Delayed credit card payments"
+                        },
+                        {
+                            "label": "Multiple recent loan enquiries",
+                            "value": "Multiple recent loan enquiries"
+                        },
+                        {
+                            "label": "Co-applicant default",
+                            "value": "Co-applicant default"
+                        },
+                        {
+                            "label": "Loan default",
+                            "value": "Loan default"
+                        },
+                        {
+                            "label": "Only unsecured loans in profile",
+                            "value": "Only unsecured loans in profile"
+                        },
+                        {
+                            "label": "Minimum due payments only on credit card",
+                            "value": "Minimum due payments only on credit card"
+                        }
+                    ],
+                    "showWhen": {
+                        "and": [
+                            {
+                                "!=": [
+                                    {
+                                        "var": "fullNameOfApplicant"
+                                    },
+                                    ""
+                                ]
+                            },
+                            {
+                                "in": [
+                                    {
+                                        "var": "TypeOfResidence"
+                                    },
+                                    [
+                                        "Self owned",
+                                        "Family owned",
+                                        "Rented"
+                                    ]
+                                ]
+                            },
+                            {
+                                "or": [
+                                    {
+                                        "==": [
+                                            {
+                                                "var": "EmploymentType"
+                                            },
+                                            [
+                                                "Employed (Government)"
+                                            ]
+                                        ]
+                                    },
+                                    {
+                                        "and": [
+                                            {
+                                                "==": [
+                                                    {
+                                                        "var": "EmploymentType"
+                                                    },
+                                                    [
+                                                        "Employed (Private)"
+                                                    ]
+                                                ]
+                                            },
+                                            {
+                                                "or": [
+                                                    {
+                                                        "==": [
+                                                            {
+                                                                "var": "companyType"
+                                                            },
+                                                            [
+                                                                "Private Limited"
+                                                            ]
+                                                        ]
+                                                    },
+                                                    {
+                                                        "and": [
+                                                            {
+                                                                "==": [
+                                                                    {
+                                                                        "var": "companyType"
+                                                                    },
+                                                                    [
+                                                                        "Private Limited Company"
+                                                                    ]
+                                                                ]
+                                                            },
+                                                            {
+                                                                "!=": [
+                                                                    {
+                                                                        "var": "totalEmployees"
+                                                                    },
+                                                                    ""
+                                                                ]
+                                                            },
+                                                            {
+                                                                "!=": [
+                                                                    {
+                                                                        "var": "PFDeducted"
+                                                                    },
+                                                                    ""
+                                                                ]
+                                                            }
+                                                        ]
+                                                    }
+                                                ]
+                                            }
+                                        ]
+                                    }
+                                ]
+                            },
+                            {
+                                "!=": [
+                                    {
+                                        "var": "selectedAge"
+                                    },
+                                    ""
+                                ]
+                            },
+                            {
+                                "!=": [
+                                    {
+                                        "var": "grossIncome"
+                                    },
+                                    ""
+                                ]
+                            },
+                            {
+                                "!=": [
+                                    {
+                                        "var": "fixedSalary"
+                                    },
+                                    ""
+                                ]
+                            },
+                            {
+                                "!=": [
+                                    {
+                                        "var": "monthlyOtherIncome"
+                                    },
+                                    ""
+                                ]
+                            },
+                            {
+                                "in": [
+                                    {
+                                        "var": "creditScore"
+                                    },
+                                    [
+                                        "No CIBIL",
+                                        "650-699"
+                                    ]
+                                ]
+                            },
+                            {
+                                "in": [
+                                    {
+                                        "var": "isDefaulter"
+                                    },
+                                    [
+                                        "Yes",
+                                        "No"
+                                    ]
+                                ]
+                            }
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "id": "existingDetailsPage",
+            "title": "Existing Details",
+            "nextButtonVisibility": {
+                "mode": [
+                    "allRequiredAnswered"
+                ]
+            },
+            "showWhen": {
+                "==": [
+                    {
+                        "var": "existingLoan"
+                    },
+                    "Yes"
+                ]
+            },
+            "questions": [
+                {
+                    "id": "q1_loanType",
+                    "bindsTo_template": "tableLoanEntriesloanType",
+                    "contextKey": "tableLoanEntriesloanType",
+                    "type": "select",
+                    "uiGroup": "select_fields",
+                    "uiMeta": {
+                        "placeholder": "Choose your existing loan type"
+                    },
+                    "required": true,
+                    "question": "What type of existing loan do you have?",
+                    "description": "Select the type of loan you currently have. This helps us understand your existing financial commitments better.",
+                    "options": [
+                        {
+                            "label": "Home Loan",
+                            "value": "Home Loan"
+                        },
+                        {
+                            "label": "Plot and Construction Loan",
+                            "value": "Plot and Construction Loan"
+                        },
+                        {
+                            "label": "Loan Against Property",
+                            "value": "Loan Against Property"
+                        },
+                        {
+                            "label": "Personal Loan",
+                            "value": "Personal Loan"
+                        },
+                        {
+                            "label": "Vehicle Loan",
+                            "value": "Vehicle Loan"
+                        },
+                        {
+                            "label": "Gold Loan",
+                            "value": "Gold Loan"
+                        },
+                        {
+                            "label": "Credit Card Loan",
+                            "value": "Credit Card Loan"
+                        },
+                        {
+                            "label": "Consumer Durable Loan",
+                            "value": "Consumer Durable Loan"
+                        },
+                        {
+                            "label": "Insta Loan",
+                            "value": "Insta Loan"
+                        },
+                        {
+                            "label": "Education Loan",
+                            "value": "Education Loan"
+                        },
+                        {
+                            "label": "OD Limit",
+                            "value": "OD Limit"
+                        },
+                        {
+                            "label": "CC Limit",
+                            "value": "CC Limit"
+                        },
+                        {
+                            "label": "Dropline OD",
+                            "value": "Dropline OD"
+                        },
+                        {
+                            "label": "Other Type Loan",
+                            "value": "Other Type Loan"
+                        }
+                    ]
+                },
+                {
+                    "id": "q2_bankName",
+                    "bindsTo_template": "tableLoanEntriesbankName",
+                    "contextKey": "tableLoanEntriesbankName",
+                    "type": "select",
+                    "uiGroup": "select_fields",
+                    "uiMeta": {
+                        "placeholder": "Select your bank"
+                    },
+                    "required": true,
+                    "question": "Which bank is your existing loan with?",
+                    "description": "Choose the bank where you have your current loan. This information helps us coordinate the loan takeover process if needed.",
+                    "options": [
+                        {
+                            "label": "HDFC Bank",
+                            "value": "HDFC Bank"
+                        },
+                        {
+                            "label": "SBI Bank",
+                            "value": "SBI Bank"
+                        },
+                        {
+                            "label": "Axis Bank",
+                            "value": "Axis Bank"
+                        },
+                        {
+                            "label": "ICICI Bank",
+                            "value": "ICICI Bank"
+                        },
+                        {
+                            "label": "Canara Bank",
+                            "value": "Canara Bank"
+                        },
+                        {
+                            "label": "Bank of Baroda",
+                            "value": "Bank of Baroda"
+                        },
+                        {
+                            "label": "Citi Bank",
+                            "value": "Citi Bank"
+                        },
+                        {
+                            "label": "Union Bank",
+                            "value": "Union Bank"
+                        }
+                    ],
+                    "showWhen": {
+                        "!=": [
+                            {
+                                "var": "tableLoanEntriesloanType"
+                            },
+                            ""
+                        ]
+                    }
+                },
+                {
+                    "id": "q3_selectedToClose",
+                    "bindsTo_template": "tableLoanEntriesselectedToClose",
+                    "contextKey": "tableLoanEntriesselectedToClose",
+                    "type": "select",
+                    "uiGroup": "select_fields",
+                    "uiMeta": {
+                        "placeholder": "How do you plan to close this loan?"
+                    },
+                    "required": true,
+                    "question": "How would you like to handle this existing loan?",
+                    "description": "Let us know if you'll close this loan yourself or if you'd like us to help with the closure process as part of your new loan.",
+                    "options": [
+                        {
+                            "label": "Self-funded (before loan disbursement)",
+                            "value": "Self-funded (before loan disbursement)"
+                        },
+                        {
+                            "label": "will be closed by this loan",
+                            "value": "will be closed by this loan"
+                        },
+                        {
+                            "label": "continue running as it is",
+                            "value": "continue running as it is"
+                        }
+                    ],
+                    "errorMessage": {
+                        "required": true,
+                        "message": "Please select a different reason for the closure plan. You have currently chosen “New Loan” as the reason. However, if your intention is to close this existing loan by consolidating it with a new debt consolidation loan, you need to go back and select the debt consolidation option instead. This is necessary because only the debt consolidation option allows you to close existing loans through this process."
+                    },
+                    "validation": {
+                        "condition": {
+                            "and": [
+                                {
+                                    "==": [
+                                        {
+                                            "var": "existingLoan"
+                                        },
+                                        "Yes"
+                                    ]
+                                },
+                                {
+                                    "!=": [
+                                        {
+                                            "var": "loanType"
+                                        },
+                                        "Debt Consolidation with Extra Funds"
+                                    ]
+                                },
+                                {
+                                    "==": [
+                                        {
+                                            "var": "tableLoanEntriesselectedToClose"
+                                        },
+                                        "will be closed by this loan"
+                                    ]
+                                }
+                            ]
+                        }
+                    },
+                    "showWhen": {
+                        "and": [
+                            {
+                                "!=": [
+                                    {
+                                        "var": "tableLoanEntriesloanType"
+                                    },
+                                    ""
+                                ]
+                            },
+                            {
+                                "!=": [
+                                    {
+                                        "var": "tableLoanEntriesbankName"
+                                    },
+                                    ""
+                                ]
+                            }
+                        ]
+                    }
+                },
+                {
+                    "id": "q4_emi",
+                    "bindsTo_template": "tableLoanEntriesemi",
+                    "contextKey": "tableLoanEntriesemi",
+                    "type": "text",
+                    "uiGroup": "text_fields",
+                    "uiMeta": {
+                        "placeholder": "Enter EMI"
+                    },
+                    "required": true,
+                    "question": "What is the EMI for this existing loan?",
+                    "description": "EMI (monthly)",
+                    "showWhen": {
+                        "and": [
+                            {
+                                "in": [
+                                    {
+                                        "var": "tableLoanEntriesloanType"
+                                    },
+                                    [
+                                        "Home Loan",
+                                        "Plot and Construction Loan",
+                                        "Loan Against Property",
+                                        "Personal Loan",
+                                        "Vehicle Loan",
+                                        "Gold Loan",
+                                        "Credit Card Loan",
+                                        "Consumer Durable Loan",
+                                        "Insta Loan",
+                                        "Education Loan",
+                                        "Other Type Loan"
+                                    ]
+                                ]
+                            },
+                            {
+                                "!=": [
+                                    {
+                                        "var": "tableLoanEntriesbankName"
+                                    },
+                                    ""
+                                ]
+                            },
+                            {
+                                "!=": [
+                                    {
+                                        "var": "tableLoanEntriesselectedToClose"
+                                    },
+                                    ""
+                                ]
+                            }
+                        ]
+                    }
+                },
+                {
+                    "id": "q5_tenure",
+                    "bindsTo_template": "tableLoanEntriestenure",
+                    "contextKey": "tableLoanEntriestenure",
+                    "type": "text",
+                    "uiGroup": "text_fields",
+                    "uiMeta": {
+                        "placeholder": "in months"
+                    },
+                    "required": true,
+                    "description": "remaining tenure",
+                    "showWhen": {
+                        "and": [
+                            {
+                                "in": [
+                                    {
+                                        "var": "tableLoanEntriesloanType"
+                                    },
+                                    [
+                                        "Home Loan",
+                                        "Plot and Construction Loan",
+                                        "Loan Against Property",
+                                        "Personal Loan",
+                                        "Vehicle Loan",
+                                        "Gold Loan",
+                                        "Credit Card Loan",
+                                        "Consumer Durable Loan",
+                                        "Insta Loan",
+                                        "Education Loan",
+                                        "Other Type Loan"
+                                    ]
+                                ]
+                            },
+                            {
+                                "!=": [
+                                    {
+                                        "var": "tableLoanEntriesbankName"
+                                    },
+                                    ""
+                                ]
+                            },
+                            {
+                                "!=": [
+                                    {
+                                        "var": "tableLoanEntriesselectedToClose"
+                                    },
+                                    ""
+                                ]
+                            },
+                            {
+                                "!=": [
+                                    {
+                                        "var": "tableLoanEntriesemi"
+                                    },
+                                    ""
+                                ]
+                            }
+                        ]
+                    }
+                },
+                {
+                    "id": "q6_totalLimit",
+                    "bindsTo_template": "tableLoanEntriestotalLimit",
+                    "contextKey": "tableLoanEntriestotalLimit",
+                    "type": "text",
+                    "uiGroup": "text_fields",
+                    "uiMeta": {
+                        "placeholder": "Enter total limit"
+                    },
+                    "required": true,
+                    "description": "total limit",
+                    "showWhen": {
+                        "and": [
+                            {
+                                "in": [
+                                    {
+                                        "var": "tableLoanEntriesloanType"
+                                    },
+                                    [
+                                        "OD Limit",
+                                        "CC Limit"
+                                    ]
+                                ]
+                            },
+                            {
+                                "!=": [
+                                    {
+                                        "var": "tableLoanEntriesbankName"
+                                    },
+                                    ""
+                                ]
+                            },
+                            {
+                                "!=": [
+                                    {
+                                        "var": "tableLoanEntriesselectedToClose"
+                                    },
+                                    ""
+                                ]
+                            }
+                        ]
+                    }
+                },
+                {
+                    "id": "q7_sanctionedLimit",
+                    "bindsTo_template": "tableLoanEntriessanctionedLimit",
+                    "contextKey": "tableLoanEntriessanctionedLimit",
+                    "type": "text",
+                    "uiGroup": "text_fields",
+                    "uiMeta": {
+                        "placeholder": "Enter total limit"
+                    },
+                    "required": true,
+                    "description": "sanctioned limit (at the time of start)",
+                    "showWhen": {
+                        "and": [
+                            {
+                                "==": [
+                                    {
+                                        "var": "tableLoanEntriesloanType"
+                                    },
+                                    "Dropline OD"
+                                ]
+                            },
+                            {
+                                "!=": [
+                                    {
+                                        "var": "tableLoanEntriesbankName"
+                                    },
+                                    ""
+                                ]
+                            },
+                            {
+                                "!=": [
+                                    {
+                                        "var": "tableLoanEntriesselectedToClose"
+                                    },
+                                    ""
+                                ]
+                            }
+                        ]
+                    }
+                },
+                {
+                    "id": "q8_remainingLimit",
+                    "bindsTo_template": "tableLoanEntriesremainingLimit",
+                    "contextKey": "tableLoanEntriesremainingLimit",
+                    "type": "text",
+                    "uiGroup": "text_fields",
+                    "uiMeta": {
+                        "placeholder": "Enter total limit"
+                    },
+                    "required": true,
+                    "description": "remaining limit (current)",
+                    "showWhen": {
+                        "and": [
+                            {
+                                "==": [
+                                    {
+                                        "var": "tableLoanEntriesloanType"
+                                    },
+                                    "Dropline OD"
+                                ]
+                            },
+                            {
+                                "!=": [
+                                    {
+                                        "var": "tableLoanEntriesbankName"
+                                    },
+                                    ""
+                                ]
+                            },
+                            {
+                                "!=": [
+                                    {
+                                        "var": "tableLoanEntriesselectedToClose"
+                                    },
+                                    ""
+                                ]
+                            },
+                            {
+                                "!=": [
+                                    {
+                                        "var": "tableLoanEntriessanctionedLimit"
+                                    },
+                                    ""
+                                ]
+                            }
+                        ]
+                    }
+                },
+                {
+                    "id": "q9_sanctionedTenure",
+                    "bindsTo_template": "tableLoanEntriessanctionedTenure",
+                    "contextKey": "tableLoanEntriessanctionedTenure",
+                    "type": "text",
+                    "uiGroup": "text_fields",
+                    "uiMeta": {
+                        "placeholder": "in months"
+                    },
+                    "required": true,
+                    "description": "sanctioned tenure",
+                    "showWhen": {
+                        "and": [
+                            {
+                                "in": [
+                                    {
+                                        "var": "tableLoanEntriesloanType"
+                                    },
+                                    [
+                                        "OD Limit",
+                                        "CC Limit",
+                                        "Dropline OD"
+                                    ]
+                                ]
+                            },
+                            {
+                                "!=": [
+                                    {
+                                        "var": "tableLoanEntriesbankName"
+                                    },
+                                    ""
+                                ]
+                            },
+                            {
+                                "!=": [
+                                    {
+                                        "var": "tableLoanEntriesselectedToClose"
+                                    },
+                                    ""
+                                ]
+                            },
+                            {
+                                "or": [
+                                    {
+                                        "!=": [
+                                            {
+                                                "var": "tableLoanEntriestotalLimit"
+                                            },
+                                            ""
+                                        ]
+                                    },
+                                    {
+                                        "and": [
+                                            {
+                                                "!=": [
+                                                    {
+                                                        "var": "tableLoanEntriessanctionedLimit"
+                                                    },
+                                                    ""
+                                                ]
+                                            },
+                                            {
+                                                "!=": [
+                                                    {
+                                                        "var": "tableLoanEntriesremainingLimit"
+                                                    },
+                                                    ""
+                                                ]
+                                            }
+                                        ]
+                                    }
+                                ]
+                            }
+                        ]
+                    }
+                },
+                {
+                    "id": "q10_remainingTenure",
+                    "bindsTo_template": "tableLoanEntriesremainingTenure",
+                    "contextKey": "tableLoanEntriesremainingTenure",
+                    "type": "text",
+                    "uiGroup": "text_fields",
+                    "uiMeta": {
+                        "placeholder": "in months"
+                    },
+                    "required": true,
+                    "description": "remaining tenure",
+                    "showWhen": {
+                        "and": [
+                            {
+                                "==": [
+                                    {
+                                        "var": "tableLoanEntriesloanType"
+                                    },
+                                    "Dropline OD"
+                                ]
+                            },
+                            {
+                                "!=": [
+                                    {
+                                        "var": "tableLoanEntriesbankName"
+                                    },
+                                    ""
+                                ]
+                            },
+                            {
+                                "!=": [
+                                    {
+                                        "var": "tableLoanEntriesselectedToClose"
+                                    },
+                                    ""
+                                ]
+                            },
+                            {
+                                "!=": [
+                                    {
+                                        "var": "tableLoanEntriessanctionedLimit"
+                                    },
+                                    ""
+                                ]
+                            },
+                            {
+                                "!=": [
+                                    {
+                                        "var": "tableLoanEntriesremainingLimit"
+                                    },
+                                    ""
+                                ]
+                            },
+                            {
+                                "!=": [
+                                    {
+                                        "var": "tableLoanEntriessanctionedTenure"
+                                    },
+                                    ""
+                                ]
+                            }
+                        ]
+                    }
+                },
+                {
+                    "id": "q11_utilizedAmount",
+                    "bindsTo_template": "tableLoanEntriesutilizedAmount",
+                    "contextKey": "tableLoanEntriesutilizedAmount",
+                    "type": "text",
+                    "uiGroup": "text_fields",
+                    "uiMeta": {
+                        "placeholder": "Enter total limit"
+                    },
+                    "required": true,
+                    "description": "utilized amount",
+                    "showWhen": {
+                        "and": [
+                            {
+                                "==": [
+                                    {
+                                        "var": "tableLoanEntriesloanType"
+                                    },
+                                    "Dropline OD"
+                                ]
+                            },
+                            {
+                                "!=": [
+                                    {
+                                        "var": "tableLoanEntriesbankName"
+                                    },
+                                    ""
+                                ]
+                            },
+                            {
+                                "!=": [
+                                    {
+                                        "var": "tableLoanEntriesselectedToClose"
+                                    },
+                                    ""
+                                ]
+                            },
+                            {
+                                "!=": [
+                                    {
+                                        "var": "tableLoanEntriessanctionedLimit"
+                                    },
+                                    ""
+                                ]
+                            },
+                            {
+                                "!=": [
+                                    {
+                                        "var": "tableLoanEntriesremainingLimit"
+                                    },
+                                    ""
+                                ]
+                            },
+                            {
+                                "!=": [
+                                    {
+                                        "var": "tableLoanEntriessanctionedTenure"
+                                    },
+                                    ""
+                                ]
+                            },
+                            {
+                                "!=": [
+                                    {
+                                        "var": "tableLoanEntriesremainingTenure"
+                                    },
+                                    ""
+                                ]
+                            }
+                        ]
+                    }
+                },
+                {
+                    "id": "q12_interestRate",
+                    "bindsTo_template": "tableLoanEntriesinterestRate",
+                    "contextKey": "tableLoanEntriesinterestRate",
+                    "type": "text",
+                    "uiGroup": "text_fields",
+                    "uiMeta": {
+                        "placeholder": "enter interest rate"
+                    },
+                    "required": true,
+                    "description": "interest rate (p.a.)",
+                    "showWhen": {
+                        "and": [
+                            {
+                                "!=": [
+                                    {
+                                        "var": "tableLoanEntriesloanType"
+                                    },
+                                    ""
+                                ]
+                            },
+                            {
+                                "!=": [
+                                    {
+                                        "var": "tableLoanEntriesbankName"
+                                    },
+                                    ""
+                                ]
+                            },
+                            {
+                                "!=": [
+                                    {
+                                        "var": "tableLoanEntriesselectedToClose"
+                                    },
+                                    ""
+                                ]
+                            },
+                            {
+                                "or": [
+                                    {
+                                        "!=": [
+                                            {
+                                                "var": "tableLoanEntriesemi"
+                                            },
+                                            ""
+                                        ]
+                                    },
+                                    {
+                                        "!=": [
+                                            {
+                                                "var": "tableLoanEntriestotalLimit"
+                                            },
+                                            ""
+                                        ]
+                                    },
+                                    {
+                                        "and": [
+                                            {
+                                                "!=": [
+                                                    {
+                                                        "var": "tableLoanEntriessanctionedLimit"
+                                                    },
+                                                    ""
+                                                ]
+                                            },
+                                            {
+                                                "!=": [
+                                                    {
+                                                        "var": "tableLoanEntriesremainingLimit"
+                                                    },
+                                                    ""
+                                                ]
+                                            }
+                                        ]
+                                    }
+                                ]
+                            },
+                            {
+                                "or": [
+                                    {
+                                        "!=": [
+                                            {
+                                                "var": "tableLoanEntriestenure"
+                                            },
+                                            ""
+                                        ]
+                                    },
+                                    {
+                                        "!=": [
+                                            {
+                                                "var": "tableLoanEntriessanctionedTenure"
+                                            },
+                                            ""
+                                        ]
+                                    },
+                                    {
+                                        "!=": [
+                                            {
+                                                "var": "tableLoanEntriesremainingTenure"
+                                            },
+                                            ""
+                                        ]
+                                    }
+                                ]
+                            }
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "id": "loanRequirementPage",
+            "title": "Your Loan Requirements",
+            "nextButtonVisibility": {
+                "mode": [
+                    "allRequiredAnswered"
+                ]
+            },
+            "questions": [
+                {
+                    "id": "q1_mortgageYear",
+                    "bindsTo_template": "mortgageYear",
+                    "contextKey": "mortgageYear",
+                    "type": "select",
+                    "uiGroup": "select_fields",
+                    "uiMeta": {
+                        "placeholder": "Select loan tenure in years"
+                    },
+                    "required": true,
+                    "question": "How long would you like your loan term to be?",
+                    "description": "Choose your preferred loan duration. A longer term means lower monthly payments but more interest over time. You can adjust this later based on your eligibility.",
+                    "options": [
+                        {
+                            "label": "1",
+                            "value": "1"
+                        },
+                        {
+                            "label": "2",
+                            "value": "2"
+                        },
+                        {
+                            "label": "3",
+                            "value": "3"
+                        },
+                        {
+                            "label": "4",
+                            "value": "4"
+                        },
+                        {
+                            "label": "5",
+                            "value": "5"
+                        }
+                    ]
+                },
+                {
+                    "id": "q2_hasSpecificAmount",
+                    "bindsTo_template": "hasSpecificAmount",
+                    "contextKey": "hasSpecificAmount",
+                    "type": "radio",
+                    "uiGroup": "loan_details",
+                    "required": true,
+                    "question": "Do you have a specific loan amount in mind?",
+                    "description": "Let us know if you have a particular loan amount requirement. This helps us tailor our offerings to your needs.",
+                    "options": [
+                        {
+                            "label": "Yes",
+                            "value": "Yes"
+                        },
+                        {
+                            "label": "No",
+                            "value": "No"
+                        }
+                    ],
+                    "showWhen": {
+                        "!=": [
+                            {
+                                "var": "mortgageYear"
+                            },
+                            ""
+                        ]
+                    }
+                },
+                {
+                    "id": "q3_loanAmount",
+                    "bindsTo_template": "loanAmount",
+                    "contextKey": "loanAmount",
+                    "type": "number",
+                    "uiGroup": "number_fields",
+                    "uiMeta": {
+                        "placeholder": "Enter amount in rupees",
+                        "min": 100000,
+                        "max": 13915400
+                    },
+                    "required": true,
+                    "question": "Enter your desired loan amount",
+                    "description": "You can request a loan amount up to ₹1,39,15,400. Enter a value that aligns with your requirements and repayment capacity.",
+                    "showWhen": {
+                        "and": [
+                            {
+                                "!=": [
+                                    {
+                                        "var": "mortgageYear"
+                                    },
+                                    ""
+                                ]
+                            },
+                            {
+                                "==": [
+                                    {
+                                        "var": "hasSpecificAmount"
+                                    },
+                                    "Yes"
+                                ]
+                            }
+                        ]
+                    }
+                }
+            ]
+        }
+    ]
+}
