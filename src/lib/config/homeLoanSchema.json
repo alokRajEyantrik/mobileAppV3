@@ -1,0 +1,1808 @@
+{
+	"formId": "homeLoanSchema",
+	"title": "Home Loan Application",
+	"pages": [
+		{
+			"nextButtonVisibility": {
+				"mode": ["allRequiredAnswered"]
+			},
+			"questions": [
+				{
+					"id": "q2_homeLoan",
+					"bindsTo_template": "homeLoanType",
+					"contextKey": "homeLoanType",
+					"type": "radio",
+					"uiGroup": "loan_details",
+					"required": true,
+					"question": "ye flow home loan se banega",
+					"description": "flow check ho raha hai home loan ka",
+					"options": [
+						{
+							"label": "New LoanSS",
+							"value": "New Loan"
+						},
+						{
+							"label": "Balance Transfer with Top-up",
+							"value": "Balance Transfer with Top-up"
+						},
+						{
+							"label": "Balance Transfer",
+							"value": "Balance Transfer"
+						},
+						{
+							"label": "Top-up only",
+							"value": "Top-up only"
+						}
+					]
+				},
+				{
+					"id": "queestion_hi_hai",
+					"bindsTo_template": "testLoan",
+					"contextKey": "testLoan",
+					"type": "radio",
+					"uiGroup": "loan_details",
+					"required": true,
+					"question": "next page question",
+					"description": "next page ka question hai ye",
+					"options": [
+						{
+							"label": "aaya haiS",
+							"value": "New Loan"
+						},
+						{
+							"label": "Balance Transfer with Top-up",
+							"value": "Balance Transfer with Top-up"
+						},
+						{
+							"label": "Balance Transfer",
+							"value": "Balance Transfer"
+						},
+						{
+							"label": "Top-up only",
+							"value": "Top-up only"
+						}
+					]
+				}
+			]
+		},
+		{
+			"id": "property_location_homeLoan",
+			"title": "Let's Rock!",
+			"nextButtonVisibility": {
+				"mode": ["allRequiredAnswered"]
+			},
+			"questions": [
+				{
+					"id": "q1_isPropertyIdentified",
+					"bindsTo_template": "isPropertyIdentified",
+					"contextKey": "isPropertyIdentified",
+					"type": "radio",
+					"uiGroup": "loan_details",
+					"required": true,
+					"question": "If the property has been identified?",
+					"options": [
+						{
+							"label": "Yes",
+							"value": "Yes",
+							"flagKey": {
+								"isPropertyIdentified": true
+							}
+						},
+						{
+							"label": "No",
+							"value": "No",
+							"flagKey": {
+								"isPropertyIdentified": false
+							}
+						}
+					]
+				},
+				{
+					"id": "q2_propertyStateName",
+					"bindsTo_template": "propertyStateName",
+					"contextKey": "propertyStateName",
+					"type": "select",
+					"uiGroup": "select_fields",
+					"uiMeta": { "placeholder": "Select a State" },
+					"description": "State Name",
+					"questionLabels": {
+						"Yes": "Where your property is located ?",
+						"No": "Where are you planning to purchase your property ?"
+					},
+					"required": true,
+					"showWhen": {
+						"in": [{ "var": "isPropertyIdentified" }, ["Yes", "No"]]
+					},
+					"errorMessage": {
+						"required": "State is required",
+						"message": "Kindly select a different state or update your earlier answer."
+					},
+					"validation": {
+						"condition": {
+							"==": [{ "var": "propertyStateName" }, ""]
+						}
+					}
+				},
+				{
+					"id": "q3_propertyCityName",
+					"bindsTo_template": "propertyCityName",
+					"contextKey": "propertyCityName",
+					"type": "derivedSelect",
+					"uiGroup": "select_fields",
+					"uiMeta": { "placeholder": "Select a City" },
+					"questionLabels": {
+						"Yes": "Enter your property city",
+						"No": "Enter the city where you plan to purchase"
+					},
+					"required": true,
+					"showWhen": {
+						"in": [{ "var": "isPropertyIdentified" }, ["Yes", "No"]]
+					},
+					"errorMessage": {
+						"required": "City is required",
+						"message": "Kindly select a different city or update your earlier answer."
+					},
+					"validation": {
+						"condition": {
+							"==": [{ "var": "propertyCityName" }, ""]
+						}
+					}
+				},
+				{
+					"id": "q4_isResidenceSameAsPropertyHas",
+					"bindsTo_template": "isResidenceSameAsPropertyHas",
+					"contextKey": "isResidenceSameAsPropertyHas",
+					"type": "radio",
+					"uiGroup": "loan_details",
+					"required": true,
+					"question": "Are you residing in the same city where the selected property is located?",
+					"description": "For an NRI applicant, this question should be addressed from the perspective of the GPA (Power of Attorney).",
+					"options": [
+						{
+							"label": "Yes",
+							"value": "Yes",
+							"flagKey": {
+								"isResidenceSameAsPropertyHas": true
+							}
+						},
+						{
+							"label": "No",
+							"value": "No",
+							"flagKey": {
+								"isResidenceSameAsPropertyHas": false
+							}
+						}
+					]
+				},
+				{
+					"id": "q5_residenceStateName",
+					"bindsTo_template": "residenceStateName",
+					"contextKey": "residenceStateName",
+					"type": "select",
+					"uiGroup": "select_fields",
+					"uiMeta": {
+						"placeholder": "Select a State"
+					},
+					"description": "Where would you like to process your loan application from? Select the location that’s most convenient for you, ensuring smooth coordination with the bank for residence and office verifications, and completing loan formalities without disrupting your schedule.",
+					"question": "Location for residence verification ?",
+					"required": true,
+					"showWhen": {
+						"==": [
+							{
+								"var": "isResidenceSameAsPropertyHas"
+							},
+							"No"
+						]
+					}
+				},
+				{
+					"id": "q6_residenceCityName",
+					"bindsTo_template": "residenceCityName",
+					"contextKey": "residenceCityName",
+					"type": "derivedSelect",
+					"uiGroup": "select_fields",
+					"uiMeta": {
+						"placeholder": "Select a City"
+					},
+					"question": "city name",
+					"required": true,
+					"showWhen": {
+						"and": [
+							{
+								"==": [
+									{
+										"var": "isResidenceSameAsPropertyHas"
+									},
+									"No"
+								]
+							}
+						]
+					},
+					"errorMessage": {
+						"required": "City is required",
+						"message": "Kindly select a different city or update your earlier answer."
+					},
+					"validation": {
+						"condition": {
+							"==": [
+								{
+									"var": "propertyCityName"
+								},
+								{
+									"var": "residenceCityName"
+								}
+							]
+						}
+					}
+				}
+			]
+		},
+		{
+			"id": "selection_homeLoan",
+			"title": "A few check points !",
+			"nextButtonVisibility": {
+				"mode": ["allRequiredAnswered"]
+			},
+			"questions": [
+				{
+					"id": "q1_isAuthorizedArea",
+					"bindsTo_template": "isAuthorizedArea",
+					"contextKey": "isAuthorizedArea",
+					"type": "radio",
+					"uiGroup": "loan_details",
+					"required": true,
+					"question": "Please confirm that selected property is situated in officially authorized area by the government?",
+					"description": "Most of the lenders prefer that your property location should be approved from respective \"City's Development Authority\" or \"Municipal Corporation\"",
+					"options": [
+						{
+							"label": "Yes",
+							"value": "Yes",
+							"flagKey": {
+								"isAuthorizedArea": true
+							}
+						},
+						{
+							"label": "No",
+							"value": "No",
+							"flagKey": {
+								"isAuthorizedArea": false
+							}
+						}
+					]
+				},
+				{
+					"id": "q2_isApprovedAsPerMap",
+					"bindsTo_template": "isApprovedAsPerMap",
+					"contextKey": "isApprovedAsPerMap",
+					"type": "radio",
+					"uiGroup": "loan_details",
+					"required": true,
+					"question": "If the construction of the property is as per \"approved map\" from the respective authority?",
+					"description": "Lenders can reject loan application if map is not approved by respective authority. Also construction of the property should be as per the approved map.",
+					"options": [
+						{
+							"label": "Yes",
+							"value": "Yes",
+							"flagKey": {
+								"isApprovedAsPerMap": true
+							}
+						},
+						{
+							"label": "No",
+							"value": "No",
+							"flagKey": {
+								"isApprovedAsPerMap": false
+							}
+						}
+					],
+					"showWhen": {
+						"and": [
+							{
+								"==": [
+									{
+										"var": "isAuthorizedArea"
+									},
+									"Yes"
+								]
+							}
+						]
+					}
+				},
+				{
+					"id": "q3_isApplicantNRI",
+					"bindsTo_template": "isApplicantNRI",
+					"contextKey": "isApplicantNRI",
+					"type": "radio",
+					"uiGroup": "loan_details",
+					"required": true,
+					"question": "If applicant or any of the co-applicants is NRI?",
+					"options": [
+						{
+							"label": "Yes",
+							"value": "Yes",
+							"flagKey": {
+								"isApplicantNRI": true
+							}
+						},
+						{
+							"label": "No",
+							"value": "No",
+							"flagKey": {
+								"isApplicantNRI": false
+							}
+						}
+					],
+					"showWhen": {
+						"or": [
+							{ "==": [{ "var": "isAuthorizedArea" }, "No"] },
+							{
+								"and": [
+									{ "==": [{ "var": "isAuthorizedArea" }, "Yes"] },
+									{ "!=": [{ "var": "isApprovedAsPerMap" }, ""] }
+								]
+							}
+						]
+					}
+				}
+			]
+		},
+		{
+			"id": "propertyDetails_homeLoan",
+			"title": "Property Details",
+			"nextButtonVisibility": {
+				"mode": ["allRequiredAnswered"]
+			},
+			"questions": [
+				{
+					"id": "q1_ownershipType",
+					"bindsTo_template": "ownershipType",
+					"contextKey": "ownershipType",
+					"type": "radio",
+					"uiGroup": "loan_details",
+					"required": true,
+					"question": "Please indicate the type of ownership for the property?",
+					"description": "Lenders need to ensure that the property meets legal requirements and compliances related to ownership rights, land tenure, and property transfer.",
+					"options": [
+						{
+							"label": "Lease Hold",
+							"value": "Lease Hold"
+						},
+						{
+							"label": "Free Hold",
+							"value": "Free Hold"
+						}
+					]
+				},
+				{
+					"id": "q2_propertyNature",
+					"bindsTo_template": "propertyNature",
+					"contextKey": "propertyNature",
+					"type": "radio",
+					"uiGroup": "loan_details",
+					"required": true,
+					"question": "Please specify the nature of property purchase?",
+					"description": "The loan process differ based on how you're buying the property—especially when it comes to disbursing funds and providing the right documents. This mainly depends on whether you're buying directly from a builder or authority, or through are sale from an individual owner .",
+					"options": [
+						{
+							"label": "Direct Sale",
+							"value": "Direct Sale"
+						},
+						{
+							"label": "Resale",
+							"value": "Resale"
+						}
+					],
+					"showWhen": {
+						"!=": [
+							{
+								"var": "ownershipType"
+							},
+							""
+						]
+					}
+				},
+				{
+					"id": "q3_constructionType",
+					"bindsTo_template": "constructionType",
+					"contextKey": "constructionType",
+					"type": "radio",
+					"uiGroup": "loan_details",
+					"required": true,
+					"question": "What type of construction is it?",
+					"options": [
+						{
+							"label": "House/Villa",
+							"value": "House/Villa"
+						},
+						{
+							"label": "Flat",
+							"value": "Flat"
+						},
+						{
+							"label": "Floor",
+							"value": "Floor"
+						}
+					],
+					"showWhen": {
+						"!=": [
+							{
+								"var": "propertyNature"
+							},
+							""
+						]
+					}
+				},
+				{
+					"id": "q_constructionStage",
+					"bindsTo_template": "constructionStage",
+					"contextKey": "constructionStage",
+					"type": "radio",
+					"uiGroup": "loan_details",
+					"required": true,
+					"question": "Please specify the construction stage of the property?",
+					"description": "The loan criteria, documentation, and disbursal process differ based on the property's stage. For under-construction properties, banks release funds to builders according to the Construction Linked Plan or Time Linked Plan (CLP/TLP). For Ready-to-Move properties, banks disburse the entire loan amount at once.",
+					"options": [
+						{
+							"label": "Under Construction",
+							"value": "Under Construction"
+						},
+						{
+							"label": "Ready To Move",
+							"value": "Ready To Move"
+						}
+					],
+					"showWhen": {
+						"!=": [
+							{
+								"var": "constructionType"
+							},
+							""
+						]
+					}
+				},
+				{
+					"id": "q_isPropertyRegisteredOnSeller",
+					"bindsTo_template": "isPropertyRegisteredOnSeller",
+					"contextKey": "isPropertyRegisteredOnSeller",
+					"type": "radio",
+					"uiGroup": "loan_details",
+					"required": true,
+					"question": "Please specify if the selected property is registered in the name of seller(s)?",
+					"description": "If the property hasn't been registered, the transaction is termed as \"Endorsement\" or \"Builder Transfer\". Legal requirements and disbursement procedures differ from registered property cases. If the seller hasn't completed registration and the construction is Ready to Move-in, ensure to check for an Occupancy Certificate. Without it, only select lenders may approve your loan application.",
+					"options": [
+						{
+							"label": "Yes",
+							"value": "Yes"
+						},
+						{
+							"label": "No",
+							"value": "No"
+						}
+					],
+					"showWhen": {
+						"or": [
+							{
+								"and": [
+									{
+										"==": [
+											{
+												"var": "propertyNature"
+											},
+											"Resale"
+										]
+									},
+									{
+										"==": [
+											{
+												"var": "constructionStage"
+											},
+											"Ready To Move"
+										]
+									}
+								]
+							},
+							{
+								"and": [
+									{
+										"==": [
+											{
+												"var": "propertyNature"
+											},
+											"Direct Sale"
+										]
+									},
+									{
+										"!=": [
+											{
+												"var": "constructionStage"
+											},
+											""
+										]
+									}
+								]
+							}
+						]
+					}
+				},
+				{
+					"id": "q_isAnyBuilderDemand",
+					"bindsTo_template": "isAnyBuilderDemand",
+					"contextKey": "isAnyBuilderDemand",
+					"type": "radio",
+					"uiGroup": "loan_details",
+					"required": true,
+					"question": "If any demand from the builder is due?",
+					"description": "There might be outstanding or upcoming demands according to the payment schedule. Seller must settle any outstanding demand to obtain a No Dues certificate from the builder before Transfer/Endorsement. The lender will disburse upcoming demands only after receiving the property papers at their end.",
+					"options": [
+						{
+							"label": "Yes",
+							"value": "Yes"
+						},
+						{
+							"label": "No",
+							"value": "No"
+						}
+					],
+					"showWhen": {
+						"or": [
+							{
+								"==": [
+									{
+										"var": "isPropertyRegisteredOnSeller"
+									},
+									"No"
+								]
+							},
+							{
+								"==": [
+									{
+										"var": "constructionStage"
+									},
+									"Under Construction"
+								]
+							}
+						]
+					}
+				},
+				{
+					"id": "q_outstandingAmount",
+					"bindsTo_template": "outstandingAmount",
+					"contextKey": "outstandingAmount",
+					"type": "number",
+					"uiGroup": "inputNumber",
+					"uiMeta": {
+						"placeholder": "Enter demanded amount"
+					},
+					"required": true,
+					"question": "What is the total amount outstanding according to the payment plan?",
+					"description": "This amount represents what needs to be paid later according to the builder's payment schedule. Amounts under ₹12,000 are not considered significant. In such cases, kindly select “No builder demand.",
+					"showWhen": {
+						"==": [
+							{
+								"var": "isAnyBuilderDemand"
+							},
+							"Yes"
+						]
+					}
+				}
+			]
+		},
+		{
+			"id": "sellerInformation_homeLoan",
+			"title": "A few details from seller",
+			"nextButtonVisibility": {
+				"mode": ["allRequiredAnswered"]
+			},
+			"questions": [
+				{
+					"id": "q_propertyPurchasedBy",
+					"bindsTo_template": "propertyPurchasedBy",
+					"contextKey": "propertyPurchasedBy",
+					"type": "radio",
+					"uiGroup": "loan_details",
+					"required": true,
+					"question": "From where the property is being purchased ?",
+					"options": [
+						{
+							"label": "Builder",
+							"value": "Builder"
+						},
+						{
+							"label": "Authority",
+							"value": "Authority"
+						}
+					],
+					"showWhen": {
+						"==": [
+							{
+								"var": "propertyNature"
+							},
+							"Direct Sale"
+						]
+					}
+				},
+				{
+					"id": "q_nameOfBuilder",
+					"bindsTo_template": "nameOfBuilder",
+					"contextKey": "nameOfBuilder",
+					"type": "text",
+					"uiGroup": "text_fields",
+					"uiMeta": {
+						"placeholder": "full name of builder"
+					},
+					"required": true,
+					"question": "Enter the name of builder.",
+					"showWhen": {
+						"==": [
+							{
+								"var": "propertyPurchasedBy"
+							},
+							"Builder"
+						]
+					}
+				},
+				{
+					"id": "q_nameOfAuthority",
+					"bindsTo_template": "nameOfAuthority",
+					"contextKey": "nameOfAuthority",
+					"type": "text",
+					"uiGroup": "text_fields",
+					"uiMeta": {
+						"placeholder": "full name of Authority"
+					},
+					"required": true,
+					"question": "Enter the name of Authority.",
+					"showWhen": {
+						"==": [
+							{
+								"var": "propertyPurchasedBy"
+							},
+							"Authority"
+						]
+					}
+				},
+				{
+					"id": "q_isPropertyOnLoan",
+					"bindsTo_template": "isPropertyOnLoan",
+					"contextKey": "isPropertyOnLoan",
+					"type": "radio",
+					"uiGroup": "loan_details",
+					"required": true,
+					"question": "Please specify if the property is on loan?",
+					"description": "You'll have to ensure if the seller has an existing loan on the property you're buying, as it can affect your loan options. You may need to use the seller's bank for the loan or have the seller transfer the balance to your bank, which could lead to complications in getting the best terms.",
+					"options": [
+						{
+							"label": "Yes",
+							"value": "Yes"
+						},
+						{
+							"label": "No",
+							"value": "No"
+						}
+					]
+				},
+				{
+					"id": "q_lendersName",
+					"bindsTo_template": "lendersName",
+					"contextKey": "lendersName",
+					"type": "select",
+					"uiGroup": "select_fields",
+					"uiMeta": {
+						"placeholder": "Select your bank"
+					},
+					"required": true,
+					"question": "Please select all the lenders, from where project is approved.",
+					"description": "If any of approved banks aren’t listed here , we're really sorry — we currently don’t have enough data to provide accurate loan or affordability details for those lenders. As a result, we're unable to proceed further with the calculation at this time.",
+					"options": [
+						{
+							"label": "HDFC Bank",
+							"value": "HDFC Bank"
+						},
+						{
+							"label": "SBI Bank",
+							"value": "SBI Bank"
+						},
+						{
+							"label": "Axis Bank",
+							"value": "Axis Bank"
+						},
+						{
+							"label": "ICICI Bank",
+							"value": "ICICI Bank"
+						},
+						{
+							"label": "Canara Bank",
+							"value": "Canara Bank"
+						},
+						{
+							"label": "Bank of Baroda",
+							"value": "Bank of Baroda"
+						},
+						{
+							"label": "Citi Bank",
+							"value": "Citi Bank"
+						},
+						{
+							"label": "Union Bank",
+							"value": "Union Bank"
+						}
+					],
+					"showWhen": {
+						"or": [
+							{
+								"!=": [
+									{
+										"var": "isPropertyOnLoan"
+									},
+									""
+								]
+							},
+							{
+								"or": [
+									{
+										"!=": [
+											{
+												"var": "nameOfBuilder"
+											},
+											""
+										]
+									},
+									{
+										"!=": [
+											{
+												"var": "nameOfAuthority"
+											},
+											""
+										]
+									}
+								]
+							}
+						]
+					}
+				},
+				{
+					"id": "q_sellerLoanBankName",
+					"bindsTo_template": "sellerLoanBankName",
+					"contextKey": "sellerLoanBankName",
+					"type": "select",
+					"uiGroup": "select_fields",
+					"uiMeta": {
+						"placeholder": "Select your bank"
+					},
+					"required": true,
+					"question": "Select the lender from where seller's loan is running.",
+					"options": [
+						{
+							"label": "HDFC Bank",
+							"value": "HDFC Bank"
+						},
+						{
+							"label": "SBI Bank",
+							"value": "SBI Bank"
+						},
+						{
+							"label": "Axis Bank",
+							"value": "Axis Bank"
+						},
+						{
+							"label": "ICICI Bank",
+							"value": "ICICI Bank"
+						},
+						{
+							"label": "Canara Bank",
+							"value": "Canara Bank"
+						},
+						{
+							"label": "Bank of Baroda",
+							"value": "Bank of Baroda"
+						},
+						{
+							"label": "Citi Bank",
+							"value": "Citi Bank"
+						},
+						{
+							"label": "Union Bank",
+							"value": "Union Bank"
+						}
+					],
+					"showWhen": {
+						"!=": [
+							{
+								"var": "isPropertyOnLoan"
+							},
+							"Yes"
+						]
+					}
+				},
+				{
+					"id": "q_foreclosureAmount",
+					"bindsTo_template": "foreclosureAmount",
+					"contextKey": "foreclosureAmount",
+					"type": "number",
+					"uiGroup": "number_fields",
+					"uiMeta": {
+						"placeholder": "enter the foreclosure amount"
+					},
+					"required": true,
+					"question": "What is the foreclosure Amount?",
+					"description": "This Amount will be paid to the seller's Bank.",
+					"showWhen": {
+						"!=": [
+							{
+								"var": "sellerLoanBankName"
+							},
+							""
+						]
+					}
+				},
+				{
+					"id": "q_isSellerNRI",
+					"bindsTo_template": "isSellerNRI",
+					"contextKey": "isSellerNRI",
+					"type": "radio",
+					"uiGroup": "loan_details",
+					"required": true,
+					"question": "From where the property is being purchased ?",
+					"options": [
+						{
+							"label": "Yes",
+							"value": "Yes"
+						},
+						{
+							"label": "No",
+							"value": "No"
+						}
+					],
+					"showWhen": {
+						"!=": [
+							{
+								"var": "foreclosureAmount"
+							},
+							""
+						]
+					}
+				}
+			]
+		},
+		{
+			"id": "tellUs_homeLoan",
+			"title": "Applicant Type",
+			"nextButtonVisibility": {
+				"mode": ["allRequiredAnswered"]
+			},
+			"questions": [
+				{
+					"id": "q_whoIsApplying",
+					"bindsTo_template": "whoIsApplying",
+					"contextKey": "whoIsApplying",
+					"type": "radio",
+					"uiGroup": "loan_details",
+					"required": true,
+					"question": "From where the property is being purchased ?",
+					"options": [
+						{
+							"label": "Individual / Sole-Proprietor",
+							"value": "Individual / Sole-Proprietor"
+						},
+						{
+							"label": "Couple",
+							"value": "Couple"
+						},
+						{
+							"label": "Family",
+							"value": "Family"
+						},
+						{
+							"label": "Company (Non-individual entity)",
+							"value": "Company (Non-individual entity)"
+						}
+					]
+				}
+			]
+		},
+		{
+			"id": "loanStructure_homeLoan",
+			"title": "Applicant(s) Details",
+			"nextButtonVisibility": {
+				"mode": ["allRequiredAnswered"]
+			},
+			"questions": [
+				{
+					"id": "q_nameOfPrimaryApplicant",
+					"bindsTo_template": "nameOfPrimaryApplicant",
+					"contextKey": "nameOfPrimaryApplicant",
+					"questions": "What's the full name of the applicant ?",
+					"description": "How it appears on PAN, Passport, Aadhaar or Driving license.",
+					"type": "text",
+					"uiGroup": "text_fields",
+					"uiMeta": {
+						"placeholder": "Enter the full name"
+					}
+				},
+				{
+					"id": "q_primaryPersonInvolvement",
+					"bindsTo_template": "primaryPersonInvolvement",
+					"contextKey": "primaryPersonInvolvement",
+					"type": "radio",
+					"uiGroup": "loan_details",
+					"required": true,
+					"question": "Please specify the reason for this person's involvement in the loan?",
+					"options": [
+						{
+							"label": "For loan repayment only",
+							"value": "For loan repayment only"
+						},
+						{
+							"label": "Loan repayment and having name on the papers",
+							"value": "Loan repayment and having name on the papers"
+						}
+					],
+					"showWhen": {
+						"!=": [
+							{
+								"var": "nameOfPrimaryApplicant"
+							},
+							""
+						]
+					}
+				},
+				{
+					"id": "q_isPrimaryApplicantNRI",
+					"bindsTo_template": "isPrimaryApplicantNRI",
+					"contextKey": "isPrimaryApplicantNRI",
+					"type": "radio",
+					"uiGroup": "loan_details",
+					"required": true,
+					"question": "Is the applicant NRI?",
+					"options": [
+						{
+							"label": "Yes",
+							"value": "Yes"
+						},
+						{
+							"label": "No",
+							"value": "No"
+						}
+					],
+					"showWhen": {
+						"!=": [
+							{
+								"var": "primaryPersonInvolvement"
+							},
+							""
+						]
+					}
+				},
+				{
+					"id": "q_primaryEmploymentType",
+					"bindsTo_template": "primaryEmploymentType",
+					"contextKey": "primaryEmploymentType",
+					"type": "select",
+					"uiGroup": "select_fields",
+					"uiMeta": {
+						"placeholder": "Select employment type"
+					},
+					"required": true,
+					"question": "What's your employment status?",
+					"options": [
+						{
+							"label": "Employed(Government)",
+							"value": "Employed(Government)"
+						},
+						{
+							"label": "Employed(Private)",
+							"value": "Employed(Private)"
+						},
+						{
+							"label": "Self-employed(Professional)",
+							"value": "Self-employed(Professional)"
+						},
+						{
+							"label": "Self-employed(Businessman)",
+							"value": "Self-employed(Businessman)"
+						},
+						{
+							"label": "Self-employed(Others)",
+							"value": "Self-employed(Others)"
+						},
+						{
+							"label": "Unemployed",
+							"value": "Unemployed"
+						},
+						{
+							"label": "Home-maker",
+							"value": "Home-maker"
+						}
+					],
+					"showWhen": {
+						"!=": [
+							{
+								"var": "fullNameOfApplicant"
+							},
+							""
+						]
+					}
+				},
+				{
+					"id": "q_isPrimaryPFDeduct",
+					"bindsTo_template": "isPrimaryPFDeduct",
+					"contextKey": "isPrimaryPFDeduct",
+					"type": "radio",
+					"uiGroup": "loan_details",
+					"required": true,
+					"question": "If the Provident Fund (PF) is being deducted from salary?(Optional)",
+					"description": "If PF is not deducted from your salary, your employer might not be registered with certain lenders. This could result in your loan being approved at a higher ROI. Don’t worry; we'll inform you of this before submitting your loan application to your chosen lender.",
+					"options": [
+						{
+							"label": "Yes",
+							"value": "Yes",
+							"flagKey": {
+								"isPrimaryPFDeduct": true
+							}
+						},
+						{
+							"label": "No",
+							"value": "No",
+							"flagKey": {
+								"isPrimaryPFDeduct": false
+							}
+						}
+					],
+					"showWhen": {
+						"and": [
+							{
+								"==": [
+									{
+										"var": "whoIsApplying"
+									},
+									"Couple"
+								]
+							},
+							{
+								"==": [
+									{
+										"var": "primaryEmploymentType"
+									},
+									"Employed(Private)"
+								]
+							}
+						]
+					}
+				},
+				{
+					"id": "q_primaryAge",
+					"bindsTo_template": "primaryAge",
+					"contextKey": "primaryAge",
+					"type": "select",
+					"uiGroup": "select_fields",
+					"uiMeta": {
+						"placeholder": "Select Age"
+					},
+					"required": true,
+					"question": "What is your current age? (select completed years only)",
+					"description": "It is required to assess your loan eligibility and tenure for the loan.",
+					"options": [
+						{
+							"label": "19",
+							"value": "19"
+						},
+						{
+							"label": "20",
+							"value": "20"
+						}
+					],
+					"showWhen": {
+						"or": [
+							{
+								"and": [
+									{
+										"==": [
+											{
+												"var": "whoIsApplying"
+											},
+											"Individual / Sole-Proprietor"
+										]
+									},
+									{
+										"!=": [
+											{
+												"var": "primaryEmploymentType"
+											},
+											""
+										]
+									}
+								]
+							},
+							{
+								"and": [
+									{
+										"==": [
+											{
+												"var": "whoIsApplying"
+											},
+											"Couple"
+										]
+									},
+									{
+										"!=": [
+											{
+												"var": "isPrimaryPFDeduct"
+											},
+											""
+										]
+									}
+								]
+							}
+						]
+					}
+				}
+			]
+		},
+		{
+			"id": "basicInfo_homeLoan",
+			"title": "Income and Obligations",
+			"nextButtonVisibility": {
+				"mode": ["allRequiredAnswered"]
+			},
+			"questions": [
+				{
+					"id": "q_yourProfession",
+					"bindsTo_template": "yourProfession",
+					"contextKey": "yourProfession",
+					"type": "select",
+					"uiGroup": "select_fields",
+					"uiMeta": {
+						"placeholder": "Select employment type"
+					},
+					"required": true,
+					"question": "Please select your profession.",
+					"description": "Banks will require you to provide relevant certificates or degrees during the loan application process.",
+					"options": [
+						{
+							"label": "Lawyer",
+							"value": "Lawyer"
+						},
+						{
+							"label": "Charted Accountant(CA)",
+							"value": "Charted Accountant(CA)"
+						},
+						{
+							"label": "MBBS Doctor",
+							"value": "MBBS Doctor"
+						},
+						{
+							"label": "Architect",
+							"value": "Architect"
+						}
+					],
+					"showWhen": {
+						"==": [
+							{
+								"var": "primaryEmploymentType"
+							},
+							"Self-employed(Professional)"
+						]
+					}
+				},
+				{
+					"id": "q_isIncomeTaxAvailable",
+					"bindsTo_template": "isIncomeTaxAvailable",
+					"contextKey": "isIncomeTaxAvailable",
+					"type": "radio",
+					"uiGroup": "loan_details",
+					"required": true,
+					"question": "If Income Tax Returns are available for last three consecutive financial years?",
+					"options": [
+						{
+							"label": "Yes",
+							"value": "Yes",
+							"flagKey": {
+								"isIncomeTaxAvailable": true
+							}
+						},
+						{
+							"label": "No",
+							"value": "No",
+							"flagKey": {
+								"isIncomeTaxAvailable": false
+							}
+						}
+					],
+					"showWhen": {
+						"!=": [
+							{
+								"var": "yourProfession"
+							},
+							""
+						]
+					}
+				},
+				{
+					"id": "q_grossReceipt",
+					"bindsTo_template": "grossReceipt",
+					"contextKey": "grossReceipt",
+					"type": "number",
+					"uiGroup": "inputNumber",
+					"uiMeta": {
+						"placeholder": ["FY2023-24", "FY2022-23", "FY2021-22"]
+					},
+					"required": true,
+					"question": "What were the Gross Receipts in the last three financial years?",
+					"showWhen": {
+						"==": [
+							{
+								"var": "isIncomeTaxAvailable"
+							},
+							"Yes"
+						]
+					}
+				},
+				{
+					"id": "q_netProfit",
+					"bindsTo_template": "netProfit",
+					"contextKey": "netProfit",
+					"type": "number",
+					"uiGroup": "inputNumber",
+					"uiMeta": {
+						"placeholder": ["FY2023-24", "FY2022-23", "FY2021-22"]
+					},
+					"required": true,
+					"question": "What were the Net Profits for the last three financial years?",
+					"showWhen": {
+						"==": [
+							{
+								"var": "isIncomeTaxAvailable"
+							},
+							"Yes"
+						]
+					}
+				},
+				{
+					"id": "q_primaryMonthlyGrossIncome",
+					"bindsTo_template": "primaryMonthlyGrossIncome",
+					"contextKey": "primaryMonthlyGrossIncome",
+					"type": "number",
+					"uiGroup": "inputNumber",
+					"uiMeta": {
+						"placeholder": "enter gross income"
+					},
+					"required": true,
+					"question": "What is the monthly gross income?",
+					"description": "Gross income is your total monthly earnings before deductions (tax, PF, NPS etc). A few banks use it to assess your loan eligibility.",
+					"showWhen": {
+						"!=": [
+							{
+								"var": "primaryEmploymentType"
+							},
+							"Self-employed(Professional)"
+						]
+					}
+				},
+				{
+					"id": "q_primaryMonthlyNetIncome",
+					"bindsTo_template": "primaryMonthlyNetIncome",
+					"contextKey": "primaryMonthlyNetIncome",
+					"type": "number",
+					"uiGroup": "inputNumber",
+					"uiMeta": {
+						"placeholder": "enter fixed monthly income"
+					},
+					"required": true,
+					"question": "What is the monthly net income?",
+					"description": "Net income is your monthly earnings after deductions (tax, PF, NPS etc). It is the amount you receive in your bank account as salary.",
+					"showWhen": {
+						"!=": [
+							{
+								"var": "primaryEmploymentType"
+							},
+							"Self-employed(Professional)"
+						]
+					}
+				},
+				{
+					"id": "q_primaryAdditionalIncome",
+					"bindsTo_template": "primaryAdditionalIncome",
+					"contextKey": "primaryAdditionalIncome",
+					"type": "number",
+					"uiGroup": "inputNumber",
+					"uiMeta": {
+						"placeholder": "enter extra monthly income"
+					},
+					"required": true,
+					"question": "What's the additional monthly income from bonuses, incentives, and rental earnings?",
+					"description": "This includes the average monthly bonus received in the latest financial year (total bonus divided by 12) and the average monthly incentive received in the latest 6 months (total incentive divided by 6).You will need to submit a valid rent agreement and the rent amount should be reflected in your bank statement. Enter zero (0) if there is no additional income.",
+					"showWhen": {
+						"!=": [
+							{
+								"var": "primaryEmploymentType"
+							},
+							"Self-employed(Professional)"
+						]
+					}
+				},
+				{
+					"id": "q_isPrimaryHasOD",
+					"bindsTo_template": "isPrimaryHasOD",
+					"contextKey": "isPrimaryHasOD",
+					"type": "radio",
+					"uiGroup": "loan_details",
+					"required": true,
+					"question": "Have you availed any unsecured Over Draft (OD) facility?",
+					"description": "When you opt for an unsecured OD facility, you are charged interest solely on the amount utilized. However, this is considered a financial obligation when applying for loans. The rationale behind this classification is that you have the flexibility to use the entire approved amount at any given time, potentially converting it into a personal loan.",
+					"options": [
+						{
+							"label": "Yes",
+							"value": "Yes",
+							"flagKey": {
+								"isPrimaryHasOD": true
+							}
+						},
+						{
+							"label": "No",
+							"value": "No",
+							"flagKey": {
+								"isPrimaryHasOD": false
+							}
+						}
+					],
+					"showWhen": {
+						"or": [
+							{
+								"!=": [
+									{
+										"var": "primaryAdditionalIncome"
+									},
+									""
+								]
+							},
+							{
+								"!=": [
+									{
+										"var": "netProfit"
+									},
+									""
+								]
+							}
+						]
+					}
+				},
+				{
+					"id": "q_primaryODLenderName",
+					"bindsTo_template": "primaryODLenderName",
+					"contextKey": "primaryODLenderName",
+					"type": "select",
+					"uiGroup": "selectButton",
+					"uiMeta": {
+						"placeholder": "Choose lender name"
+					},
+					"required": true,
+					"question": "Select the lender from where you have availed the OD facility.",
+					"options": [
+						{
+							"label": "State Bank of India",
+							"value": "State Bank of India"
+						},
+						{
+							"label": "HDFC",
+							"value": "HDFC"
+						}
+					],
+					"showWhen": {
+						"==": [{ "var": "isPrimaryHasOD" }, "Yes"]
+					}
+				},
+				{
+					"id": "q_primaryTenureOfOD",
+					"bindsTo_template": "primaryTenureOfOD",
+					"contextKey": "primaryTenureOfOD",
+					"type": "number",
+					"uiGroup": "inputNumber",
+					"uiMeta": {
+						"placeholder": "enter the tenure"
+					},
+					"required": true,
+					"question": "What is the tenure of OD (in Months)?",
+					"showWhen": {
+						"==": [{ "var": "isPrimaryHasOD" }, "Yes"]
+					}
+				},
+				{
+					"id": "q_primaryROIOfOD",
+					"bindsTo_template": "primaryROIOfOD",
+					"contextKey": "primaryROIOfOD",
+					"type": "number",
+					"uiGroup": "inputNumber",
+					"uiMeta": {
+						"placeholder": "enter the ROI"
+					},
+					"required": true,
+					"question": "Enter your OD rate of Interest (ROI).",
+					"showWhen": {
+						"==": [{ "var": "isPrimaryHasOD" }, "Yes"]
+					}
+				},
+				{
+					"id": "q_primaryLimitOfOD",
+					"bindsTo_template": "primaryLimitOfOD",
+					"contextKey": "primaryLimitOfOD",
+					"type": "number",
+					"uiGroup": "inputNumber",
+					"uiMeta": {
+						"placeholder": "enter your OD limit"
+					},
+					"required": true,
+					"question": "Enter your OD limit.",
+					"showWhen": {
+						"!=": [{ "var": "primaryROIOfOD" }, ""]
+					}
+				},
+				{
+					"id": "q_primaryMonthlyEMI",
+					"bindsTo_template": "primaryMonthlyEMI",
+					"contextKey": "primaryMonthlyEMI",
+					"type": "number",
+					"uiGroup": "inputNumber",
+					"uiMeta": {
+						"placeholder": "enter total EMIs"
+					},
+					"required": true,
+					"question": "What are the monthly EMIs being paid from the account of",
+					"description": "Please enter total Amount of EMIs (Home Loan, Auto Loan, Personal Loan, Credit Card Loan etc). Do not include EMI's of the loans where remaining tenure is less than 12 months or you can close the loan before disbursement of the loan you are going to apply for. Enter zero (0) if there is no EMI.",
+					"showWhen": {
+						"!=": [{ "var": "primaryLimitOfOD" }, ""]
+					}
+				},
+				{
+					"id": "q_primaryCombinedLimitOfCC",
+					"bindsTo_template": "primaryCombinedLimitOfCC",
+					"contextKey": "primaryCombinedLimitOfCC",
+					"type": "number",
+					"uiGroup": "inputNumber",
+					"uiMeta": {
+						"placeholder": "enter credit cards limit"
+					},
+					"required": true,
+					"question": "What is the combined limit of all the credit cards issued in the name of",
+					"showWhen": {
+						"!=": [{ "var": "primaryLimitOfOD" }, ""]
+					}
+				},
+				{
+					"id": "q_primaryCIBILScore",
+					"bindsTo_template": "primaryCIBILScore",
+					"contextKey": "primaryCIBILScore",
+					"type": "select",
+					"uiGroup": "selectButton",
+					"uiMeta": {
+						"placeholder": "Select credit score"
+					},
+					"required": true,
+					"question": "What's the Credit Score?",
+					"description": "The credit score is a crucial factor that lenders consider to determine your creditworthiness. A higher credit score is essential for securing more favorable loan terms and interest rates, directly influencing loan eligibility and approval.",
+					"options": [
+						{
+							"label": "No CIBIL",
+							"value": "No CIBIL"
+						},
+						{
+							"label": "650-699",
+							"value": "650-699"
+						},
+						{
+							"label": "700-729",
+							"value": "700-729"
+						},
+						{
+							"label": "730-749",
+							"value": "730-749"
+						},
+						{
+							"label": "750-779",
+							"value": "750-779"
+						},
+						{
+							"label": "780-799",
+							"value": "780-799"
+						},
+						{
+							"label": "more than 800",
+							"value": "more than 800"
+						}
+					],
+					"showWhen": {
+						"!=": [{ "Var": "primaryCombinedLimitOfCC" }, ""]
+					}
+				},
+				{
+					"id": "q_isPrimaryDefaulter",
+					"bindsTo_template": "isPrimaryDefaulter",
+					"contextKey": "isPrimaryDefaulter",
+					"type": "select",
+					"uiGroup": "selectButton",
+					"required": true,
+					"question": "Have you ever been defaulter",
+					"options": [
+						{
+							"label": "Yes",
+							"value": "Yes",
+							"flagKey": {
+								"isPrimaryDefaulter": true
+							}
+						},
+						{
+							"label": "No",
+							"value": "No",
+							"flagKey": {
+								"isPrimaryDefaulter": false
+							}
+						}
+					],
+					"showWhen": {
+						"!=": [
+							{
+								"var": "primaryCIBILScore"
+							},
+							""
+						]
+					}
+				},
+				{
+					"id": "q_whyPrimaryLowCredit",
+					"bindsTo_template": "whyPrimaryLowCredit",
+					"contextKey": "whyPrimaryLowCredit",
+					"type": "multiple-select",
+					"uiGroup": "select_fields",
+					"uiMeta": {
+						"placeholder": "Select the reason why you have low credit score"
+					},
+					"required": true,
+					"question": "What are the possible reasons behind your low CIBIL score?",
+					"description": "select all the applicable reasons to help us understand what may be impacting your credit score",
+					"options": [
+						{
+							"label": "Delayed EMI",
+							"value": "Delayed EMI"
+						},
+						{
+							"label": "High credit card utilization",
+							"value": "High credit card utilization"
+						},
+						{
+							"label": "No credit history",
+							"value": "No credit history"
+						},
+						{
+							"label": "Frequent use of full credit limit",
+							"value": "Frequent use of full credit limit"
+						},
+						{
+							"label": "Delayed credit card payments",
+							"value": "Delayed credit card payments"
+						},
+						{
+							"label": "Multiple recent loan enquiries",
+							"value": "Multiple recent loan enquiries"
+						},
+						{
+							"label": "Co-applicant default",
+							"value": "Co-applicant default"
+						},
+						{
+							"label": "Loan default",
+							"value": "Loan default"
+						},
+						{
+							"label": "Only unsecured loans in profile",
+							"value": "Only unsecured loans in profile"
+						},
+						{
+							"label": "Minimum due payments only on credit card",
+							"value": "Minimum due payments only on credit card"
+						}
+					],
+					"showWhen": {
+						"!=": [{ "var": "isPrimaryDefaulter" }, ""]
+					}
+				}
+			]
+		},
+		{
+			"id": "mortgageProfile_homeLoan",
+			"title": "Your mortgage profile",
+			"nextButtonVisibility": {
+				"mode": ["allRequiredAnswered"]
+			},
+			"questions": [
+				{
+					"id": "q_mortgageYear",
+					"bindsTo_template": "mortgageYear",
+					"contextKey": "mortgageYear",
+					"type": "select",
+					"uiGroup": "select_fields",
+					"uiMeta": {
+						"placeholder": "Select loan tenure in years"
+					},
+					"required": true,
+					"question": "How long would you like your loan term to be?",
+					"description": "Term is the full length of your home loan - anywhere from 5 to 35 years. A longer term means you'll have lower monthly payments, but you'll pay more interest over time. Don't worry, you can change your mind later.",
+					"options": [
+						{
+							"label": "1 years",
+							"value": "1 years"
+						},
+						{
+							"label": "2 years",
+							"value": "2 years"
+						},
+						{
+							"label": "3 years",
+							"value": "3 years"
+						},
+						{
+							"label": "4 years",
+							"value": "4 years"
+						},
+						{
+							"label": "5 years",
+							"value": "5 years"
+						}
+					]
+				},
+				{
+					"id": "q_dealValue",
+					"bindsTo_template": "dealValue",
+					"contextKey": "dealValue",
+					"type": "number",
+					"uiGroup": "inputNumber",
+					"uiMeta": {
+						"placeholder": "deal value"
+					},
+					"required": true,
+					"question": "What is the assessed market value of the property or the agreed-upon deal value with the seller?",
+					"description": "It's important to note that lenders conduct their own assessments of property value and determine it accordingly. This value may or may not align precisely with the agreed-upon deal value.",
+					"showWhen": {
+						"!=": [{ "var": "mortgageYear" }, ""]
+					},
+					"errorMessage": {
+						"required": true,
+						"message": "We are providing services for the minimum loan amount of 25 Lakhs. Hence the deal Value should be more than 25 Lakhs."
+					},
+					"validation": {
+						"condition": {
+							"<": [
+								{
+									"var": "dealValue"
+								},
+								"2500000"
+							]
+						}
+					}
+				},
+				{
+					"id": "q_downPayment",
+					"bindsTo_template": "downPayment",
+					"contextKey": "downPayment",
+					"type": "number",
+					"uiGroup": "inputNumber",
+					"uiMeta": {
+						"placeholder": "downpayment amount"
+					},
+					"required": true,
+					"question": "How much amount you have for the downpayment ?",
+					"showWhen": {
+						"!=": [{ "var": "dealValue" }, ""]
+					}
+				},
+				{
+					"id": "q_isATSReady",
+					"bindsTo_template": "isATSReady",
+					"contextKey": "isATSReady",
+					"type": "radio",
+					"uiGroup": "loan_details",
+					"required": true,
+					"question": "Is your Agreement to Sell (ATS) ready ?",
+					"options": [
+						{
+							"label": "Yes",
+							"value": "Yes",
+							"flagKey": {
+								"isATSReady": true
+							}
+						},
+						{
+							"label": "No",
+							"value": "No",
+							"flagKey": {
+								"isATSReady": false
+							}
+						}
+					],
+					"showWhen": {
+						"!=": [{ "var": "downPayment" }, ""]
+					}
+				},
+				{
+					"id": "q_ourSuggestionOrBySelf",
+					"bindsTo_template": "ourSuggestionOrBySelf",
+					"contextKey": "ourSuggestionOrBySelf",
+					"type": "radio",
+					"uiGroup": "loan_details",
+					"required": true,
+					"question": "Would you like to know our suggestion for ATS value (Registry Value) or you will decide by yourself?",
+					"options": [
+						{
+							"label": "Suggestion Required",
+							"value": "Suggestion Required"
+						},
+						{
+							"label": "By Myself",
+							"value": "By Myself"
+						}
+					],
+					"showWhen": {
+						"==": [{ "var": "isATSReady" }, "No"]
+					}
+				},
+				{
+					"id": "q_propertyValueAsPerATS",
+					"bindsTo_template": "propertyValueAsPerATS",
+					"contextKey": "propertyValueAsPerATS",
+					"type": "number",
+					"uiGroup": "inputNumber",
+					"uiMeta": {
+						"placeholder": "Sell value"
+					},
+					"required": true,
+					"question": "Property Value as per 'Agreement to Sell' (i.e. ATS document)?",
+					"description": "This will be considered as the registry amount on which stamp duty will be calculated.",
+					"showWhen": {
+						"or": [
+							{
+								"==": [{ "var": "isATSReady" }, "Yes"]
+							},
+							{
+								"and": [
+									{
+										"==": [{ "var": "isATSReady" }, "No"]
+									},
+									{
+										"==": [{ "var": "ourSuggestionOrBySelf" }, "By Myself"]
+									}
+								]
+							}
+						]
+					}
+				},
+				{
+					"id": "q_downpaymentByOwn",
+					"bindsTo_template": "downpaymentByOwn",
+					"contextKey": "downpaymentByOwn",
+					"type": "number",
+					"uiGroup": "inputNumber",
+					"uiMeta": {
+						"placeholder": "Downpayment amount of ATS"
+					},
+					"required": true,
+					"question": "Down Payment (own contribution amount) as per 'Agreement to Sell' document?",
+					"showWhen": {
+						"or": [
+							{
+								"==": [{ "var": "isATSReady" }, "Yes"]
+							},
+							{
+								"and": [
+									{
+										"==": [{ "var": "isATSReady" }, "No"]
+									},
+									{
+										"==": [{ "var": "ourSuggestionOrBySelf" }, "By Myself"]
+									}
+								]
+							}
+						]
+					}
+				}
+			]
+		}
+	]
+}

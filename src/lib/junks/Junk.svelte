@@ -294,3 +294,7 @@
 	<h3>Debug: GST State Error</h3>
 	<pre>{$gstStateError}</pre>
 </div>
+
+
+<!-- city state has different question label  -->
+ <!-- const questionText = currentQuestion.questionLabels[answers.isPropertyIdentified]; -->
