@@ -2686,7 +2686,7 @@
 		},
 		{
 			"id": "loanRequirementPage",
-			"title": "Your Loan Requirements",
+			"title": "Your mortgage profile",
 			"nextButtonVisibility": {
 				"mode": ["allRequiredAnswered"]
 			},
@@ -2701,50 +2701,32 @@
 						"placeholder": "Select loan tenure in years"
 					},
 					"required": true,
-					"question": "How long would you like your loan term to be?",
-					"description": "Choose your preferred loan duration. A longer term means lower monthly payments but more interest over time. You can adjust this later based on your eligibility.",
+					"question": "How long would you like your LAP term to be?",
+					"description": "Term is the full length of your LAP - anywhere from 5 to 15 years. A longer term means you'll have lower monthly payments, but you'll pay more interest over time. Don't worry, you can change your mind later.",
 					"options": [
-						{
-							"label": "1",
-							"value": "1"
-						},
-						{
-							"label": "2",
-							"value": "2"
-						},
-						{
-							"label": "3",
-							"value": "3"
-						},
-						{
-							"label": "4",
-							"value": "4"
-						},
 						{
 							"label": "5",
 							"value": "5"
+						},
+						{
+							"label": "10",
+							"value": "10"
+						},
+						{
+							"label": "15",
+							"value": "15"
 						}
 					]
 				},
 				{
-					"id": "q2_hasSpecificAmount",
-					"bindsTo_template": "hasSpecificAmount",
-					"contextKey": "hasSpecificAmount",
-					"type": "radio",
+					"id": "q2_propCost",
+					"bindsTo_template": "propCost",
+					"contextKey": "propCost",
+					"type": "number",
 					"uiGroup": "loan_details",
 					"required": true,
-					"question": "Do you have a specific loan amount in mind?",
-					"description": "Let us know if you have a particular loan amount requirement. This helps us tailor our offerings to your needs.",
-					"options": [
-						{
-							"label": "Yes",
-							"value": "Yes"
-						},
-						{
-							"label": "No",
-							"value": "No"
-						}
-					],
+					"question": "What would you estimate the current value of the property?",
+					"description": "( Accurate numbers get you accurate offers from lenders. )",
 					"showWhen": {
 						"!=": [{ "var": "mortgageYear" }, ""]
 					}
@@ -2756,20 +2738,20 @@
 					"type": "number",
 					"uiGroup": "number_fields",
 					"uiMeta": {
-						"placeholder": "Enter amount in rupees",
+						"placeholder": "Enter your required amount",
 						"min": 100000,
 						"max": 13915400
 					},
 					"required": true,
-					"question": "Enter your desired loan amount",
-					"description": "You can request a loan amount up to ₹1,39,15,400. Enter a value that aligns with your requirements and repayment capacity.",
+					"question": "Please specify your desired loan amount.",
+					"description": "You can request a loan amount up to ***. Enter a value that aligns with your requirements and repayment capacity.",
 					"showWhen": {
 						"and": [
 							{
 								"!=": [{ "var": "mortgageYear" }, ""]
 							},
 							{
-								"==": [{ "var": "hasSpecificAmount" }, "Yes"]
+								"!=": [{ "var": "propCost" }, ""]
 							}
 						]
 					}
