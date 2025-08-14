@@ -1082,11 +1082,94 @@
 						}
 					],
 					"showWhen": {
-						"!=": [
+						"and": [
 							{
-								"var": "fullNameOfApplicant"
+								"==": [
+									{
+										"var": "tellUsApplying"
+									},
+									"Individual / Sole-Proprietor"
+								]
 							},
-							""
+							{
+								"!=": [
+									{
+										"var": "fullNameOfApplicant"
+									},
+									""
+								]
+							}
+						]
+					}
+				},
+				{
+					"id": "q_PFdeducted",
+					"bindsTo_template": "PFdeducted",
+					"contextKey": "PFdeducted",
+					"type": "radio",
+					"uiGroup": "select_fields",
+					"uiMeta": {
+						"placeholder": "Select employment type"
+					},
+					"required": true,
+					"question": "If the Provident Fund (PF) is being deducted from salary?(Optional)",
+					"description": "If PF is not deducted from your salary, your employer might not be registered with certain lenders. This could result in your loan being approved at a higher ROI. Don’t worry; we'll inform you of this before submitting your loan application to your chosen lender.",
+					"options": [
+						{
+							"label": "Yes",
+							"value": "Yes"
+						},
+						{
+							"label": "No",
+							"value": "No"
+						}
+					],
+					"showWhen": {
+						"and": [
+							{
+								"==": [
+									{
+										"var": "tellUsApplying"
+									},
+									"Individual / Sole-Proprietor"
+								]
+							},
+							{
+								"!=": [
+									{
+										"var": "fullNameOfApplicant"
+									},
+									""
+								]
+							},
+							{
+								"==": [
+									{
+										"var": "EmploymentType"
+									},
+									"Employed(Private)"
+								]
+							}
+						]
+					}
+				},
+				{
+					"id": "q_companyName",
+					"bindsTo_template": "companyName",
+					"contextKey": "companyName",
+					"type": "text",
+					"uiGroup": "text_fields",
+					"uiMeta": {
+						"placeholder": "Enter the full name"
+					},
+					"required": true,
+					"question": "What's the company name?",
+					"showWhen": {
+						"==": [
+							{
+								"var": "tellUsApplying"
+							},
+							"Company (Non-individual entity)"
 						]
 					}
 				},
@@ -1100,7 +1183,7 @@
 						"placeholder": "Select employment type"
 					},
 					"required": true,
-					"question": "What is your current age? (select completed years only)",
+					"question": "What is your current age? or years has your company been in business?",
 					"description": "It is required to assess your loan eligibility and tenure for the loan.",
 					"options": [
 						{
@@ -1113,11 +1196,79 @@
 						}
 					],
 					"showWhen": {
-						"!=": [
+						"or": [
 							{
-								"var": "EmploymentType"
+								"and": [
+									{
+										"==": [
+											{
+												"var": "tellUsApplying"
+											},
+											"Company (Non-individual entity)"
+										]
+									},
+									{
+										"!=": [
+											{
+												"var": "companyName"
+											},
+											""
+										]
+									}
+								]
 							},
-							""
+							{
+								"and": [
+									{
+										"==": [
+											{
+												"var": "tellUsApplying"
+											},
+											"Individual / Sole-Proprietor"
+										]
+									},
+									{
+										"!=": [
+											{
+												"var": "fullNameOfApplicant"
+											},
+											""
+										]
+									},
+									{
+										"or": [
+											{
+												"!=": [
+													{
+														"var": "EmploymentType"
+													},
+													"Employed(Private)"
+												]
+											},
+											{
+												"and": [
+													{
+														"==": [
+															{
+																"var": "EmploymentType"
+															},
+															"Employed(Private)"
+														]
+													},
+													{
+														"!=": [
+															{
+																"var": "PFdeducted"
+															},
+															""
+														]
+													}
+												]
+											}
+										]
+									}
+								]
+							}
 						]
 					}
 				}
