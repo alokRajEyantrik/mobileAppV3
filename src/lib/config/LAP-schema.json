@@ -1835,6 +1835,105 @@
 								]
 							},
 							{
+								"in": [
+									{
+										"var": "creditScore"
+									},
+									["No CIBIL", "650-699"]
+								]
+							},
+							{
+								"!=": [
+									{
+										"var": "isDefaulter"
+									},
+									""
+								]
+							}
+						]
+					}
+				},
+				{
+					"id": "q_obligation",
+					"bindsTo_template": "obligation",
+					"contextKey": "obligation",
+					"type": "radio",
+					"uiGroup": "selectButton",
+					"required": true,
+					"question": "Do you have any obligation?",
+					"options": [
+						{
+							"label": "Yes",
+							"value": "Yes"
+						},
+						{
+							"label": "No",
+							"value": "No"
+						}
+					],
+					"showWhen": {
+						"and": [
+							{
+								"or": [
+									{
+										"and": [
+											{
+												"!=": [
+													{
+														"var": "grossIncome"
+													},
+													""
+												]
+											},
+											{
+												"!=": [
+													{
+														"var": "fixedSalary"
+													},
+													""
+												]
+											}
+										]
+									},
+									{
+										"and": [
+											{
+												"!=": [
+													{
+														"var": "professionType"
+													},
+													""
+												]
+											},
+											{
+												"==": [
+													{
+														"var": "incomeTaxAvailableThreeFinancialYear"
+													},
+													"Yes"
+												]
+											},
+											{
+												"!=": [
+													{
+														"var": "grossReceiptsArray"
+													},
+													""
+												]
+											},
+											{
+												"!=": [
+													{
+														"var": "netProfit"
+													},
+													""
+												]
+											}
+										]
+									}
+								]
+							},
+							{
 								"!=": [
 									{
 										"var": "creditScore"
@@ -1852,25 +1951,7 @@
 							}
 						]
 					}
-				}
-			]
-		},
-		{
-			"id": "existingDetailsPage",
-			"title": "Existing Details",
-			"nextButtonVisibility": {
-				"mode": ["allRequiredAnswered"]
-			},
-			"showWhen": {
-				"==": [
-					{
-						"var": "existingLoan"
-					},
-					"Yes"
-				]
-			},
-
-			"questions": [
+				},
 				{
 					"id": "q1_loanType",
 					"bindsTo_template": "tableLoanEntriesloanType",
@@ -1885,28 +1966,44 @@
 					"description": "Select the type of loan you currently have. This helps us understand your existing financial commitments better.",
 					"options": [
 						{
-							"label": "Business Loan - Unsecured",
-							"value": "Business Loan - Unsecured"
+							"label": "Home Loan",
+							"value": "Home Loan"
 						},
 						{
-							"label": "Business Loan - Secured",
-							"value": "Business Loan - Secured"
+							"label": "Plot and Construction Loan",
+							"value": "Plot and Construction Loan"
 						},
 						{
 							"label": "Loan Against Property",
 							"value": "Loan Against Property"
 						},
 						{
-							"label": "Machinery Loan",
-							"value": "Machinery Loan"
+							"label": "Personal Loan",
+							"value": "Personal Loan"
 						},
 						{
 							"label": "Vehicle Loan",
 							"value": "Vehicle Loan"
 						},
 						{
-							"label": "Property Loan",
-							"value": "Property Loan"
+							"label": "Gold Loan",
+							"value": "Gold Loan"
+						},
+						{
+							"label": "Credit Card Loan",
+							"value": "Credit Card Loan"
+						},
+						{
+							"label": "Consumer Durable Loan",
+							"value": "Consumer Durable Loan"
+						},
+						{
+							"label": "Education Loan",
+							"value": "Education Loan"
+						},
+						{
+							"label": "Insta Loan",
+							"value": "Insta Loan"
 						},
 						{
 							"label": "OD Limit",
@@ -1999,48 +2096,14 @@
 							"value": "Self-funded (before loan disbursement)"
 						},
 						{
-							"label": "will be closed by this loan",
-							"value": "will be closed by this loan"
+							"label": "will be closed by Top-up amount",
+							"value": "will be closed by Top-up amount"
 						},
 						{
 							"label": "continue running as it is",
 							"value": "continue running as it is"
 						}
 					],
-					"errorMessage": {
-						"required": true,
-						"message": "Please select a different reason for the closure plan. You have currently chosen “New Loan” as the reason. However, if your intention is to close this existing loan by consolidating it with a new debt consolidation loan, you need to go back and select the debt consolidation option instead. This is necessary because only the debt consolidation option allows you to close existing loans through this process."
-					},
-					"validation": {
-						"condition": {
-							"and": [
-								{
-									"==": [
-										{
-											"var": "existingLoan"
-										},
-										"Yes"
-									]
-								},
-								{
-									"!=": [
-										{
-											"var": "loanType"
-										},
-										"Debt Consolidation with Extra Funds"
-									]
-								},
-								{
-									"==": [
-										{
-											"var": "tableLoanEntriesselectedToClose"
-										},
-										"will be closed by this loan"
-									]
-								}
-							]
-						}
-					},
 					"showWhen": {
 						"and": [
 							{
@@ -2082,12 +2145,16 @@
 										"var": "tableLoanEntriesloanType"
 									},
 									[
-										"Business Loan - Unsecured",
-										"Business Loan - Secured",
+										"Home Loan",
+										"Plot and Construction Loan",
 										"Loan Against Property",
-										"Machinery Loan",
+										"Personal Loan",
 										"Vehicle Loan",
-										"Property Loan",
+										"Gold Loan",
+										"Credit Card Loan",
+										"Consumer Durable Loan",
+										"Education Loan",
+										"Insta Loan",
 										"Other Type Loan"
 									]
 								]
@@ -2130,12 +2197,16 @@
 										"var": "tableLoanEntriesloanType"
 									},
 									[
-										"Business Loan - Unsecured",
-										"Business Loan - Secured",
+										"Home Loan",
+										"Plot and Construction Loan",
 										"Loan Against Property",
-										"Machinery Loan",
+										"Personal Loan",
 										"Vehicle Loan",
-										"Property Loan",
+										"Gold Loan",
+										"Credit Card Loan",
+										"Consumer Durable Loan",
+										"Education Loan",
+										"Insta Loan",
 										"Other Type Loan"
 									]
 								]
