@@ -1146,6 +1146,118 @@
 			},
 			"questions": [
 				{
+					"id": "q_yourProfession",
+					"bindsTo_template": "yourProfession",
+					"contextKey": "yourProfession",
+					"type": "select",
+					"uiGroup": "select_fields",
+					"uiMeta": {
+						"placeholder": "Select employment type"
+					},
+					"required": true,
+					"question": "Please select your profession.",
+					"description": "Banks will require you to provide relevant certificates or degrees during the loan application process.",
+					"options": [
+						{
+							"label": "Lawyer",
+							"value": "Lawyer"
+						},
+						{
+							"label": "Charted Accountant(CA)",
+							"value": "Charted Accountant(CA)"
+						},
+						{
+							"label": "MBBS Doctor",
+							"value": "MBBS Doctor"
+						},
+						{
+							"label": "Architect",
+							"value": "Architect"
+						}
+					],
+					"showWhen": {
+						"==": [
+							{
+								"var": "primaryEmploymentType"
+							},
+							"Self-employed(Professional)"
+						]
+					}
+				},
+				{
+					"id": "q_isIncomeTaxAvailable",
+					"bindsTo_template": "isIncomeTaxAvailable",
+					"contextKey": "isIncomeTaxAvailable",
+					"type": "radio",
+					"uiGroup": "loan_details",
+					"required": true,
+					"question": "If Income Tax Returns are available for last three consecutive financial years?",
+					"options": [
+						{
+							"label": "Yes",
+							"value": "Yes",
+							"flagKey": {
+								"isIncomeTaxAvailable": true
+							}
+						},
+						{
+							"label": "No",
+							"value": "No",
+							"flagKey": {
+								"isIncomeTaxAvailable": false
+							}
+						}
+					],
+					"showWhen": {
+						"!=": [
+							{
+								"var": "yourProfession"
+							},
+							""
+						]
+					}
+				},
+				{
+					"id": "q_grossReceipt",
+					"bindsTo_template": "grossReceipt",
+					"contextKey": "grossReceipt",
+					"type": "number",
+					"uiGroup": "inputNumber",
+					"uiMeta": {
+						"placeholder": ["FY2023-24", "FY2022-23", "FY2021-22"]
+					},
+					"required": true,
+					"question": "What were the Gross Receipts in the last three financial years?",
+					"showWhen": {
+						"==": [
+							{
+								"var": "isIncomeTaxAvailable"
+							},
+							"Yes"
+						]
+					}
+				},
+				{
+					"id": "q_netProfit",
+					"bindsTo_template": "netProfit",
+					"contextKey": "netProfit",
+					"type": "number",
+					"uiGroup": "inputNumber",
+					"uiMeta": {
+						"placeholder": ["FY2023-24", "FY2022-23", "FY2021-22"]
+					},
+					"required": true,
+					"question": "What were the Net Profits for the last three financial years?",
+					"showWhen": {
+						"==": [
+							{
+								"var": "isIncomeTaxAvailable"
+							},
+							"Yes"
+						]
+					}
+				},
+				{
 					"id": "q_primaryMonthlyGrossIncome",
 					"bindsTo_template": "primaryMonthlyGrossIncome",
 					"contextKey": "primaryMonthlyGrossIncome",
@@ -1156,7 +1268,15 @@
 					},
 					"required": true,
 					"question": "What is the monthly gross income?",
-					"description": "Gross income is your total monthly earnings before deductions (tax, PF, NPS etc). A few banks use it to assess your loan eligibility."
+					"description": "Gross income is your total monthly earnings before deductions (tax, PF, NPS etc). A few banks use it to assess your loan eligibility.",
+					"showWhen": {
+						"!=": [
+							{
+								"var": "primaryEmploymentType"
+							},
+							"Self-employed(Professional)"
+						]
+					}
 				},
 				{
 					"id": "q_primaryMonthlyNetIncome",
@@ -1169,7 +1289,15 @@
 					},
 					"required": true,
 					"question": "What is the monthly net income?",
-					"description": "Net income is your monthly earnings after deductions (tax, PF, NPS etc). It is the amount you receive in your bank account as salary."
+					"description": "Net income is your monthly earnings after deductions (tax, PF, NPS etc). It is the amount you receive in your bank account as salary.",
+					"showWhen": {
+						"!=": [
+							{
+								"var": "primaryEmploymentType"
+							},
+							"Self-employed(Professional)"
+						]
+					}
 				},
 				{
 					"id": "q_primaryAdditionalIncome",
@@ -1182,7 +1310,15 @@
 					},
 					"required": true,
 					"question": "What's the additional monthly income from bonuses, incentives, and rental earnings?",
-					"description": "This includes the average monthly bonus received in the latest financial year (total bonus divided by 12) and the average monthly incentive received in the latest 6 months (total incentive divided by 6).You will need to submit a valid rent agreement and the rent amount should be reflected in your bank statement. Enter zero (0) if there is no additional income."
+					"description": "This includes the average monthly bonus received in the latest financial year (total bonus divided by 12) and the average monthly incentive received in the latest 6 months (total incentive divided by 6).You will need to submit a valid rent agreement and the rent amount should be reflected in your bank statement. Enter zero (0) if there is no additional income.",
+					"showWhen": {
+						"!=": [
+							{
+								"var": "primaryEmploymentType"
+							},
+							"Self-employed(Professional)"
+						]
+					}
 				},
 				{
 					"id": "q_isPrimaryHasOD",
@@ -1210,11 +1346,23 @@
 						}
 					],
 					"showWhen": {
-						"!=": [
+						"or": [
 							{
-								"var": "primaryAdditionalIncome"
+								"!=": [
+									{
+										"var": "primaryAdditionalIncome"
+									},
+									""
+								]
 							},
-							""
+							{
+								"!=": [
+									{
+										"var": "netProfit"
+									},
+									""
+								]
+							}
 						]
 					}
 				},
