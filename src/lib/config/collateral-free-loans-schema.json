@@ -2221,7 +2221,7 @@
 						},
 						{
 							"label": "continue running as it is",
-							"value": "'keep running"
+							"value": "keep running"
 						}
 					],
 					"errorMessage": {

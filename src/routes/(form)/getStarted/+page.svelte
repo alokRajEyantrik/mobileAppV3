@@ -696,7 +696,7 @@
 		testing.update((data) => ({ ...data, [id]: value }));
 	};
 
-	$: console.log($testing, 'testiung');
+	
 </script>
 
 <!-- Main container with responsive padding and max-width -->
