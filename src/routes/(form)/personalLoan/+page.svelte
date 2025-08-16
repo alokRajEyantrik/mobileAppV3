@@ -113,6 +113,7 @@
 			};
 
 			// Format payload to match working test data structure exactly
+			console.log(combinedAnswers,"com");
 			const formattedPayload = {
 				loanTransaction: {
 					LoanName: combinedAnswers.loanName || selectedLoan,
@@ -1130,11 +1131,11 @@
 
 				{#if isLastPage}
 					<button
-						disabled={!canSubmit || isSubmitting}
+						
 						class="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-8 rounded-md transition duration-200 ease-in-out disabled:opacity-50 disabled:cursor-not-allowed"
 						on:click={handleSubmit}
 						aria-label="Submit application"
-						aria-disabled={!canSubmit || isSubmitting}
+						
 					>
 						{#if isSubmitting}
 							Submitting...

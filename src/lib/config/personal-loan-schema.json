@@ -2292,9 +2292,9 @@
 					}
 				},
 				{
-					"id": "q3_loanAmount",
-					"bindsTo_template": "loanAmount",
-					"contextKey": "loanAmount",
+					"id": "q3_RequiredLoanAmount",
+					"bindsTo_template": "RequiredLoanAmount",
+					"contextKey": "RequiredLoanAmount",
 					"type": "number",
 					"uiGroup": "number_fields",
 					"uiMeta": {
