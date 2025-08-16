@@ -2096,689 +2096,355 @@
 			},
 			"questions": [
 				{
-					"group": [
+					"id": "q1_loanType",
+					"existing_bindsTo": "loanType",
+					"contextKey": "loanType",
+					"type": "existingselect",
+					"uiGroup": "select_fields",
+					"uiMeta": {
+						"placeholder": "Choose your existing loan type"
+					},
+					"required": true,
+					"question": "What type of existing loan do you have?",
+					"description": "Select the type of loan you currently have. This helps us understand your existing financial commitments better.",
+					"options": [
 						{
-							"id": "q1_loanType",
-							"bindsTo_template": "loanType",
-							"contextKey": "loanType",
-							"type": "select",
-							"uiGroup": "select_fields",
-							"uiMeta": {
-								"placeholder": "Choose your existing loan type"
-							},
-							"required": true,
-							"question": "What type of existing loan do you have?",
-							"description": "Select the type of loan you currently have. This helps us understand your existing financial commitments better.",
-							"options": [
-								{
-									"label": "Business Loan - Unsecured",
-									"value": "Business Loan - Unsecured"
-								},
-								{
-									"label": "Business Loan - Secured",
-									"value": "Business Loan - Secured"
-								},
-								{
-									"label": "Loan Against Property",
-									"value": "Loan Against Property"
-								},
-								{
-									"label": "Machinery Loan",
-									"value": "Machinery Loan"
-								},
-								{
-									"label": "Vehicle Loan",
-									"value": "Vehicle Loan"
-								},
-								{
-									"label": "Property Loan",
-									"value": "Property Loan"
-								},
-								{
-									"label": "OD Limit",
-									"value": "OD Limit"
-								},
-								{
-									"label": "CC Limit",
-									"value": "CC Limit"
-								},
-								{
-									"label": "Dropline OD",
-									"value": "Dropline OD"
-								},
-								{
-									"label": "Other Type Loan",
-									"value": "Other Type Loan"
-								}
-							]
+							"label": "Business Loan - Unsecured",
+							"value": "Business Loan - Unsecured"
 						},
 						{
-							"id": "q2_bankName",
-							"bindsTo_template": "bankName",
-							"contextKey": "bankName",
-							"type": "select",
-							"uiGroup": "select_fields",
-							"uiMeta": {
-								"placeholder": "Select your bank"
-							},
-							"required": true,
-							"question": "Which bank is your existing loan with?",
-							"description": "Choose the bank where you have your current loan. This information helps us coordinate the loan takeover process if needed.",
-							"options": [
-								{
-									"label": "HDFC Bank",
-									"value": "HDFC Bank"
-								},
-								{
-									"label": "SBI Bank",
-									"value": "SBI Bank"
-								},
-								{
-									"label": "Axis Bank",
-									"value": "Axis Bank"
-								},
-								{
-									"label": "ICICI Bank",
-									"value": "ICICI Bank"
-								},
-								{
-									"label": "Canara Bank",
-									"value": "Canara Bank"
-								},
-								{
-									"label": "Bank of Baroda",
-									"value": "Bank of Baroda"
-								},
-								{
-									"label": "Citi Bank",
-									"value": "Citi Bank"
-								},
-								{
-									"label": "Union Bank",
-									"value": "Union Bank"
-								}
-							],
-							"showWhen": {
-								"!=": [
+							"label": "Business Loan - Secured",
+							"value": "Business Loan - Secured"
+						},
+						{
+							"label": "Loan Against Property",
+							"value": "Loan Against Property"
+						},
+						{
+							"label": "Machinery Loan",
+							"value": "Machinery Loan"
+						},
+						{
+							"label": "Vehicle Loan",
+							"value": "Vehicle Loan"
+						},
+						{
+							"label": "Property Loan",
+							"value": "Property Loan"
+						},
+						{
+							"label": "OD Limit",
+							"value": "OD Limit"
+						},
+						{
+							"label": "CC Limit",
+							"value": "CC Limit"
+						},
+						{
+							"label": "Dropline OD",
+							"value": "Dropline OD"
+						},
+						{
+							"label": "Other Type Loan",
+							"value": "Other Type Loan"
+						}
+					]
+				},
+				{
+					"id": "q2_bankName",
+					"existing_bindsTo": "bankName",
+					"contextKey": "bankName",
+					"type": "existingselect",
+					"uiGroup": "select_fields",
+					"uiMeta": {
+						"placeholder": "Select your bank"
+					},
+					"required": true,
+					"question": "Which bank is your existing loan with?",
+					"description": "Choose the bank where you have your current loan. This information helps us coordinate the loan takeover process if needed.",
+					"options": [
+						{
+							"label": "HDFC Bank",
+							"value": "HDFC Bank"
+						},
+						{
+							"label": "SBI Bank",
+							"value": "SBI Bank"
+						},
+						{
+							"label": "Axis Bank",
+							"value": "Axis Bank"
+						},
+						{
+							"label": "ICICI Bank",
+							"value": "ICICI Bank"
+						},
+						{
+							"label": "Canara Bank",
+							"value": "Canara Bank"
+						},
+						{
+							"label": "Bank of Baroda",
+							"value": "Bank of Baroda"
+						},
+						{
+							"label": "Citi Bank",
+							"value": "Citi Bank"
+						},
+						{
+							"label": "Union Bank",
+							"value": "Union Bank"
+						}
+					]
+					
+				},
+				{
+					"id": "q3_selectedToClose",
+					"existing_bindsTo": "selectedToClose",
+					"contextKey": "selectedToClose",
+					"type": "existingselect",
+					"uiGroup": "select_fields",
+					"uiMeta": {
+						"placeholder": "How do you plan to close this loan?"
+					},
+					"required": true,
+					"question": "How would you like to handle this existing loan?",
+					"description": "Let us know if you'll close this loan yourself or if you'd like us to help with the closure process as part of your new loan.",
+					"options": [
+						{
+							"label": "Self-funded (before loan disbursement)",
+							"value": "Self-funded (before loan disbursement)"
+						},
+						{
+							"label": "will be closed by this loan",
+							"value": "will be closed by this loan"
+						},
+						{
+							"label": "continue running as it is",
+							"value": "keep running"
+						}
+					],
+					"errorMessage": {
+						"required": true,
+						"message": "Please select a different reason for the closure plan. You have currently chosen “New Loan” as the reason. However, if your intention is to close this existing loan by consolidating it with a new debt consolidation loan, you need to go back and select the debt consolidation option instead. This is necessary because only the debt consolidation option allows you to close existing loans through this process."
+					}
+					
+				},
+				{
+					"id": "q4_emi",
+					"existing_bindsTo": "EMIs",
+					"contextKey": "EMIs",
+					"type": "existingtext",
+					"uiGroup": "text_fields",
+					"uiMeta": {
+						"placeholder": "Enter EMI"
+					},
+					"required": true,
+					"question": "What is the EMI for this existing loan?",
+					"description": "EMI (monthly)"
+					
+				},
+				{
+					"id": "q5_tenure",
+					"existing_bindsTo": "tenure",
+					"contextKey": "tenure",
+					"type": "existingtext",
+					"uiGroup": "text_fields",
+					"uiMeta": {
+						"placeholder": "in months"
+					},
+					"required": true,
+					"question": "remaining tenure"
+					
+				},
+				{
+					"id": "q6_totalLimit",
+					"existing_bindsTo": "totalLimit",
+					"contextKey": "totalLimit",
+	 				"type": "text",
+					"uiGroup": "text_fields",
+					"uiMeta": {
+						"placeholder": "Enter total limit"
+					},
+					"required": true,
+					"question": "total limit",
+					"showWhen": {
+						"and": [
+							{
+								"in": [
 									{
 										"var": "loanType"
+									},
+									[
+										"OD Limit",
+										"CC Limit"
+									]
+								]
+							},
+							{
+								"!=": [
+									{
+										"var": "bankName"
+									},
+									""
+								]
+							},
+							{
+								"!=": [
+									{
+										"var": "selectedToClose"
 									},
 									""
 								]
 							}
-						},
-						{
-							"id": "q3_selectedToClose",
-							"bindsTo_template": "selectedToClose",
-							"contextKey": "selectedToClose",
-							"type": "select",
-							"uiGroup": "select_fields",
-							"uiMeta": {
-								"placeholder": "How do you plan to close this loan?"
+						]
+					}
+				},
+				{
+					"id": "q7_sanctionedLimit",
+					"existing_bindsTo": "sanctionedLimit",
+					"contextKey": "sanctionedLimit",
+					"type": "text",
+					"uiGroup": "text_fields",
+					"uiMeta": {
+						"placeholder": "Enter total limit"
+					},
+					"required": true,
+					"question": "sanctioned limit (at the time of start)",
+					"showWhen": {
+						"and": [
+							{
+								"==": [
+									{
+										"var": "loanType"
+									},
+									"Dropline OD"
+								]
 							},
-							"required": true,
-							"question": "How would you like to handle this existing loan?",
-							"description": "Let us know if you'll close this loan yourself or if you'd like us to help with the closure process as part of your new loan.",
-							"options": [
-								{
-									"label": "Self-funded (before loan disbursement)",
-									"value": "Self-funded (before loan disbursement)"
-								},
-								{
-									"label": "will be closed by this loan",
-									"value": "will be closed by this loan"
-								},
-								{
-									"label": "continue running as it is",
-									"value": "continue running as it is"
-								}
-							],
-							"errorMessage": {
-								"required": true,
-								"message": "Please select a different reason for the closure plan. You have currently chosen “New Loan” as the reason. However, if your intention is to close this existing loan by consolidating it with a new debt consolidation loan, you need to go back and select the debt consolidation option instead. This is necessary because only the debt consolidation option allows you to close existing loans through this process."
+							{
+								"!=": [
+									{
+										"var": "bankName"
+									},
+									""
+								]
 							},
-							"validation": {
-								"condition": {
-									"and": [
-										{
-											"==": [
-												{
-													"var": "existingLoan"
-												},
-												"Yes"
-											]
-										},
-										{
-											"!=": [
-												{
-													"var": "loanType"
-												},
-												"Debt Consolidation with Extra Funds"
-											]
-										},
-										{
-											"==": [
-												{
-													"var": "selectedToClose"
-												},
-												"will be closed by this loan"
-											]
-										}
+							{
+								"!=": [
+									{
+										"var": "selectedToClose"
+									},
+									""
+								]
+							}
+						]
+					}
+				},
+				{
+					"id": "q8_remainingLimit",
+					"existing_bindsTo": "remainingLimit",
+					"contextKey": "remainingLimit",
+					"type": "text",
+					"uiGroup": "text_fields",
+					"uiMeta": {
+						"placeholder": "Enter total limit"
+					},
+					"required": true,
+					"question": "remaining limit (current)",
+					"showWhen": {
+						"and": [
+							{
+								"==": [
+									{
+										"var": "loanType"
+									},
+									"Dropline OD"
+								]
+							},
+							{
+								"!=": [
+									{
+										"var": "bankName"
+									},
+									""
+								]
+							},
+							{
+								"!=": [
+									{
+										"var": "selectedToClose"
+									},
+									""
+								]
+							},
+							{
+								"!=": [
+									{
+										"var": "sanctionedLimit"
+									},
+									""
+								]
+							}
+						]
+					}
+				},
+				{
+					"id": "q9_sanctionedTenure",
+					"existing_bindsTo": "sanctionedTenure",
+					"contextKey": "sanctionedTenure",
+					"type": "text",
+					"uiGroup": "text_fields",
+					"uiMeta": {
+						"placeholder": "in months"
+					},
+					"required": true,
+					"question": "sanctioned tenure",
+					"showWhen": {
+						"and": [
+							{
+								"in": [
+									{
+										"var": "loanType"
+									},
+									[
+										"OD Limit",
+										"CC Limit",
+										"Dropline OD"
 									]
-								}
-							},
-							"showWhen": {
-								"and": [
-									{
-										"!=": [
-											{
-												"var": "loanType"
-											},
-											""
-										]
-									},
-									{
-										"!=": [
-											{
-												"var": "bankName"
-											},
-											""
-										]
-									}
 								]
-							}
-						},
-						{
-							"id": "q4_emi",
-							"bindsTo_template": "emi",
-							"contextKey": "emi",
-							"type": "text",
-							"uiGroup": "text_fields",
-							"uiMeta": {
-								"placeholder": "Enter EMI"
 							},
-							"required": true,
-							"question": "What is the EMI for this existing loan?",
-							"description": "EMI (monthly)",
-							"showWhen": {
-								"and": [
+							{
+								"!=": [
 									{
-										"in": [
-											{
-												"var": "loanType"
-											},
-											[
-												"Business Loan - Unsecured",
-												"Business Loan - Secured",
-												"Loan Against Property",
-												"Machinery Loan",
-												"Vehicle Loan",
-												"Property Loan",
-												"Other Type Loan"
-											]
-										]
+										"var": "bankName"
 									},
-									{
-										"!=": [
-											{
-												"var": "bankName"
-											},
-											""
-										]
-									},
-									{
-										"!=": [
-											{
-												"var": "selectedToClose"
-											},
-											""
-										]
-									}
+									""
 								]
-							}
-						},
-						{
-							"id": "q5_tenure",
-							"bindsTo_template": "tenure",
-							"contextKey": "tenure",
-							"type": "text",
-							"uiGroup": "text_fields",
-							"uiMeta": {
-								"placeholder": "in months"
 							},
-							"required": true,
-							"question": "remaining tenure",
-							"showWhen": {
-								"and": [
+							{
+								"!=": [
 									{
-										"in": [
-											{
-												"var": "loanType"
-											},
-											[
-												"Business Loan - Unsecured",
-												"Business Loan - Secured",
-												"Loan Against Property",
-												"Machinery Loan",
-												"Vehicle Loan",
-												"Property Loan",
-												"Other Type Loan"
-											]
-										]
+										"var": "selectedToClose"
 									},
-									{
-										"!=": [
-											{
-												"var": "bankName"
-											},
-											""
-										]
-									},
-									{
-										"!=": [
-											{
-												"var": "selectedToClose"
-											},
-											""
-										]
-									},
-									{
-										"!=": [
-											{
-												"var": "emi"
-											},
-											""
-										]
-									}
+									""
 								]
-							}
-						},
-						{
-							"id": "q6_totalLimit",
-							"bindsTo_template": "totalLimit",
-							"contextKey": "totalLimit",
-							"type": "text",
-							"uiGroup": "text_fields",
-							"uiMeta": {
-								"placeholder": "Enter total limit"
 							},
-							"required": true,
-							"question": "total limit",
-							"showWhen": {
-								"and": [
-									{
-										"in": [
-											{
-												"var": "loanType"
-											},
-											[
-												"OD Limit",
-												"CC Limit"
-											]
-										]
-									},
+							{
+								"or": [
 									{
 										"!=": [
 											{
-												"var": "bankName"
+												"var": "totalLimit"
 											},
 											""
 										]
 									},
 									{
-										"!=": [
-											{
-												"var": "selectedToClose"
-											},
-											""
-										]
-									}
-								]
-							}
-						},
-						{
-							"id": "q7_sanctionedLimit",
-							"bindsTo_template": "sanctionedLimit",
-							"contextKey": "sanctionedLimit",
-							"type": "text",
-							"uiGroup": "text_fields",
-							"uiMeta": {
-								"placeholder": "Enter total limit"
-							},
-							"required": true,
-							"question": "sanctioned limit (at the time of start)",
-							"showWhen": {
-								"and": [
-									{
-										"==": [
-											{
-												"var": "loanType"
-											},
-											"Dropline OD"
-										]
-									},
-									{
-										"!=": [
-											{
-												"var": "bankName"
-											},
-											""
-										]
-									},
-									{
-										"!=": [
-											{
-												"var": "selectedToClose"
-											},
-											""
-										]
-									}
-								]
-							}
-						},
-						{
-							"id": "q8_remainingLimit",
-							"bindsTo_template": "remainingLimit",
-							"contextKey": "remainingLimit",
-							"type": "text",
-							"uiGroup": "text_fields",
-							"uiMeta": {
-								"placeholder": "Enter total limit"
-							},
-							"required": true,
-							"question": "remaining limit (current)",
-							"showWhen": {
-								"and": [
-									{
-										"==": [
-											{
-												"var": "loanType"
-											},
-											"Dropline OD"
-										]
-									},
-									{
-										"!=": [
-											{
-												"var": "bankName"
-											},
-											""
-										]
-									},
-									{
-										"!=": [
-											{
-												"var": "selectedToClose"
-											},
-											""
-										]
-									},
-									{
-										"!=": [
-											{
-												"var": "sanctionedLimit"
-											},
-											""
-										]
-									}
-								]
-							}
-						},
-						{
-							"id": "q9_sanctionedTenure",
-							"bindsTo_template": "sanctionedTenure",
-							"contextKey": "sanctionedTenure",
-							"type": "text",
-							"uiGroup": "text_fields",
-							"uiMeta": {
-								"placeholder": "in months"
-							},
-							"required": true,
-							"question": "sanctioned tenure",
-							"showWhen": {
-								"and": [
-									{
-										"in": [
-											{
-												"var": "loanType"
-											},
-											[
-												"OD Limit",
-												"CC Limit",
-												"Dropline OD"
-											]
-										]
-									},
-									{
-										"!=": [
-											{
-												"var": "bankName"
-											},
-											""
-										]
-									},
-									{
-										"!=": [
-											{
-												"var": "selectedToClose"
-											},
-											""
-										]
-									},
-									{
-										"or": [
+										"and": [
 											{
 												"!=": [
 													{
-														"var": "totalLimit"
-													},
-													""
-												]
-											},
-											{
-												"and": [
-													{
-														"!=": [
-															{
-																"var": "sanctionedLimit"
-															},
-															""
-														]
-													},
-													{
-														"!=": [
-															{
-																"var": "remainingLimit"
-															},
-															""
-														]
-													}
-												]
-											}
-										]
-									}
-								]
-							}
-						},
-						{
-							"id": "q10_remainingTenure",
-							"bindsTo_template": "remainingTenure",
-							"contextKey": "remainingTenure",
-							"type": "text",
-							"uiGroup": "text_fields",
-							"uiMeta": {
-								"placeholder": "in months"
-							},
-							"required": true,
-							"question": "remaining tenure",
-							"showWhen": {
-								"and": [
-									{
-										"==": [
-											{
-												"var": "loanType"
-											},
-											"Dropline OD"
-										]
-									},
-									{
-										"!=": [
-											{
-												"var": "bankName"
-											},
-											""
-										]
-									},
-									{
-										"!=": [
-											{
-												"var": "selectedToClose"
-											},
-											""
-										]
-									},
-									{
-										"!=": [
-											{
-												"var": "sanctionedLimit"
-											},
-											""
-										]
-									},
-									{
-										"!=": [
-											{
-												"var": "remainingLimit"
-											},
-											""
-										]
-									},
-									{
-										"!=": [
-											{
-												"var": "sanctionedTenure"
-											},
-											""
-										]
-									}
-								]
-							}
-						},
-						{
-							"id": "q11_utilizedAmount",
-							"bindsTo_template": "utilizedAmount",
-							"contextKey": "utilizedAmount",
-							"type": "text",
-							"uiGroup": "text_fields",
-							"uiMeta": {
-								"placeholder": "Enter total limit"
-							},
-							"required": true,
-							"question": "utilized amount",
-							"showWhen": {
-								"and": [
-									{
-										"==": [
-											{
-												"var": "loanType"
-											},
-											"Dropline OD"
-										]
-									},
-									{
-										"!=": [
-											{
-												"var": "bankName"
-											},
-											""
-										]
-									},
-									{
-										"!=": [
-											{
-												"var": "selectedToClose"
-											},
-											""
-										]
-									},
-									{
-										"!=": [
-											{
-												"var": "sanctionedLimit"
-											},
-											""
-										]
-									},
-									{
-										"!=": [
-											{
-												"var": "remainingLimit"
-											},
-											""
-										]
-									},
-									{
-										"!=": [
-											{
-												"var": "sanctionedTenure"
-											},
-											""
-										]
-									},
-									{
-										"!=": [
-											{
-												"var": "remainingTenure"
-											},
-											""
-										]
-									}
-								]
-							}
-						},
-						{
-							"id": "q12_interestRate",
-							"bindsTo_template": "interestRate",
-							"contextKey": "interestRate",
-							"type": "text",
-							"uiGroup": "text_fields",
-							"uiMeta": {
-								"placeholder": "enter interest rate"
-							},
-							"required": true,
-							"question": "interest rate (p.a.)",
-							"showWhen": {
-								"and": [
-									{
-										"!=": [
-											{
-												"var": "loanType"
-											},
-											""
-										]
-									},
-									{
-										"!=": [
-											{
-												"var": "bankName"
-											},
-											""
-										]
-									},
-									{
-										"!=": [
-											{
-												"var": "selectedToClose"
-											},
-											""
-										]
-									},
-									{
-										"or": [
-											{
-												"!=": [
-													{
-														"var": "emi"
+														"var": "sanctionedLimit"
 													},
 													""
 												]
@@ -2786,55 +2452,7 @@
 											{
 												"!=": [
 													{
-														"var": "totalLimit"
-													},
-													""
-												]
-											},
-											{
-												"and": [
-													{
-														"!=": [
-															{
-																"var": "sanctionedLimit"
-															},
-															""
-														]
-													},
-													{
-														"!=": [
-															{
-																"var": "remainingLimit"
-															},
-															""
-														]
-													}
-												]
-											}
-										]
-									},
-									{
-										"or": [
-											{
-												"!=": [
-													{
-														"var": "tenure"
-													},
-													""
-												]
-											},
-											{
-												"!=": [
-													{
-														"var": "sanctionedTenure"
-													},
-													""
-												]
-											},
-											{
-												"!=": [
-													{
-														"var": "remainingTenure"
+														"var": "remainingLimit"
 													},
 													""
 												]
@@ -2843,8 +2461,182 @@
 									}
 								]
 							}
-						}
-					]
+						]
+					}
+				},
+				{
+					"id": "q10_remainingTenure",
+					"existing_bindsTo": "remainingTenure",
+					"contextKey": "remainingTenure",
+					"type": "text",
+					"uiGroup": "text_fields",
+					"uiMeta": {
+						"placeholder": "in months"
+					},
+					"required": true,
+					"question": "remaining tenure",
+					"showWhen": {
+						"and": [
+							{
+								"==": [
+									{
+										"var": "loanType"
+									},
+									"Dropline OD"
+								]
+							},
+							{
+								"!=": [
+									{
+										"var": "bankName"
+									},
+									""
+								]
+							},
+							{
+								"!=": [
+									{
+										"var": "selectedToClose"
+									},
+									""
+								]
+							},
+							{
+								"!=": [
+									{
+										"var": "sanctionedLimit"
+									},
+									""
+								]
+							},
+							{
+								"!=": [
+									{
+										"var": "remainingLimit"
+									},
+									""
+								]
+							},
+							{
+								"!=": [
+									{
+										"var": "sanctionedTenure"
+									},
+									""
+								]
+							}
+						]
+					}
+				},
+				{
+					"id": "q11_utilizedAmount",
+					"existing_bindsTo": "utilizedAmount",
+					"contextKey": "utilizedAmount",
+					"type": "text",
+					"uiGroup": "text_fields",
+					"uiMeta": {
+						"placeholder": "Enter total limit"
+					},
+					"required": true,
+					"question": "utilized amount",
+					"showWhen": {
+						"and": [
+							{
+								"==": [
+									{
+										"var": "loanType"
+									},
+									"Dropline OD"
+								]
+							},
+							{
+								"!=": [
+									{
+										"var": "bankName"
+									},
+									""
+								]
+							},
+							{
+								"!=": [
+									{
+										"var": "selectedToClose"
+									},
+									""
+								]
+							},
+							{
+								"!=": [
+									{
+										"var": "sanctionedLimit"
+									},
+									""
+								]
+							},
+							{
+								"!=": [
+									{
+										"var": "remainingLimit"
+									},
+									""
+								]
+							},
+							{
+								"!=": [
+									{
+										"var": "sanctionedTenure"
+									},
+									""
+								]
+							},
+							{
+								"!=": [
+									{
+										"var": "remainingTenure"
+									},
+									""
+								]
+							}
+						]
+					}
+				},
+				{
+					"id": "q12_interestRate",
+					"existing_bindsTo": "interestRate",
+					"contextKey": "interestRate",
+					"type": "existingtext",
+					"uiGroup": "text_fields",
+					"uiMeta": {
+						"placeholder": "enter interest rate"
+					},
+					"required": true,
+					"question": "interest rate (p.a.)"
+				
+				},
+				{"id": "q12_addButton",
+					"existing_bindsTo": "addButton",
+					"contextKey": "addButton",
+					"uiGroup": "add_button",
+					"type": "button",
+					"question": "Add",
+					"disabledCondition": {
+						"anyEmpty": [
+							"loanType",
+							"bankName",
+							"selectedToClose",
+							"EMIs",
+							"tenure",
+							"interestRate"
+						]
+					},
+					"showWhen": {
+						"==": [
+							{
+								"var": "existingLoan"
+							},
+							"Yes"
+						]
+					}
 				}
 			]
 		},

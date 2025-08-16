@@ -1022,7 +1022,7 @@
 		{
 			"id": "loanStructurePage",
 			"title": "Applicant(s) Details",
-			"bindsTo_template": "allExistingApplicantDetails",
+			"bindsTo_template": "allApplicantDetails",
 			"nextButtonVisibility": {
 				"mode": ["allRequiredAnswered"]
 			},
@@ -1044,7 +1044,46 @@
 							{
 								"var": "tellUsApplying"
 							},
-							"Individual / Sole-Proprietor"
+							["Individual / Sole-Proprietor", "Couple"]
+						]
+					}
+				},
+				{
+					"id": "q_existingRoleOfPerson",
+					"bindsTo_template": "existingRoleOfPerson",
+					"contextKey": "existingRoleOfPerson",
+					"type": "radio",
+					"uiGroup": "select_fields",
+					"required": true,
+					"question": "Please specify the reason for this person's involvement in the loan?",
+					"options": [
+						{
+							"label": "or loan repayment only",
+							"value": "or loan repayment only"
+						},
+						{
+							"label": "Loan repayment and having name on the property papers",
+							"value": "Loan repayment and having name on the property papers"
+						}
+					],
+					"showWhen": {
+						"and": [
+							{
+								"==": [
+									{
+										"var": "tellUsApplying"
+									},
+									["Individual / Sole-Proprietor", "Couple"]
+								]
+							},
+							{
+								"!=": [
+									{
+										"var": "fullNameOfApplicant"
+									},
+									""
+								]
+							}
 						]
 					}
 				},
@@ -1082,11 +1121,94 @@
 						}
 					],
 					"showWhen": {
-						"!=": [
+						"and": [
 							{
-								"var": "fullNameOfApplicant"
+								"==": [
+									{
+										"var": "tellUsApplying"
+									},
+									"Individual / Sole-Proprietor"
+								]
 							},
-							""
+							{
+								"!=": [
+									{
+										"var": "fullNameOfApplicant"
+									},
+									""
+								]
+							}
+						]
+					}
+				},
+				{
+					"id": "q_PFdeducted",
+					"bindsTo_template": "PFdeducted",
+					"contextKey": "PFdeducted",
+					"type": "radio",
+					"uiGroup": "select_fields",
+					"uiMeta": {
+						"placeholder": "Select employment type"
+					},
+					"required": true,
+					"question": "If the Provident Fund (PF) is being deducted from salary?(Optional)",
+					"description": "If PF is not deducted from your salary, your employer might not be registered with certain lenders. This could result in your loan being approved at a higher ROI. Don’t worry; we'll inform you of this before submitting your loan application to your chosen lender.",
+					"options": [
+						{
+							"label": "Yes",
+							"value": "Yes"
+						},
+						{
+							"label": "No",
+							"value": "No"
+						}
+					],
+					"showWhen": {
+						"and": [
+							{
+								"==": [
+									{
+										"var": "tellUsApplying"
+									},
+									"Individual / Sole-Proprietor"
+								]
+							},
+							{
+								"!=": [
+									{
+										"var": "fullNameOfApplicant"
+									},
+									""
+								]
+							},
+							{
+								"==": [
+									{
+										"var": "EmploymentType"
+									},
+									"Employed(Private)"
+								]
+							}
+						]
+					}
+				},
+				{
+					"id": "q_companyName",
+					"bindsTo_template": "companyName",
+					"contextKey": "companyName",
+					"type": "text",
+					"uiGroup": "text_fields",
+					"uiMeta": {
+						"placeholder": "Enter the full name"
+					},
+					"required": true,
+					"question": "What's the company name?",
+					"showWhen": {
+						"==": [
+							{
+								"var": "tellUsApplying"
+							},
+							"Company (Non-individual entity)"
 						]
 					}
 				},
@@ -1100,7 +1222,7 @@
 						"placeholder": "Select employment type"
 					},
 					"required": true,
-					"question": "What is your current age? (select completed years only)",
+					"question": "What is your current age? or years has your company been in business?",
 					"description": "It is required to assess your loan eligibility and tenure for the loan.",
 					"options": [
 						{
@@ -1113,32 +1235,762 @@
 						}
 					],
 					"showWhen": {
-						"!=": [
+						"or": [
 							{
-								"var": "EmploymentType"
+								"and": [
+									{
+										"==": [
+											{
+												"var": "tellUsApplying"
+											},
+											"Company (Non-individual entity)"
+										]
+									},
+									{
+										"!=": [
+											{
+												"var": "companyName"
+											},
+											""
+										]
+									}
+								]
 							},
-							""
+							{
+								"and": [
+									{
+										"==": [
+											{
+												"var": "tellUsApplying"
+											},
+											"Individual / Sole-Proprietor"
+										]
+									},
+									{
+										"!=": [
+											{
+												"var": "fullNameOfApplicant"
+											},
+											""
+										]
+									},
+									{
+										"or": [
+											{
+												"!=": [
+													{
+														"var": "EmploymentType"
+													},
+													"Employed(Private)"
+												]
+											},
+											{
+												"and": [
+													{
+														"==": [
+															{
+																"var": "EmploymentType"
+															},
+															"Employed(Private)"
+														]
+													},
+													{
+														"!=": [
+															{
+																"var": "PFdeducted"
+															},
+															""
+														]
+													}
+												]
+											}
+										]
+									}
+								]
+							}
 						]
 					}
 				}
 			]
 		},
 		{
-			"id": "existingDetailsPage",
-			"title": "Existing Details",
+			"id": "basicInfoPage",
+			"title": "Income and Obligations",
+			"bindsTo_template": "allApplicantDetails",
 			"nextButtonVisibility": {
 				"mode": ["allRequiredAnswered"]
 			},
-			"showWhen": {
-				"==": [
-					{
-						"var": "existingLoan"
-					},
-					"Yes"
-				]
-			},
-
 			"questions": [
+				{
+					"id": "q1_grossIncome",
+					"bindsTo_template": "grossIncome",
+					"contextKey": "grossIncome",
+					"type": "text",
+					"uiGroup": "text_fields",
+					"uiMeta": {
+						"placeholder": "Enter gross income"
+					},
+					"required": true,
+					"question": "What is the monthly gross income?",
+					"description": "Gross income is your total monthly earnings before deductions (tax, PF, NPS, etc) A few banks use it to assess your loan eligibility",
+					"showWhen": {
+						"in": [
+							{
+								"var": "EmploymentType"
+							},
+							["Employed(Government)", "Employed(Private)"]
+						]
+					}
+				},
+				{
+					"id": "q2_fixedSalary",
+					"bindsTo_template": "fixedSalary",
+					"contextKey": "fixedSalary",
+					"type": "text",
+					"uiGroup": "text_fields",
+					"uiMeta": {
+						"placeholder": "Enter fixed monthly salary"
+					},
+					"required": true,
+					"question": "What is the monthly net income?",
+					"description": "Net income is your monthly earnings after deductions (tax, PF, NPS, etc) It is the amount you receive in your bank account as salary",
+					"errorMessage": {
+						"required": true,
+						"message": "Gross income should be greater than or equal to fixed salary"
+					},
+					"validation": {
+						"condition": {
+							"<": [{ "var": "grossIncome" }, { "var": "fixedSalary" }]
+						}
+					},
+					"showWhen": {
+						"!=": [
+							{
+								"var": "grossIncome"
+							},
+							""
+						]
+					}
+				},
+				{
+					"id": "q3_monthlyOtherIncome",
+					"bindsTo_template": "monthlyOtherIncome",
+					"contextKey": "monthlyOtherIncome",
+					"type": "text",
+					"uiGroup": "text_fields",
+					"uiMeta": {
+						"placeholder": "extra monthly income"
+					},
+					"required": true,
+					"question": "What's the additional monthly income from bonuses, incentives, and rental earnings?",
+					"description": "This includes the average monthly bonus received in the latest financial year (total bonus divided by 12) and the average monthly incentive received in the latest 6 months (total incentive divided by 6). You will need to submit a valid rent agreement, and the rent amount should be reflected in your bank statement Enter zero (0) if there is no additional income",
+					"showWhen": {
+						"and": [
+							{
+								"!=": [
+									{
+										"var": "grossIncome"
+									},
+									""
+								]
+							},
+							{
+								"!=": [
+									{
+										"var": "fixedSalary"
+									},
+									""
+								]
+							}
+						]
+					}
+				},
+				{
+					"id": "q_professionType",
+					"bindsTo_template": "professionType",
+					"contextKey": "professionType",
+					"type": "select",
+					"uiGroup": "selectButton",
+					"uiMeta": {
+						"placeholder": "Select profession"
+					},
+					"required": true,
+					"question": "Please select your profession",
+					"description": "Banks will require you to provide relevant certificates or degrees during the loan application process",
+					"options": [
+						{
+							"label": "Lawyer",
+							"value": "Lawyer"
+						},
+						{
+							"label": "Charted Accountant",
+							"value": "Charted Accountant"
+						},
+						{
+							"label": "MBBS Doctor",
+							"value": "MBBS Doctor"
+						},
+						{
+							"label": "Architect",
+							"value": "Architect"
+						}
+					],
+					"showWhen": {
+						"==": [
+							{
+								"var": "EmploymentType"
+							},
+							["Self-employed(Professional)"]
+						]
+					}
+				},
+				{
+					"id": "q_incomeTaxAvailableThreeFinancialYear",
+					"bindsTo_template": "incomeTaxAvailableThreeFinancialYear",
+					"contextKey": "incomeTaxAvailableThreeFinancialYear",
+					"type": "radio",
+					"uiGroup": "loan_details",
+					"required": true,
+					"question": "If Income Tax Returns are available for last three consecutive financial years?",
+					"options": [
+						{
+							"label": "Yes",
+							"value": "Yes",
+							"flagKey": {
+								"isITRAvailable": true
+							}
+						},
+						{
+							"label": "No",
+							"value": "No",
+							"flagKey": {
+								"isITRAvailable": false
+							}
+						}
+					],
+					"errorMessage": {
+						"required": true,
+						"message": "We regret to inform you that we are currently unable to proceed with your request due to our service constraints."
+					},
+					"validation": {
+						"condition": {
+							"!=": [
+								{
+									"var": "incomeTaxAvailableThreeFinancialYear"
+								},
+								"Yes"
+							]
+						}
+					},
+					"showWhen": {
+						"!=": [
+							{
+								"var": "professionType"
+							},
+							""
+						]
+					}
+				},
+				{
+					"id": "q_grossReceiptsArray",
+					"bindsTo_template": "grossReceiptsArray",
+					"contextKey": "grossReceiptsArray",
+					"type": "number",
+					"uiGroup": "inputNumber",
+					"uiMeta": {
+						"placeholder": ["FY2023-24", "FY2022-23", "FY2021-22"]
+					},
+					"required": true,
+					"question": "What were the Gross Receipts in the last three financial years?",
+					"showWhen": {
+						"and": [
+							{
+								"!=": [
+									{
+										"var": "professionType"
+									},
+									""
+								]
+							},
+							{
+								"==": [
+									{
+										"var": "incomeTaxAvailableThreeFinancialYear"
+									},
+									"Yes"
+								]
+							}
+						]
+					}
+				},
+				{
+					"id": "q_netProfit",
+					"bindsTo_template": "netProfit",
+					"contextKey": "netProfit",
+					"type": "number",
+					"uiGroup": "inputNumber",
+					"uiMeta": {
+						"placeholder": ["FY2023-24", "FY2022-23", "FY2021-22"]
+					},
+					"required": true,
+					"question": "What were the Net Profits for the last three financial years?",
+					"showWhen": {
+						"and": [
+							{
+								"!=": [
+									{
+										"var": "professionType"
+									},
+									""
+								]
+							},
+							{
+								"==": [
+									{
+										"var": "incomeTaxAvailableThreeFinancialYear"
+									},
+									"Yes"
+								]
+							},
+							{
+								"!=": [
+									{
+										"var": "grossReceiptsArray"
+									},
+									""
+								]
+							}
+						]
+					}
+				},
+				{
+					"id": "q_creditScore",
+					"bindsTo_template": "creditScore",
+					"contextKey": "creditScore",
+					"type": "select",
+					"uiGroup": "selectButton",
+					"uiMeta": {
+						"placeholder": "Select credit score"
+					},
+					"required": true,
+					"question": "What's the Credit Score?",
+					"description": "The credit score is a crucial factor that lenders consider to determine your creditworthiness A higher credit score is essential for securing more favorable loan terms and interest rates, directly influencing loan eligibility and approval.",
+					"options": [
+						{
+							"label": "No CIBIL",
+							"value": "No CIBIL"
+						},
+						{
+							"label": "650-699",
+							"value": "650-699"
+						},
+						{
+							"label": "700-729",
+							"value": "700-729"
+						},
+						{
+							"label": "730-749",
+							"value": "730-749"
+						},
+						{
+							"label": "750-779",
+							"value": "750-779"
+						},
+						{
+							"label": "780-799",
+							"value": "780-799"
+						},
+						{
+							"label": "more than 800",
+							"value": "more than 800"
+						}
+					],
+					"showWhen": {
+						"or": [
+							{
+								"and": [
+									{
+										"!=": [
+											{
+												"var": "grossIncome"
+											},
+											""
+										]
+									},
+									{
+										"!=": [
+											{
+												"var": "fixedSalary"
+											},
+											""
+										]
+									}
+								]
+							},
+							{
+								"and": [
+									{
+										"!=": [
+											{
+												"var": "professionType"
+											},
+											""
+										]
+									},
+									{
+										"==": [
+											{
+												"var": "incomeTaxAvailableThreeFinancialYear"
+											},
+											"Yes"
+										]
+									},
+									{
+										"!=": [
+											{
+												"var": "grossReceiptsArray"
+											},
+											""
+										]
+									},
+									{
+										"!=": [
+											{
+												"var": "netProfit"
+											},
+											""
+										]
+									}
+								]
+							}
+						]
+					}
+				},
+				{
+					"id": "q_isDefaulter",
+					"bindsTo_template": "isDefaulter",
+					"contextKey": "isDefaulter",
+					"type": "select",
+					"uiGroup": "selectButton",
+					"required": true,
+					"question": "Have you ever been defaulter",
+					"options": [
+						{
+							"label": "Yes",
+							"value": "Yes"
+						},
+						{
+							"label": "No",
+							"value": "No"
+						}
+					],
+					"showWhen": {
+						"and": [
+							{
+								"or": [
+									{
+										"and": [
+											{
+												"!=": [
+													{
+														"var": "grossIncome"
+													},
+													""
+												]
+											},
+											{
+												"!=": [
+													{
+														"var": "fixedSalary"
+													},
+													""
+												]
+											}
+										]
+									},
+									{
+										"and": [
+											{
+												"!=": [
+													{
+														"var": "professionType"
+													},
+													""
+												]
+											},
+											{
+												"==": [
+													{
+														"var": "incomeTaxAvailableThreeFinancialYear"
+													},
+													"Yes"
+												]
+											},
+											{
+												"!=": [
+													{
+														"var": "grossReceiptsArray"
+													},
+													""
+												]
+											},
+											{
+												"!=": [
+													{
+														"var": "netProfit"
+													},
+													""
+												]
+											}
+										]
+									}
+								]
+							},
+							{
+								"!=": [
+									{
+										"var": "creditScore"
+									},
+									""
+								]
+							}
+						]
+					}
+				},
+				{
+					"id": "q_whyLowCredit",
+					"bindsTo_template": "whyLowCredit",
+					"contextKey": "whyLowCredit",
+					"type": "multiple-select",
+					"uiGroup": "select_fields",
+					"uiMeta": {
+						"placeholder": "Select the reason why you have low credit score"
+					},
+					"required": true,
+					"question": "What are the possible reasons behind your low CIBIL score?",
+					"description": "select all the applicable reasons to help us understand what may be impacting your credit score",
+					"options": [
+						{
+							"label": "Delayed EMI",
+							"value": "Delayed EMI"
+						},
+						{
+							"label": "High credit card utilization",
+							"value": "High credit card utilization"
+						},
+						{
+							"label": "No credit history",
+							"value": "No credit history"
+						},
+						{
+							"label": "Frequent use of full credit limit",
+							"value": "Frequent use of full credit limit"
+						},
+						{
+							"label": "Delayed credit card payments",
+							"value": "Delayed credit card payments"
+						},
+						{
+							"label": "Multiple recent loan enquiries",
+							"value": "Multiple recent loan enquiries"
+						},
+						{
+							"label": "Co-applicant default",
+							"value": "Co-applicant default"
+						},
+						{
+							"label": "Loan default",
+							"value": "Loan default"
+						},
+						{
+							"label": "Only unsecured loans in profile",
+							"value": "Only unsecured loans in profile"
+						},
+						{
+							"label": "Minimum due payments only on credit card",
+							"value": "Minimum due payments only on credit card"
+						}
+					],
+					"showWhen": {
+						"and": [
+							{
+								"or": [
+									{
+										"and": [
+											{
+												"!=": [
+													{
+														"var": "grossIncome"
+													},
+													""
+												]
+											},
+											{
+												"!=": [
+													{
+														"var": "fixedSalary"
+													},
+													""
+												]
+											}
+										]
+									},
+									{
+										"and": [
+											{
+												"!=": [
+													{
+														"var": "professionType"
+													},
+													""
+												]
+											},
+											{
+												"==": [
+													{
+														"var": "incomeTaxAvailableThreeFinancialYear"
+													},
+													"Yes"
+												]
+											},
+											{
+												"!=": [
+													{
+														"var": "grossReceiptsArray"
+													},
+													""
+												]
+											},
+											{
+												"!=": [
+													{
+														"var": "netProfit"
+													},
+													""
+												]
+											}
+										]
+									}
+								]
+							},
+							{
+								"in": [
+									{
+										"var": "creditScore"
+									},
+									["No CIBIL", "650-699"]
+								]
+							},
+							{
+								"!=": [
+									{
+										"var": "isDefaulter"
+									},
+									""
+								]
+							}
+						]
+					}
+				},
+				{
+					"id": "q_obligation",
+					"bindsTo_template": "obligation",
+					"contextKey": "obligation",
+					"type": "radio",
+					"uiGroup": "selectButton",
+					"required": true,
+					"question": "Do you have any obligation?",
+					"options": [
+						{
+							"label": "Yes",
+							"value": "Yes"
+						},
+						{
+							"label": "No",
+							"value": "No"
+						}
+					],
+					"showWhen": {
+						"and": [
+							{
+								"or": [
+									{
+										"and": [
+											{
+												"!=": [
+													{
+														"var": "grossIncome"
+													},
+													""
+												]
+											},
+											{
+												"!=": [
+													{
+														"var": "fixedSalary"
+													},
+													""
+												]
+											}
+										]
+									},
+									{
+										"and": [
+											{
+												"!=": [
+													{
+														"var": "professionType"
+													},
+													""
+												]
+											},
+											{
+												"==": [
+													{
+														"var": "incomeTaxAvailableThreeFinancialYear"
+													},
+													"Yes"
+												]
+											},
+											{
+												"!=": [
+													{
+														"var": "grossReceiptsArray"
+													},
+													""
+												]
+											},
+											{
+												"!=": [
+													{
+														"var": "netProfit"
+													},
+													""
+												]
+											}
+										]
+									}
+								]
+							},
+							{
+								"!=": [
+									{
+										"var": "creditScore"
+									},
+									""
+								]
+							},
+							{
+								"!=": [
+									{
+										"var": "isDefaulter"
+									},
+									""
+								]
+							}
+						]
+					}
+				},
 				{
 					"id": "q1_loanType",
 					"bindsTo_template": "tableLoanEntriesloanType",
@@ -1153,28 +2005,44 @@
 					"description": "Select the type of loan you currently have. This helps us understand your existing financial commitments better.",
 					"options": [
 						{
-							"label": "Business Loan - Unsecured",
-							"value": "Business Loan - Unsecured"
+							"label": "Home Loan",
+							"value": "Home Loan"
 						},
 						{
-							"label": "Business Loan - Secured",
-							"value": "Business Loan - Secured"
+							"label": "Plot and Construction Loan",
+							"value": "Plot and Construction Loan"
 						},
 						{
 							"label": "Loan Against Property",
 							"value": "Loan Against Property"
 						},
 						{
-							"label": "Machinery Loan",
-							"value": "Machinery Loan"
+							"label": "Personal Loan",
+							"value": "Personal Loan"
 						},
 						{
 							"label": "Vehicle Loan",
 							"value": "Vehicle Loan"
 						},
 						{
-							"label": "Property Loan",
-							"value": "Property Loan"
+							"label": "Gold Loan",
+							"value": "Gold Loan"
+						},
+						{
+							"label": "Credit Card Loan",
+							"value": "Credit Card Loan"
+						},
+						{
+							"label": "Consumer Durable Loan",
+							"value": "Consumer Durable Loan"
+						},
+						{
+							"label": "Education Loan",
+							"value": "Education Loan"
+						},
+						{
+							"label": "Insta Loan",
+							"value": "Insta Loan"
 						},
 						{
 							"label": "OD Limit",
@@ -1267,48 +2135,14 @@
 							"value": "Self-funded (before loan disbursement)"
 						},
 						{
-							"label": "will be closed by this loan",
-							"value": "will be closed by this loan"
+							"label": "will be closed by Top-up amount",
+							"value": "will be closed by Top-up amount"
 						},
 						{
 							"label": "continue running as it is",
 							"value": "continue running as it is"
 						}
 					],
-					"errorMessage": {
-						"required": true,
-						"message": "Please select a different reason for the closure plan. You have currently chosen “New Loan” as the reason. However, if your intention is to close this existing loan by consolidating it with a new debt consolidation loan, you need to go back and select the debt consolidation option instead. This is necessary because only the debt consolidation option allows you to close existing loans through this process."
-					},
-					"validation": {
-						"condition": {
-							"and": [
-								{
-									"==": [
-										{
-											"var": "existingLoan"
-										},
-										"Yes"
-									]
-								},
-								{
-									"!=": [
-										{
-											"var": "loanType"
-										},
-										"Debt Consolidation with Extra Funds"
-									]
-								},
-								{
-									"==": [
-										{
-											"var": "tableLoanEntriesselectedToClose"
-										},
-										"will be closed by this loan"
-									]
-								}
-							]
-						}
-					},
 					"showWhen": {
 						"and": [
 							{
@@ -1350,12 +2184,16 @@
 										"var": "tableLoanEntriesloanType"
 									},
 									[
-										"Business Loan - Unsecured",
-										"Business Loan - Secured",
+										"Home Loan",
+										"Plot and Construction Loan",
 										"Loan Against Property",
-										"Machinery Loan",
+										"Personal Loan",
 										"Vehicle Loan",
-										"Property Loan",
+										"Gold Loan",
+										"Credit Card Loan",
+										"Consumer Durable Loan",
+										"Education Loan",
+										"Insta Loan",
 										"Other Type Loan"
 									]
 								]
@@ -1398,12 +2236,16 @@
 										"var": "tableLoanEntriesloanType"
 									},
 									[
-										"Business Loan - Unsecured",
-										"Business Loan - Secured",
+										"Home Loan",
+										"Plot and Construction Loan",
 										"Loan Against Property",
-										"Machinery Loan",
+										"Personal Loan",
 										"Vehicle Loan",
-										"Property Loan",
+										"Gold Loan",
+										"Credit Card Loan",
+										"Consumer Durable Loan",
+										"Education Loan",
+										"Insta Loan",
 										"Other Type Loan"
 									]
 								]
@@ -1883,7 +2725,7 @@
 		},
 		{
 			"id": "loanRequirementPage",
-			"title": "Your Loan Requirements",
+			"title": "Your mortgage profile",
 			"nextButtonVisibility": {
 				"mode": ["allRequiredAnswered"]
 			},
@@ -1898,50 +2740,32 @@
 						"placeholder": "Select loan tenure in years"
 					},
 					"required": true,
-					"question": "How long would you like your loan term to be?",
-					"description": "Choose your preferred loan duration. A longer term means lower monthly payments but more interest over time. You can adjust this later based on your eligibility.",
+					"question": "How long would you like your LAP term to be?",
+					"description": "Term is the full length of your LAP - anywhere from 5 to 15 years. A longer term means you'll have lower monthly payments, but you'll pay more interest over time. Don't worry, you can change your mind later.",
 					"options": [
-						{
-							"label": "1",
-							"value": "1"
-						},
-						{
-							"label": "2",
-							"value": "2"
-						},
-						{
-							"label": "3",
-							"value": "3"
-						},
-						{
-							"label": "4",
-							"value": "4"
-						},
 						{
 							"label": "5",
 							"value": "5"
+						},
+						{
+							"label": "10",
+							"value": "10"
+						},
+						{
+							"label": "15",
+							"value": "15"
 						}
 					]
 				},
 				{
-					"id": "q2_hasSpecificAmount",
-					"bindsTo_template": "hasSpecificAmount",
-					"contextKey": "hasSpecificAmount",
-					"type": "radio",
+					"id": "q2_propCost",
+					"bindsTo_template": "propCost",
+					"contextKey": "propCost",
+					"type": "number",
 					"uiGroup": "loan_details",
 					"required": true,
-					"question": "Do you have a specific loan amount in mind?",
-					"description": "Let us know if you have a particular loan amount requirement. This helps us tailor our offerings to your needs.",
-					"options": [
-						{
-							"label": "Yes",
-							"value": "Yes"
-						},
-						{
-							"label": "No",
-							"value": "No"
-						}
-					],
+					"question": "What would you estimate the current value of the property?",
+					"description": "( Accurate numbers get you accurate offers from lenders. )",
 					"showWhen": {
 						"!=": [{ "var": "mortgageYear" }, ""]
 					}
@@ -1953,20 +2777,20 @@
 					"type": "number",
 					"uiGroup": "number_fields",
 					"uiMeta": {
-						"placeholder": "Enter amount in rupees",
+						"placeholder": "Enter your required amount",
 						"min": 100000,
 						"max": 13915400
 					},
 					"required": true,
-					"question": "Enter your desired loan amount",
-					"description": "You can request a loan amount up to ₹1,39,15,400. Enter a value that aligns with your requirements and repayment capacity.",
+					"question": "Please specify your desired loan amount.",
+					"description": "You can request a loan amount up to ***. Enter a value that aligns with your requirements and repayment capacity.",
 					"showWhen": {
 						"and": [
 							{
 								"!=": [{ "var": "mortgageYear" }, ""]
 							},
 							{
-								"==": [{ "var": "hasSpecificAmount" }, "Yes"]
+								"!=": [{ "var": "propCost" }, ""]
 							}
 						]
 					}

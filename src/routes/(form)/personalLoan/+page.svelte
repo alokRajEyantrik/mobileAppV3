@@ -17,7 +17,9 @@
 	import NumberField from '$lib/components/NumberField.svelte';
 	import MultipleSelectField from '$lib/components/MultipleSelectField.svelte';
 	import DerivedSelect from '$lib/components/DerivedSelect.svelte';
+	import GroupFields from '$lib/components/GroupFields.svelte';
 	import { submitApplication } from '$lib/services/api';
+	import { formData } from '$lib/stores/formStepper';
 
 	// Enhanced type definitions to support additional input types, including multiple-select
 	interface Question {
@@ -260,6 +262,8 @@
 			console.error('Submission error:', error);
 			submitError =
 				error instanceof Error ? error.message : 'Failed to submit application. Please try again.';
+			submitError =
+				error instanceof Error ? error.message : 'Failed to submit application. Please try again.';
 		} finally {
 			isSubmitting = false;
 		}
@@ -301,7 +305,7 @@
 
 	// Resolve binding keys with template support
 	function resolveBindsTo(question: Question, answers: Answers, selectedLoan: string): string {
-		if (!question.bindsTo_template) return question.bindsTo || question.id;
+		if (!question.existing_bindsTodsTo_template) return question.bindsTo || question.id;
 		return question.bindsTo_template.replace(/\{([^}]+)\}/g, (_, key: string) => {
 			if (key === 'q1_loanName') return sanitizeKey(selectedLoan);
 			const val = answers[key];
@@ -318,7 +322,10 @@
 	$: currentAnswers = ($loanData as LoanDataStore)[selectedLoan] ?? ({} as Answers);
 
 	$: combinedAnswers = (() => {
-		const combined: Answers = {};
+		// Start with all current answers to ensure we include dynamically added collections
+		const combined: Answers = { ...currentAnswers };
+
+		// Process schema questions
 		for (const page of schema.pages) {
 			for (const q of page.questions) {
 				const key = resolveBindsTo(q, currentAnswers, selectedLoan);
@@ -346,6 +353,8 @@
 				}
 			}
 		}
+
+		// Ensure important fields are always present
 		combined['q1_loanName'] = selectedLoan;
 		combined['loanName'] = selectedLoan; // Also store without prefix
 
@@ -398,6 +407,99 @@
 			return null;
 		}
 	};
+
+	// Handlers for grouped entries (arrays of objects)
+	function addGroupEntry(collectionKey: string, entry: any) {
+		try {
+			// Special handling for specific collections based on the schema
+			const isExistingLoanCollection =
+				collectionKey === 'existingLoans' ||
+				collectionKey.includes('loanType') ||
+				collectionKey === 'tableLoanEntries';
+
+			// Use a standardized collection key for loan details
+			const finalCollectionKey = isExistingLoanCollection
+				? 'q1_loanType_collection'
+				: collectionKey;
+
+			console.log(
+				`Adding entry to collection ${collectionKey} (standardized to: ${finalCollectionKey})`,
+				entry
+			);
+
+			// Get existing entries or initialize empty array
+			const existingEntries = currentAnswers[finalCollectionKey] || [];
+
+			// Check if existingEntries is an array, if not convert to array
+			const validEntries = Array.isArray(existingEntries) ? existingEntries : [];
+
+			// Create new array with the new entry
+			const updatedEntries = [...validEntries, entry];
+			console.log('Updated entries:', updatedEntries);
+
+			// Update the store with the new array
+			updateAnswerByKey(finalCollectionKey, updatedEntries);
+
+			// Force a refresh of the reactive store
+			setTimeout(() => {
+				loanData.update((data) => {
+					// Make sure we preserve the updated entries in the store
+					const updatedData = { ...data };
+					if (isExistingLoanCollection) {
+						// Ensure the standardized key is properly updated
+						updatedData[finalCollectionKey] = updatedEntries;
+					}
+					return updatedData;
+				});
+
+				// Log current store state for debugging
+				console.log('Current store state after update:', get(loanData));
+			}, 10);
+		} catch (error) {
+			console.error('Error adding group entry:', error);
+			alert('Failed to add entry. Please try again.');
+		}
+	}
+	function deleteGroupEntry(collectionKey: string, index: number) {
+		console.log('Deleting entry at index', index, 'from collection:', collectionKey);
+
+		// Special handling for specific collections based on the schema
+		const isExistingLoanCollection =
+			collectionKey === 'existingLoans' || collectionKey.includes('loanType');
+
+		// Use a standardized collection key for loan details
+		const finalCollectionKey = isExistingLoanCollection ? 'q1_loanType_collection' : collectionKey;
+
+		// Safely get the current entries array
+		let prev = currentAnswers[finalCollectionKey];
+
+		// Validate the collection is an array
+		if (!Array.isArray(prev)) {
+			console.warn('Cannot delete from non-array:', prev);
+			return;
+		}
+
+		// Make sure the index is valid
+		if (index < 0 || index >= prev.length) {
+			console.warn('Invalid index for deletion:', index, 'in array of length', prev.length);
+			return;
+		}
+
+		// Create a new array without the deleted entry
+		const next = [...prev.slice(0, index), ...prev.slice(index + 1)];
+		console.log('New entries after deletion:', next);
+
+		// Update the store
+		updateAnswerByKey(finalCollectionKey, next);
+
+		// Force a refresh of the reactive store
+		setTimeout(() => {
+			loanData.update((data) => {
+				// This creates a new reference to trigger reactivity
+				return { ...data };
+			});
+		}, 10);
+	}
 
 	// GST validation function with improved error handling
 	function validateGSTState(gstNumber: string): string | null {
@@ -538,9 +640,23 @@
 		if (currentPageIndex > 0) currentPageIndex -= 1;
 	}
 
+	// Helper: flatten questions, expanding any group wrappers into their inner questions
+	function flattenQuestions(questions: any[]): any[] {
+		const out: any[] = [];
+		for (const q of questions) {
+			if ('group' in q && Array.isArray((q as any).group)) {
+				for (const inner of (q as any).group as any[]) out.push(inner);
+			} else {
+				out.push(q);
+			}
+		}
+		return out;
+	}
+
 	// Check if all required questions are answered (enhanced for new types, including arrays)
 	function allRequiredAnswered(): boolean {
-		return currentPage.questions
+		const flat = flattenQuestions(currentPage.questions);
+		return flat
 			.filter((q) => q.required && isQuestionVisible(q, combinedAnswers))
 			.every((q) => {
 				const key = resolveBindsTo(q, combinedAnswers, selectedLoan);
@@ -611,7 +727,10 @@
 		}
 
 		// Business address validation
-		if (question.id.startsWith('q4_business') || question.id.startsWith('q5_business')) {
+		if (
+			typeof question.id === 'string' &&
+			(question.id.startsWith('q4_business') || question.id.startsWith('q5_business'))
+		) {
 			const addressSameOrNot = answers['addressSameOrNot'];
 			if (addressSameOrNot === 'No' && (!val || (typeof val === 'string' && val === ''))) {
 				return question.errorMessage?.required ?? 'This field is required';
@@ -629,7 +748,7 @@
 				currentPage.nextButtonVisibility.mode.includes('allRequiredAnswered') &&
 				allRequiredAnswered();
 		}
-		for (const q of currentPage.questions) {
+		for (const q of flattenQuestions(currentPage.questions)) {
 			if (isQuestionVisible(q, combinedAnswers) && hasValidationError(q, combinedAnswers)) {
 				enabled = true;
 				break;
@@ -650,16 +769,109 @@
 				const key = resolveBindsTo(q, combinedAnswers, selectedLoan);
 				const val = currentAnswers[key];
 
+
 				if (!q.required) return true;
+
 
 				if (q.type === 'multiple-select') {
 					return Array.isArray(val) && val.length > 0;
 				}
 
+
 				return val !== undefined && val !== null && (typeof val !== 'string' || val !== '');
 			});
 		});
 	})();
+
+	export const testing = writable({
+		loanType: '',
+
+		bankName: '',
+		selectedToClose: '',
+		closurePlan: '',
+		EMIs: '',
+		tenure: '',
+		interestRate: '',
+		tableLoanEntries: [], // ✅ This is where we will push
+		tableLimitEntries: [] // ✅ This is where we will push
+	});
+	const disableAddButton = (q, data) => {
+		if (!q.disabledCondition?.anyEmpty) return false;
+
+		return q.disabledCondition.anyEmpty.some((fieldName) => {
+			console.log('data', data);
+			console.log('fieldName', fieldName);
+			const value = data[fieldName];
+			return value === undefined || value === null || value === '';
+		});
+	};
+	const handleAddClick = () => {
+		const currentData = get(testing); // only for validation
+
+		// Required fields check
+		const requiredFields = [
+			'loanType',
+			'bankName',
+			'selectedToClose',
+			'EMIs',
+			'tenure',
+			'interestRate'
+		];
+
+		const missingField = requiredFields.some((field) => !currentData[field]);
+		if (missingField) {
+			alert('Please fill all fields before adding');
+			return;
+		}
+
+		if (['Dropline OD', 'CC Limit', 'OD Limit'].includes(currentData.loanType)) {
+
+            console.log('Special loan type detected');
+		}  else {
+		// Prepare new loan entry
+		const newEntry = {
+			loanType: currentData.loanType,
+			bankName: currentData.bankName,
+			selectedToClose: currentData.selectedToClose,
+			EMIs: Number(currentData.EMIs),
+			tenure: currentData.tenure,
+			interestRate: currentData.interestRate
+		};
+
+		// Ensure currentAnswers.tableLoanEntries exists
+		if (!Array.isArray(currentAnswers.tableLoanEntries)) {
+			currentAnswers.tableLoanEntries = [];
+		}
+
+		// Push into currentAnswers
+		currentAnswers.tableLoanEntries.push(newEntry);
+
+		// If selectedToClose is 'Keep Running', calculate totalEMIs
+		if (newEntry.selectedToClose.toLowerCase() === 'keep running') {
+			currentAnswers.totalEMIs = currentAnswers.tableLoanEntries
+				.filter((item) => item.selectedToClose.toLowerCase() === 'keep running')
+				.reduce((sum, entry) => sum + Number(entry.EMIs || 0), 0);
+		}
+
+		// Clear the validated fields in `testing` (optional)
+		requiredFields.forEach((field) => {
+			currentData[field] = '';
+		});
+
+	}
+
+		console.log('Updated currentAnswers:', currentAnswers);
+	};
+
+	const handleInput = (id, value) => {
+		if (!id) {
+			console.warn('handleInput called with undefined id', value);
+			return;
+		}
+		testing.update((data) => ({ ...data, [id]: value }));
+	};
+
+	
 </script>
 
 <!-- Main container with responsive padding and max-width -->
@@ -834,9 +1046,68 @@
 						onChange={(values: (string | number)[]) => updateAnswer(question, values)}
 						required={question.required ?? false}
 					/>
+				{:else if question.type === 'existingtext'}
+					<div>
+						<label>{question.question}</label>
+						<input
+							type="text"
+							value={$testing[question.existing_bindsTo] || ''}
+							on:input={(e) => handleInput(question.existing_bindsTo, e.target.value)}
+						/>
+					</div>
+				{:else if question.type === 'existingselect'}
+					<div>
+						<label>{question.question}</label>
+						{#if question.existing_bindsTo}
+							<select bind:value={$testing[question.existing_bindsTo]}>
+								<option value="">Select</option>
+								{#each question.options as opt}
+									<option value={opt.value}>{opt.label}</option>
+								{/each}
+							</select>
+						{:else}
+							<span style="color:red">Error: bindsTo_template missing!</span>
+						{/if}
+					</div>
+				{:else if question.type === 'button'}
+					<button on:click={handleAddClick} disabled={disableAddButton(question, $testing)}>
+						{question.question}
+					</button>
 				{/if}
 			</div>
 		{/each}
+		{#if Array.isArray(currentAnswers.tableLoanEntries) && currentAnswers.tableLoanEntries.length > 0 && currentPage.title == 'Existing Details'}
+			<h3>Added Loan Entries:</h3>
+			<table class="loan-table">
+				<thead>
+					<tr>
+						<th>Type</th>
+						<th>Bank Name</th>
+						<th>Closure Plan</th>
+						<th>EMI</th>
+						<th>Tenure (mo)</th>
+						<th>Interest (p.a)</th>
+						<th>Action</th>
+					</tr>
+				</thead>
+				<tbody>
+					{#each currentAnswers.tableLoanEntries as entry, i}
+						<tr>
+							<td>{entry.loanType}</td>
+							<td>{entry.bankName}</td>
+							<td>{entry.selectedToClose}</td>
+							<td>{entry.EMIs}</td>
+							<td>{entry.tenure}</td>
+							<td>{entry.interestRate}</td>
+							<td>
+								<button on:click={() => editEntry(i)}>✏️</button>
+								<button on:click={() => deleteEntry(i)}>🗑️</button>
+							</td>
+						</tr>
+					{/each}
+				</tbody>
+			</table>
+		{/if}
 
 		<!-- Navigation buttons with improved accessibility -->
 		<div class="flex flex-col sm:flex-row justify-between mt-8 space-y-4 sm:space-y-0 sm:space-x-4">
@@ -984,3 +1255,39 @@
 		</div>
 	{/if}
 </div>
+
+<style>
+	.loan-table {
+		border-collapse: collapse;
+		width: 100%;
+		font-family: Arial, sans-serif;
+	}
+
+	.loan-table th,
+	.loan-table td {
+		border: 1px solid #ddd;
+		padding: 8px;
+		text-align: left;
+	}
+
+	.loan-table th {
+		background-color: #f4f4f4;
+		font-weight: bold;
+	}
+
+	.loan-table tr:nth-child(even) {
+		background-color: #f9f9f9;
+	}
+
+	.loan-table tr:hover {
+		background-color: #f1f1f1;
+	}
+
+	.loan-table button {
+		border: none;
+		background: none;
+		cursor: pointer;
+		font-size: 16px;
+		margin-right: 5px;
+	}
+</style>

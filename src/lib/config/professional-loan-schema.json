@@ -567,7 +567,7 @@
 					"type": "select",
 					"uiGroup": "selectButton",
 					"uiMeta": {
-						"placeholder": "Select Age"
+						"placeholder": "Select profession"
 					},
 					"required": true,
 					"question": "Please select your profession",
