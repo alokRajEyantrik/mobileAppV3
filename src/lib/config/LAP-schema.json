@@ -1044,7 +1044,46 @@
 							{
 								"var": "tellUsApplying"
 							},
-							"Individual / Sole-Proprietor"
+							["Individual / Sole-Proprietor", "Couple"]
+						]
+					}
+				},
+				{
+					"id": "q_existingRoleOfPerson",
+					"bindsTo_template": "existingRoleOfPerson",
+					"contextKey": "existingRoleOfPerson",
+					"type": "radio",
+					"uiGroup": "select_fields",
+					"required": true,
+					"question": "Please specify the reason for this person's involvement in the loan?",
+					"options": [
+						{
+							"label": "or loan repayment only",
+							"value": "or loan repayment only"
+						},
+						{
+							"label": "Loan repayment and having name on the property papers",
+							"value": "Loan repayment and having name on the property papers"
+						}
+					],
+					"showWhen": {
+						"and": [
+							{
+								"==": [
+									{
+										"var": "tellUsApplying"
+									},
+									["Individual / Sole-Proprietor", "Couple"]
+								]
+							},
+							{
+								"!=": [
+									{
+										"var": "fullNameOfApplicant"
+									},
+									""
+								]
+							}
 						]
 					}
 				},
