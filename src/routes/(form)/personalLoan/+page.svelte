@@ -309,7 +309,8 @@
 
 	// Resolve binding keys with template support
 	function resolveBindsTo(question: Question, answers: Answers, selectedLoan: string): string {
-		if (!question.existing_bindsTodsTo_template) return question.bindsTo || question.id;
+		// console.log(question, answers, selectedLoan);
+		if (!question.bindsTo_template) return question.bindsTo || question.id;
 		return question.bindsTo_template.replace(/\{([^}]+)\}/g, (_, key: string) => {
 			if (key === 'q1_loanName') return sanitizeKey(selectedLoan);
 			const val = answers[key];
@@ -362,7 +363,6 @@
 		combined['q1_loanName'] = selectedLoan;
 		combined['loanName'] = selectedLoan; // Also store without prefix
 
-		console.log('Combined answers:', combined);
 		return combined;
 	})();
 
@@ -377,7 +377,6 @@
 	$: currentPage = visiblePages[currentPageIndex];
 	$: visibleQuestions =
 		currentPage?.questions.filter((q) => isQuestionVisible(q, combinedAnswers)) ?? [];
-	$: console.log('Visible Questions:', visibleQuestions);
 
 	// Get dynamic option value (enhanced for multiple types)
 	function getOptionValue(
@@ -426,11 +425,6 @@
 				? 'q1_loanType_collection'
 				: collectionKey;
 
-			console.log(
-				`Adding entry to collection ${collectionKey} (standardized to: ${finalCollectionKey})`,
-				entry
-			);
-
 			// Get existing entries or initialize empty array
 			const existingEntries = currentAnswers[finalCollectionKey] || [];
 
@@ -439,7 +433,6 @@
 
 			// Create new array with the new entry
 			const updatedEntries = [...validEntries, entry];
-			console.log('Updated entries:', updatedEntries);
 
 			// Update the store with the new array
 			updateAnswerByKey(finalCollectionKey, updatedEntries);
@@ -457,7 +450,6 @@
 				});
 
 				// Log current store state for debugging
-				console.log('Current store state after update:', get(loanData));
 			}, 10);
 		} catch (error) {
 			console.error('Error adding group entry:', error);
@@ -624,13 +616,13 @@
 		}
 
 		// Log visibility check for debugging
-		console.log('Question:', question.id);
-		console.log('ShowWhen condition:', question.showWhen);
-		console.log('Form data:', formData);
-		console.log('Normalized data:', normalizedData);
+		// console.log('Question:', question.id);
+		// console.log('ShowWhen condition:', question.showWhen);
+		// console.log('Form data:', formData);
+		// console.log('Normalized data:', normalizedData);
 
 		const isVisible = jsonLogic.apply(question.showWhen, normalizedData);
-		console.log('Visibility result:', isVisible);
+		// console.log('Visibility result:', isVisible);
 
 		return isVisible;
 	}
@@ -785,52 +777,99 @@
 	})();
 
 	export const testing = writable({
-		loanType: '',
-
+		existingLoanType: '',
 		bankName: '',
 		selectedToClose: '',
-		closurePlan: '',
 		EMIs: '',
+		limit: '',
 		tenure: '',
+		sanctionedTenure: '',
 		interestRate: '',
 		tableLoanEntries: [], // ✅ This is where we will push
 		tableLimitEntries: [] // ✅ This is where we will push
 	});
 	const disableAddButton = (q, data) => {
-		if (!q.disabledCondition?.anyEmpty) return false;
+		console.log('disableAddButton called with:', q, data);
+		if (['CC Limit', 'OD Limit'].includes(combinedAnswers.existingLoanType)) {
+			if (!q.disabledCondition?.limitEmpty) return false;
 
-		return q.disabledCondition.anyEmpty.some((fieldName) => {
-			console.log('data', data);
-			console.log('fieldName', fieldName);
-			const value = data[fieldName];
-			return value === undefined || value === null || value === '';
-		});
+			return q.disabledCondition.limitEmpty.some((fieldName) => {
+				const value = data[fieldName];
+				return value === undefined || value === null || value === '';
+			});
+		} else {
+			if (!q.disabledCondition?.termLoanEmpty) return false;
+
+			return q.disabledCondition.termLoanEmpty.some((fieldName) => {
+				const value = data[fieldName];
+				return value === undefined || value === null || value === '';
+			});
+		}
 	};
+
 	const handleAddClick = () => {
 		const currentData = get(testing); // only for validation
 
 		// Required fields check
-		const requiredFields = [
-			'loanType',
+		const termLoanRequiredFields = [
 			'bankName',
 			'selectedToClose',
 			'EMIs',
 			'tenure',
 			'interestRate'
 		];
+		const limitRequiredFields = [
+			'bankName',
+			'selectedToClose',
+			'limit',
+			'sanctionedTenure',
+			'interestRate'
+		];
 
-		const missingField = requiredFields.some((field) => !currentData[field]);
-		if (missingField) {
-			alert('Please fill all fields before adding');
-			return;
-		}
+		if (['CC Limit', 'OD Limit'].includes(combinedAnswers.existingLoanType)) {
+			const missingField = limitRequiredFields.some((field) => !currentData[field]);
+			if (missingField) {
+				alert('Please fill all limits fields before adding');
+				return;
+			}
+			const newEntry = {
+				existingLoanType: combinedAnswers.existingLoanType,
+				bankName: currentData.bankName,
+				selectedToClose: currentData.selectedToClose,
+				limit: Number(currentData.limit),
+				sanctionedTenure: currentData.sanctionedTenure,
+				interestRate: currentData.interestRate
+			};
 
-		if (['Dropline OD', 'CC Limit', 'OD Limit'].includes(currentData.loanType)) {
-			console.log('Special loan type detected');
+			// Ensure currentAnswers.tableLoanEntries exists
+			if (!Array.isArray(currentAnswers.tableLimitEntries)) {
+				currentAnswers.tableLimitEntries = [];
+			}
+
+			// Push into currentAnswers
+			currentAnswers.tableLimitEntries.push(newEntry);
+
+			// If selectedToClose is 'Keep Running', calculate totalLimits
+			if (newEntry.selectedToClose.toLowerCase() === 'keep running') {
+				currentAnswers.totalLimits = currentAnswers.tableLimitEntries
+					.filter((item) => item.selectedToClose.toLowerCase() === 'keep running')
+					.reduce((sum, entry) => sum + Number(entry.limit || 0), 0);
+			}
+
+			// Clear the validated fields in `testing` (optional)
+			limitRequiredFields.forEach((field) => {
+				currentData[field] = '';
+			});
+		} else if ('Dropline OD' == combinedAnswers.existingLoanType) {
 		} else {
 			// Prepare new loan entry
+			const missingField = termLoanRequiredFields.some((field) => !currentData[field]);
+			if (missingField) {
+				alert('Please fill all fields before adding');
+				return;
+			}
 			const newEntry = {
-				loanType: currentData.loanType,
+				existingLoanType: combinedAnswers.existingLoanType,
 				bankName: currentData.bankName,
 				selectedToClose: currentData.selectedToClose,
 				EMIs: Number(currentData.EMIs),
@@ -854,13 +893,46 @@
 			}
 
 			// Clear the validated fields in `testing` (optional)
-			requiredFields.forEach((field) => {
+			termLoanRequiredFields.forEach((field) => {
 				currentData[field] = '';
 			});
 		}
 
-		console.log('Updated currentAnswers:', currentAnswers);
+		// console.log('Updated currentAnswers:', currentAnswers);
 	};
+
+	function deleteEntry(data, index) {
+		if (
+			data.existingLoanType == 'OD Limit' ||
+			data.existingLoanType == 'CC Limit' ||
+			data.existingLoanType == 'Dropline OD'
+		) {
+			currentAnswers.tableLimitEntries = currentAnswers.tableLimitEntries.filter(
+				(_, i) => i !== index
+			);
+		} else {
+			currentAnswers.tableLoanEntries = currentAnswers.tableLoanEntries.filter(
+				(_, i) => i !== index
+			);
+		}
+	}
+
+	
+
+	$: {
+		if (currentAnswers.tableLoanEntries) {
+			currentAnswers.totalEMIs = currentAnswers.tableLoanEntries
+				.filter((item) => item.selectedToClose.toLowerCase() === 'keep running')
+				.reduce((sum, entry) => sum + (Number(entry.EMIs) || 0), 0);
+		}
+
+		// totalLimit 
+		if (currentAnswers.tableLimitEntries) {
+			currentAnswers.totalLimits = currentAnswers.tableLimitEntries
+				.filter((item) => item.selectedToClose.toLowerCase() === 'keep running')
+				.reduce((sum, entry) => sum + (Number(entry.limit) || 0), 0);
+		}
+	}
 
 	const handleInput = (id, value) => {
 		if (!id) {
@@ -1043,7 +1115,7 @@
 						onChange={(values: (string | number)[]) => updateAnswer(question, values)}
 						required={question.required ?? false}
 					/>
-				{:else if question.type === 'existingtext'}
+				{:else if question.type === 'existingText'}
 					<div>
 						<label>{question.question}</label>
 						<input
@@ -1052,7 +1124,7 @@
 							on:input={(e) => handleInput(question.existing_bindsTo, e.target.value)}
 						/>
 					</div>
-				{:else if question.type === 'existingselect'}
+				{:else if question.type === 'existingSelect'}
 					<div>
 						<label>{question.question}</label>
 						{#if question.existing_bindsTo}
@@ -1063,7 +1135,7 @@
 								{/each}
 							</select>
 						{:else}
-							<span style="color:red">Error: bindsTo_template missing!</span>
+							<span style="color:red">Error: existing_bindsTo missing!</span>
 						{/if}
 					</div>
 				{:else if question.type === 'button'}
@@ -1074,7 +1146,7 @@
 			</div>
 		{/each}
 		{#if Array.isArray(currentAnswers.tableLoanEntries) && currentAnswers.tableLoanEntries.length > 0 && currentPage.title == 'Existing Details'}
-			<h3>Added Loan Entries:</h3>
+			<h3>Term Loans</h3>
 			<table class="loan-table">
 				<thead>
 					<tr>
@@ -1090,15 +1162,47 @@
 				<tbody>
 					{#each currentAnswers.tableLoanEntries as entry, i}
 						<tr>
-							<td>{entry.loanType}</td>
+							<td>{entry.existingLoanType}</td>
 							<td>{entry.bankName}</td>
 							<td>{entry.selectedToClose}</td>
 							<td>{entry.EMIs}</td>
 							<td>{entry.tenure}</td>
 							<td>{entry.interestRate}</td>
 							<td>
-								<button on:click={() => editEntry(i)}>✏️</button>
-								<button on:click={() => deleteEntry(i)}>🗑️</button>
+								<button on:click={() => editEntry(entry, i)}>✏️</button>
+								<button on:click={() => deleteEntry(entry, i)}>🗑️</button>
+							</td>
+						</tr>
+					{/each}
+				</tbody>
+			</table>
+		{/if}
+		{#if Array.isArray(currentAnswers.tableLimitEntries) && currentAnswers.tableLimitEntries.length > 0 && currentPage.title == 'Existing Details'}
+			<h3>Limit Loans</h3>
+			<table class="loan-table">
+				<thead>
+					<tr>
+						<th>Type</th>
+						<th>Bank Name</th>
+						<th>Closure Plan</th>
+						<th>LIMIT</th>
+						<th>Tenure (mo)</th>
+						<th>Interest (p.a)</th>
+						<th>Action</th>
+					</tr>
+				</thead>
+				<tbody>
+					{#each currentAnswers.tableLimitEntries as entry, i}
+						<tr>
+							<td>{entry.existingLoanType}</td>
+							<td>{entry.bankName}</td>
+							<td>{entry.selectedToClose}</td>
+							<td>{entry.limit}</td>
+							<td>{entry.sanctionedTenure}</td>
+							<td>{entry.interestRate}</td>
+							<td>
+								<button on:click={() => editEntry(entry, i)}>✏️</button>
+								<button on:click={() => deleteEntry(entry, i)}>🗑️</button>
 							</td>
 						</tr>
 					{/each}
