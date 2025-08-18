@@ -201,6 +201,7 @@
 						"placeholder": "Select City name"
 					},
 					"question": "City name",
+					"description": "city name",
 					"required": true,
 					"showWhen": {
 						"!=": [
@@ -994,7 +995,7 @@
 						"placeholder": "Enter the number"
 					},
 					"required": true,
-					"question": "How many family members are applying for the loan?",
+					"question": "How many family members or directors/partners are applying for the loan?",
 					"description": "(including the primary applicant)",
 					"showWhen": {
 						"or": [
@@ -1070,7 +1071,28 @@
 							{
 								"var": "tellUsApplying"
 							},
-							["Individual / Sole-Proprietor", "Couple"]
+							["Individual / Sole-Proprietor", "Couple", "Family"]
+						]
+					}
+				},
+				{
+					"id": "q_fullNameOfCoApplicant",
+					"bindsTo_template": "fullNameOfCoApplicant",
+					"contextKey": "fullNameOfCoApplicant",
+					"type": "text",
+					"uiGroup": "text_fields",
+					"uiMeta": {
+						"placeholder": "Enter the full name"
+					},
+					"required": true,
+					"question": "What's the full name of the Co-applicant ?",
+					"description": "How it appears on PAN, Passport, Aadhaar or Driving license.",
+					"showWhen": {
+						"in": [
+							{
+								"var": "tellUsApplying"
+							},
+							["Couple", "Family"]
 						]
 					}
 				},
@@ -1089,7 +1111,15 @@
 						},
 						{
 							"label": "Having name on the property papers",
-							"value": "Having name on the property papers"
+							"value": "Having name on the property papers",
+							"showWhen": {
+								"!=": [
+									{
+										"var": "fullNameOfCoApplicant"
+									},
+									""
+								]
+							}
 						},
 						{
 							"label": "Loan repayment and having name on the property papers",
@@ -1103,7 +1133,7 @@
 									{
 										"var": "tellUsApplying"
 									},
-									["Couple"]
+									["Couple", "Family"]
 								]
 							},
 							{
@@ -1497,11 +1527,23 @@
 						}
 					},
 					"showWhen": {
-						"!=": [
+						"and": [
 							{
-								"var": "grossIncome"
+								"in": [
+									{
+										"var": "EmploymentType"
+									},
+									["Employed(Government)", "Employed(Private)"]
+								]
 							},
-							""
+							{
+								"!=": [
+									{
+										"var": "grossIncome"
+									},
+									""
+								]
+							}
 						]
 					}
 				},
@@ -1519,6 +1561,14 @@
 					"description": "This includes the average monthly bonus received in the latest financial year (total bonus divided by 12) and the average monthly incentive received in the latest 6 months (total incentive divided by 6). You will need to submit a valid rent agreement, and the rent amount should be reflected in your bank statement Enter zero (0) if there is no additional income",
 					"showWhen": {
 						"and": [
+							{
+								"in": [
+									{
+										"var": "EmploymentType"
+									},
+									["Employed(Government)", "Employed(Private)"]
+								]
+							},
 							{
 								"!=": [
 									{
@@ -1548,7 +1598,7 @@
 						"placeholder": "Select profession"
 					},
 					"required": true,
-					"question": "Please select your profession",
+					"question": "Please select your profession.",
 					"description": "Banks will require you to provide relevant certificates or degrees during the loan application process",
 					"options": [
 						{
@@ -1616,11 +1666,35 @@
 						}
 					},
 					"showWhen": {
-						"!=": [
+						"or": [
 							{
-								"var": "professionType"
+								"==": [
+									{
+										"var": "EmploymentType"
+									},
+									["Self-employed(Businessman)"]
+								]
 							},
-							""
+							{
+								"and": [
+									{
+										"==": [
+											{
+												"var": "EmploymentType"
+											},
+											["Self-employed(Professional)"]
+										]
+									},
+									{
+										"!=": [
+											{
+												"var": "professionType"
+											},
+											""
+										]
+									}
+								]
+							}
 						]
 					}
 				},
@@ -1637,6 +1711,14 @@
 					"question": "What were the Gross Receipts in the last three financial years?",
 					"showWhen": {
 						"and": [
+							{
+								"==": [
+									{
+										"var": "EmploymentType"
+									},
+									["Self-employed(Professional)"]
+								]
+							},
 							{
 								"!=": [
 									{
@@ -1670,11 +1752,83 @@
 					"showWhen": {
 						"and": [
 							{
-								"!=": [
+								"or": [
 									{
-										"var": "professionType"
+										"==": [
+											{
+												"var": "EmploymentType"
+											},
+											["Self-employed(Businessman)"]
+										]
 									},
-									""
+									{
+										"==": [
+											{
+												"var": "EmploymentType"
+											},
+											["Self-employed(Others)"]
+										]
+									},
+									{
+										"and": [
+											{
+												"==": [
+													{
+														"var": "EmploymentType"
+													},
+													["Self-employed(Professional)"]
+												]
+											},
+											{
+												"!=": [
+													{
+														"var": "professionType"
+													},
+													""
+												]
+											},
+											{
+												"!=": [
+													{
+														"var": "grossReceiptsArray"
+													},
+													""
+												]
+											}
+										]
+									}
+								]
+							},
+							{
+								"==": [
+									{
+										"var": "incomeTaxAvailableThreeFinancialYear"
+									},
+									"Yes"
+								]
+							}
+						]
+					}
+				},
+				{
+					"id": "q_depreciationArray",
+					"bindsTo_template": "depreciationArray",
+					"contextKey": "depreciationArray",
+					"type": "number",
+					"uiGroup": "inputNumber",
+					"uiMeta": {
+						"placeholder": ["FY2023-24", "FY2022-23", "FY2021-22"]
+					},
+					"required": true,
+					"question": "What's the sum of \"Depreciation\" and \"Interest on Loans\" as per profit-loss statement?",
+					"showWhen": {
+						"and": [
+							{
+								"==": [
+									{
+										"var": "EmploymentType"
+									},
+									["Self-employed(Businessman)"]
 								]
 							},
 							{
@@ -1688,7 +1842,7 @@
 							{
 								"!=": [
 									{
-										"var": "grossReceiptsArray"
+										"var": "netProfit"
 									},
 									""
 								]
@@ -1757,33 +1911,58 @@
 											},
 											""
 										]
+									},
+									{
+										"!=": [
+											{
+												"var": "monthlyOtherIncome"
+											},
+											""
+										]
 									}
 								]
 							},
 							{
 								"and": [
 									{
-										"!=": [
+										"or": [
 											{
-												"var": "professionType"
+												"!=": [
+													{
+														"var": "depreciationArray"
+													},
+													""
+												]
 											},
-											""
+											{
+												"and": [
+													{
+														"!=": [
+															{
+																"var": "professionType"
+															},
+															""
+														]
+													},
+													{
+														"!=": [
+															{
+																"var": "grossReceiptsArray"
+															},
+															""
+														]
+													}
+												]
+											}
 										]
 									},
+
 									{
 										"==": [
 											{
 												"var": "incomeTaxAvailableThreeFinancialYear"
 											},
 											"Yes"
-										]
-									},
-									{
-										"!=": [
-											{
-												"var": "grossReceiptsArray"
-											},
-											""
 										]
 									},
 									{
@@ -1838,33 +2017,58 @@
 													},
 													""
 												]
+											},
+											{
+												"!=": [
+													{
+														"var": "monthlyOtherIncome"
+													},
+													""
+												]
 											}
 										]
 									},
 									{
 										"and": [
 											{
-												"!=": [
+												"or": [
 													{
-														"var": "professionType"
+														"!=": [
+															{
+																"var": "depreciationArray"
+															},
+															""
+														]
 													},
-													""
+													{
+														"and": [
+															{
+																"!=": [
+																	{
+																		"var": "professionType"
+																	},
+																	""
+																]
+															},
+															{
+																"!=": [
+																	{
+																		"var": "grossReceiptsArray"
+																	},
+																	""
+																]
+															}
+														]
+													}
 												]
 											},
+
 											{
 												"==": [
 													{
 														"var": "incomeTaxAvailableThreeFinancialYear"
 													},
 													"Yes"
-												]
-											},
-											{
-												"!=": [
-													{
-														"var": "grossReceiptsArray"
-													},
-													""
 												]
 											},
 											{
@@ -1965,33 +2169,58 @@
 													},
 													""
 												]
+											},
+											{
+												"!=": [
+													{
+														"var": "monthlyOtherIncome"
+													},
+													""
+												]
 											}
 										]
 									},
 									{
 										"and": [
 											{
-												"!=": [
+												"or": [
 													{
-														"var": "professionType"
+														"!=": [
+															{
+																"var": "depreciationArray"
+															},
+															""
+														]
 													},
-													""
+													{
+														"and": [
+															{
+																"!=": [
+																	{
+																		"var": "professionType"
+																	},
+																	""
+																]
+															},
+															{
+																"!=": [
+																	{
+																		"var": "grossReceiptsArray"
+																	},
+																	""
+																]
+															}
+														]
+													}
 												]
 											},
+
 											{
 												"==": [
 													{
 														"var": "incomeTaxAvailableThreeFinancialYear"
 													},
 													"Yes"
-												]
-											},
-											{
-												"!=": [
-													{
-														"var": "grossReceiptsArray"
-													},
-													""
 												]
 											},
 											{
@@ -2064,33 +2293,58 @@
 													},
 													""
 												]
+											},
+											{
+												"!=": [
+													{
+														"var": "monthlyOtherIncome"
+													},
+													""
+												]
 											}
 										]
 									},
 									{
 										"and": [
 											{
-												"!=": [
+												"or": [
 													{
-														"var": "professionType"
+														"!=": [
+															{
+																"var": "depreciationArray"
+															},
+															""
+														]
 													},
-													""
+													{
+														"and": [
+															{
+																"!=": [
+																	{
+																		"var": "professionType"
+																	},
+																	""
+																]
+															},
+															{
+																"!=": [
+																	{
+																		"var": "grossReceiptsArray"
+																	},
+																	""
+																]
+															}
+														]
+													}
 												]
 											},
+
 											{
 												"==": [
 													{
 														"var": "incomeTaxAvailableThreeFinancialYear"
 													},
 													"Yes"
-												]
-											},
-											{
-												"!=": [
-													{
-														"var": "grossReceiptsArray"
-													},
-													""
 												]
 											},
 											{
@@ -3242,7 +3496,21 @@
 					"uiGroup": "number_fields",
 					"required": true,
 					"question": "What would you estimate the current value of the property?",
-					"description": "If uncertain, please provide your best estimate. Keep in mind that lenders will independently evaluate the market value of your property and determine the maximum lending amount accordingly."
+					"description": "If uncertain, please provide your best estimate. Keep in mind that lenders will independently evaluate the market value of your property and determine the maximum lending amount accordingly.",
+					"errorMessage": {
+						"required": true,
+						"message": "We do not provide services for the property value less than 20,00,000."
+					},
+					"validation": {
+						"condition": {
+							"<": [
+								{
+									"var": "propCost"
+								},
+								"2000000"
+							]
+						}
+					}
 				},
 				{
 					"id": "q_topupRequired",
@@ -3286,7 +3554,7 @@
 					},
 					"required": true,
 					"question": "Please specify the required Top-up amount ?",
-					"description": "Based on LTV and property value, you can enter up to 17,40,000 , though the possible top-up may vary with each lender based on their terms and your eligibility.",
+					"description": "Based on LTV and property value, you can enter up to ---- , though the possible top-up may vary with each lender based on their terms and your eligibility.",
 					"showWhen": {
 						"and": [
 							{
@@ -3457,6 +3725,20 @@
 								"!=": [{ "var": "propCost" }, ""]
 							}
 						]
+					},
+					"errorMessage": {
+						"required": true,
+						"message": "While we'll show you the best offers, we're unable to process loans under ₹30 Lakh due to service limitations. Thank you for understanding."
+					},
+					"validation": {
+						"condition": {
+							"<": [
+								{
+									"var": "loanAmount"
+								},
+								"3000000"
+							]
+						}
 					}
 				}
 			]
