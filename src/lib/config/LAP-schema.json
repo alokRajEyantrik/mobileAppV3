@@ -201,6 +201,7 @@
 						"placeholder": "Select City name"
 					},
 					"question": "City name",
+					"description": "city name",
 					"required": true,
 					"showWhen": {
 						"!=": [
@@ -347,6 +348,14 @@
 					"showWhen": {
 						"and": [
 							{
+								"==": [
+									{
+										"var": "loanType"
+									},
+									"New Loan"
+								]
+							},
+							{
 								"!=": [
 									{
 										"var": "propertyStateName"
@@ -440,17 +449,23 @@
 					"options": [
 						{
 							"label": "Yes",
-							"value": "Yes"
+							"value": "Yes",
+							"flagKey": {
+								"isApprovedByAuthority": true
+							}
 						},
 						{
 							"label": "No",
-							"value": "No"
+							"value": "No",
+							"flagKey": {
+								"isApprovedByAuthority": false
+							}
 						}
 					],
 					"showWhen": {
 						"!=": [
 							{
-								"var": "ifPropertyRegistered"
+								"var": "residenceOptionSame"
 							},
 							""
 						]
@@ -482,11 +497,17 @@
 					"options": [
 						{
 							"label": "Yes",
-							"value": "Yes"
+							"value": "Yes",
+							"flagKey": {
+								"isAsPerMap": true
+							}
 						},
 						{
 							"label": "No",
-							"value": "No"
+							"value": "No",
+							"flagKey": {
+								"isAsPerMap": false
+							}
 						}
 					],
 					"showWhen": {
@@ -523,11 +544,17 @@
 					"options": [
 						{
 							"label": "Yes",
-							"value": "Yes"
+							"value": "Yes",
+							"flagKey": {
+								"isApplicantNRI": true
+							}
 						},
 						{
 							"label": "No",
-							"value": "No"
+							"value": "No",
+							"flagKey": {
+								"isApplicantNRI": false
+							}
 						}
 					],
 					"showWhen": {
@@ -968,7 +995,7 @@
 						"placeholder": "Enter the number"
 					},
 					"required": true,
-					"question": "How many family members are applying for the loan?",
+					"question": "How many family members or directors/partners are applying for the loan?",
 					"description": "(including the primary applicant)",
 					"showWhen": {
 						"or": [
@@ -1040,11 +1067,138 @@
 					"question": "What's the full name of the applicant ?",
 					"description": "How it appears on PAN, Passport, Aadhaar or Driving license.",
 					"showWhen": {
-						"==": [
+						"in": [
 							{
 								"var": "tellUsApplying"
 							},
-							"Individual / Sole-Proprietor"
+							["Individual / Sole-Proprietor", "Couple", "Family"]
+						]
+					}
+				},
+				{
+					"id": "q_fullNameOfCoApplicant",
+					"bindsTo_template": "fullNameOfCoApplicant",
+					"contextKey": "fullNameOfCoApplicant",
+					"type": "text",
+					"uiGroup": "text_fields",
+					"uiMeta": {
+						"placeholder": "Enter the full name"
+					},
+					"required": true,
+					"question": "What's the full name of the Co-applicant ?",
+					"description": "How it appears on PAN, Passport, Aadhaar or Driving license.",
+					"showWhen": {
+						"in": [
+							{
+								"var": "tellUsApplying"
+							},
+							["Couple", "Family"]
+						]
+					}
+				},
+				{
+					"id": "q_existingRoleOfPerson",
+					"bindsTo_template": "existingRoleOfPerson",
+					"contextKey": "existingRoleOfPerson",
+					"type": "radio",
+					"uiGroup": "select_fields",
+					"required": true,
+					"question": "Please specify the reason for this person's involvement in the loan?",
+					"options": [
+						{
+							"label": "For loan repayment only",
+							"value": "For loan repayment only"
+						},
+						{
+							"label": "Having name on the property papers",
+							"value": "Having name on the property papers",
+							"showWhen": {
+								"!=": [
+									{
+										"var": "fullNameOfCoApplicant"
+									},
+									""
+								]
+							}
+						},
+						{
+							"label": "Loan repayment and having name on the property papers",
+							"value": "Loan repayment and having name on the property papers"
+						}
+					],
+					"showWhen": {
+						"and": [
+							{
+								"in": [
+									{
+										"var": "tellUsApplying"
+									},
+									["Couple", "Family"]
+								]
+							},
+							{
+								"!=": [
+									{
+										"var": "fullNameOfApplicant"
+									},
+									""
+								]
+							}
+						]
+					}
+				},
+				{
+					"id": "q_primaryApplicantIsNRI",
+					"bindsTo_template": "primaryApplicantIsNRI",
+					"contextKey": "primaryApplicantIsNRI",
+					"type": "radio",
+					"uiGroup": "select_fields",
+					"required": true,
+					"question": "Is the applicant NRI?",
+					"options": [
+						{
+							"label": "Yes",
+							"value": "Yes"
+						},
+						{
+							"label": "No",
+							"value": "No"
+						}
+					],
+					"showWhen": {
+						"and": [
+							{
+								"==": [
+									{
+										"var": "ApplicantIsNRI"
+									},
+									"Yes"
+								]
+							},
+							{
+								"in": [
+									{
+										"var": "tellUsApplying"
+									},
+									["Couple", "Family"]
+								]
+							},
+							{
+								"!=": [
+									{
+										"var": "existingRoleOfPerson"
+									},
+									""
+								]
+							},
+							{
+								"!=": [
+									{
+										"var": "fullNameOfApplicant"
+									},
+									""
+								]
+							}
 						]
 					}
 				},
@@ -1069,26 +1223,74 @@
 							"value": "Employed(Private)"
 						},
 						{
+							"label": "Unemployed",
+							"value": "Unemployed",
+							"showWhen": {
+								"in": [
+									{
+										"var": "tellUsApplying"
+									},
+									["Couple", "Family"]
+								]
+							}
+						},
+						{
+							"label": "Home-maker",
+							"value": "Home-maker",
+							"showWhen": {
+								"in": [
+									{
+										"var": "tellUsApplying"
+									},
+									["Couple", "Family"]
+								]
+							}
+						},
+						{
 							"label": "Self-employed(Professional)",
-							"value": "Self-employed(Professional)"
+							"value": "Self-employed(Professional)",
+							"showWhen": {
+								"==": [
+									{
+										"var": "ApplicantIsNRI"
+									},
+									"No"
+								]
+							}
 						},
 						{
 							"label": "Self-employed(Businessman)",
-							"value": "Self-employed(Businessman)"
+							"value": "Self-employed(Businessman)",
+							"showWhen": {
+								"==": [
+									{
+										"var": "ApplicantIsNRI"
+									},
+									"No"
+								]
+							}
 						},
 						{
 							"label": "Self-employed(Others)",
-							"value": "Self-employed(Others)"
+							"value": "Self-employed(Others)",
+							"showWhen": {
+								"==": [
+									{
+										"var": "ApplicantIsNRI"
+									},
+									"No"
+								]
+							}
 						}
 					],
 					"showWhen": {
 						"and": [
 							{
-								"==": [
+								"in": [
 									{
 										"var": "tellUsApplying"
 									},
-									"Individual / Sole-Proprietor"
+									["Individual / Sole-Proprietor", "Couple"]
 								]
 							},
 							{
@@ -1127,11 +1329,11 @@
 					"showWhen": {
 						"and": [
 							{
-								"==": [
+								"in": [
 									{
 										"var": "tellUsApplying"
 									},
-									"Individual / Sole-Proprietor"
+									["Individual / Sole-Proprietor", "Couple"]
 								]
 							},
 							{
@@ -1220,11 +1422,11 @@
 							{
 								"and": [
 									{
-										"==": [
+										"in": [
 											{
 												"var": "tellUsApplying"
 											},
-											"Individual / Sole-Proprietor"
+											["Individual / Sole-Proprietor", "Couple"]
 										]
 									},
 									{
@@ -1286,7 +1488,7 @@
 					"id": "q1_grossIncome",
 					"bindsTo_template": "grossIncome",
 					"contextKey": "grossIncome",
-					"type": "text",
+					"type": "number",
 					"uiGroup": "text_fields",
 					"uiMeta": {
 						"placeholder": "Enter gross income"
@@ -1307,7 +1509,7 @@
 					"id": "q2_fixedSalary",
 					"bindsTo_template": "fixedSalary",
 					"contextKey": "fixedSalary",
-					"type": "text",
+					"type": "number",
 					"uiGroup": "text_fields",
 					"uiMeta": {
 						"placeholder": "Enter fixed monthly salary"
@@ -1325,11 +1527,23 @@
 						}
 					},
 					"showWhen": {
-						"!=": [
+						"and": [
 							{
-								"var": "grossIncome"
+								"in": [
+									{
+										"var": "EmploymentType"
+									},
+									["Employed(Government)", "Employed(Private)"]
+								]
 							},
-							""
+							{
+								"!=": [
+									{
+										"var": "grossIncome"
+									},
+									""
+								]
+							}
 						]
 					}
 				},
@@ -1337,7 +1551,7 @@
 					"id": "q3_monthlyOtherIncome",
 					"bindsTo_template": "monthlyOtherIncome",
 					"contextKey": "monthlyOtherIncome",
-					"type": "text",
+					"type": "number",
 					"uiGroup": "text_fields",
 					"uiMeta": {
 						"placeholder": "extra monthly income"
@@ -1347,6 +1561,14 @@
 					"description": "This includes the average monthly bonus received in the latest financial year (total bonus divided by 12) and the average monthly incentive received in the latest 6 months (total incentive divided by 6). You will need to submit a valid rent agreement, and the rent amount should be reflected in your bank statement Enter zero (0) if there is no additional income",
 					"showWhen": {
 						"and": [
+							{
+								"in": [
+									{
+										"var": "EmploymentType"
+									},
+									["Employed(Government)", "Employed(Private)"]
+								]
+							},
 							{
 								"!=": [
 									{
@@ -1376,7 +1598,7 @@
 						"placeholder": "Select profession"
 					},
 					"required": true,
-					"question": "Please select your profession",
+					"question": "Please select your profession.",
 					"description": "Banks will require you to provide relevant certificates or degrees during the loan application process",
 					"options": [
 						{
@@ -1444,11 +1666,35 @@
 						}
 					},
 					"showWhen": {
-						"!=": [
+						"or": [
 							{
-								"var": "professionType"
+								"==": [
+									{
+										"var": "EmploymentType"
+									},
+									["Self-employed(Businessman)"]
+								]
 							},
-							""
+							{
+								"and": [
+									{
+										"==": [
+											{
+												"var": "EmploymentType"
+											},
+											["Self-employed(Professional)"]
+										]
+									},
+									{
+										"!=": [
+											{
+												"var": "professionType"
+											},
+											""
+										]
+									}
+								]
+							}
 						]
 					}
 				},
@@ -1465,6 +1711,14 @@
 					"question": "What were the Gross Receipts in the last three financial years?",
 					"showWhen": {
 						"and": [
+							{
+								"==": [
+									{
+										"var": "EmploymentType"
+									},
+									["Self-employed(Professional)"]
+								]
+							},
 							{
 								"!=": [
 									{
@@ -1498,11 +1752,83 @@
 					"showWhen": {
 						"and": [
 							{
-								"!=": [
+								"or": [
 									{
-										"var": "professionType"
+										"==": [
+											{
+												"var": "EmploymentType"
+											},
+											["Self-employed(Businessman)"]
+										]
 									},
-									""
+									{
+										"==": [
+											{
+												"var": "EmploymentType"
+											},
+											["Self-employed(Others)"]
+										]
+									},
+									{
+										"and": [
+											{
+												"==": [
+													{
+														"var": "EmploymentType"
+													},
+													["Self-employed(Professional)"]
+												]
+											},
+											{
+												"!=": [
+													{
+														"var": "professionType"
+													},
+													""
+												]
+											},
+											{
+												"!=": [
+													{
+														"var": "grossReceiptsArray"
+													},
+													""
+												]
+											}
+										]
+									}
+								]
+							},
+							{
+								"==": [
+									{
+										"var": "incomeTaxAvailableThreeFinancialYear"
+									},
+									"Yes"
+								]
+							}
+						]
+					}
+				},
+				{
+					"id": "q_depreciationArray",
+					"bindsTo_template": "depreciationArray",
+					"contextKey": "depreciationArray",
+					"type": "number",
+					"uiGroup": "inputNumber",
+					"uiMeta": {
+						"placeholder": ["FY2023-24", "FY2022-23", "FY2021-22"]
+					},
+					"required": true,
+					"question": "What's the sum of \"Depreciation\" and \"Interest on Loans\" as per profit-loss statement?",
+					"showWhen": {
+						"and": [
+							{
+								"==": [
+									{
+										"var": "EmploymentType"
+									},
+									["Self-employed(Businessman)"]
 								]
 							},
 							{
@@ -1516,7 +1842,7 @@
 							{
 								"!=": [
 									{
-										"var": "grossReceiptsArray"
+										"var": "netProfit"
 									},
 									""
 								]
@@ -1585,33 +1911,58 @@
 											},
 											""
 										]
+									},
+									{
+										"!=": [
+											{
+												"var": "monthlyOtherIncome"
+											},
+											""
+										]
 									}
 								]
 							},
 							{
 								"and": [
 									{
-										"!=": [
+										"or": [
 											{
-												"var": "professionType"
+												"!=": [
+													{
+														"var": "depreciationArray"
+													},
+													""
+												]
 											},
-											""
+											{
+												"and": [
+													{
+														"!=": [
+															{
+																"var": "professionType"
+															},
+															""
+														]
+													},
+													{
+														"!=": [
+															{
+																"var": "grossReceiptsArray"
+															},
+															""
+														]
+													}
+												]
+											}
 										]
 									},
+
 									{
 										"==": [
 											{
 												"var": "incomeTaxAvailableThreeFinancialYear"
 											},
 											"Yes"
-										]
-									},
-									{
-										"!=": [
-											{
-												"var": "grossReceiptsArray"
-											},
-											""
 										]
 									},
 									{
@@ -1666,33 +2017,58 @@
 													},
 													""
 												]
+											},
+											{
+												"!=": [
+													{
+														"var": "monthlyOtherIncome"
+													},
+													""
+												]
 											}
 										]
 									},
 									{
 										"and": [
 											{
-												"!=": [
+												"or": [
 													{
-														"var": "professionType"
+														"!=": [
+															{
+																"var": "depreciationArray"
+															},
+															""
+														]
 													},
-													""
+													{
+														"and": [
+															{
+																"!=": [
+																	{
+																		"var": "professionType"
+																	},
+																	""
+																]
+															},
+															{
+																"!=": [
+																	{
+																		"var": "grossReceiptsArray"
+																	},
+																	""
+																]
+															}
+														]
+													}
 												]
 											},
+
 											{
 												"==": [
 													{
 														"var": "incomeTaxAvailableThreeFinancialYear"
 													},
 													"Yes"
-												]
-											},
-											{
-												"!=": [
-													{
-														"var": "grossReceiptsArray"
-													},
-													""
 												]
 											},
 											{
@@ -1793,33 +2169,58 @@
 													},
 													""
 												]
+											},
+											{
+												"!=": [
+													{
+														"var": "monthlyOtherIncome"
+													},
+													""
+												]
 											}
 										]
 									},
 									{
 										"and": [
 											{
-												"!=": [
+												"or": [
 													{
-														"var": "professionType"
+														"!=": [
+															{
+																"var": "depreciationArray"
+															},
+															""
+														]
 													},
-													""
+													{
+														"and": [
+															{
+																"!=": [
+																	{
+																		"var": "professionType"
+																	},
+																	""
+																]
+															},
+															{
+																"!=": [
+																	{
+																		"var": "grossReceiptsArray"
+																	},
+																	""
+																]
+															}
+														]
+													}
 												]
 											},
+
 											{
 												"==": [
 													{
 														"var": "incomeTaxAvailableThreeFinancialYear"
 													},
 													"Yes"
-												]
-											},
-											{
-												"!=": [
-													{
-														"var": "grossReceiptsArray"
-													},
-													""
 												]
 											},
 											{
@@ -1892,33 +2293,58 @@
 													},
 													""
 												]
+											},
+											{
+												"!=": [
+													{
+														"var": "monthlyOtherIncome"
+													},
+													""
+												]
 											}
 										]
 									},
 									{
 										"and": [
 											{
-												"!=": [
+												"or": [
 													{
-														"var": "professionType"
+														"!=": [
+															{
+																"var": "depreciationArray"
+															},
+															""
+														]
 													},
-													""
+													{
+														"and": [
+															{
+																"!=": [
+																	{
+																		"var": "professionType"
+																	},
+																	""
+																]
+															},
+															{
+																"!=": [
+																	{
+																		"var": "grossReceiptsArray"
+																	},
+																	""
+																]
+															}
+														]
+													}
 												]
 											},
+
 											{
 												"==": [
 													{
 														"var": "incomeTaxAvailableThreeFinancialYear"
 													},
 													"Yes"
-												]
-											},
-											{
-												"!=": [
-													{
-														"var": "grossReceiptsArray"
-													},
-													""
 												]
 											},
 											{
@@ -2021,7 +2447,15 @@
 							"label": "Other Type Loan",
 							"value": "Other Type Loan"
 						}
-					]
+					],
+					"showWhen": {
+						"==": [
+							{
+								"var": "obligation"
+							},
+							"Yes"
+						]
+					}
 				},
 				{
 					"id": "q2_bankName",
@@ -2685,10 +3119,547 @@
 			]
 		},
 		{
+			"id": "existingDetailsPage",
+			"title": "existing details",
+			"nextButtonVisibility": {
+				"mode": ["allRequiredAnswered"]
+			},
+			"showWhen": {
+				"in": [
+					{
+						"var": "loanType"
+					},
+					["Balance Transfer With Top-up", "Balance Transfer Only", "Top-up Only"]
+				]
+			},
+			"questions": [
+				{
+					"id": "q1_principalOutstanding",
+					"bindsTo_template": "principalOutstanding",
+					"contextKey": "principalOutstanding",
+					"type": "number",
+					"uiGroup": "text_fields",
+					"uiMeta": {
+						"placeholder": "Enter outstanding amount"
+					},
+					"required": true,
+					"question": "What is the outstanding principal amount?",
+					"description": "The \"outstanding principal\" is the remaining amount of the original loan, which decreases with each EMI. Sometimes people confuse it with total of remaining EMIs, but that's not the outstanding principal amount. You can check this outstanding amount in \"Schedule of repayment\" or can ask from your lender.",
+					"errorMessage": {
+						"required": true,
+						"message": "Please enter a minimum principal outstanding amount of 5 lakh."
+					},
+					"validation": {
+						"condition": {
+							"<": [
+								{
+									"var": "principalOutstanding"
+								},
+								"500000"
+							]
+						}
+					}
+				},
+				{
+					"id": "q2_existingInterestRate",
+					"bindsTo_template": "existingInterestRate",
+					"contextKey": "existingInterestRate",
+					"type": "number",
+					"uiGroup": "text_fields",
+					"uiMeta": {
+						"placeholder": "Enter existing interest rate"
+					},
+					"required": true,
+					"question": "What's the current interest rate with existing Lender?",
+					"showWhen": {
+						">=": [
+							{
+								"var": "principalOutstanding"
+							},
+							"500000"
+						]
+					},
+					"errorMessage": {
+						"required": true,
+						"message": "You can enter up to a minumum of 1% and maximum of 40% as the interest rate. Any figure beyond this may be unreasonable to our AI."
+					},
+					"validation": {
+						"condition": {
+							"or": [
+								{ "<": [{ "var": "existingInterestRate" }, 1] },
+								{ ">": [{ "var": "existingInterestRate" }, 40] }
+							]
+						}
+					}
+				},
+				{
+					"id": "q3_originalRemainingTenure",
+					"bindsTo_template": "originalRemainingTenure",
+					"contextKey": "originalRemainingTenure",
+					"type": "number",
+					"uiGroup": "text_fields",
+					"uiMeta": {
+						"placeholder": "Enter remaining tenure"
+					},
+					"required": true,
+					"question": "What's the remaining tenure to close the loan at existing Lender?(in Months)",
+					"showWhen": {
+						"and": [
+							{
+								">=": [
+									{
+										"var": "principalOutstanding"
+									},
+									"500000"
+								]
+							},
+							{
+								"and": [
+									{ ">=": [{ "var": "existingInterestRate" }, 1] },
+									{ "<=": [{ "var": "existingInterestRate" }, 40] }
+								]
+							}
+						]
+					},
+					"errorMessage": {
+						"required": true,
+						"message": "You can enter up to a minimum of 12 month and maximum of 180 months (15 years) as remaining tenures. Any figure beyond this seems unreasonable."
+					},
+					"validation": {
+						"condition": {
+							"or": [
+								{ "<": [{ "var": "originalRemainingTenure" }, 12] },
+								{ ">": [{ "var": "originalRemainingTenure" }, 180] }
+							]
+						}
+					}
+				},
+				{
+					"id": "q4_bankName",
+					"existing_bindsTo": "bankName",
+					"contextKey": "bankName",
+					"type": "select",
+					"uiGroup": "select_fields",
+					"uiMeta": {
+						"placeholder": "Select bank name"
+					},
+					"required": true,
+					"question": "Please select the lender with whom your current loan is active.",
+					"options": [
+						{
+							"label": "HDFC Bank",
+							"value": "HDFC Bank"
+						},
+						{
+							"label": "SBI Bank",
+							"value": "SBI Bank"
+						},
+						{
+							"label": "Axis Bank",
+							"value": "Axis Bank"
+						},
+						{
+							"label": "ICICI Bank",
+							"value": "ICICI Bank"
+						},
+						{
+							"label": "Canara Bank",
+							"value": "Canara Bank"
+						},
+						{
+							"label": "Bank of Baroda",
+							"value": "Bank of Baroda"
+						},
+						{
+							"label": "Citi Bank",
+							"value": "Citi Bank"
+						},
+						{
+							"label": "Union Bank",
+							"value": "Union Bank"
+						}
+					],
+					"showWhen": {
+						"and": [
+							{
+								">=": [
+									{
+										"var": "principalOutstanding"
+									},
+									"500000"
+								]
+							},
+							{
+								"and": [
+									{ ">=": [{ "var": "existingInterestRate" }, 1] },
+									{ "<=": [{ "var": "existingInterestRate" }, 40] }
+								]
+							},
+							{
+								"and": [
+									{ ">=": [{ "var": "originalRemainingTenure" }, 12] },
+									{ "<=": [{ "var": "originalRemainingTenure" }, 180] }
+								]
+							}
+						]
+					}
+				},
+				{
+					"id": "q5_includedCurrentEMIsAmount",
+					"bindsTo_template": "includedCurrentEMIsAmount",
+					"contextKey": "includedCurrentEMIsAmount",
+					"type": "number",
+					"uiGroup": "text_fields",
+					"uiMeta": {
+						"placeholder": "Enter EMI amount"
+					},
+					"required": true,
+					"question": "What's the current EMI?",
+					"showWhen": {
+						"and": [
+							{
+								">=": [
+									{
+										"var": "principalOutstanding"
+									},
+									"500000"
+								]
+							},
+							{
+								"and": [
+									{ ">=": [{ "var": "existingInterestRate" }, 1] },
+									{ "<=": [{ "var": "existingInterestRate" }, 40] }
+								]
+							},
+							{
+								"and": [
+									{ ">=": [{ "var": "originalRemainingTenure" }, 12] },
+									{ "<=": [{ "var": "originalRemainingTenure" }, 180] }
+								]
+							},
+							{
+								"!=": [
+									{
+										"var": "bankName"
+									},
+									""
+								]
+							}
+						]
+					}
+				},
+				{
+					"id": "q6_insuranceDetailsOptions",
+					"bindsTo_template": "insuranceDetailsOptions",
+					"contextKey": "insuranceDetailsOptions",
+					"type": "radio",
+					"uiGroup": "text_fields",
+					"required": true,
+					"question": "Have you taken any loan insurance?",
+					"options": [
+						{
+							"label": "Yes",
+							"value": "Yes"
+						},
+						{
+							"label": "No",
+							"value": "No"
+						}
+					],
+					"showWhen": {
+						"and": [
+							{
+								">=": [
+									{
+										"var": "principalOutstanding"
+									},
+									"500000"
+								]
+							},
+							{
+								"and": [
+									{ ">=": [{ "var": "existingInterestRate" }, 1] },
+									{ "<=": [{ "var": "existingInterestRate" }, 40] }
+								]
+							},
+							{
+								"and": [
+									{ ">=": [{ "var": "originalRemainingTenure" }, 12] },
+									{ "<=": [{ "var": "originalRemainingTenure" }, 180] }
+								]
+							},
+							{
+								"!=": [
+									{
+										"var": "bankName"
+									},
+									""
+								]
+							},
+							{
+								"!=": [
+									{
+										"var": "includedCurrentEMIsAmount"
+									},
+									""
+								]
+							}
+						]
+					}
+				},
+				{
+					"id": "q7_insuranceLoanAmount",
+					"bindsTo_template": "insuranceLoanAmount",
+					"contextKey": "insuranceLoanAmount",
+					"type": "number",
+					"uiGroup": "text_fields",
+					"required": true,
+					"question": "What's the outstanding insurance amount?",
+					"showWhen": {
+						"and": [
+							{
+								">=": [
+									{
+										"var": "principalOutstanding"
+									},
+									"500000"
+								]
+							},
+							{
+								"and": [
+									{ ">=": [{ "var": "existingInterestRate" }, 1] },
+									{ "<=": [{ "var": "existingInterestRate" }, 40] }
+								]
+							},
+							{
+								"and": [
+									{ ">=": [{ "var": "originalRemainingTenure" }, 12] },
+									{ "<=": [{ "var": "originalRemainingTenure" }, 180] }
+								]
+							},
+							{
+								"!=": [
+									{
+										"var": "bankName"
+									},
+									""
+								]
+							},
+							{
+								"!=": [
+									{
+										"var": "includedCurrentEMIsAmount"
+									},
+									""
+								]
+							},
+							{
+								"==": [
+									{
+										"var": "insuranceDetailsOptions"
+									},
+									"Yes"
+								]
+							}
+						]
+					}
+				}
+			]
+		},
+		{
+			"id": "topUpDetailstPage",
+			"title": "Your Loan Requirements",
+			"nextButtonVisibility": {
+				"mode": ["allRequiredAnswered"]
+			},
+			"showWhen": {
+				"and": [
+					{
+						"in": [
+							{
+								"var": "loanType"
+							},
+							["Balance Transfer With Top-up", "Balance Transfer Only", "Top-up Only"]
+						]
+					},
+					{
+						"in": [{ "var": "insuranceDetailsOptions" }, ["Yes", "No"]]
+					}
+				]
+			},
+			"questions": [
+				{
+					"id": "q1_propCost",
+					"bindsTo_template": "propCost",
+					"contextKey": "propCost",
+					"type": "number",
+					"uiGroup": "number_fields",
+					"required": true,
+					"question": "What would you estimate the current value of the property?",
+					"description": "If uncertain, please provide your best estimate. Keep in mind that lenders will independently evaluate the market value of your property and determine the maximum lending amount accordingly.",
+					"errorMessage": {
+						"required": true,
+						"message": "We do not provide services for the property value less than 20,00,000."
+					},
+					"validation": {
+						"condition": {
+							"<": [
+								{
+									"var": "propCost"
+								},
+								"2000000"
+							]
+						}
+					}
+				},
+				{
+					"id": "q_topupRequired",
+					"bindsTo_template": "topupRequired",
+					"contextKey": "topupRequired",
+					"type": "radio",
+					"uiGroup": "number_fields",
+					"required": true,
+					"question": "Do you want any Top-up loan with balance transfer?",
+					"options": [
+						{
+							"label": "Yes",
+							"value": "Yes"
+						},
+						{
+							"label": "No",
+							"value": "No"
+						}
+					],
+					"showWhen": {
+						"and": [
+							{
+								"==": [{ "var": "loanType" }, "Balance Transfer Only"]
+							},
+							{
+								"!=": [{ "var": "propCost" }, ""]
+							}
+						]
+					}
+				},
+				{
+					"id": "q2_topUpAmount",
+					"bindsTo_template": "topUpAmount",
+					"contextKey": "topUpAmount",
+					"type": "number",
+					"uiGroup": "number_fields",
+					"uiMeta": {
+						"placeholder": "Enter your required amount",
+						"min": 100000,
+						"max": 13915400
+					},
+					"required": true,
+					"question": "Please specify the required Top-up amount ?",
+					"description": "Based on LTV and property value, you can enter up to ---- , though the possible top-up may vary with each lender based on their terms and your eligibility.",
+					"showWhen": {
+						"and": [
+							{
+								"or": [
+									{
+										"in": [{ "var": "loanType" }, ["Balance Transfer With Top-up", "Top-up Only"]]
+									},
+									{
+										"and": [
+											{
+												"==": [{ "var": "loanType" }, "Balance Transfer Only"]
+											},
+											{
+												"==": [{ "var": "topupRequired" }, "Yes"]
+											}
+										]
+									}
+								]
+							},
+							{
+								"!=": [{ "var": "propCost" }, ""]
+							}
+						]
+					},
+					"errorMessage": {
+						"required": true,
+						"message": "Lenders do not accept loan applications below 5 lakh. You should try for personal loan / Business loan for such low amount."
+					},
+					"validation": {
+						"condition": {
+							"<": [
+								{
+									"var": "topUpAmount"
+								},
+								"500000"
+							]
+						}
+					}
+				},
+				{
+					"id": "q3_mortgageYear",
+					"bindsTo_template": "mortgageYear",
+					"contextKey": "mortgageYear",
+					"type": "select",
+					"uiGroup": "select_fields",
+					"uiMeta": {
+						"placeholder": "Select loan tenure in years"
+					},
+					"required": true,
+					"question": "What loan term would you prefer with the new lender?",
+					"description": "You can choose a term between 5 and 15 years. A longer term will result in lower monthly payments but higher total interest over time. You can always change your decision later if needed.",
+					"options": [
+						{
+							"label": "5",
+							"value": "5"
+						},
+						{
+							"label": "10",
+							"value": "10"
+						},
+						{
+							"label": "15",
+							"value": "15"
+						}
+					],
+					"showWhwn": {
+						"and": [
+							{
+								"or": [
+									{
+										"==": [{ "var": "loanType" }, "Balance Transfer With Top-up"]
+									},
+									{
+										"and": [
+											{
+												"==": [{ "var": "loanType" }, "Balance Transfer Only"]
+											},
+											{
+												"==": [{ "var": "topupRequired" }, "Yes"]
+											}
+										]
+									}
+								]
+							},
+							{
+								"!=": [{ "var": "propCost" }, ""]
+							}
+						]
+					}
+				}
+			]
+		},
+		{
 			"id": "loanRequirementPage",
 			"title": "Your mortgage profile",
 			"nextButtonVisibility": {
 				"mode": ["allRequiredAnswered"]
+			},
+			"showWhen": {
+				"==": [
+					{
+						"var": "loanType"
+					},
+					["New Loan"]
+				]
 			},
 			"questions": [
 				{
@@ -2754,6 +3725,20 @@
 								"!=": [{ "var": "propCost" }, ""]
 							}
 						]
+					},
+					"errorMessage": {
+						"required": true,
+						"message": "While we'll show you the best offers, we're unable to process loans under ₹30 Lakh due to service limitations. Thank you for understanding."
+					},
+					"validation": {
+						"condition": {
+							"<": [
+								{
+									"var": "loanAmount"
+								},
+								"3000000"
+							]
+						}
 					}
 				}
 			]

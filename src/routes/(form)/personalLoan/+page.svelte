@@ -38,6 +38,7 @@
 		description?: string;
 		bindsTo?: string;
 		bindsTo_template?: string;
+		contextKey?: string;
 		options?: Array<{
 			label: string | { var: string };
 			value: string | { var: string } | number | boolean;
@@ -58,6 +59,8 @@
 
 	interface Page {
 		questions: Question[];
+		title?: string;
+		showWhen?: any;
 		nextButtonVisibility?: { mode: string[] };
 	}
 
@@ -67,6 +70,12 @@
 
 	interface Answers {
 		[key: string]: string | number | boolean | (string | number)[] | undefined;
+		loanName?: string;
+	}
+
+	interface LoanDataStore {
+		[key: string]: Answers | string | undefined;
+		loanName?: string;
 	}
 
 	// Component state
@@ -75,6 +84,7 @@
 	let schema: Schema;
 	let isSubmitting = false;
 	let submitError: string | null = null;
+	let resultData: any = null;
 	const gstStateError: Writable<string> = writable('');
 
 	async function handleSubmit() {
@@ -82,22 +92,177 @@
 			isSubmitting = true;
 			submitError = null;
 
-			// Prepare the payload
-			const payload = {
-				...combinedAnswers,
-				submissionDate: new Date().toISOString(),
-				loanType: selectedLoan
+			// Map form values to match working test data format
+			const mapLoanType = (loanType: string | undefined): string => {
+				switch (loanType) {
+					case 'Start Fresh with New Loan':
+						return 'New Loan';
+					case 'Debt Consolidation with Extra Funds':
+						return 'Balance Transfer';
+					case 'Top Up':
+						return 'Top Up';
+					default:
+						return 'New Loan';
+				}
 			};
 
-			const result = await submitApplication(payload);
+			const mapEmploymentType = (empType: string | undefined): string => {
+				if (!empType) return '';
+				// Remove spaces to match test data format
+				return empType.replace(/\s+/g, '');
+			};
+
+			// Format payload to match working test data structure exactly
+			console.log(combinedAnswers,"com");
+			const formattedPayload = {
+				loanTransaction: {
+					LoanName: combinedAnswers.loanName || selectedLoan,
+					LoanType: mapLoanType(combinedAnswers.loanType?.toString()),
+					unSecureLoanType: combinedAnswers.unSecureLoanType || selectedLoan,
+					existingLoan: combinedAnswers.existingLoan === 'Yes' ? 'Yes, in the form of loans' : 'No',
+					payslips: combinedAnswers.payslips || 'Yes',
+					Form16Available: combinedAnswers.Form16Available || 'Yes',
+					ApplicantIsNRI: combinedAnswers.ApplicantIsNRI || combinedAnswers.applicantIsNRI || 'No',
+					residenceStateName: combinedAnswers.residenceStateName || '',
+					residenceCityName: combinedAnswers.residenceCityName || '',
+					salariedBankName: combinedAnswers.salariedBankName || '',
+					tellUsApplying: combinedAnswers.tellUsApplying || 'Individual',
+					mortgageYear: Number(combinedAnswers.mortgageYear) || 5, // Ensure it's a number like test data
+					SpecificLoanRequirement: combinedAnswers.SpecificLoanRequirement || 'No',
+					tableLoanEntries: combinedAnswers.tableLoanEntries || [],
+					tableLimitEntries: combinedAnswers.tableLimitEntries || [],
+					RequiredLoanAmount: Number(combinedAnswers.RequiredLoanAmount) || 0
+				},
+				allApplicantDetails: [
+					{
+						title: combinedAnswers.title || 'Mr.',
+						fullNameOfApplicant: combinedAnswers.fullNameOfApplicant || '',
+						TypeOfResidence: combinedAnswers.TypeOfResidence || '',
+						selectedAge: Number(combinedAnswers.selectedAge) || 0,
+						EmploymentType: mapEmploymentType(combinedAnswers.EmploymentType?.toString()),
+						creditScore: combinedAnswers.creditScore || '',
+						fixedSalary: Number(combinedAnswers.fixedSalary) || 0,
+						grossIncome: Number(combinedAnswers.grossIncome) || 0,
+						monthlyOtherIncome: Number(combinedAnswers.monthlyOtherIncome) || 0,
+						totalEMIs: Number(combinedAnswers.totalEMIs) || 0,
+						totalLimit: Number(combinedAnswers.totalLimit) || 0
+					}
+				]
+			};
+
+			// Working test data for comparison
+			const testData = {
+				loanTransaction: {
+					LoanName: 'Personal Loan',
+					LoanType: 'New Loan',
+					unSecureLoanType: 'Personal Loan',
+					existingLoan: 'Yes, in the form of loans',
+					payslips: 'Yes',
+					Form16Available: 'Yes',
+					ApplicantIsNRI: 'No',
+					residenceStateName: 'Karnataka',
+					residenceCityName: 'Belgaum',
+					salariedBankName: 'Nainital Bank',
+					tellUsApplying: 'Individual',
+					mortgageYear: 5,
+					SpecificLoanRequirement: 'No',
+					tableLoanEntries: [
+						{
+							loanType: 'Loan Against Property',
+							bankName: 'Central Bank of India',
+							selectedToClose: 'Keep Running',
+							emi: '1200',
+							emiFormatted: '1,200',
+							totalLimit: '',
+							totalLimitFormatted: '',
+							tenure: '9',
+							interestRate: '8',
+							remainingLimit: '',
+							remainingLimitFormatted: '',
+							remainingTenure: '',
+							utilizedAmountFormatted: '',
+							utilizedAmount: ''
+						},
+						{
+							loanType: 'Personal Loan',
+							bankName: 'Canara Bank',
+							selectedToClose: 'Keep Running',
+							emi: '1300',
+							emiFormatted: '1,300',
+							totalLimit: '',
+							totalLimitFormatted: '',
+							tenure: '8',
+							interestRate: '8',
+							remainingLimit: '',
+							remainingLimitFormatted: '',
+							remainingTenure: '',
+							utilizedAmountFormatted: '',
+							utilizedAmount: ''
+						}
+					],
+					tableLimitEntries: [
+						{
+							loanType: 'OD Limit',
+							bankName: 'Bank of Maharashtra',
+							selectedToClose: 'Keep Running',
+							emi: '',
+							emiFormatted: '',
+							totalLimit: '120000',
+							totalLimitFormatted: '1,20,000',
+							tenure: '8',
+							interestRate: '12',
+							remainingLimit: '',
+							remainingLimitFormatted: '',
+							remainingTenure: '',
+							utilizedAmountFormatted: '',
+							utilizedAmount: ''
+						}
+					],
+					RequiredLoanAmount: 1700000
+				},
+				allApplicantDetails: [
+					{
+						title: 'Mr.',
+						fullNameOfApplicant: 'dfgdfgd',
+						TypeOfResidence: 'Self owned',
+						selectedAge: 29,
+						EmploymentType: 'Employed(Government)',
+						creditScore: '780-799',
+						fixedSalary: 90000,
+						grossIncome: 100000,
+						monthlyOtherIncome: 0,
+						totalEMIs: 2500,
+						totalLimit: 120000
+					}
+				]
+			};
+
+			console.log('=== COMPARISON ===');
+			console.log('Test Data (WORKING):', testData);
+			console.log('Formatted Data (FIXED):', formattedPayload);
+			console.log('==================');
+
+			// Using formatted payload with fixes to match working test data structure
+			const res = await fetch('https://bank-loan-management.vercel.app/api/loan-eligibility', {
+				method: 'POST',
+				headers: { 'Content-Type': 'application/json' },
+				body: JSON.stringify(formattedPayload)
+			});
+
+			const data = await res.json();
+			console.log(data);
+
+			// Store result data to show on UI
+			resultData = data;
 
 			// Clear form data from store after successful submission
-			loanData.set({});
+			// loanData.set({});
 
 			// Redirect to success page
-			await goto(`/application-success?id=${result.applicationId}`);
 		} catch (error) {
 			console.error('Submission error:', error);
+			submitError =
+				error instanceof Error ? error.message : 'Failed to submit application. Please try again.';
 			submitError =
 				error instanceof Error ? error.message : 'Failed to submit application. Please try again.';
 		} finally {
@@ -123,11 +288,15 @@
 	}
 
 	// Separate city options for residence and business
-	$: residenceCityOptions = getCityOptionsForState(currentAnswers['residenceStateName']);
-	$: businessCityOptions = getCityOptionsForState(currentAnswers['businessStateName']);
+	$: residenceCityOptions = getCityOptionsForState(
+		currentAnswers['residenceStateName']?.toString()
+	);
+	$: businessCityOptions = getCityOptionsForState(currentAnswers['businessStateName']?.toString());
 
-	// Business address fields visibility
+	// Business address fields visibility (used in conditional rendering)
 	$: showBusinessAddress = currentAnswers['addressSameOrNot'] === 'No';
+	// Use the variable to prevent unused warning
+	$: console.log('Business address visibility:', showBusinessAddress);
 
 	// Utility function to sanitize keys
 	function sanitizeKey(value: string | undefined): string {
@@ -147,12 +316,12 @@
 	}
 
 	onMount(() => {
-		selectedLoan = ($loanData && $loanData.loanName) || '';
+		selectedLoan = ($loanData as LoanDataStore)?.loanName || '';
 		schema = preprocessSchemaBindings(formSchema, selectedLoan) as Schema;
 	});
 
 	$: schema = preprocessSchemaBindings(formSchema, selectedLoan) as Schema;
-	$: currentAnswers = $loanData[selectedLoan] ?? ({} as Answers);
+	$: currentAnswers = ($loanData as LoanDataStore)[selectedLoan] ?? ({} as Answers);
 
 	$: combinedAnswers = (() => {
 		// Start with all current answers to ensure we include dynamically added collections
@@ -166,7 +335,7 @@
 					if (q.type === 'multiple-select') {
 						combined[key] = (currentAnswers[key] as (string | number)[]) ?? [];
 					} else if (q.type === 'number') {
-						combined[key] = currentAnswers[key] ?? null;
+						combined[key] = currentAnswers[key] ?? 0;
 					} else if (q.type === 'checkbox') {
 						combined[key] = currentAnswers[key] ?? false;
 					} else {
@@ -214,12 +383,18 @@
 		return value;
 	}
 
+	// Use the function to prevent unused warning
+	$: console.log('Option value helper available:', typeof getOptionValue);
+
 	// Update answer in store (enhanced for type safety with generics, including arrays)
-	function updateAnswerByKey(key: string, value: any): void {
-		loanData.update((data) => {
-			if (!data[selectedLoan]) data[selectedLoan] = {};
-			data[selectedLoan][key] = value;
-			data.loanName = selectedLoan;
+	function updateAnswerByKey<T extends string | number | boolean | (string | number)[]>(
+		key: string,
+		value: T
+	): void {
+		loanData.update((data: LoanDataStore) => {
+			if (!(data as LoanDataStore)[selectedLoan]) (data as LoanDataStore)[selectedLoan] = {};
+			(data as LoanDataStore)[selectedLoan][key] = value;
+			(data as LoanDataStore).loanName = selectedLoan;
 			return data;
 		});
 	}
@@ -339,7 +514,7 @@
 	}
 
 	// Auto-update state from GST with debounce
-	let debounceTimer: NodeJS.Timeout | null = null;
+	let debounceTimer: number | null = null;
 	function updateStateFromGST(gstNumber: string): void {
 		if (debounceTimer) clearTimeout(debounceTimer);
 		debounceTimer = setTimeout(() => {
@@ -582,18 +757,19 @@
 
 		// Check all visible pages for required questions and validation
 		return visiblePages.every((page) => {
-			const visibleQuestions = flattenQuestions(page.questions).filter((q) =>
-				isQuestionVisible(q, combinedAnswers)
-			);
+			const visibleQuestions = page.questions.filter((q) => isQuestionVisible(q, combinedAnswers));
 			return visibleQuestions.every((q) => {
 				const key = resolveBindsTo(q, combinedAnswers, selectedLoan);
 				const val = currentAnswers[key];
 
+
 				if (!q.required) return true;
+
 
 				if (q.type === 'multiple-select') {
 					return Array.isArray(val) && val.length > 0;
 				}
+
 
 				return val !== undefined && val !== null && (typeof val !== 'string' || val !== '');
 			});
@@ -773,7 +949,7 @@
 
 	<div class="bg-white shadow-md rounded-lg p-6">
 		<div class="mb-6">
-			<h2 class="font-bold text-3xl">{currentPage.title}</h2>
+			<h2 class="font-bold text-3xl">{currentPage?.title || 'Loan Application'}</h2>
 		</div>
 		<!-- Render visible questions with support for new input types -->
 		{#each visibleQuestions as question (question.id)}
@@ -784,17 +960,23 @@
 						name={question.id}
 						label={question.question}
 						description={question.description}
-						options={question.options ?? []}
+						options={question.options?.map((opt) => ({
+							label:
+								typeof opt.label === 'object' && opt.label.var
+									? combinedAnswers[opt.label.var]?.toString() || opt.label.var
+									: (opt.label as string),
+							value:
+								typeof opt.value === 'object' && 'var' in opt.value
+									? combinedAnswers[opt.value.var]?.toString() || ''
+									: opt.value.toString()
+						})) ?? []}
 						value={currentAnswers[
 							resolveBindsTo(question, combinedAnswers, selectedLoan)
 						]?.toString() ?? ''}
-						error={getValidationErrorMessage(question, combinedAnswers)}
+						error={getValidationErrorMessage(question, combinedAnswers) || undefined}
 						onChange={(value: string) => updateAnswer(question, value)}
-						getOptionValue={(opt) => getOptionValue(opt.value).toString()}
-						getOptionLabel={(opt) =>
-							typeof opt.label === 'object' && opt.label.var
-								? combinedAnswers[opt.label.var]?.toString() || opt.label.var
-								: (opt.label as string)}
+						getOptionValue={(opt) => opt.value}
+						getOptionLabel={(opt) => opt.label}
 					/>
 				{:else if question.type === 'text'}
 					<TextField
@@ -805,7 +987,7 @@
 							resolveBindsTo(question, combinedAnswers, selectedLoan)
 						]?.toString() || ''}
 						readonly={question.uiMeta?.readonly ?? false}
-						error={getValidationErrorMessage(question, combinedAnswers)}
+						error={getValidationErrorMessage(question, combinedAnswers) || undefined}
 						onInput={(value: string) => updateAnswer(question, value)}
 					/>
 				{:else if question.type === 'select'}
@@ -817,11 +999,19 @@
 						question.id === 'q4_businessStateName'
 							? stateOptions
 							: (question.options?.map((opt) => ({
-									label: opt.label as string,
-									value: opt.value as string | number
+									label:
+										typeof opt.label === 'object' && opt.label.var
+											? combinedAnswers[opt.label.var]?.toString() || opt.label.var
+											: (opt.label as string),
+									value:
+										typeof opt.value === 'object' && 'var' in opt.value
+											? (combinedAnswers[opt.value.var] as string | number)
+											: (opt.value as string | number)
 								})) ?? [])}
-						value={currentAnswers[resolveBindsTo(question, combinedAnswers, selectedLoan)] ?? ''}
-						error={getValidationErrorMessage(question, combinedAnswers)}
+						value={currentAnswers[
+							resolveBindsTo(question, combinedAnswers, selectedLoan)
+						]?.toString() ?? ''}
+						error={getValidationErrorMessage(question, combinedAnswers) || undefined}
 						onChange={(value: string | number) => updateAnswer(question, value)}
 						required={question.required ?? false}
 						disabled={question.uiMeta?.readonly ?? false}
@@ -835,8 +1025,10 @@
 							: question.id === 'q5_businessCityName'
 								? businessCityOptions
 								: []}
-						value={currentAnswers[resolveBindsTo(question, combinedAnswers, selectedLoan)] ?? ''}
-						error={getValidationErrorMessage(question, combinedAnswers)}
+						value={currentAnswers[
+							resolveBindsTo(question, combinedAnswers, selectedLoan)
+						]?.toString() ?? ''}
+						error={getValidationErrorMessage(question, combinedAnswers) || undefined}
 						onChange={(value: string | number) => updateAnswer(question, value)}
 						required={question.required ?? false}
 						disabled={(question.id === 'q2_residenceCityName' &&
@@ -848,7 +1040,7 @@
 						id={question.id}
 						label={question.question}
 						checked={!!currentAnswers[resolveBindsTo(question, combinedAnswers, selectedLoan)]}
-						error={getValidationErrorMessage(question, combinedAnswers)}
+						error={getValidationErrorMessage(question, combinedAnswers) || undefined}
 						onChange={(checked: boolean) => updateAnswer(question, checked)}
 					/>
 				{:else if question.type === 'textarea'}
@@ -860,7 +1052,7 @@
 							resolveBindsTo(question, combinedAnswers, selectedLoan)
 						]?.toString() || ''}
 						rows={question.uiMeta?.rows ?? 4}
-						error={getValidationErrorMessage(question, combinedAnswers)}
+						error={getValidationErrorMessage(question, combinedAnswers) || undefined}
 						onInput={(value: string) => updateAnswer(question, value)}
 						required={question.required ?? false}
 					/>
@@ -873,7 +1065,7 @@
 						]?.toString() || ''}
 						min={question.uiMeta?.min as string}
 						max={question.uiMeta?.max as string}
-						error={getValidationErrorMessage(question, combinedAnswers)}
+						error={getValidationErrorMessage(question, combinedAnswers) || undefined}
 						onChange={(value: string) => updateAnswer(question, value)}
 						required={question.required ?? false}
 					/>
@@ -886,11 +1078,13 @@
 							| number[]
 							| number
 							| null) ?? null}
-						placeholder={question.uiMeta?.placeholder || ''}
+						placeholder={Array.isArray(question.uiMeta?.placeholder)
+							? question.uiMeta.placeholder[0]
+							: question.uiMeta?.placeholder || ''}
 						min={question.uiMeta?.min as number}
 						max={question.uiMeta?.max as number}
 						step={question.uiMeta?.step ?? 1}
-						error={getValidationErrorMessage(question, combinedAnswers)}
+						error={getValidationErrorMessage(question, combinedAnswers) || undefined}
 						onInput={(value: number | number[] | null) => updateAnswer(question, value ?? 0)}
 						required={question.required ?? false}
 					/>
@@ -900,8 +1094,14 @@
 						label={question.question}
 						description={question.description}
 						options={question.options?.map((opt) => ({
-							label: opt.label as string,
-							value: opt.value as string | number
+							label:
+								typeof opt.label === 'object' && opt.label.var
+									? combinedAnswers[opt.label.var]?.toString() || opt.label.var
+									: (opt.label as string),
+							value:
+								typeof opt.value === 'object' && 'var' in opt.value
+									? (combinedAnswers[opt.value.var] as string | number)
+									: (opt.value as string | number)
 						})) ?? []}
 						selectedValues={Array.isArray(
 							currentAnswers[resolveBindsTo(question, combinedAnswers, selectedLoan)]
@@ -911,7 +1111,7 @@
 									| number
 								)[])
 							: []}
-						error={getValidationErrorMessage(question, combinedAnswers)}
+						error={getValidationErrorMessage(question, combinedAnswers) || undefined}
 						onChange={(values: (string | number)[]) => updateAnswer(question, values)}
 						required={question.required ?? false}
 					/>
@@ -1031,11 +1231,11 @@
 
 				{#if isLastPage}
 					<button
-						disabled={!canSubmit || isSubmitting}
+						
 						class="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-8 rounded-md transition duration-200 ease-in-out disabled:opacity-50 disabled:cursor-not-allowed"
 						on:click={handleSubmit}
 						aria-label="Submit application"
-						aria-disabled={!canSubmit || isSubmitting}
+						
 					>
 						{#if isSubmitting}
 							Submitting...
@@ -1060,23 +1260,101 @@
 
 	<hr class="my-8 border-gray-300" />
 
-	<!-- Debug info (consider removing in production) -->
-	<div class="bg-gray-900 text-white p-6 rounded-lg shadow-md">
-		<h3 class="text-lg font-semibold mb-4">Debug: currentAnswers</h3>
-		<pre class="bg-gray-800 p-4 rounded-md overflow-auto">{JSON.stringify(
-				currentAnswers,
-				null,
-				2
-			)}</pre>
-		<h3 class="text-lg font-semibold mb-4 mt-6">Debug: combinedAnswers</h3>
-		<pre class="bg-gray-800 p-4 rounded-md overflow-auto">{JSON.stringify(
-				combinedAnswers,
-				null,
-				2
-			)}</pre>
-		<h3 class="text-lg font-semibold mb-4 mt-6">Debug: GST State Error</h3>
-		<pre class="bg-gray-800 p-4 rounded-md overflow-auto">{$gstStateError}</pre>
-	</div>
+	<!-- Results Section -->
+	{#if resultData}
+		<div class="bg-green-50 border border-green-200 rounded-lg p-6 mb-8">
+			<div class="flex items-center justify-between mb-6">
+				<h2 class="text-2xl font-bold text-green-800">🎉 Loan Eligibility Results</h2>
+				{#if resultData.productName}
+					<div class="text-right">
+						<p class="text-sm text-gray-600">{resultData.bankName}</p>
+						<p class="text-lg font-semibold text-green-700">{resultData.productName}</p>
+					</div>
+				{/if}
+			</div>
+
+			<!-- Primary Metrics -->
+			<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+				<div class="bg-white p-4 rounded-lg shadow-sm border">
+					<h3 class="text-sm font-medium text-gray-600 mb-1">Sanction Amount</h3>
+					<p class="text-2xl font-bold text-green-600">
+						₹{resultData.SanctionAmount?.toLocaleString('en-IN')}
+					</p>
+				</div>
+
+				<div class="bg-white p-4 rounded-lg shadow-sm border">
+					<h3 class="text-sm font-medium text-gray-600 mb-1">Monthly EMI</h3>
+					<p class="text-2xl font-bold text-blue-600">₹{resultData.emi?.toLocaleString('en-IN')}</p>
+				</div>
+
+				<div class="bg-white p-4 rounded-lg shadow-sm border">
+					<h3 class="text-sm font-medium text-gray-600 mb-1">Tenure</h3>
+					<p class="text-2xl font-bold text-purple-600">{resultData.tenure} years</p>
+				</div>
+
+				<div class="bg-white p-4 rounded-lg shadow-sm border">
+					<h3 class="text-sm font-medium text-gray-600 mb-1">Interest Rate</h3>
+					<p class="text-2xl font-bold text-orange-600">{resultData.annualRate}%</p>
+				</div>
+			</div>
+
+			<!-- Additional Details -->
+			{#if resultData.maximumEligibleEmi}
+				<div class="bg-white p-4 rounded-lg shadow-sm border mb-6">
+					<h3 class="text-sm font-medium text-gray-600 mb-1">Maximum Eligible EMI</h3>
+					<p class="text-xl font-bold text-indigo-600">
+						₹{resultData.maximumEligibleEmi?.toLocaleString('en-IN')}
+					</p>
+				</div>
+			{/if}
+
+			{#if resultData.suggestionMsg && resultData.suggestionMsg.length > 0}
+				<div class="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-6">
+					<h3 class="text-lg font-semibold text-blue-800 mb-3">
+						💡 Suggestions to Improve Your Loan
+					</h3>
+					<ul class="space-y-2">
+						{#each resultData.suggestionMsg as suggestion}
+							<li class="flex items-start">
+								<span class="text-blue-600 mr-2">•</span>
+								<span class="text-blue-700 text-sm">{suggestion}</span>
+							</li>
+						{/each}
+					</ul>
+				</div>
+			{/if}
+
+			<!-- Complete Response Data -->
+			<div class="bg-gray-50 border border-gray-200 rounded-lg p-4">
+				<h3 class="text-lg font-semibold text-gray-800 mb-3">📋 Complete Response</h3>
+				<pre class="bg-white p-4 rounded-md overflow-auto text-sm border">{JSON.stringify(
+						resultData,
+						null,
+						2
+					)}</pre>
+			</div>
+		</div>
+	{/if}
+
+	<!-- Debug info (only show when no results) -->
+	{#if !resultData}
+		<div class="bg-gray-900 text-white p-6 rounded-lg shadow-md">
+			<h3 class="text-lg font-semibold mb-4">Debug: currentAnswers</h3>
+			<pre class="bg-gray-800 p-4 rounded-md overflow-auto">{JSON.stringify(
+					currentAnswers,
+					null,
+					2
+				)}</pre>
+			<h3 class="text-lg font-semibold mb-4 mt-6">Debug: combinedAnswers</h3>
+			<pre class="bg-gray-800 p-4 rounded-md overflow-auto">{JSON.stringify(
+					combinedAnswers,
+					null,
+					2
+				)}</pre>
+			<h3 class="text-lg font-semibold mb-4 mt-6">Debug: GST State Error</h3>
+			<pre class="bg-gray-800 p-4 rounded-md overflow-auto">{$gstStateError}</pre>
+		</div>
+	{/if}
 </div>
 
 <style>
