@@ -25,6 +25,9 @@
 							"flagKey": {
 								"isSecuredLoan": true,
 								"isHomeLoan": true
+							},
+							"uiMeta": {
+								"icon": "Circle"
 							}
 						},
 						{
@@ -33,6 +36,9 @@
 							"flagKey": {
 								"isSecuredLoan": true,
 								"isPlotLoan": true
+							},
+							"uiMeta": {
+								"icon": "Circle"
 							}
 						},
 						{
@@ -41,6 +47,9 @@
 							"flagKey": {
 								"isSecuredLoan": true,
 								"isLAP": true
+							},
+							"uiMeta": {
+								"icon": "Circle"
 							}
 						},
 						{
@@ -49,6 +58,9 @@
 							"flagKey": {
 								"isUnsecuredLoan": true,
 								"isBusinessLoan": true
+							},
+							"uiMeta": {
+								"icon": "Circle"
 							}
 						},
 						{
@@ -57,6 +69,9 @@
 							"flagKey": {
 								"isUnsecuredLoan": true,
 								"isProfessionalLoan": true
+							},
+							"uiMeta": {
+								"icon": "Circle"
 							}
 						},
 						{
@@ -65,6 +80,9 @@
 							"flagKey": {
 								"isUnsecuredLoan": true,
 								"isPersonalLoan": true
+							},
+							"uiMeta": {
+								"icon": "Circle"
 							}
 						}
 					]
