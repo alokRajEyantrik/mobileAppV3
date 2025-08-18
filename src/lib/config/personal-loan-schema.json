@@ -2193,6 +2193,16 @@
 							"limit",
 							"sanctionedTenure",
 							"interestRate"
+						],
+						"DODEmpty": [
+							"bankName",
+							"selectedToClose",
+							"sanctionedTenure",
+							"interestRate",
+							"remainingTenure",
+							"utilizedAmount",
+							"sanctionedLimit",
+							"remainingLimit"
 						]
 					},
 					"showWhen": {
@@ -2279,9 +2289,9 @@
 					}
 				},
 				{
-					"id": "q3_RequiredLoanAmount",
-					"bindsTo_template": "RequiredLoanAmount",
-					"contextKey": "RequiredLoanAmount",
+					"id": "q3_loanAmount",
+					"bindsTo_template": "loanAmount",
+					"contextKey": "loanAmount",
 					"type": "number",
 					"uiGroup": "number_fields",
 					"uiMeta": {

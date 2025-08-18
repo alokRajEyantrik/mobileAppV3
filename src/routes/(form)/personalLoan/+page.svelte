@@ -113,7 +113,6 @@
 			};
 
 			// Format payload to match working test data structure exactly
-			console.log(combinedAnswers,"com");
 			const formattedPayload = {
 				loanTransaction: {
 					LoanName: combinedAnswers.loanName || selectedLoan,
@@ -237,10 +236,10 @@
 				]
 			};
 
-			console.log('=== COMPARISON ===');
-			console.log('Test Data (WORKING):', testData);
-			console.log('Formatted Data (FIXED):', formattedPayload);
-			console.log('==================');
+			// console.log('=== COMPARISON ===');
+			// console.log('Test Data (WORKING):', testData);
+			// console.log('Formatted Data (FIXED):', formattedPayload);
+			// console.log('==================');
 
 			// Using formatted payload with fixes to match working test data structure
 			const res = await fetch('https://bank-loan-management.vercel.app/api/loan-eligibility', {
@@ -250,7 +249,7 @@
 			});
 
 			const data = await res.json();
-			console.log(data);
+			// console.log(data);
 
 			// Store result data to show on UI
 			resultData = data;
@@ -762,14 +761,11 @@
 				const key = resolveBindsTo(q, combinedAnswers, selectedLoan);
 				const val = currentAnswers[key];
 
-
 				if (!q.required) return true;
-
 
 				if (q.type === 'multiple-select') {
 					return Array.isArray(val) && val.length > 0;
 				}
-
 
 				return val !== undefined && val !== null && (typeof val !== 'string' || val !== '');
 			});
@@ -785,15 +781,25 @@
 		tenure: '',
 		sanctionedTenure: '',
 		interestRate: '',
+		remainingTenure: '',
+		utilizedAmount: '',
+		sanctionedLimit: '',
+		remainingLimit: '',
 		tableLoanEntries: [], // ✅ This is where we will push
 		tableLimitEntries: [] // ✅ This is where we will push
 	});
 	const disableAddButton = (q, data) => {
-		console.log('disableAddButton called with:', q, data);
 		if (['CC Limit', 'OD Limit'].includes(combinedAnswers.existingLoanType)) {
 			if (!q.disabledCondition?.limitEmpty) return false;
 
 			return q.disabledCondition.limitEmpty.some((fieldName) => {
+				const value = data[fieldName];
+				return value === undefined || value === null || value === '';
+			});
+		} else if ('Dropline OD' == combinedAnswers.existingLoanType) {
+			if (!q.disabledCondition?.dodLimitEmpty) return false;
+
+			return q.disabledCondition.dodLimitEmpty.some((fieldName) => {
 				const value = data[fieldName];
 				return value === undefined || value === null || value === '';
 			});
@@ -824,6 +830,16 @@
 			'limit',
 			'sanctionedTenure',
 			'interestRate'
+		];
+		const DODRequiredFields = [
+			'bankName',
+			'selectedToClose',
+			'sanctionedLimit',
+			'sanctionedTenure',
+			'interestRate',
+			'remainingLimit',
+			'remainingTenure',
+			'utilizedAmount'
 		];
 
 		if (['CC Limit', 'OD Limit'].includes(combinedAnswers.existingLoanType)) {
@@ -861,6 +877,42 @@
 				currentData[field] = '';
 			});
 		} else if ('Dropline OD' == combinedAnswers.existingLoanType) {
+			const missingField = DODRequiredFields.some((field) => !currentData[field]);
+			if (missingField) {
+				alert('Please fill all limits fields before adding');
+				return;
+			}
+			const newEntry = {
+				existingLoanType: combinedAnswers.existingLoanType,
+				bankName: currentData.bankName,
+				selectedToClose: currentData.selectedToClose,
+				sanctionedLimit: Number(currentData.sanctionedLimit),
+				sanctionedTenure: currentData.sanctionedTenure,
+				interestRate: currentData.interestRate,
+				remainingLimit: currentData.remainingLimit,
+				remainingTenure: currentData.remainingTenure,
+				utilizedAmount: currentData.utilizedAmount
+			};
+
+			// Ensure currentAnswers.tableLoanEntries exists
+			if (!Array.isArray(currentAnswers.tableLimitEntries)) {
+				currentAnswers.tableLimitEntries = [];
+			}
+
+			// Push into currentAnswers
+			currentAnswers.tableLimitEntries.push(newEntry);
+
+			// If selectedToClose is 'Keep Running', calculate totalLimits
+			if (newEntry.selectedToClose.toLowerCase() === 'keep running') {
+				currentAnswers.totalLimits = currentAnswers.tableLimitEntries
+					.filter((item) => item.selectedToClose.toLowerCase() === 'keep running')
+					.reduce((sum, entry) => sum + Number(entry.limit || 0), 0);
+			}
+
+			// Clear the validated fields in `testing` (optional)
+			DODRequiredFields.forEach((field) => {
+				currentData[field] = '';
+			});
 		} else {
 			// Prepare new loan entry
 			const missingField = termLoanRequiredFields.some((field) => !currentData[field]);
@@ -917,7 +969,48 @@
 		}
 	}
 
-	
+	// Edit entry: populate the form fields for editing
+	function editEntry(entry, index) {
+		deleteEntry(entry, index);
+		currentAnswers.existingLoanType = entry.existingLoanType || '';
+		if (entry.limit !== undefined && ['CC Limit', 'OD Limit'].includes(entry.existingLoanType)) {
+			// Limit entry
+
+			testing.update((data) => ({
+				...data,
+				existingLoanType: entry.existingLoanType || '',
+				bankName: entry.bankName || '',
+				selectedToClose: entry.selectedToClose || '',
+				limit: entry.limit || '',
+				sanctionedTenure: entry.sanctionedTenure || '',
+				interestRate: entry.interestRate || ''
+			}));
+		} else if (entry.sanctionedLimit !== undefined && 'Dropline OD' == entry.existingLoanType) {
+			testing.update((data) => ({
+				...data,
+				existingLoanType: entry.existingLoanType || '',
+				bankName: entry.bankName || '',
+				selectedToClose: entry.selectedToClose || '',
+				sanctionedLimit: entry.sanctionedLimit || '',
+				sanctionedTenure: entry.sanctionedTenure || '',
+				interestRate: entry.interestRate || '',
+				remainingLimit: entry.remainingLimit || '',
+				remainingTenure: entry.remainingTenure || '',
+				utilizedAmount: entry.utilizedAmount || ''
+			}));
+		} else {
+			// Term loan entry
+			testing.update((data) => ({
+				...data,
+				existingLoanType: entry.existingLoanType || '',
+				bankName: entry.bankName || '',
+				selectedToClose: entry.selectedToClose || '',
+				EMIs: entry.EMIs || '',
+				tenure: entry.tenure || '',
+				interestRate: entry.interestRate || ''
+			}));
+		}
+	}
 
 	$: {
 		if (currentAnswers.tableLoanEntries) {
@@ -926,11 +1019,14 @@
 				.reduce((sum, entry) => sum + (Number(entry.EMIs) || 0), 0);
 		}
 
-		// totalLimit 
+		// totalLimit
 		if (currentAnswers.tableLimitEntries) {
 			currentAnswers.totalLimits = currentAnswers.tableLimitEntries
 				.filter((item) => item.selectedToClose.toLowerCase() === 'keep running')
-				.reduce((sum, entry) => sum + (Number(entry.limit) || 0), 0);
+				.reduce((sum, entry) => {
+					const value = Number(entry.limit || entry.sanctionedLimit) || 0;
+					return sum + value;
+				}, 0);
 		}
 	}
 
@@ -1197,7 +1293,7 @@
 							<td>{entry.existingLoanType}</td>
 							<td>{entry.bankName}</td>
 							<td>{entry.selectedToClose}</td>
-							<td>{entry.limit}</td>
+							<td>{entry.limit || entry.sanctionedLimit}</td>
 							<td>{entry.sanctionedTenure}</td>
 							<td>{entry.interestRate}</td>
 							<td>
@@ -1231,11 +1327,9 @@
 
 				{#if isLastPage}
 					<button
-						
 						class="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-8 rounded-md transition duration-200 ease-in-out disabled:opacity-50 disabled:cursor-not-allowed"
 						on:click={handleSubmit}
 						aria-label="Submit application"
-						
 					>
 						{#if isSubmitting}
 							Submitting...
