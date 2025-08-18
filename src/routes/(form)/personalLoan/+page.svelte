@@ -7,7 +7,8 @@
 	import gstStateCodes from '$lib/config/gstStateCodes.json';
 	import pincode_IN_Selected from '$lib/config/pincode_IN_Selected.json';
 	import { writable, get, type Writable } from 'svelte/store';
-	import { goto } from '$app/navigation';
+	import type { Schema } from '$lib/types/types'; // runtime
+	import type { Question, Page, Answers, LoanDataStore } from '$lib/types/types'; 
 	import TextField from '$lib/components/TextField.svelte';
 	import RadioField from '$lib/components/RadioField.svelte';
 	import SelectField from '$lib/components/SelectField.svelte';
@@ -22,61 +23,63 @@
 	import { formData } from '$lib/stores/formStepper';
 
 	// Enhanced type definitions to support additional input types, including multiple-select
-	interface Question {
-		id: string;
-		type:
-			| 'text'
-			| 'radio'
-			| 'select'
-			| 'checkbox'
-			| 'textarea'
-			| 'date'
-			| 'number'
-			| 'derivedSelect'
-			| 'multiple-select';
-		question: string;
-		description?: string;
-		bindsTo?: string;
-		bindsTo_template?: string;
-		contextKey?: string;
-		options?: Array<{
-			label: string | { var: string };
-			value: string | { var: string } | number | boolean;
-		}>;
-		required?: boolean;
-		showWhen?: any; // JSON Logic expression
-		validation?: { condition: any; message: string };
-		errorMessage?: Record<string, string>;
-		uiMeta?: {
-			readonly?: boolean;
-			placeholder?: string | string[];
-			rows?: number;
-			min?: string | number;
-			max?: string | number;
-			step?: number | 'any';
-		};
-	}
+	// interface Question {
+	// 	id: string;
+	// 	type:
+	// 		| 'text'
+	// 		| 'radio'
+	// 		| 'select'
+	// 		| 'checkbox'
+	// 		| 'textarea'
+	// 		| 'date'
+	// 		| 'number'
+	// 		| 'derivedSelect'
+	// 		| 'multiple-select';
+	// 	question: string;
+	// 	description?: string;
+	// 	bindsTo?: string;
+	// 	bindsTo_template?: string;
+	// 	contextKey?: string;
+	// 	options?: Array<{
+	// 		label: string | { var: string };
+	// 		value: string | { var: string } | number | boolean;
+	// 	}>;
+	// 	required?: boolean;
+	// 	showWhen?: any; // JSON Logic expression
+	// 	validation?: { condition: any; message: string };
+	// 	errorMessage?: Record<string, string>;
+	// 	uiMeta?: {
+	// 		readonly?: boolean;
+	// 		placeholder?: string | string[];
+	// 		rows?: number;
+	// 		min?: string | number;
+	// 		max?: string | number;
+	// 		step?: number | 'any';
+	// 	};
+	// }
 
-	interface Page {
-		questions: Question[];
-		title?: string;
-		showWhen?: any;
-		nextButtonVisibility?: { mode: string[] };
-	}
+	// interface Page {
+	// 	questions: Question[];
+	// 	title?: string;
+	// 	showWhen?: any;
+	// 	nextButtonVisibility?: { mode: string[] };
+	// }
 
-	interface Schema {
-		pages: Page[];
-	}
+	// interface Schema {
+	// 	pages: Page[];
+	// }
 
-	interface Answers {
-		[key: string]: string | number | boolean | (string | number)[] | undefined;
-		loanName?: string;
-	}
+	// interface Answers {
+	// 	[key: string]: string | number | boolean | (string | number)[] | undefined;
+	// 	loanName?: string;
+	// }
 
-	interface LoanDataStore {
-		[key: string]: Answers | string | undefined;
-		loanName?: string;
-	}
+	// interface LoanDataStore {
+	// 	[key: string]: Answers | string | undefined;
+	// 	loanName?: string;
+	// }
+
+	$:console.log(formSchema,"formSchema")
 
 	// Component state
 	let selectedLoan: string = '';
