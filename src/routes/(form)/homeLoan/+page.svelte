@@ -1,14 +1,12 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
+	import { writable, get, type Writable } from 'svelte/store';
+	import jsonLogic from 'json-logic-js';
 	import { loanData } from '$lib/stores/loanData';
 	import { preprocessSchemaBindings } from '$lib/utils/schemaUtils';
-	import formSchema from '$lib/config/personal-loan-schema.json';
-	import jsonLogic from 'json-logic-js';
+	import homeLoanSchema from '$lib/config/homeLoanSchema.json';
 	import gstStateCodes from '$lib/config/gstStateCodes.json';
 	import pincode_IN_Selected from '$lib/config/pincode_IN_Selected.json';
-	import { writable, get, type Writable } from 'svelte/store';
-	import type { Schema } from '$lib/types/types'; // runtime
-	import type { Question, Page, Answers, LoanDataStore } from '$lib/types/types'; 
 	import TextField from '$lib/components/TextField.svelte';
 	import RadioField from '$lib/components/RadioField.svelte';
 	import SelectField from '$lib/components/SelectField.svelte';
@@ -18,268 +16,80 @@
 	import NumberField from '$lib/components/NumberField.svelte';
 	import MultipleSelectField from '$lib/components/MultipleSelectField.svelte';
 	import DerivedSelect from '$lib/components/DerivedSelect.svelte';
-	import GroupFields from '$lib/components/GroupFields.svelte';
-	import { submitApplication } from '$lib/services/api';
-	import { formData } from '$lib/stores/formStepper';
 
-	// Enhanced type definitions to support additional input types, including multiple-select
-	// interface Question {
-	// 	id: string;
-	// 	type:
-	// 		| 'text'
-	// 		| 'radio'
-	// 		| 'select'
-	// 		| 'checkbox'
-	// 		| 'textarea'
-	// 		| 'date'
-	// 		| 'number'
-	// 		| 'derivedSelect'
-	// 		| 'multiple-select';
-	// 	question: string;
-	// 	description?: string;
-	// 	bindsTo?: string;
-	// 	bindsTo_template?: string;
-	// 	contextKey?: string;
-	// 	options?: Array<{
-	// 		label: string | { var: string };
-	// 		value: string | { var: string } | number | boolean;
-	// 	}>;
-	// 	required?: boolean;
-	// 	showWhen?: any; // JSON Logic expression
-	// 	validation?: { condition: any; message: string };
-	// 	errorMessage?: Record<string, string>;
-	// 	uiMeta?: {
-	// 		readonly?: boolean;
-	// 		placeholder?: string | string[];
-	// 		rows?: number;
-	// 		min?: string | number;
-	// 		max?: string | number;
-	// 		step?: number | 'any';
-	// 	};
-	// }
+	// Utility types (minimized for brevity)
+	interface Question {
+		id: string;
+		contextKey?: string;
+		bindsTo?: string;
+		bindsTo_template?: string;
+		type: string;
+		options?: any[];
+		required?: boolean;
+		showWhen?: any;
+		validation?: any;
+		errorMessage?: Record<string, string>;
+	}
+	interface Page {
+		questions: Question[];
+		title?: string;
+		showWhen?: any;
+		nextButtonVisibility?: { mode: string[] };
+	}
+	interface Schema {
+		pages: Page[];
+	}
+	interface Answers {
+		[key: string]: any;
+	}
+	interface LoanDataStore {
+		[key: string]: Answers | string | undefined;
+		loanName?: string;
+	}
 
-	// interface Page {
-	// 	questions: Question[];
-	// 	title?: string;
-	// 	showWhen?: any;
-	// 	nextButtonVisibility?: { mode: string[] };
-	// }
+	// Store variable for GST
+	const gstStateError: Writable<string> = writable('');
+	export const testing = writable({
+		loanType: '',
+		bankName: '',
+		selectedToClose: '',
+		closurePlan: '',
+		EMIs: '',
+		tenure: '',
+		interestRate: '',
+		tableLoanEntries: [],
+		tableLimitEntries: []
+	});
 
-	// interface Schema {
-	// 	pages: Page[];
-	// }
-
-	// interface Answers {
-	// 	[key: string]: string | number | boolean | (string | number)[] | undefined;
-	// 	loanName?: string;
-	// }
-
-	// interface LoanDataStore {
-	// 	[key: string]: Answers | string | undefined;
-	// 	loanName?: string;
-	// }
-
-	$:console.log(formSchema,"formSchema")
-
-	// Component state
+	// App state
 	let selectedLoan: string = '';
 	let currentPageIndex: number = 0;
 	let schema: Schema;
 	let isSubmitting = false;
 	let submitError: string | null = null;
 	let resultData: any = null;
-	const gstStateError: Writable<string> = writable('');
 
-	async function handleSubmit() {
-		try {
-			isSubmitting = true;
-			submitError = null;
-
-			// Map form values to match working test data format
-			const mapLoanType = (loanType: string | undefined): string => {
-				switch (loanType) {
-					case 'Start Fresh with New Loan':
-						return 'New Loan';
-					case 'Debt Consolidation with Extra Funds':
-						return 'Balance Transfer';
-					case 'Top Up':
-						return 'Top Up';
-					default:
-						return 'New Loan';
-				}
-			};
-
-			const mapEmploymentType = (empType: string | undefined): string => {
-				if (!empType) return '';
-				// Remove spaces to match test data format
-				return empType.replace(/\s+/g, '');
-			};
-
-			// Format payload to match working test data structure exactly
-			console.log(combinedAnswers, 'com');
-			const formattedPayload = {
-				loanTransaction: {
-					LoanName: combinedAnswers.loanName || selectedLoan,
-					LoanType: mapLoanType(combinedAnswers.loanType?.toString()),
-					unSecureLoanType: combinedAnswers.unSecureLoanType || selectedLoan,
-					existingLoan: combinedAnswers.existingLoan === 'Yes' ? 'Yes, in the form of loans' : 'No',
-					payslips: combinedAnswers.payslips || 'Yes',
-					Form16Available: combinedAnswers.Form16Available || 'Yes',
-					ApplicantIsNRI: combinedAnswers.ApplicantIsNRI || combinedAnswers.applicantIsNRI || 'No',
-					residenceStateName: combinedAnswers.residenceStateName || '',
-					residenceCityName: combinedAnswers.residenceCityName || '',
-					salariedBankName: combinedAnswers.salariedBankName || '',
-					tellUsApplying: combinedAnswers.tellUsApplying || 'Individual',
-					mortgageYear: Number(combinedAnswers.mortgageYear) || 5, // Ensure it's a number like test data
-					SpecificLoanRequirement: combinedAnswers.SpecificLoanRequirement || 'No',
-					tableLoanEntries: combinedAnswers.tableLoanEntries || [],
-					tableLimitEntries: combinedAnswers.tableLimitEntries || [],
-					RequiredLoanAmount: Number(combinedAnswers.RequiredLoanAmount) || 0
-				},
-				allApplicantDetails: [
-					{
-						title: combinedAnswers.title || 'Mr.',
-						fullNameOfApplicant: combinedAnswers.fullNameOfApplicant || '',
-						TypeOfResidence: combinedAnswers.TypeOfResidence || '',
-						selectedAge: Number(combinedAnswers.selectedAge) || 0,
-						EmploymentType: mapEmploymentType(combinedAnswers.EmploymentType?.toString()),
-						creditScore: combinedAnswers.creditScore || '',
-						fixedSalary: Number(combinedAnswers.fixedSalary) || 0,
-						grossIncome: Number(combinedAnswers.grossIncome) || 0,
-						monthlyOtherIncome: Number(combinedAnswers.monthlyOtherIncome) || 0,
-						totalEMIs: Number(combinedAnswers.totalEMIs) || 0,
-						totalLimit: Number(combinedAnswers.totalLimit) || 0
-					}
-				]
-			};
-
-			// Working test data for comparison
-			const testData = {
-				loanTransaction: {
-					LoanName: 'Personal Loan',
-					LoanType: 'New Loan',
-					unSecureLoanType: 'Personal Loan',
-					existingLoan: 'Yes, in the form of loans',
-					payslips: 'Yes',
-					Form16Available: 'Yes',
-					ApplicantIsNRI: 'No',
-					residenceStateName: 'Karnataka',
-					residenceCityName: 'Belgaum',
-					salariedBankName: 'Nainital Bank',
-					tellUsApplying: 'Individual',
-					mortgageYear: 5,
-					SpecificLoanRequirement: 'No',
-					tableLoanEntries: [
-						{
-							loanType: 'Loan Against Property',
-							bankName: 'Central Bank of India',
-							selectedToClose: 'Keep Running',
-							emi: '1200',
-							emiFormatted: '1,200',
-							totalLimit: '',
-							totalLimitFormatted: '',
-							tenure: '9',
-							interestRate: '8',
-							remainingLimit: '',
-							remainingLimitFormatted: '',
-							remainingTenure: '',
-							utilizedAmountFormatted: '',
-							utilizedAmount: ''
-						},
-						{
-							loanType: 'Personal Loan',
-							bankName: 'Canara Bank',
-							selectedToClose: 'Keep Running',
-							emi: '1300',
-							emiFormatted: '1,300',
-							totalLimit: '',
-							totalLimitFormatted: '',
-							tenure: '8',
-							interestRate: '8',
-							remainingLimit: '',
-							remainingLimitFormatted: '',
-							remainingTenure: '',
-							utilizedAmountFormatted: '',
-							utilizedAmount: ''
-						}
-					],
-					tableLimitEntries: [
-						{
-							loanType: 'OD Limit',
-							bankName: 'Bank of Maharashtra',
-							selectedToClose: 'Keep Running',
-							emi: '',
-							emiFormatted: '',
-							totalLimit: '120000',
-							totalLimitFormatted: '1,20,000',
-							tenure: '8',
-							interestRate: '12',
-							remainingLimit: '',
-							remainingLimitFormatted: '',
-							remainingTenure: '',
-							utilizedAmountFormatted: '',
-							utilizedAmount: ''
-						}
-					],
-					RequiredLoanAmount: 1700000
-				},
-				allApplicantDetails: [
-					{
-						title: 'Mr.',
-						fullNameOfApplicant: 'dfgdfgd',
-						TypeOfResidence: 'Self owned',
-						selectedAge: 29,
-						EmploymentType: 'Employed(Government)',
-						creditScore: '780-799',
-						fixedSalary: 90000,
-						grossIncome: 100000,
-						monthlyOtherIncome: 0,
-						totalEMIs: 2500,
-						totalLimit: 120000
-					}
-				]
-			};
-
-			console.log('=== COMPARISON ===');
-			console.log('Test Data (WORKING):', testData);
-			console.log('Formatted Data (FIXED):', formattedPayload);
-			console.log('==================');
-
-			// Using formatted payload with fixes to match working test data structure
-			const res = await fetch('https://bank-loan-management.vercel.app/api/loan-eligibility', {
-				method: 'POST',
-				headers: { 'Content-Type': 'application/json' },
-				body: JSON.stringify(formattedPayload)
+	// 1️⃣ Utility functions
+	function sanitizeKey(value: string | undefined): string {
+		if (!value) return '';
+		return value.replace(/\s+/g, '_');
+	}
+	function resolveBindsTo(question: Question, answers: Answers, selectedLoan: string): string {
+		if (question.bindsTo_template) {
+			return question.bindsTo_template.replace(/\{([^}]+)\}/g, (_, key: string) => {
+				if (key === 'q1_loanName') return sanitizeKey(selectedLoan);
+				const val = answers[key];
+				return typeof val === 'string' ? sanitizeKey(val) : (val?.toString() ?? '');
 			});
-
-			const data = await res.json();
-			console.log(data);
-
-			// Store result data to show on UI
-			resultData = data;
-
-			// Clear form data from store after successful submission
-			// loanData.set({});
-
-			// Redirect to success page
-		} catch (error) {
-			console.error('Submission error:', error);
-			submitError =
-				error instanceof Error ? error.message : 'Failed to submit application. Please try again.';
-			submitError =
-				error instanceof Error ? error.message : 'Failed to submit application. Please try again.';
-		} finally {
-			isSubmitting = false;
 		}
+		return question.bindsTo || question.id;
 	}
 
-	// Dynamic state options from pincode data
+	// 🎛 Mapping options for selects
 	$: stateOptions = Object.keys(pincode_IN_Selected).map((state) => ({
 		label: state,
 		value: state
 	}));
-
-	// Function to get city options for a specific state
 	function getCityOptionsForState(
 		state: string | undefined
 	): Array<{ label: string; value: string }> {
@@ -289,108 +99,53 @@
 		);
 		return cities.map((city) => ({ label: city, value: city }));
 	}
+	// For residence/business fields
+	$: residenceCityOptions = getCityOptionsForState(currentAnswers['propertyStateName']?.toString());
+	$: businessCityOptions = getCityOptionsForState(currentAnswers['residenceStateName']?.toString());
+	$: showBusinessAddress = currentAnswers['isResidenceSameAsPropertyHas'] === 'No';
 
-	// Separate city options for residence and business
-	$: residenceCityOptions = getCityOptionsForState(
-		currentAnswers['residenceStateName']?.toString()
-	);
-	$: businessCityOptions = getCityOptionsForState(currentAnswers['businessStateName']?.toString());
-
-	// Business address fields visibility (used in conditional rendering)
-	$: showBusinessAddress = currentAnswers['addressSameOrNot'] === 'No';
-	// Use the variable to prevent unused warning
-	$: console.log('Business address visibility:', showBusinessAddress);
-
-	// Utility function to sanitize keys
-	function sanitizeKey(value: string | undefined): string {
-		if (!value) return '';
-		return value.replace(/\s+/g, '_');
-	}
-
-	// Resolve binding keys with template support
-	function resolveBindsTo(question: Question, answers: Answers, selectedLoan: string): string {
-		if (!question.existing_bindsTodsTo_template) return question.bindsTo || question.id;
-		return question.bindsTo_template.replace(/\{([^}]+)\}/g, (_, key: string) => {
-			if (key === 'q1_loanName') return sanitizeKey(selectedLoan);
-			const val = answers[key];
-			return typeof val === 'string' ? sanitizeKey(val) : (val?.toString() ?? '');
-		});
-	}
-
+	// 2️⃣ Handle mounting and schema
 	onMount(() => {
-		selectedLoan = ($loanData as LoanDataStore)?.loanName || '';
-		schema = preprocessSchemaBindings(formSchema, selectedLoan) as Schema;
+		selectedLoan = (($loanData as LoanDataStore)?.loanName || '') as string;
+		schema = preprocessSchemaBindings(homeLoanSchema, selectedLoan) as Schema;
 	});
-
-	$: schema = preprocessSchemaBindings(formSchema, selectedLoan) as Schema;
+	$: schema = preprocessSchemaBindings(homeLoanSchema, selectedLoan) as Schema;
 	$: currentAnswers = ($loanData as LoanDataStore)[selectedLoan] ?? ({} as Answers);
 
+	// 3️⃣ Collate all answers mapped to schema keys
 	$: combinedAnswers = (() => {
-		// Start with all current answers to ensure we include dynamically added collections
 		const combined: Answers = { ...currentAnswers };
-
-		// Process schema questions
 		for (const page of schema.pages) {
 			for (const q of page.questions) {
 				const key = resolveBindsTo(q, currentAnswers, selectedLoan);
 				if (key) {
-					if (q.type === 'multiple-select') {
+					if (q.type === 'multiple-select')
 						combined[key] = (currentAnswers[key] as (string | number)[]) ?? [];
-					} else if (q.type === 'number') {
-						combined[key] = currentAnswers[key] ?? 0;
-					} else if (q.type === 'checkbox') {
-						combined[key] = currentAnswers[key] ?? false;
-					} else {
-						combined[key] = currentAnswers[key] ?? '';
-					}
-
-					// Also store without contextKey prefix for visibility checks
-					if (key.includes('_')) {
-						const shortKey = key.split('_').pop() || '';
-						combined[shortKey] = combined[key];
-					}
-
-					// Store context keys
+					else if (q.type === 'number') combined[key] = currentAnswers[key] ?? 0;
+					else if (q.type === 'checkbox') combined[key] = currentAnswers[key] ?? false;
+					else combined[key] = currentAnswers[key] ?? '';
+					// ContextKey mapping as alias
 					if (q.contextKey) {
 						combined[q.contextKey] = combined[key];
 					}
 				}
 			}
 		}
-
-		// Ensure important fields are always present
 		combined['q1_loanName'] = selectedLoan;
-		combined['loanName'] = selectedLoan; // Also store without prefix
-
-		console.log('Combined answers:', combined);
+		combined['loanName'] = selectedLoan;
 		return combined;
 	})();
 
-	// Filter out pages that should be hidden based on showWhen conditions
+	// 4️⃣ Control page visibility & nav
 	$: visiblePages = schema.pages.filter(
 		(page) => !page.showWhen || jsonLogic.apply(page.showWhen, combinedAnswers)
 	);
-
-	// Map current page index to visible pages array index
 	$: currentPageIndex = Math.min(currentPageIndex, visiblePages.length - 1);
-
 	$: currentPage = visiblePages[currentPageIndex];
 	$: visibleQuestions =
 		currentPage?.questions.filter((q) => isQuestionVisible(q, combinedAnswers)) ?? [];
-	$: console.log('Visible Questions:', visibleQuestions);
 
-	// Get dynamic option value (enhanced for multiple types)
-	function getOptionValue(
-		value: string | { var: string } | number | boolean
-	): string | number | boolean {
-		if (typeof value === 'object' && 'var' in value) return combinedAnswers[value.var] ?? '';
-		return value;
-	}
-
-	// Use the function to prevent unused warning
-	$: console.log('Option value helper available:', typeof getOptionValue);
-
-	// Update answer in store (enhanced for type safety with generics, including arrays)
+	// 5️⃣ Main updateAnswer/field handling
 	function updateAnswerByKey<T extends string | number | boolean | (string | number)[]>(
 		key: string,
 		value: T
@@ -402,8 +157,31 @@
 			return data;
 		});
 	}
+	function updateAnswer(
+		question: Question,
+		value: string | number | boolean | (string | number)[]
+	): void {
+		if (question.id === 'q1_loanName') {
+			selectedLoan = value as string;
+			schema = preprocessSchemaBindings(homeLoanSchema, selectedLoan) as Schema;
+			currentPageIndex = 0;
+		}
+		const key = resolveBindsTo(question, currentAnswers, selectedLoan);
+		updateAnswerByKey(key, value);
 
-	// Validators (expandable for new types, added example for multiple-select)
+		// Key-specific effects
+		if (key.toLowerCase().includes('nri')) updateAnswerByKey('isApplicantNRI', value);
+		if (key === 'GSTNumber') updateStateFromGST(value as string);
+		if (key === 'residenceStateName') updateAnswerByKey('residenceCityName', '');
+		else if (key === 'residenceStateName') updateAnswerByKey('residenceCityName', '');
+		else if (key === 'TypeOfResidence') updateAnswerByKey('typeOfResidence', value);
+		else if (key === 'isResidenceSameAsPropertyHas' && value === 'Yes') {
+			updateAnswerByKey('residenceStateName', currentAnswers['propertyStateName'] || '');
+			updateAnswerByKey('residenceCityName', currentAnswers['propertyCityName'] || '');
+		}
+	}
+
+	// 6️⃣ Validators
 	const validators = {
 		validateGSTState,
 		validateMinSelections(values: (string | number)[]): string | null {
@@ -411,120 +189,18 @@
 			return null;
 		}
 	};
-
-	// Handlers for grouped entries (arrays of objects)
-	function addGroupEntry(collectionKey: string, entry: any) {
-		try {
-			// Special handling for specific collections based on the schema
-			const isExistingLoanCollection =
-				collectionKey === 'existingLoans' ||
-				collectionKey.includes('loanType') ||
-				collectionKey === 'tableLoanEntries';
-
-			// Use a standardized collection key for loan details
-			const finalCollectionKey = isExistingLoanCollection
-				? 'q1_loanType_collection'
-				: collectionKey;
-
-			console.log(
-				`Adding entry to collection ${collectionKey} (standardized to: ${finalCollectionKey})`,
-				entry
-			);
-
-			// Get existing entries or initialize empty array
-			const existingEntries = currentAnswers[finalCollectionKey] || [];
-
-			// Check if existingEntries is an array, if not convert to array
-			const validEntries = Array.isArray(existingEntries) ? existingEntries : [];
-
-			// Create new array with the new entry
-			const updatedEntries = [...validEntries, entry];
-			console.log('Updated entries:', updatedEntries);
-
-			// Update the store with the new array
-			updateAnswerByKey(finalCollectionKey, updatedEntries);
-
-			// Force a refresh of the reactive store
-			setTimeout(() => {
-				loanData.update((data) => {
-					// Make sure we preserve the updated entries in the store
-					const updatedData = { ...data };
-					if (isExistingLoanCollection) {
-						// Ensure the standardized key is properly updated
-						updatedData[finalCollectionKey] = updatedEntries;
-					}
-					return updatedData;
-				});
-
-				// Log current store state for debugging
-				console.log('Current store state after update:', get(loanData));
-			}, 10);
-		} catch (error) {
-			console.error('Error adding group entry:', error);
-			alert('Failed to add entry. Please try again.');
-		}
-	}
-	function deleteGroupEntry(collectionKey: string, index: number) {
-		console.log('Deleting entry at index', index, 'from collection:', collectionKey);
-
-		// Special handling for specific collections based on the schema
-		const isExistingLoanCollection =
-			collectionKey === 'existingLoans' || collectionKey.includes('loanType');
-
-		// Use a standardized collection key for loan details
-		const finalCollectionKey = isExistingLoanCollection ? 'q1_loanType_collection' : collectionKey;
-
-		// Safely get the current entries array
-		let prev = currentAnswers[finalCollectionKey];
-
-		// Validate the collection is an array
-		if (!Array.isArray(prev)) {
-			console.warn('Cannot delete from non-array:', prev);
-			return;
-		}
-
-		// Make sure the index is valid
-		if (index < 0 || index >= prev.length) {
-			console.warn('Invalid index for deletion:', index, 'in array of length', prev.length);
-			return;
-		}
-
-		// Create a new array without the deleted entry
-		const next = [...prev.slice(0, index), ...prev.slice(index + 1)];
-		console.log('New entries after deletion:', next);
-
-		// Update the store
-		updateAnswerByKey(finalCollectionKey, next);
-
-		// Force a refresh of the reactive store
-		setTimeout(() => {
-			loanData.update((data) => {
-				// This creates a new reference to trigger reactivity
-				return { ...data };
-			});
-		}, 10);
-	}
-
-	// GST validation function with improved error handling
 	function validateGSTState(gstNumber: string): string | null {
 		if (!gstNumber) return 'required';
-
 		if (gstNumber.length !== 15) return 'lengthError';
-
 		const gstPattern = /^[0-9]{2}[A-Z]{5}[0-9]{4}[A-Z][A-Z0-9]{1}Z[A-Z0-9]{1}$/;
 		if (!gstPattern.test(gstNumber.toUpperCase())) return 'message';
-
 		const stateCode = gstNumber.substring(0, 2);
 		const stateName = gstStateCodes[stateCode as keyof typeof gstStateCodes];
 		if (!stateName) return 'message';
-
 		if (!pincode_IN_Selected[stateName as keyof typeof pincode_IN_Selected])
 			return 'stateNotServed';
-
-		return null; // Valid
+		return null;
 	}
-
-	// Auto-update state from GST with debounce
 	let debounceTimer: number | null = null;
 	function updateStateFromGST(gstNumber: string): void {
 		if (debounceTimer) clearTimeout(debounceTimer);
@@ -541,59 +217,38 @@
 		}, 300);
 	}
 
-	// Main update function with special handling (enhanced for multiple types, including arrays)
-	function updateAnswer(
-		question: Question,
-		value: string | number | boolean | (string | number)[]
-	): void {
-		console.log('Updating answer:', { questionId: question.id, value });
-		if (question.id === 'q1_loanName') {
-			selectedLoan = value as string;
-			schema = preprocessSchemaBindings(formSchema, selectedLoan) as Schema;
-			currentPageIndex = 0;
-		}
-
-		const key = resolveBindsTo(question, currentAnswers, selectedLoan);
-		updateAnswerByKey(key, value);
-
-		// Also update with correct casing if it's the NRI question
-		if (key === 'applicantIsNRI') {
-			updateAnswerByKey('ApplicantIsNRI', value);
-		}
-
-		if (key === 'GSTNumber') {
-			updateStateFromGST(value as string);
-		}
-
-		if (key === 'residenceStateName') {
-			updateAnswerByKey('residenceCityName', '');
-		} else if (key === 'businessStateName') {
-			updateAnswerByKey('businessCityName', '');
-		} else if (key === 'TypeOfResidence') {
-			// Also update lowercase version for visibility conditions
-			updateAnswerByKey('typeOfResidence', value);
-		} else if (key === 'addressSameOrNot' && value === 'Yes') {
-			// Copy residence address to business address when "Yes" is selected
-			updateAnswerByKey('businessStateName', currentAnswers['residenceStateName'] || '');
-			updateAnswerByKey('businessCityName', currentAnswers['residenceCityName'] || '');
-		}
+	// 7️⃣ Navigation
+	function goNext(): void {
+		if (currentPageIndex < visiblePages.length - 1) currentPageIndex += 1;
 	}
-
-	// Visibility check
+	function goPrev(): void {
+		if (currentPageIndex > 0) currentPageIndex -= 1;
+	}
+	function flattenQuestions(questions: any[]): any[] {
+		return questions.flatMap((q) =>
+			'group' in q && Array.isArray((q as any).group) ? (q as any).group : [q]
+		);
+	}
+	function allRequiredAnswered(): boolean {
+		const flat = flattenQuestions(currentPage.questions);
+		return flat
+			.filter((q) => q.required && isQuestionVisible(q, combinedAnswers))
+			.every((q) => {
+				const key = resolveBindsTo(q, combinedAnswers, selectedLoan);
+				const val = currentAnswers[key];
+				if (q.type === 'multiple-select') return Array.isArray(val) && val.length > 0;
+				return val !== undefined && val !== null && (typeof val !== 'string' || val !== '');
+			});
+	}
 	function isQuestionVisible(question: Question, formData: Answers): boolean {
 		if (!question.showWhen) return true;
-
-		// Create case-insensitive version of form data
+		// Normalization
 		const normalizedData: Record<string, any> = {};
 		for (const [key, value] of Object.entries(formData)) {
-			// Store value under all possible casings
 			normalizedData[key] = value;
 			normalizedData[key.toLowerCase()] = value;
 			normalizedData[key.toUpperCase()] = value;
-			// Also store with first letter capitalized
 			normalizedData[key.charAt(0).toUpperCase() + key.slice(1).toLowerCase()] = value;
-
-			// Store for keys without contextKey prefix
 			if (key.includes('_')) {
 				const shortKey = key.split('_').pop() || '';
 				normalizedData[shortKey] = value;
@@ -601,8 +256,6 @@
 				normalizedData[shortKey.toUpperCase()] = value;
 				normalizedData[shortKey.charAt(0).toUpperCase() + shortKey.slice(1).toLowerCase()] = value;
 			}
-
-			// Store type-specific variations
 			if (key.includes('Type')) {
 				const withoutType = key.replace('Type', '');
 				normalizedData[withoutType.toLowerCase()] = value;
@@ -611,8 +264,6 @@
 					value;
 			}
 		}
-
-		// Store bindsTo values separately
 		if (question.bindsTo_template) {
 			const key = resolveBindsTo(question, formData, formData.q1_loanName as string);
 			const value = formData[key];
@@ -622,139 +273,59 @@
 				normalizedData[key.toUpperCase()] = value;
 			}
 		}
-
-		// Log visibility check for debugging
-		console.log('Question:', question.id);
-		console.log('ShowWhen condition:', question.showWhen);
-		console.log('Form data:', formData);
-		console.log('Normalized data:', normalizedData);
-
-		const isVisible = jsonLogic.apply(question.showWhen, normalizedData);
-		console.log('Visibility result:', isVisible);
-
-		return isVisible;
+		return jsonLogic.apply(question.showWhen, normalizedData);
 	}
 
-	// Navigation functions
-	function goNext(): void {
-		if (currentPageIndex < visiblePages.length - 1) currentPageIndex += 1;
-	}
-
-	function goPrev(): void {
-		if (currentPageIndex > 0) currentPageIndex -= 1;
-	}
-
-	// Helper: flatten questions, expanding any group wrappers into their inner questions
-	function flattenQuestions(questions: any[]): any[] {
-		const out: any[] = [];
-		for (const q of questions) {
-			if ('group' in q && Array.isArray((q as any).group)) {
-				for (const inner of (q as any).group as any[]) out.push(inner);
-			} else {
-				out.push(q);
-			}
-		}
-		return out;
-	}
-
-	// Check if all required questions are answered (enhanced for new types, including arrays)
-	function allRequiredAnswered(): boolean {
-		const flat = flattenQuestions(currentPage.questions);
-		return flat
-			.filter((q) => q.required && isQuestionVisible(q, combinedAnswers))
-			.every((q) => {
-				const key = resolveBindsTo(q, combinedAnswers, selectedLoan);
-				const val = currentAnswers[key];
-				if (q.type === 'multiple-select') {
-					return Array.isArray(val) && val.length > 0;
-				}
-				return val !== undefined && val !== null && (typeof val !== 'string' || val !== '');
-			});
-	}
-
-	// Validation helpers (enhanced to handle new types, including arrays)
+	// 8️⃣ Validation
 	function hasValidationError(question: Question, answers: Answers): boolean {
 		return !!getValidationErrorMessage(question, answers);
 	}
-
 	function getValidationErrorMessage(question: Question, answers: Answers): string | null {
 		const key = resolveBindsTo(question, answers, selectedLoan);
 		const val = answers[key];
-
-		// Suppress initial errors on page 0
-		if (
-			(val === undefined ||
-				val === null ||
-				(typeof val === 'string' && val === '') ||
-				(Array.isArray(val) && val.length === 0)) &&
-			currentPageIndex === 0
-		) {
-			return null;
-		}
-
+		if (!val && currentPageIndex === 0) return null;
 		if (question.required) {
-			if (question.type === 'multiple-select') {
-				if (!Array.isArray(val) || val.length === 0) {
-					return question.errorMessage?.required ?? 'This field is required';
-				}
-			} else if (val === undefined || val === null || (typeof val === 'string' && val === '')) {
+			if (question.type === 'multiple-select' && (!Array.isArray(val) || val.length === 0)) {
+				return question.errorMessage?.required ?? 'This field is required';
+			}
+			if (val === undefined || val === null || val === '') {
 				return question.errorMessage?.required ?? 'This field is required';
 			}
 		}
-
 		if (question.validation?.condition) {
-			const isInvalid = jsonLogic.apply(question.validation.condition, answers);
-			if (isInvalid) {
+			const conditionResult = jsonLogic.apply(question.validation.condition, answers);
+			if (conditionResult) {
 				const validatorFnName = question.validation.message;
 				if (
 					validatorFnName &&
 					typeof validators[validatorFnName as keyof typeof validators] === 'function'
 				) {
-					const errorKey = (validators[validatorFnName as keyof typeof validators] as any)(
-						question.type === 'multiple-select'
-							? (val as (string | number)[])
-							: (val?.toString() ?? '')
-					);
-					if (errorKey) {
-						return question.errorMessage?.[errorKey] ?? 'Validation failed';
-					}
+					const errorKey = (validators[validatorFnName as keyof typeof validators] as any)(val);
+					if (errorKey) return question.errorMessage?.[errorKey] ?? 'Validation failed';
 				}
 				return question.errorMessage?.message ?? 'Invalid input';
 			}
 		}
-
-		if (question.bindsTo === 'residenceStateName' || question.id === 'q1_residenceStateName') {
+		if (key === 'residenceStateName') {
 			const gstErr = get(gstStateError);
-			if (gstErr) {
-				return question.errorMessage?.stateNotServed ?? gstErr;
-			}
+			if (gstErr) return question.errorMessage?.stateNotServed ?? gstErr;
 		}
-
-		// Business address validation
-		if (
-			typeof question.id === 'string' &&
-			(question.id.startsWith('q4_business') || question.id.startsWith('q5_business'))
-		) {
-			const addressSameOrNot = answers['addressSameOrNot'];
-			if (addressSameOrNot === 'No' && (!val || (typeof val === 'string' && val === ''))) {
-				return question.errorMessage?.required ?? 'This field is required';
-			}
-		}
-
 		return null;
 	}
 
-	// Reactive next button enablement
+	// 9️⃣ Next button enabled
 	$: isNextEnabled = (() => {
+		if (!currentPage) return false;
 		let enabled = true;
 		if (currentPage.nextButtonVisibility) {
-			enabled =
-				currentPage.nextButtonVisibility.mode.includes('allRequiredAnswered') &&
-				allRequiredAnswered();
+			if (currentPage.nextButtonVisibility.mode.includes('allRequiredAnswered')) {
+				enabled = allRequiredAnswered();
+			}
 		}
+		// If any validation error exists, disable button
 		for (const q of flattenQuestions(currentPage.questions)) {
 			if (isQuestionVisible(q, combinedAnswers) && hasValidationError(q, combinedAnswers)) {
-				enabled = true;
+				enabled = false;
 				break;
 			}
 		}
@@ -762,54 +333,108 @@
 	})();
 
 	$: isLastPage = currentPageIndex === visiblePages.length - 1;
-
 	$: canSubmit = (() => {
 		if (!isLastPage) return false;
-
 		// Check all visible pages for required questions and validation
 		return visiblePages.every((page) => {
 			const visibleQuestions = page.questions.filter((q) => isQuestionVisible(q, combinedAnswers));
 			return visibleQuestions.every((q) => {
 				const key = resolveBindsTo(q, combinedAnswers, selectedLoan);
 				const val = currentAnswers[key];
-
 				if (!q.required) return true;
-
-				if (q.type === 'multiple-select') {
-					return Array.isArray(val) && val.length > 0;
-				}
-
+				if (q.type === 'multiple-select') return Array.isArray(val) && val.length > 0;
 				return val !== undefined && val !== null && (typeof val !== 'string' || val !== '');
 			});
 		});
 	})();
 
-	export const testing = writable({
-		loanType: '',
+	// 10️⃣ Payload mapping for Home Loan schema (update for backend as needed!)
+	async function handleSubmit() {
+		try {
+			isSubmitting = true;
+			submitError = null;
 
-		bankName: '',
-		selectedToClose: '',
-		closurePlan: '',
-		EMIs: '',
-		tenure: '',
-		interestRate: '',
-		tableLoanEntries: [], // ✅ This is where we will push
-		tableLimitEntries: [] // ✅ This is where we will push
-	});
+			const mapEmploymentType = (empType: string | undefined): string => {
+				if (!empType) return '';
+				// Remove spaces to match test data format
+				return empType.replace(/\s+/g, '');
+			};
+
+			console.log(combinedAnswers, 'combined');
+
+			const formattedPayload = {
+				loanTransaction: {
+					LoanName: combinedAnswers.loanName || selectedLoan,
+					LoanType: combinedAnswers.homeLoanType || 'New Loan',
+					propertyIdentified: combinedAnswers.isPropertyIdentified || 'Yes',
+					propertyStateName: combinedAnswers.propertyStateName || '',
+					propertyCityName: combinedAnswers.propertyCityName || '',
+					residenceOptionSame: combinedAnswers.isResidenceSameAsPropertyHas || 'Yes',
+					residenceStateName: combinedAnswers.residenceStateName || '',
+					residenceCityName: combinedAnswers.residenceCityName || '',
+					approvedByAuthority: combinedAnswers.isAuthorizedArea || 'Yes',
+					asPerMap: combinedAnswers.isApprovedAsPerMap || 'Yes',
+					ApplicantIsNRI: combinedAnswers.isPrimaryApplicantNRI || 'No',
+					propertyType: combinedAnswers.ownershipType || '',
+					purchaseType: combinedAnswers.propertyNature || '',
+					constructionType: combinedAnswers.constructionType || '',
+					PropertyStage: combinedAnswers.constructionStage || '',
+					purchasedFrom: combinedAnswers.propertyPurchasedBy || '',
+					approvedBankForSelectedByUser: combinedAnswers.lendersName || '',
+					tellUsApplying: combinedAnswers.whoIsApplying || '',
+					numberOfDirectorOrApplicant: Number(combinedAnswers.numberOfDirectorOrApplicant) || 0,
+					mortgageYear: Number(combinedAnswers.mortgageYear) || 20,
+					propCost: Number(combinedAnswers.dealValue) || 0,
+					deposit: Number(combinedAnswers.downPayment) || 0,
+					RequiredLoanAmount:
+						Number(combinedAnswers.dealValue || 0) - Number(combinedAnswers.downPayment || 0)
+				},
+				allApplicantDetails: [
+					{
+						title: combinedAnswers.title || 'Mr.',
+						fullNameOfApplicant: combinedAnswers.nameOfPrimaryApplicant || '',
+						TypeOfResidence: combinedAnswers.TypeOfResidence || '',
+						selectedAge: Number(combinedAnswers.primaryAge) || 0,
+						EmploymentType: mapEmploymentType(combinedAnswers.primaryEmploymentType?.toString()),
+						creditScore: combinedAnswers.primaryCIBILScore || '',
+						fixedSalary: Number(combinedAnswers.primaryMonthlyNetIncome) || 0,
+						grossIncome: Number(combinedAnswers.primaryMonthlyGrossIncome) || 0,
+						monthlyOtherIncome: Number(combinedAnswers.primaryAdditionalIncome) || 0,
+						totalEMIs: Number(combinedAnswers.primaryMonthlyEMI) || 0,
+						totalLimit: Number(combinedAnswers.primaryCombinedLimitOfCC) || 0
+					}
+				]
+			};
+
+			const res = await fetch('https://bank-loan-management.vercel.app/api/loan-eligibility', {
+				method: 'POST',
+				headers: { 'Content-Type': 'application/json' },
+				body: JSON.stringify(formattedPayload)
+			});
+			const data = await res.json();
+			resultData = data;
+			console.log(resultData, 'resultData');
+			alert('form submitted successfully!');
+		} catch (error) {
+			console.error('Submission error:', error);
+			submitError =
+				error instanceof Error ? error.message : 'Failed to submit application. Please try again.';
+		} finally {
+			isSubmitting = false;
+		}
+	}
+
+	// Add/remove table logic unchanged—use as before
+
 	const disableAddButton = (q, data) => {
 		if (!q.disabledCondition?.anyEmpty) return false;
-
 		return q.disabledCondition.anyEmpty.some((fieldName) => {
-			console.log('data', data);
-			console.log('fieldName', fieldName);
 			const value = data[fieldName];
 			return value === undefined || value === null || value === '';
 		});
 	};
 	const handleAddClick = () => {
-		const currentData = get(testing); // only for validation
-
-		// Required fields check
+		const currentData = get(testing);
 		const requiredFields = [
 			'loanType',
 			'bankName',
@@ -818,17 +443,12 @@
 			'tenure',
 			'interestRate'
 		];
-
 		const missingField = requiredFields.some((field) => !currentData[field]);
 		if (missingField) {
 			alert('Please fill all fields before adding');
 			return;
 		}
-
-		if (['Dropline OD', 'CC Limit', 'OD Limit'].includes(currentData.loanType)) {
-			console.log('Special loan type detected');
-		} else {
-			// Prepare new loan entry
+		if (!['Dropline OD', 'CC Limit', 'OD Limit'].includes(currentData.loanType)) {
 			const newEntry = {
 				loanType: currentData.loanType,
 				bankName: currentData.bankName,
@@ -837,34 +457,23 @@
 				tenure: currentData.tenure,
 				interestRate: currentData.interestRate
 			};
-
-			// Ensure currentAnswers.tableLoanEntries exists
 			if (!Array.isArray(currentAnswers.tableLoanEntries)) {
 				currentAnswers.tableLoanEntries = [];
 			}
-
-			// Push into currentAnswers
 			currentAnswers.tableLoanEntries.push(newEntry);
-
-			// If selectedToClose is 'Keep Running', calculate totalEMIs
 			if (newEntry.selectedToClose.toLowerCase() === 'keep running') {
 				currentAnswers.totalEMIs = currentAnswers.tableLoanEntries
 					.filter((item) => item.selectedToClose.toLowerCase() === 'keep running')
 					.reduce((sum, entry) => sum + Number(entry.EMIs || 0), 0);
 			}
-
-			// Clear the validated fields in `testing` (optional)
 			requiredFields.forEach((field) => {
 				currentData[field] = '';
 			});
 		}
-
-		console.log('Updated currentAnswers:', currentAnswers);
 	};
-
 	const handleInput = (id, value) => {
 		if (!id) {
-			console.warn('handleInput called with undefined id', value);
+			// console.warn('handleInput called with undefined id', value);
 			return;
 		}
 		testing.update((data) => ({ ...data, [id]: value }));
@@ -919,12 +528,13 @@
 						onInput={(value: string) => updateAnswer(question, value)}
 					/>
 				{:else if question.type === 'select'}
+					<!-- <p>select field hai</p> -->
 					<SelectField
 						id={question.id}
 						label={question.question}
 						description={question.description}
-						options={question.id === 'q1_residenceStateName' ||
-						question.id === 'q4_businessStateName'
+						options={question.id === 'q2_propertyStateName' ||
+						question.id === 'q5_residenceStateName'
 							? stateOptions
 							: (question.options?.map((opt) => ({
 									label:
@@ -945,12 +555,13 @@
 						disabled={question.uiMeta?.readonly ?? false}
 					/>
 				{:else if question.type === 'derivedSelect'}
+					<!-- <p>derived select hai</p> -->
 					<DerivedSelect
 						id={question.id}
 						label={question.question}
-						options={question.id === 'q2_residenceCityName'
+						options={question.id === 'q3_propertyCityName'
 							? residenceCityOptions
-							: question.id === 'q5_businessCityName'
+							: question.id === 'q6_residenceCityName'
 								? businessCityOptions
 								: []}
 						value={currentAnswers[
@@ -959,9 +570,9 @@
 						error={getValidationErrorMessage(question, combinedAnswers) || undefined}
 						onChange={(value: string | number) => updateAnswer(question, value)}
 						required={question.required ?? false}
-						disabled={(question.id === 'q2_residenceCityName' &&
-							!currentAnswers['residenceStateName']) ||
-							(question.id === 'q5_businessCityName' && !currentAnswers['businessStateName'])}
+						disabled={(question.id === 'q3_propertyCityName' &&
+							!currentAnswers['propertyStateName']) ||
+							(question.id === 'q6_residenceCityName' && !currentAnswers['residenceStateName'])}
 					/>
 				{:else if question.type === 'checkbox'}
 					<CheckboxField
@@ -971,7 +582,9 @@
 						error={getValidationErrorMessage(question, combinedAnswers) || undefined}
 						onChange={(checked: boolean) => updateAnswer(question, checked)}
 					/>
+					<!-- <p>checkbox hai</p> -->
 				{:else if question.type === 'textarea'}
+					<!-- <p>text area hai</p> -->
 					<TextareaField
 						id={question.id}
 						label={question.question}
@@ -985,6 +598,7 @@
 						required={question.required ?? false}
 					/>
 				{:else if question.type === 'date'}
+					<!-- <p>date hai</p> -->
 					<DateField
 						id={question.id}
 						label={question.question}
@@ -1016,6 +630,7 @@
 						onInput={(value: number | number[] | null) => updateAnswer(question, value ?? 0)}
 						required={question.required ?? false}
 					/>
+					<!-- <p>number field hai</p> -->
 				{:else if question.type === 'multiple-select'}
 					<MultipleSelectField
 						id={question.id}
@@ -1043,6 +658,8 @@
 						onChange={(values: (string | number)[]) => updateAnswer(question, values)}
 						required={question.required ?? false}
 					/>
+
+					<!-- <p>multiple select hai</p> -->
 				{:else if question.type === 'existingtext'}
 					<div>
 						<label>{question.question}</label>
@@ -1052,6 +669,7 @@
 							on:input={(e) => handleInput(question.existing_bindsTo, e.target.value)}
 						/>
 					</div>
+					<!-- <p>existing text hai</p> -->
 				{:else if question.type === 'existingselect'}
 					<div>
 						<label>{question.question}</label>
@@ -1066,6 +684,7 @@
 							<span style="color:red">Error: bindsTo_template missing!</span>
 						{/if}
 					</div>
+					<!-- <p>existing select hai</p> -->
 				{:else if question.type === 'button'}
 					<button on:click={handleAddClick} disabled={disableAddButton(question, $testing)}>
 						{question.question}
@@ -1073,7 +692,7 @@
 				{/if}
 			</div>
 		{/each}
-		{#if Array.isArray(currentAnswers.tableLoanEntries) && currentAnswers.tableLoanEntries.length > 0 && currentPage.title == 'Existing Details'}
+		<!-- {#if Array.isArray(currentAnswers.tableLoanEntries) && currentAnswers.tableLoanEntries.length > 0 && currentPage.title == 'Existing Details'}
 			<h3>Added Loan Entries:</h3>
 			<table class="loan-table">
 				<thead>
@@ -1104,7 +723,7 @@
 					{/each}
 				</tbody>
 			</table>
-		{/if}
+		{/if} -->
 
 		<!-- Navigation buttons with improved accessibility -->
 		<div class="flex flex-col sm:flex-row justify-between mt-8 space-y-4 sm:space-y-0 sm:space-x-4">

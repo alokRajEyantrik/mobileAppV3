@@ -3,10 +3,72 @@
 	"title": "Home Loan Application",
 	"pages": [
 		{
+			"id": "firstPage",
+			"title": "Let's Rock!",
 			"nextButtonVisibility": {
 				"mode": ["allRequiredAnswered"]
 			},
 			"questions": [
+				{
+					"id": "q1_loanName",
+					"bindsTo_template": "loanName",
+					"contextKey": "loanName",
+					"type": "radio",
+					"uiGroup": "loan_details",
+					"required": true,
+					"question": "What are you looking for?",
+					"description": "Get started by letting us know a little bit about what you need",
+					"options": [
+						{
+							"label": "Home Loan",
+							"value": "Home Loan",
+							"flagKey": {
+								"isSecuredLoan": true,
+								"isHomeLoan": true
+							}
+						},
+						{
+							"label": "Plot Loan",
+							"value": "Plot Loan",
+							"flagKey": {
+								"isSecuredLoan": true,
+								"isPlotLoan": true
+							}
+						},
+						{
+							"label": "Loan Against Property (LAP)",
+							"value": "Loan Against Property",
+							"flagKey": {
+								"isSecuredLoan": true,
+								"isLAP": true
+							}
+						},
+						{
+							"label": "Business Loan",
+							"value": "Business Loan",
+							"flagKey": {
+								"isUnsecuredLoan": true,
+								"isBusinessLoan": true
+							}
+						},
+						{
+							"label": "Professional Loan",
+							"value": "Professional Loan",
+							"flagKey": {
+								"isUnsecuredLoan": true,
+								"isProfessionalLoan": true
+							}
+						},
+						{
+							"label": "Personal Loan",
+							"value": "Personal Loan",
+							"flagKey": {
+								"isUnsecuredLoan": true,
+								"isPersonalLoan": true
+							}
+						}
+					]
+				},
 				{
 					"id": "q2_homeLoan",
 					"bindsTo_template": "homeLoanType",
@@ -14,39 +76,11 @@
 					"type": "radio",
 					"uiGroup": "loan_details",
 					"required": true,
-					"question": "ye flow home loan se banega",
-					"description": "flow check ho raha hai home loan ka",
+					"question": "What type of loan are you planning?",
+					"description": "It will help us to identify your requirements, specifically",
 					"options": [
 						{
-							"label": "New LoanSS",
-							"value": "New Loan"
-						},
-						{
-							"label": "Balance Transfer with Top-up",
-							"value": "Balance Transfer with Top-up"
-						},
-						{
-							"label": "Balance Transfer",
-							"value": "Balance Transfer"
-						},
-						{
-							"label": "Top-up only",
-							"value": "Top-up only"
-						}
-					]
-				},
-				{
-					"id": "queestion_hi_hai",
-					"bindsTo_template": "testLoan",
-					"contextKey": "testLoan",
-					"type": "radio",
-					"uiGroup": "loan_details",
-					"required": true,
-					"question": "next page question",
-					"description": "next page ka question hai ye",
-					"options": [
-						{
-							"label": "aaya haiS",
+							"label": "New Loan",
 							"value": "New Loan"
 						},
 						{
@@ -67,7 +101,7 @@
 		},
 		{
 			"id": "property_location_homeLoan",
-			"title": "Let's Rock!",
+			"title": "Property Details",
 			"nextButtonVisibility": {
 				"mode": ["allRequiredAnswered"]
 			},
@@ -405,8 +439,9 @@
 					"id": "q3_constructionType",
 					"bindsTo_template": "constructionType",
 					"contextKey": "constructionType",
-					"type": "radio",
-					"uiGroup": "loan_details",
+					"type": "select",
+					"uiGroup": "select_fields",
+					"uiMeta": { "placeholder": "Choose Construction Type" },
 					"required": true,
 					"question": "What type of construction is it?",
 					"options": [
@@ -500,26 +535,6 @@
 										]
 									}
 								]
-							},
-							{
-								"and": [
-									{
-										"==": [
-											{
-												"var": "propertyNature"
-											},
-											"Direct Sale"
-										]
-									},
-									{
-										"!=": [
-											{
-												"var": "constructionStage"
-											},
-											""
-										]
-									}
-								]
 							}
 						]
 					}
@@ -546,19 +561,51 @@
 					"showWhen": {
 						"or": [
 							{
-								"==": [
+								"and": [
 									{
-										"var": "isPropertyRegisteredOnSeller"
+										"==": [
+											{
+												"var": "propertyNature"
+											},
+											"Resale"
+										]
 									},
-									"No"
+									{
+										"==": [
+											{
+												"var": "constructionStage"
+											},
+											"Ready To Move"
+										]
+									},
+									{
+										"==": [
+											{
+												"var": "isPropertyRegisteredOnSeller"
+											},
+											"No"
+										]
+									}
 								]
 							},
 							{
-								"==": [
+								"and": [
 									{
-										"var": "constructionStage"
+										"==": [
+											{
+												"var": "propertyNature"
+											},
+											"Resale"
+										]
 									},
-									"Under Construction"
+									{
+										"==": [
+											{
+												"var": "constructionStage"
+											},
+											"Under Construction"
+										]
+									}
 								]
 							}
 						]
@@ -577,11 +624,23 @@
 					"question": "What is the total amount outstanding according to the payment plan?",
 					"description": "This amount represents what needs to be paid later according to the builder's payment schedule. Amounts under ₹12,000 are not considered significant. In such cases, kindly select “No builder demand.",
 					"showWhen": {
-						"==": [
+						"and": [
 							{
-								"var": "isAnyBuilderDemand"
+								"==": [
+									{
+										"var": "propertyNature"
+									},
+									"Resale"
+								]
 							},
-							"Yes"
+							{
+								"==": [
+									{
+										"var": "isAnyBuilderDemand"
+									},
+									"Yes"
+								]
+							}
 						]
 					}
 				}
@@ -679,13 +738,16 @@
 							"label": "No",
 							"value": "No"
 						}
-					]
+					],
+					"showWhen": {
+						"==": [{ "var": "propertyNature" }, "Resale"]
+					}
 				},
 				{
 					"id": "q_lendersName",
 					"bindsTo_template": "lendersName",
 					"contextKey": "lendersName",
-					"type": "select",
+					"type": "multiple-select",
 					"uiGroup": "select_fields",
 					"uiMeta": {
 						"placeholder": "Select your bank"
@@ -806,11 +868,13 @@
 						}
 					],
 					"showWhen": {
-						"!=": [
+						"and": [
 							{
-								"var": "isPropertyOnLoan"
+								"==": [{ "var": "propertyNature" }, "Resale"]
 							},
-							"Yes"
+							{
+								"==": [{ "var": "isPropertyOnLoan" }, "Yes"]
+							}
 						]
 					}
 				},
@@ -842,7 +906,7 @@
 					"type": "radio",
 					"uiGroup": "loan_details",
 					"required": true,
-					"question": "From where the property is being purchased ?",
+					"question": "If seller / any of the seller's is NRI?",
 					"options": [
 						{
 							"label": "Yes",
@@ -897,6 +961,145 @@
 							"value": "Company (Non-individual entity)"
 						}
 					]
+				},
+				{
+					"id": "q_familyCount",
+					"bindsTo_template": "familyCount",
+					"contextKey": "familyCount",
+					"type": "number",
+					"uiGroup": "number_fields",
+					"uiMeta": {
+						"placeholder": "enter the number"
+					},
+					"required": true,
+					"question": "How many family members are applying for the loan? (including the primary applicant)",
+					"description": "Please include all the members whether their name is on property or they are coming for the loan repayment.",
+					"showWhen": {
+						"==": [
+							{
+								"var": "whoIsApplying"
+							},
+							"Family"
+						]
+					},
+					"errorMessage": {
+						"required": true,
+						"message": "Members should be between 2 and 4"
+					},
+					"validation": {
+						"condition": {
+							"or": [{ "<": [{ "var": "familyCount" }, 2] }, { ">": [{ "var": "familyCount" }, 4] }]
+						}
+					}
+				},
+				{
+					"id": "q_companyType",
+					"bindsTo_template": "companyType",
+					"contextKey": "companyType",
+					"type": "select",
+					"uiGroup": "select_fields",
+					"uiMeta": {
+						"placeholder": "Select company type"
+					},
+					"required": true,
+					"question": "What's company type?",
+					"description": "Select the type of company who is applying for the loan. Be informed, the property should be in the name of company and not in the name of owner or director.",
+					"options": [
+						{
+							"label": "One Person Company (OPC)",
+							"value": "One Person Company (OPC)"
+						},
+						{
+							"label": "Partnership firm",
+							"value": "Partnership firm"
+						},
+						{
+							"label": "Limited Liability Partnership (LLP)",
+							"value": "Limited Liability Partnership (LLP)"
+						},
+						{
+							"label": "Private Limited Company (Pvt. Ltd.)",
+							"value": "Private Limited Company (Pvt. Ltd.)"
+						}
+					],
+					"showWhen": {
+						"==": [
+							{
+								"var": "whoIsApplying"
+							},
+							"Company (Non-individual entity)"
+						]
+					}
+				},
+				{
+					"id": "q_assessLoanEligibility",
+					"bindsTo_template": "assessLoanEligibility",
+					"contextKey": "assessLoanEligibility",
+					"type": "radio",
+					"uiGroup": "loan_details",
+					"required": true,
+					"question": "How would you like to assess your company’s loan eligibility? ",
+					"options": [
+						{
+							"label": "Based on 3 years of ITRs",
+							"value": "Based on 3 years of ITRs"
+						},
+						{
+							"label": "Book my appointment",
+							"value": "Book my appointment"
+						}
+					],
+					"showWhen": {
+						"and": [
+							{
+								"!=": [
+									{
+										"var": "companyType"
+									},
+									""
+								]
+							},
+							{
+								"==": [
+									{
+										"var": "whoIsApplying"
+									},
+									"Company (Non-individual entity)"
+								]
+							}
+						]
+					}
+				},
+				{
+					"id": "q_directorsCount",
+					"bindsTo_template": "directorsCount",
+					"contextKey": "directorsCount",
+					"type": "number",
+					"uiGroup": "number_fields",
+					"uiMeta": {
+						"placeholder": "enter the number"
+					},
+					"required": true,
+					"question": "How many Directors/Partners are there in the company?",
+					"description": "As the property is being purchased in the name of the company, it will be the primary applicant and all the Directors/Partners will be co-applicants on the loan.",
+					"showWhen": {
+						"and": [
+							{
+								"==": [
+									{
+										"var": "whoIsApplying"
+									},
+									"Company (Non-individual entity)"
+								]
+							},
+							{
+								"!=": [{ "var": "companyType" }, "One Person Company (OPC)"]
+							},
+							{
+								"==": [{ "var": "assessLoanEligibility" }, "Based on 3 years of ITRs"]
+							}
+						]
+					}
 				}
 			]
 		},
@@ -911,7 +1114,7 @@
 					"id": "q_nameOfPrimaryApplicant",
 					"bindsTo_template": "nameOfPrimaryApplicant",
 					"contextKey": "nameOfPrimaryApplicant",
-					"questions": "What's the full name of the applicant ?",
+					"question": "What's the full name of the applicant ?",
 					"description": "How it appears on PAN, Passport, Aadhaar or Driving license.",
 					"type": "text",
 					"uiGroup": "text_fields",
@@ -938,11 +1141,18 @@
 						}
 					],
 					"showWhen": {
-						"!=": [
+						"and": [
 							{
-								"var": "nameOfPrimaryApplicant"
+								"!=": [{ "var": "whoIsApplying" }, "Individual / Sole-Proprietor"]
 							},
-							""
+							{
+								"!=": [
+									{
+										"var": "nameOfPrimaryApplicant"
+									},
+									""
+								]
+							}
 						]
 					}
 				},
@@ -1049,23 +1259,11 @@
 						}
 					],
 					"showWhen": {
-						"and": [
+						"==": [
 							{
-								"==": [
-									{
-										"var": "whoIsApplying"
-									},
-									"Couple"
-								]
+								"var": "primaryEmploymentType"
 							},
-							{
-								"==": [
-									{
-										"var": "primaryEmploymentType"
-									},
-									"Employed(Private)"
-								]
-							}
+							"Employed(Private)"
 						]
 					}
 				},
@@ -1433,7 +1631,12 @@
 					"required": true,
 					"question": "Enter your OD limit.",
 					"showWhen": {
-						"!=": [{ "var": "primaryROIOfOD" }, ""]
+						"and": [
+							{ "!=": [{ "var": "primaryROIOfOD" }, ""] },
+							{
+								"==": [{ "var": "isPrimaryHasOD" }, "Yes"]
+							}
+						]
 					}
 				},
 				{
@@ -1446,10 +1649,22 @@
 						"placeholder": "enter total EMIs"
 					},
 					"required": true,
-					"question": "What are the monthly EMIs being paid from the account of",
+					"question": "What are the monthly EMIs being paid from the account of {}",
 					"description": "Please enter total Amount of EMIs (Home Loan, Auto Loan, Personal Loan, Credit Card Loan etc). Do not include EMI's of the loans where remaining tenure is less than 12 months or you can close the loan before disbursement of the loan you are going to apply for. Enter zero (0) if there is no EMI.",
 					"showWhen": {
-						"!=": [{ "var": "primaryLimitOfOD" }, ""]
+						"or": [
+							{
+								"!=": [{ "var": "primaryLimitOfOD" }, ""]
+							},
+							{
+								"==": [
+									{
+										"var": "isPrimaryHasOD"
+									},
+									"No"
+								]
+							}
+						]
 					}
 				},
 				{
@@ -1464,7 +1679,7 @@
 					"required": true,
 					"question": "What is the combined limit of all the credit cards issued in the name of",
 					"showWhen": {
-						"!=": [{ "var": "primaryLimitOfOD" }, ""]
+						">=": [{ "var": "primaryMonthlyEMI" }, 0]
 					}
 				},
 				{
@@ -1510,7 +1725,7 @@
 						}
 					],
 					"showWhen": {
-						"!=": [{ "Var": "primaryCombinedLimitOfCC" }, ""]
+						">=": [{ "var": "primaryCombinedLimitOfCC" }, 0]
 					}
 				},
 				{
@@ -1601,7 +1816,19 @@
 						}
 					],
 					"showWhen": {
-						"!=": [{ "var": "isPrimaryDefaulter" }, ""]
+						"or": [
+							{
+								"==": [{ "var": "isPrimaryDefaulter" }, "Yes"]
+							},
+							{
+								"!=": [
+									{
+										"var": "primaryCIBILScore"
+									},
+									"more than 800"
+								]
+							}
+						]
 					}
 				}
 			]
@@ -1627,26 +1854,42 @@
 					"description": "Term is the full length of your home loan - anywhere from 5 to 35 years. A longer term means you'll have lower monthly payments, but you'll pay more interest over time. Don't worry, you can change your mind later.",
 					"options": [
 						{
-							"label": "1 years",
-							"value": "1 years"
+							"label": "1",
+							"value": "1"
 						},
 						{
-							"label": "2 years",
-							"value": "2 years"
+							"label": "2",
+							"value": "2"
 						},
 						{
-							"label": "3 years",
-							"value": "3 years"
+							"label": "3",
+							"value": "3"
 						},
 						{
-							"label": "4 years",
-							"value": "4 years"
+							"label": "4",
+							"value": "4"
 						},
 						{
-							"label": "5 years",
-							"value": "5 years"
+							"label": "5",
+							"value": "5"
 						}
 					]
+				},
+				{
+					"id": "q_allotmentValue",
+					"bindsTo_template": "allotmentValue",
+					"contextKey": "allotmentValue",
+					"type": "number",
+					"uiGroup": "inputNumber",
+					"uiMeta": {
+						"placeholder": "allotment value"
+					},
+					"required": true,
+					"question": "Please provide the property allotment value?",
+					"description": "In case of unregistered property, a few government banks sanction the loan based on allotment value. This amount is mentioned in the allotment letter which seller would have received from the builder.",
+					"showWhen": {
+						"==": [{ "var": "propertyNature" }, "Resale"]
+					}
 				},
 				{
 					"id": "q_dealValue",

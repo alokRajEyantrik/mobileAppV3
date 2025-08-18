@@ -5,7 +5,7 @@ export function preprocessSchemaBindings(schema, loanName) {
 			delete item.bindsTo_template;
 		}
 		if (item.questions) {
-			item.questions = item.questions.map(processItem);
+			// item.questions = item.questions.map(processItem);
 		}
 		if (item.items) {
 			item.items = item.items.map(processItem);
