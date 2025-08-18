@@ -6,7 +6,9 @@
 			"id": "firstPage",
 			"title": "Let's Rock!",
 			"nextButtonVisibility": {
-				"mode": ["allRequiredAnswered"]
+				"mode": [
+					"allRequiredAnswered"
+				]
 			},
 			"questions": [
 				{
@@ -97,7 +99,11 @@
 							{
 								"var": "loanName"
 							},
-							["Personal Loan", "Professional Loan", "Business Loan"]
+							[
+								"Personal Loan",
+								"Professional Loan",
+								"Business Loan"
+							]
 						]
 					}
 				},
@@ -131,7 +137,12 @@
 							{
 								"var": "unSecureLoanType"
 							},
-							["Personal Loan", "Professional Loan", "Business Loan", "Drop-line OverDraft (DOD)"]
+							[
+								"Personal Loan",
+								"Professional Loan",
+								"Business Loan",
+								"Drop-line OverDraft (DOD)"
+							]
 						]
 					}
 				},
@@ -161,7 +172,11 @@
 									{
 										"var": "unSecureLoanType"
 									},
-									["Personal Loan", "Professional Loan", "Business Loan"]
+									[
+										"Personal Loan",
+										"Professional Loan",
+										"Business Loan"
+									]
 								]
 							},
 							{
@@ -181,7 +196,9 @@
 			"id": "collateral_free_selectionPage",
 			"title": "A few check points !",
 			"nextButtonVisibility": {
-				"mode": ["allRequiredAnswered"]
+				"mode": [
+					"allRequiredAnswered"
+				]
 			},
 			"questions": [
 				{
@@ -332,7 +349,9 @@
 			"id": "locationPage",
 			"title": "Residence Location",
 			"nextButtonVisibility": {
-				"mode": ["allRequiredAnswered"]
+				"mode": [
+					"allRequiredAnswered"
+				]
 			},
 			"questions": [
 				{
@@ -459,7 +478,9 @@
 			"id": "basicInfoPage",
 			"title": "Income and Obligations",
 			"nextButtonVisibility": {
-				"mode": ["allRequiredAnswered"]
+				"mode": [
+					"allRequiredAnswered"
+				]
 			},
 			"questions": [
 				{
@@ -569,7 +590,11 @@
 									{
 										"var": "TypeOfResidence"
 									},
-									["Self owned", "Family owned", "Rented"]
+									[
+										"Self owned",
+										"Family owned",
+										"Rented"
+									]
 								]
 							}
 						]
@@ -612,7 +637,11 @@
 									{
 										"var": "TypeOfResidence"
 									},
-									["Self owned", "Family owned", "Rented"]
+									[
+										"Self owned",
+										"Family owned",
+										"Rented"
+									]
 								]
 							},
 							{
@@ -620,7 +649,10 @@
 									{
 										"var": "EmploymentType"
 									},
-									["Employed (Private)", "Employed (Government)"]
+									[
+										"Employed (Private)",
+										"Employed (Government)"
+									]
 								]
 							}
 						]
@@ -659,7 +691,11 @@
 									{
 										"var": "TypeOfResidence"
 									},
-									["Self owned", "Family owned", "Rented"]
+									[
+										"Self owned",
+										"Family owned",
+										"Rented"
+									]
 								]
 							},
 							{
@@ -667,7 +703,9 @@
 									{
 										"var": "EmploymentType"
 									},
-									["Employed (Private)"]
+									[
+										"Employed (Private)"
+									]
 								]
 							},
 							{
@@ -722,7 +760,11 @@
 									{
 										"var": "TypeOfResidence"
 									},
-									["Self owned", "Family owned", "Rented"]
+									[
+										"Self owned",
+										"Family owned",
+										"Rented"
+									]
 								]
 							},
 							{
@@ -730,7 +772,9 @@
 									{
 										"var": "EmploymentType"
 									},
-									["Employed (Private)"]
+									[
+										"Employed (Private)"
+									]
 								]
 							},
 							{
@@ -738,7 +782,9 @@
 									{
 										"var": "companyType"
 									},
-									["Private Limited Company"]
+									[
+										"Private Limited Company"
+									]
 								]
 							},
 							{
@@ -785,7 +831,11 @@
 									{
 										"var": "TypeOfResidence"
 									},
-									["Self owned", "Family owned", "Rented"]
+									[
+										"Self owned",
+										"Family owned",
+										"Rented"
+									]
 								]
 							},
 							{
@@ -793,7 +843,9 @@
 									{
 										"var": "EmploymentType"
 									},
-									["Employed (Private)"]
+									[
+										"Employed (Private)"
+									]
 								]
 							},
 							{
@@ -801,7 +853,9 @@
 									{
 										"var": "companyType"
 									},
-									["Private Limited Company"]
+									[
+										"Private Limited Company"
+									]
 								]
 							},
 							{
@@ -850,7 +904,11 @@
 									{
 										"var": "TypeOfResidence"
 									},
-									["Self owned", "Family owned", "Rented"]
+									[
+										"Self owned",
+										"Family owned",
+										"Rented"
+									]
 								]
 							},
 							{
@@ -860,7 +918,9 @@
 											{
 												"var": "EmploymentType"
 											},
-											["Employed (Government)"]
+											[
+												"Employed (Government)"
+											]
 										]
 									},
 									{
@@ -870,7 +930,9 @@
 													{
 														"var": "EmploymentType"
 													},
-													["Employed (Private)"]
+													[
+														"Employed (Private)"
+													]
 												]
 											},
 											{
@@ -880,7 +942,9 @@
 															{
 																"var": "companyType"
 															},
-															["Private Limited"]
+															[
+																"Private Limited"
+															]
 														]
 													},
 													{
@@ -890,7 +954,9 @@
 																	{
 																		"var": "companyType"
 																	},
-																	["Private Limited Company"]
+																	[
+																		"Private Limited Company"
+																	]
 																]
 															},
 															{
@@ -946,7 +1012,14 @@
 					},
 					"validation": {
 						"condition": {
-							"<": [{ "var": "grossIncome" }, { "var": "fixedSalary" }]
+							"<": [
+								{
+									"var": "grossIncome"
+								},
+								{
+									"var": "fixedSalary"
+								}
+							]
 						}
 					},
 					"showWhen": {
@@ -964,7 +1037,11 @@
 									{
 										"var": "TypeOfResidence"
 									},
-									["Self owned", "Family owned", "Rented"]
+									[
+										"Self owned",
+										"Family owned",
+										"Rented"
+									]
 								]
 							},
 							{
@@ -974,7 +1051,9 @@
 											{
 												"var": "EmploymentType"
 											},
-											["Employed (Government)"]
+											[
+												"Employed (Government)"
+											]
 										]
 									},
 									{
@@ -984,7 +1063,9 @@
 													{
 														"var": "EmploymentType"
 													},
-													["Employed (Private)"]
+													[
+														"Employed (Private)"
+													]
 												]
 											},
 											{
@@ -994,7 +1075,9 @@
 															{
 																"var": "companyType"
 															},
-															["Private Limited"]
+															[
+																"Private Limited"
+															]
 														]
 													},
 													{
@@ -1004,7 +1087,9 @@
 																	{
 																		"var": "companyType"
 																	},
-																	["Private Limited Company"]
+																	[
+																		"Private Limited Company"
+																	]
 																]
 															},
 															{
@@ -1077,7 +1162,11 @@
 									{
 										"var": "TypeOfResidence"
 									},
-									["Self owned", "Family owned", "Rented"]
+									[
+										"Self owned",
+										"Family owned",
+										"Rented"
+									]
 								]
 							},
 							{
@@ -1087,7 +1176,9 @@
 											{
 												"var": "EmploymentType"
 											},
-											["Employed (Government)"]
+											[
+												"Employed (Government)"
+											]
 										]
 									},
 									{
@@ -1097,7 +1188,9 @@
 													{
 														"var": "EmploymentType"
 													},
-													["Employed (Private)"]
+													[
+														"Employed (Private)"
+													]
 												]
 											},
 											{
@@ -1107,7 +1200,9 @@
 															{
 																"var": "companyType"
 															},
-															["Private Limited"]
+															[
+																"Private Limited"
+															]
 														]
 													},
 													{
@@ -1117,7 +1212,9 @@
 																	{
 																		"var": "companyType"
 																	},
-																	["Private Limited Company"]
+																	[
+																		"Private Limited Company"
+																	]
 																]
 															},
 															{
@@ -1228,7 +1325,11 @@
 									{
 										"var": "TypeOfResidence"
 									},
-									["Self owned", "Family owned", "Rented"]
+									[
+										"Self owned",
+										"Family owned",
+										"Rented"
+									]
 								]
 							},
 							{
@@ -1238,7 +1339,9 @@
 											{
 												"var": "EmploymentType"
 											},
-											["Employed (Government)"]
+											[
+												"Employed (Government)"
+											]
 										]
 									},
 									{
@@ -1248,7 +1351,9 @@
 													{
 														"var": "EmploymentType"
 													},
-													["Employed (Private)"]
+													[
+														"Employed (Private)"
+													]
 												]
 											},
 											{
@@ -1258,7 +1363,9 @@
 															{
 																"var": "companyType"
 															},
-															["Private Limited"]
+															[
+																"Private Limited"
+															]
 														]
 													},
 													{
@@ -1268,7 +1375,9 @@
 																	{
 																		"var": "companyType"
 																	},
-																	["Private Limited Company"]
+																	[
+																		"Private Limited Company"
+																	]
 																]
 															},
 															{
@@ -1364,7 +1473,11 @@
 									{
 										"var": "TypeOfResidence"
 									},
-									["Self owned", "Family owned", "Rented"]
+									[
+										"Self owned",
+										"Family owned",
+										"Rented"
+									]
 								]
 							},
 							{
@@ -1374,7 +1487,9 @@
 											{
 												"var": "EmploymentType"
 											},
-											["Employed (Government)"]
+											[
+												"Employed (Government)"
+											]
 										]
 									},
 									{
@@ -1384,7 +1499,9 @@
 													{
 														"var": "EmploymentType"
 													},
-													["Employed (Private)"]
+													[
+														"Employed (Private)"
+													]
 												]
 											},
 											{
@@ -1394,7 +1511,9 @@
 															{
 																"var": "companyType"
 															},
-															["Private Limited"]
+															[
+																"Private Limited"
+															]
 														]
 													},
 													{
@@ -1404,7 +1523,9 @@
 																	{
 																		"var": "companyType"
 																	},
-																	["Private Limited Company"]
+																	[
+																		"Private Limited Company"
+																	]
 																]
 															},
 															{
@@ -1543,7 +1664,11 @@
 									{
 										"var": "TypeOfResidence"
 									},
-									["Self owned", "Family owned", "Rented"]
+									[
+										"Self owned",
+										"Family owned",
+										"Rented"
+									]
 								]
 							},
 							{
@@ -1553,7 +1678,9 @@
 											{
 												"var": "EmploymentType"
 											},
-											["Employed (Government)"]
+											[
+												"Employed (Government)"
+											]
 										]
 									},
 									{
@@ -1563,7 +1690,9 @@
 													{
 														"var": "EmploymentType"
 													},
-													["Employed (Private)"]
+													[
+														"Employed (Private)"
+													]
 												]
 											},
 											{
@@ -1573,7 +1702,9 @@
 															{
 																"var": "companyType"
 															},
-															["Private Limited"]
+															[
+																"Private Limited"
+															]
 														]
 													},
 													{
@@ -1583,7 +1714,9 @@
 																	{
 																		"var": "companyType"
 																	},
-																	["Private Limited Company"]
+																	[
+																		"Private Limited Company"
+																	]
 																]
 															},
 															{
@@ -1647,7 +1780,10 @@
 									{
 										"var": "creditScore"
 									},
-									["No CIBIL", "650-699"]
+									[
+										"No CIBIL",
+										"650-699"
+									]
 								]
 							},
 							{
@@ -1655,7 +1791,10 @@
 									{
 										"var": "isDefaulter"
 									},
-									["Yes", "No"]
+									[
+										"Yes",
+										"No"
+									]
 								]
 							}
 						]
@@ -1682,10 +1821,11 @@
 			},
 			"questions": [
 				{
-					"id": "q1_loanType",
-					"existing_bindsTo": "loanType",
-					"contextKey": "loanType",
-					"type": "existingselect",
+					"id": "q1_existingLoanType",
+					"bindsTo_template": "existingLoanType",
+					"existing_bindsTo": "existingLoanType",
+					"contextKey": "existingLoanType",
+					"type": "select",
 					"uiGroup": "select_fields",
 					"uiMeta": {
 						"placeholder": "Choose your existing loan type"
@@ -1740,7 +1880,7 @@
 					"id": "q2_bankName",
 					"existing_bindsTo": "bankName",
 					"contextKey": "bankName",
-					"type": "existingselect",
+					"type": "existingSelect",
 					"uiGroup": "select_fields",
 					"uiMeta": {
 						"placeholder": "Select your bank"
@@ -1782,13 +1922,12 @@
 							"value": "Union Bank"
 						}
 					]
-					
 				},
 				{
 					"id": "q3_selectedToClose",
 					"existing_bindsTo": "selectedToClose",
 					"contextKey": "selectedToClose",
-					"type": "existingselect",
+					"type": "existingSelect",
 					"uiGroup": "select_fields",
 					"uiMeta": {
 						"placeholder": "How do you plan to close this loan?"
@@ -1814,247 +1953,52 @@
 						"required": true,
 						"message": "Please select a different reason for the closure plan. You have currently chosen “New Loan” as the reason. However, if your intention is to close this existing loan by consolidating it with a new debt consolidation loan, you need to go back and select the debt consolidation option instead. This is necessary because only the debt consolidation option allows you to close existing loans through this process."
 					}
-					
 				},
 				{
 					"id": "q4_emi",
 					"existing_bindsTo": "EMIs",
 					"contextKey": "EMIs",
-					"type": "existingtext",
+					"type": "existingText",
 					"uiGroup": "text_fields",
 					"uiMeta": {
 						"placeholder": "Enter EMI"
 					},
 					"required": true,
 					"question": "What is the EMI for this existing loan?",
-					"description": "EMI (monthly)"
-					
+					"description": "EMI (monthly)",
+					"showWhen": {
+						"or": [
+							{
+								"in": [
+									{
+										"var": "existingLoanType"
+									},
+									[
+										"Business Loan - Unsecured",
+										"Business Loan - Secured",
+										"Loan Against Property",
+										"Machinery Loan",
+										"Vehicle Loan",
+										"Property Loan"
+									]
+								]
+							},
+							{
+								"==": [
+									{
+										"var": "existingLoanType"
+									},
+									""
+								]
+							}
+						]
+					}
 				},
 				{
 					"id": "q5_tenure",
 					"existing_bindsTo": "tenure",
 					"contextKey": "tenure",
-					"type": "existingtext",
-					"uiGroup": "text_fields",
-					"uiMeta": {
-						"placeholder": "in months"
-					},
-					"required": true,
-					"question": "remaining tenure"
-					
-				},
-				{
-					"id": "q6_totalLimit",
-					"existing_bindsTo": "totalLimit",
-					"contextKey": "totalLimit",
-	 				"type": "text",
-					"uiGroup": "text_fields",
-					"uiMeta": {
-						"placeholder": "Enter total limit"
-					},
-					"required": true,
-					"question": "total limit",
-					"showWhen": {
-						"and": [
-							{
-								"in": [
-									{
-										"var": "loanType"
-									},
-									[
-										"OD Limit",
-										"CC Limit"
-									]
-								]
-							},
-							{
-								"!=": [
-									{
-										"var": "bankName"
-									},
-									""
-								]
-							},
-							{
-								"!=": [
-									{
-										"var": "selectedToClose"
-									},
-									""
-								]
-							}
-						]
-					}
-				},
-				{
-					"id": "q7_sanctionedLimit",
-					"existing_bindsTo": "sanctionedLimit",
-					"contextKey": "sanctionedLimit",
-					"type": "text",
-					"uiGroup": "text_fields",
-					"uiMeta": {
-						"placeholder": "Enter total limit"
-					},
-					"required": true,
-					"question": "sanctioned limit (at the time of start)",
-					"showWhen": {
-						"and": [
-							{
-								"==": [
-									{
-										"var": "loanType"
-									},
-									"Dropline OD"
-								]
-							},
-							{
-								"!=": [
-									{
-										"var": "bankName"
-									},
-									""
-								]
-							},
-							{
-								"!=": [
-									{
-										"var": "selectedToClose"
-									},
-									""
-								]
-							}
-						]
-					}
-				},
-				{
-					"id": "q8_remainingLimit",
-					"existing_bindsTo": "remainingLimit",
-					"contextKey": "remainingLimit",
-					"type": "text",
-					"uiGroup": "text_fields",
-					"uiMeta": {
-						"placeholder": "Enter total limit"
-					},
-					"required": true,
-					"question": "remaining limit (current)",
-					"showWhen": {
-						"and": [
-							{
-								"==": [
-									{
-										"var": "loanType"
-									},
-									"Dropline OD"
-								]
-							},
-							{
-								"!=": [
-									{
-										"var": "bankName"
-									},
-									""
-								]
-							},
-							{
-								"!=": [
-									{
-										"var": "selectedToClose"
-									},
-									""
-								]
-							},
-							{
-								"!=": [
-									{
-										"var": "sanctionedLimit"
-									},
-									""
-								]
-							}
-						]
-					}
-				},
-				{
-					"id": "q9_sanctionedTenure",
-					"existing_bindsTo": "sanctionedTenure",
-					"contextKey": "sanctionedTenure",
-					"type": "text",
-					"uiGroup": "text_fields",
-					"uiMeta": {
-						"placeholder": "in months"
-					},
-					"required": true,
-					"question": "sanctioned tenure",
-					"showWhen": {
-						"and": [
-							{
-								"in": [
-									{
-										"var": "loanType"
-									},
-									[
-										"OD Limit",
-										"CC Limit",
-										"Dropline OD"
-									]
-								]
-							},
-							{
-								"!=": [
-									{
-										"var": "bankName"
-									},
-									""
-								]
-							},
-							{
-								"!=": [
-									{
-										"var": "selectedToClose"
-									},
-									""
-								]
-							},
-							{
-								"or": [
-									{
-										"!=": [
-											{
-												"var": "totalLimit"
-											},
-											""
-										]
-									},
-									{
-										"and": [
-											{
-												"!=": [
-													{
-														"var": "sanctionedLimit"
-													},
-													""
-												]
-											},
-											{
-												"!=": [
-													{
-														"var": "remainingLimit"
-													},
-													""
-												]
-											}
-										]
-									}
-								]
-							}
-						]
-					}
-				},
-				{
-					"id": "q10_remainingTenure",
-					"existing_bindsTo": "remainingTenure",
-					"contextKey": "remainingTenure",
-					"type": "text",
+					"type": "existingText",
 					"uiGroup": "text_fields",
 					"uiMeta": {
 						"placeholder": "in months"
@@ -2062,51 +2006,26 @@
 					"required": true,
 					"question": "remaining tenure",
 					"showWhen": {
-						"and": [
+						"or": [
+							{
+								"in": [
+									{
+										"var": "existingLoanType"
+									},
+									[
+										"Business Loan - Unsecured",
+										"Business Loan - Secured",
+										"Loan Against Property",
+										"Machinery Loan",
+										"Vehicle Loan",
+										"Property Loan"
+									]
+								]
+							},
 							{
 								"==": [
 									{
-										"var": "loanType"
-									},
-									"Dropline OD"
-								]
-							},
-							{
-								"!=": [
-									{
-										"var": "bankName"
-									},
-									""
-								]
-							},
-							{
-								"!=": [
-									{
-										"var": "selectedToClose"
-									},
-									""
-								]
-							},
-							{
-								"!=": [
-									{
-										"var": "sanctionedLimit"
-									},
-									""
-								]
-							},
-							{
-								"!=": [
-									{
-										"var": "remainingLimit"
-									},
-									""
-								]
-							},
-							{
-								"!=": [
-									{
-										"var": "sanctionedTenure"
+										"var": "existingLoanType"
 									},
 									""
 								]
@@ -2115,10 +2034,129 @@
 					}
 				},
 				{
-					"id": "q11_utilizedAmount",
+					"id": "q6_limit",
+					"existing_bindsTo": "limit",
+					"contextKey": "limit",
+					"type": "existingText",
+					"uiGroup": "text_fields",
+					"uiMeta": {
+						"placeholder": "Enter total limit"
+					},
+					"required": true,
+					"question": "total limit",
+					"showWhen": {
+						"in": [
+							{
+								"var": "existingLoanType"
+							},
+							[
+								"OD Limit",
+								"CC Limit"
+							]
+						]
+					}
+				},
+				{
+					"id": "q7_sanctionedLimit",
+					"existing_bindsTo": "sanctionedLimit",
+					"contextKey": "sanctionedLimit",
+					"type": "existingText",
+					"uiGroup": "text_fields",
+					"uiMeta": {
+						"placeholder": "Enter total limit"
+					},
+					"required": true,
+					"question": "sanctioned limit (at the time of start)",
+					"showWhen": {
+						"==": [
+							{
+								"var": "existingLoanType"
+							},
+							"Dropline OD"
+						]
+					}
+				},
+				{
+					"id": "q8_sanctionedTenure",
+					"existing_bindsTo": "sanctionedTenure",
+					"contextKey": "sanctionedTenure",
+					"type": "existingText",
+					"uiGroup": "text_fields",
+					"uiMeta": {
+						"placeholder": "in months"
+					},
+					"required": true,
+					"question": "sanctioned tenure",
+					"showWhen": {
+						"in": [
+							{
+								"var": "existingLoanType"
+							},
+							[
+								"OD Limit",
+								"CC Limit",
+								"Dropline OD"
+							]
+						]
+					}
+				},
+				{
+					"id": "q9_interestRate",
+					"existing_bindsTo": "interestRate",
+					"contextKey": "interestRate",
+					"type": "existingText",
+					"uiGroup": "text_fields",
+					"uiMeta": {
+						"placeholder": "enter interest rate"
+					},
+					"required": true,
+					"question": "interest rate (p.a.)"
+				},
+				{
+					"id": "10_remainingLimit",
+					"existing_bindsTo": "remainingLimit",
+					"contextKey": "remainingLimit",
+					"type": "existingText",
+					"uiGroup": "text_fields",
+					"uiMeta": {
+						"placeholder": "Enter total limit"
+					},
+					"required": true,
+					"question": "remaining limit (current)",
+					"showWhen": {
+						"==": [
+							{
+								"var": "existingLoanType"
+							},
+							"Dropline OD"
+						]
+					}
+				},
+				{
+					"id": "q11_remainingTenure",
+					"existing_bindsTo": "remainingTenure",
+					"contextKey": "remainingTenure",
+					"type": "existingText",
+					"uiGroup": "text_fields",
+					"uiMeta": {
+						"placeholder": "in months"
+					},
+					"required": true,
+					"question": "remaining tenure",
+					"showWhen": {
+						"==": [
+							{
+								"var": "existingLoanType"
+							},
+							"Dropline OD"
+						]
+					}
+				},
+				{
+					"id": "q12_utilizedAmount",
 					"existing_bindsTo": "utilizedAmount",
 					"contextKey": "utilizedAmount",
-					"type": "text",
+					"type": "existingText",
 					"uiGroup": "text_fields",
 					"uiMeta": {
 						"placeholder": "Enter total limit"
@@ -2126,92 +2164,34 @@
 					"required": true,
 					"question": "utilized amount",
 					"showWhen": {
-						"and": [
+						"==": [
 							{
-								"==": [
-									{
-										"var": "loanType"
-									},
-									"Dropline OD"
-								]
+								"var": "existingLoanType"
 							},
-							{
-								"!=": [
-									{
-										"var": "bankName"
-									},
-									""
-								]
-							},
-							{
-								"!=": [
-									{
-										"var": "selectedToClose"
-									},
-									""
-								]
-							},
-							{
-								"!=": [
-									{
-										"var": "sanctionedLimit"
-									},
-									""
-								]
-							},
-							{
-								"!=": [
-									{
-										"var": "remainingLimit"
-									},
-									""
-								]
-							},
-							{
-								"!=": [
-									{
-										"var": "sanctionedTenure"
-									},
-									""
-								]
-							},
-							{
-								"!=": [
-									{
-										"var": "remainingTenure"
-									},
-									""
-								]
-							}
+							"Dropline OD"
 						]
 					}
 				},
 				{
-					"id": "q12_interestRate",
-					"existing_bindsTo": "interestRate",
-					"contextKey": "interestRate",
-					"type": "existingtext",
-					"uiGroup": "text_fields",
-					"uiMeta": {
-						"placeholder": "enter interest rate"
-					},
-					"required": true,
-					"question": "interest rate (p.a.)"
-				
-				},
-				{"id": "q12_addButton",
+					"id": "q12_addButton",
 					"existing_bindsTo": "addButton",
 					"contextKey": "addButton",
 					"uiGroup": "add_button",
 					"type": "button",
 					"question": "Add",
 					"disabledCondition": {
-						"anyEmpty": [
-							"loanType",
+						"termLoanEmpty": [
 							"bankName",
 							"selectedToClose",
 							"EMIs",
 							"tenure",
+							"interestRate"
+						],
+						"limitEmpty": [
+							"bankName",
+							"selectedToClose",
+							"limit",
+							"sanctionedTenure",
 							"interestRate"
 						]
 					},
@@ -2230,7 +2210,9 @@
 			"id": "loanRequirementPage",
 			"title": "Your Loan Requirements",
 			"nextButtonVisibility": {
-				"mode": ["allRequiredAnswered"]
+				"mode": [
+					"allRequiredAnswered"
+				]
 			},
 			"questions": [
 				{
@@ -2288,7 +2270,12 @@
 						}
 					],
 					"showWhen": {
-						"!=": [{ "var": "mortgageYear" }, ""]
+						"!=": [
+							{
+								"var": "mortgageYear"
+							},
+							""
+						]
 					}
 				},
 				{
@@ -2308,10 +2295,20 @@
 					"showWhen": {
 						"and": [
 							{
-								"!=": [{ "var": "mortgageYear" }, ""]
+								"!=": [
+									{
+										"var": "mortgageYear"
+									},
+									""
+								]
 							},
 							{
-								"==": [{ "var": "hasSpecificAmount" }, "Yes"]
+								"==": [
+									{
+										"var": "hasSpecificAmount"
+									},
+									"Yes"
+								]
 							}
 						]
 					}
