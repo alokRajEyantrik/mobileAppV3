@@ -85,6 +85,22 @@
 		return question.bindsTo || question.id;
 	}
 
+	function resolveDynamicText(field: any, answers: Answers): string {
+		if (!field) return '';
+		if (typeof field === 'string') return field;
+
+		if (typeof field === 'object' && field.switch && Array.isArray(field.switch)) {
+			for (const condition of field.switch) {
+				if (jsonLogic.apply(condition.case, answers)) {
+					return resolveDynamicText(condition.then, answers);
+				}
+			}
+			return '';
+		}
+
+		return typeof field === 'object' ? JSON.stringify(field) : '';
+	}
+
 	// 🎛 Mapping options for selects
 	$: stateOptions = Object.keys(pincode_IN_Selected).map((state) => ({
 		label: state,
@@ -495,8 +511,8 @@
 					<RadioField
 						id={question.id}
 						name={question.id}
-						label={question.question}
-						description={question.description}
+						label={resolveDynamicText(question.question, combinedAnswers)}
+						description={resolveDynamicText(question.description, combinedAnswers)}
 						options={question.options?.map((opt) => ({
 							label:
 								typeof opt.label === 'object' && opt.label.var
@@ -518,8 +534,8 @@
 				{:else if question.type === 'text'}
 					<TextField
 						id={question.id}
-						label={question.question}
-						description={question.description}
+						label={resolveDynamicText(question.question, combinedAnswers)}
+						description={resolveDynamicText(question.description, combinedAnswers)}
 						value={currentAnswers[
 							resolveBindsTo(question, combinedAnswers, selectedLoan)
 						]?.toString() || ''}
@@ -531,8 +547,8 @@
 					<!-- <p>select field hai</p> -->
 					<SelectField
 						id={question.id}
-						label={question.question}
-						description={question.description}
+						label={resolveDynamicText(question.question, combinedAnswers)}
+						description={resolveDynamicText(question.description, combinedAnswers)}
 						options={question.id === 'q2_propertyStateName' ||
 						question.id === 'q5_residenceStateName'
 							? stateOptions
@@ -558,7 +574,7 @@
 					<!-- <p>derived select hai</p> -->
 					<DerivedSelect
 						id={question.id}
-						label={question.question}
+						label={resolveDynamicText(question.question, combinedAnswers)}
 						options={question.id === 'q3_propertyCityName'
 							? residenceCityOptions
 							: question.id === 'q6_residenceCityName'
@@ -577,7 +593,7 @@
 				{:else if question.type === 'checkbox'}
 					<CheckboxField
 						id={question.id}
-						label={question.question}
+						label={resolveDynamicText(question.question, combinedAnswers)}
 						checked={!!currentAnswers[resolveBindsTo(question, combinedAnswers, selectedLoan)]}
 						error={getValidationErrorMessage(question, combinedAnswers) || undefined}
 						onChange={(checked: boolean) => updateAnswer(question, checked)}
@@ -587,8 +603,8 @@
 					<!-- <p>text area hai</p> -->
 					<TextareaField
 						id={question.id}
-						label={question.question}
-						description={question.description}
+						label={resolveDynamicText(question.question, combinedAnswers)}
+						description={resolveDynamicText(question.description, combinedAnswers)}
 						value={currentAnswers[
 							resolveBindsTo(question, combinedAnswers, selectedLoan)
 						]?.toString() || ''}
@@ -601,7 +617,7 @@
 					<!-- <p>date hai</p> -->
 					<DateField
 						id={question.id}
-						label={question.question}
+						label={resolveDynamicText(question.question, combinedAnswers)}
 						value={currentAnswers[
 							resolveBindsTo(question, combinedAnswers, selectedLoan)
 						]?.toString() || ''}
@@ -614,8 +630,8 @@
 				{:else if question.type === 'number'}
 					<NumberField
 						id={question.id}
-						label={question.question}
-						description={question.description}
+						label={resolveDynamicText(question.question, combinedAnswers)}
+						description={resolveDynamicText(question.description, combinedAnswers)}
 						value={(currentAnswers[resolveBindsTo(question, combinedAnswers, selectedLoan)] as
 							| number[]
 							| number
@@ -634,8 +650,8 @@
 				{:else if question.type === 'multiple-select'}
 					<MultipleSelectField
 						id={question.id}
-						label={question.question}
-						description={question.description}
+						label={resolveDynamicText(question.question, combinedAnswers)}
+						description={resolveDynamicText(question.description, combinedAnswers)}
 						options={question.options?.map((opt) => ({
 							label:
 								typeof opt.label === 'object' && opt.label.var
@@ -662,7 +678,7 @@
 					<!-- <p>multiple select hai</p> -->
 				{:else if question.type === 'existingtext'}
 					<div>
-						<label>{question.question}</label>
+						<label>{resolveDynamicText(question.question, combinedAnswers)}</label>
 						<input
 							type="text"
 							value={$testing[question.existing_bindsTo] || ''}
@@ -672,7 +688,7 @@
 					<!-- <p>existing text hai</p> -->
 				{:else if question.type === 'existingselect'}
 					<div>
-						<label>{question.question}</label>
+						<label>{resolveDynamicText(question.question, combinedAnswers)}</label>
 						{#if question.existing_bindsTo}
 							<select bind:value={$testing[question.existing_bindsTo]}>
 								<option value="">Select</option>

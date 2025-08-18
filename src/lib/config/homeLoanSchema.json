@@ -962,36 +962,7 @@
 						}
 					]
 				},
-				{
-					"id": "q_familyCount",
-					"bindsTo_template": "familyCount",
-					"contextKey": "familyCount",
-					"type": "number",
-					"uiGroup": "number_fields",
-					"uiMeta": {
-						"placeholder": "enter the number"
-					},
-					"required": true,
-					"question": "How many family members are applying for the loan? (including the primary applicant)",
-					"description": "Please include all the members whether their name is on property or they are coming for the loan repayment.",
-					"showWhen": {
-						"==": [
-							{
-								"var": "whoIsApplying"
-							},
-							"Family"
-						]
-					},
-					"errorMessage": {
-						"required": true,
-						"message": "Members should be between 2 and 4"
-					},
-					"validation": {
-						"condition": {
-							"or": [{ "<": [{ "var": "familyCount" }, 2] }, { ">": [{ "var": "familyCount" }, 4] }]
-						}
-					}
-				},
+
 				{
 					"id": "q_companyType",
 					"bindsTo_template": "companyType",
@@ -1071,32 +1042,66 @@
 					}
 				},
 				{
-					"id": "q_directorsCount",
-					"bindsTo_template": "directorsCount",
-					"contextKey": "directorsCount",
+					"id": "q_numberOfDirectorOrApplicant",
+					"bindsTo_template": "numberOfDirectorOrApplicant",
+					"contextKey": "numberOfDirectorOrApplicant",
 					"type": "number",
 					"uiGroup": "number_fields",
 					"uiMeta": {
 						"placeholder": "enter the number"
 					},
 					"required": true,
-					"question": "How many Directors/Partners are there in the company?",
-					"description": "As the property is being purchased in the name of the company, it will be the primary applicant and all the Directors/Partners will be co-applicants on the loan.",
+					"question": {
+						"switch": [
+							{
+								"case": { "==": [{ "var": "whoIsApplying" }, "Family"] },
+								"then": "How many family members are applying for the loan? (including the primary applicant)"
+							},
+							{
+								"case": { "==": [{ "var": "whoIsApplying" }, "Company (Non-individual entity)"] },
+								"then": "How many Directors/Partners are there in the company?zz"
+							}
+						]
+					},
+					"description": {
+						"switch": [
+							{
+								"case": { "==": [{ "var": "whoIsApplying" }, "Family"] },
+								"then": "Please include all the members whether their name is on property or they are coming for the loan repayment. (for family)"
+							},
+							{
+								"case": { "==": [{ "var": "whoIsApplying" }, "Company (Non-individual entity)"] },
+								"then": "As the property is being purchased in the name of the company, it will be the primary applicant and all the Directors/Partners will be co-applicants on the loan. (for company)"
+							}
+						]
+					},
 					"showWhen": {
-						"and": [
+						"or": [
+							{
+								"and": [
+									{
+										"==": [
+											{
+												"var": "whoIsApplying"
+											},
+											"Company (Non-individual entity)"
+										]
+									},
+									{
+										"!=": [{ "var": "companyType" }, "One Person Company (OPC)"]
+									},
+									{
+										"==": [{ "var": "assessLoanEligibility" }, "Based on 3 years of ITRs"]
+									}
+								]
+							},
 							{
 								"==": [
 									{
 										"var": "whoIsApplying"
 									},
-									"Company (Non-individual entity)"
+									"Family"
 								]
-							},
-							{
-								"!=": [{ "var": "companyType" }, "One Person Company (OPC)"]
-							},
-							{
-								"==": [{ "var": "assessLoanEligibility" }, "Based on 3 years of ITRs"]
 							}
 						]
 					}
