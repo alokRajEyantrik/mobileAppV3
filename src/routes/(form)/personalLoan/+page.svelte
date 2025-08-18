@@ -7,7 +7,8 @@
 	import gstStateCodes from '$lib/config/gstStateCodes.json';
 	import pincode_IN_Selected from '$lib/config/pincode_IN_Selected.json';
 	import { writable, get, type Writable } from 'svelte/store';
-	import { goto } from '$app/navigation';
+	import type { Schema } from '$lib/types/types'; // runtime
+	import type { Question, Page, Answers, LoanDataStore } from '$lib/types/types'; 
 	import TextField from '$lib/components/TextField.svelte';
 	import RadioField from '$lib/components/RadioField.svelte';
 	import SelectField from '$lib/components/SelectField.svelte';
@@ -22,61 +23,63 @@
 	import { formData } from '$lib/stores/formStepper';
 
 	// Enhanced type definitions to support additional input types, including multiple-select
-	interface Question {
-		id: string;
-		type:
-			| 'text'
-			| 'radio'
-			| 'select'
-			| 'checkbox'
-			| 'textarea'
-			| 'date'
-			| 'number'
-			| 'derivedSelect'
-			| 'multiple-select';
-		question: string;
-		description?: string;
-		bindsTo?: string;
-		bindsTo_template?: string;
-		contextKey?: string;
-		options?: Array<{
-			label: string | { var: string };
-			value: string | { var: string } | number | boolean;
-		}>;
-		required?: boolean;
-		showWhen?: any; // JSON Logic expression
-		validation?: { condition: any; message: string };
-		errorMessage?: Record<string, string>;
-		uiMeta?: {
-			readonly?: boolean;
-			placeholder?: string | string[];
-			rows?: number;
-			min?: string | number;
-			max?: string | number;
-			step?: number | 'any';
-		};
-	}
+	// interface Question {
+	// 	id: string;
+	// 	type:
+	// 		| 'text'
+	// 		| 'radio'
+	// 		| 'select'
+	// 		| 'checkbox'
+	// 		| 'textarea'
+	// 		| 'date'
+	// 		| 'number'
+	// 		| 'derivedSelect'
+	// 		| 'multiple-select';
+	// 	question: string;
+	// 	description?: string;
+	// 	bindsTo?: string;
+	// 	bindsTo_template?: string;
+	// 	contextKey?: string;
+	// 	options?: Array<{
+	// 		label: string | { var: string };
+	// 		value: string | { var: string } | number | boolean;
+	// 	}>;
+	// 	required?: boolean;
+	// 	showWhen?: any; // JSON Logic expression
+	// 	validation?: { condition: any; message: string };
+	// 	errorMessage?: Record<string, string>;
+	// 	uiMeta?: {
+	// 		readonly?: boolean;
+	// 		placeholder?: string | string[];
+	// 		rows?: number;
+	// 		min?: string | number;
+	// 		max?: string | number;
+	// 		step?: number | 'any';
+	// 	};
+	// }
 
-	interface Page {
-		questions: Question[];
-		title?: string;
-		showWhen?: any;
-		nextButtonVisibility?: { mode: string[] };
-	}
+	// interface Page {
+	// 	questions: Question[];
+	// 	title?: string;
+	// 	showWhen?: any;
+	// 	nextButtonVisibility?: { mode: string[] };
+	// }
 
-	interface Schema {
-		pages: Page[];
-	}
+	// interface Schema {
+	// 	pages: Page[];
+	// }
 
-	interface Answers {
-		[key: string]: string | number | boolean | (string | number)[] | undefined;
-		loanName?: string;
-	}
+	// interface Answers {
+	// 	[key: string]: string | number | boolean | (string | number)[] | undefined;
+	// 	loanName?: string;
+	// }
 
-	interface LoanDataStore {
-		[key: string]: Answers | string | undefined;
-		loanName?: string;
-	}
+	// interface LoanDataStore {
+	// 	[key: string]: Answers | string | undefined;
+	// 	loanName?: string;
+	// }
+
+	$:console.log(formSchema,"formSchema")
 
 	// Component state
 	let selectedLoan: string = '';
@@ -113,7 +116,7 @@
 			};
 
 			// Format payload to match working test data structure exactly
-			console.log(combinedAnswers,"com");
+			console.log(combinedAnswers, 'com');
 			const formattedPayload = {
 				loanTransaction: {
 					LoanName: combinedAnswers.loanName || selectedLoan,
@@ -306,7 +309,8 @@
 
 	// Resolve binding keys with template support
 	function resolveBindsTo(question: Question, answers: Answers, selectedLoan: string): string {
-		if (!question.existing_bindsTodsTo_template) return question.bindsTo || question.id;
+		// console.log(question, answers, selectedLoan);
+		if (!question.bindsTo_template) return question.bindsTo || question.id;
 		return question.bindsTo_template.replace(/\{([^}]+)\}/g, (_, key: string) => {
 			if (key === 'q1_loanName') return sanitizeKey(selectedLoan);
 			const val = answers[key];
@@ -359,7 +363,6 @@
 		combined['q1_loanName'] = selectedLoan;
 		combined['loanName'] = selectedLoan; // Also store without prefix
 
-		console.log('Combined answers:', combined);
 		return combined;
 	})();
 
@@ -374,7 +377,6 @@
 	$: currentPage = visiblePages[currentPageIndex];
 	$: visibleQuestions =
 		currentPage?.questions.filter((q) => isQuestionVisible(q, combinedAnswers)) ?? [];
-	$: console.log('Visible Questions:', visibleQuestions);
 
 	// Get dynamic option value (enhanced for multiple types)
 	function getOptionValue(
@@ -423,11 +425,6 @@
 				? 'q1_loanType_collection'
 				: collectionKey;
 
-			console.log(
-				`Adding entry to collection ${collectionKey} (standardized to: ${finalCollectionKey})`,
-				entry
-			);
-
 			// Get existing entries or initialize empty array
 			const existingEntries = currentAnswers[finalCollectionKey] || [];
 
@@ -436,7 +433,6 @@
 
 			// Create new array with the new entry
 			const updatedEntries = [...validEntries, entry];
-			console.log('Updated entries:', updatedEntries);
 
 			// Update the store with the new array
 			updateAnswerByKey(finalCollectionKey, updatedEntries);
@@ -454,7 +450,6 @@
 				});
 
 				// Log current store state for debugging
-				console.log('Current store state after update:', get(loanData));
 			}, 10);
 		} catch (error) {
 			console.error('Error adding group entry:', error);
@@ -621,13 +616,13 @@
 		}
 
 		// Log visibility check for debugging
-		console.log('Question:', question.id);
-		console.log('ShowWhen condition:', question.showWhen);
-		console.log('Form data:', formData);
-		console.log('Normalized data:', normalizedData);
+		// console.log('Question:', question.id);
+		// console.log('ShowWhen condition:', question.showWhen);
+		// console.log('Form data:', formData);
+		// console.log('Normalized data:', normalizedData);
 
 		const isVisible = jsonLogic.apply(question.showWhen, normalizedData);
-		console.log('Visibility result:', isVisible);
+		// console.log('Visibility result:', isVisible);
 
 		return isVisible;
 	}
@@ -770,14 +765,11 @@
 				const key = resolveBindsTo(q, combinedAnswers, selectedLoan);
 				const val = currentAnswers[key];
 
-
 				if (!q.required) return true;
-
 
 				if (q.type === 'multiple-select') {
 					return Array.isArray(val) && val.length > 0;
 				}
-
 
 				return val !== undefined && val !== null && (typeof val !== 'string' || val !== '');
 			});
@@ -785,84 +777,162 @@
 	})();
 
 	export const testing = writable({
-		loanType: '',
-
+		existingLoanType: '',
 		bankName: '',
 		selectedToClose: '',
-		closurePlan: '',
 		EMIs: '',
+		limit: '',
 		tenure: '',
+		sanctionedTenure: '',
 		interestRate: '',
 		tableLoanEntries: [], // ✅ This is where we will push
 		tableLimitEntries: [] // ✅ This is where we will push
 	});
 	const disableAddButton = (q, data) => {
-		if (!q.disabledCondition?.anyEmpty) return false;
+		console.log('disableAddButton called with:', q, data);
+		if (['CC Limit', 'OD Limit'].includes(combinedAnswers.existingLoanType)) {
+			if (!q.disabledCondition?.limitEmpty) return false;
 
-		return q.disabledCondition.anyEmpty.some((fieldName) => {
-			console.log('data', data);
-			console.log('fieldName', fieldName);
-			const value = data[fieldName];
-			return value === undefined || value === null || value === '';
-		});
+			return q.disabledCondition.limitEmpty.some((fieldName) => {
+				const value = data[fieldName];
+				return value === undefined || value === null || value === '';
+			});
+		} else {
+			if (!q.disabledCondition?.termLoanEmpty) return false;
+
+			return q.disabledCondition.termLoanEmpty.some((fieldName) => {
+				const value = data[fieldName];
+				return value === undefined || value === null || value === '';
+			});
+		}
 	};
+
 	const handleAddClick = () => {
 		const currentData = get(testing); // only for validation
 
 		// Required fields check
-		const requiredFields = [
-			'loanType',
+		const termLoanRequiredFields = [
 			'bankName',
 			'selectedToClose',
 			'EMIs',
 			'tenure',
 			'interestRate'
 		];
+		const limitRequiredFields = [
+			'bankName',
+			'selectedToClose',
+			'limit',
+			'sanctionedTenure',
+			'interestRate'
+		];
 
-		const missingField = requiredFields.some((field) => !currentData[field]);
-		if (missingField) {
-			alert('Please fill all fields before adding');
-			return;
+		if (['CC Limit', 'OD Limit'].includes(combinedAnswers.existingLoanType)) {
+			const missingField = limitRequiredFields.some((field) => !currentData[field]);
+			if (missingField) {
+				alert('Please fill all limits fields before adding');
+				return;
+			}
+			const newEntry = {
+				existingLoanType: combinedAnswers.existingLoanType,
+				bankName: currentData.bankName,
+				selectedToClose: currentData.selectedToClose,
+				limit: Number(currentData.limit),
+				sanctionedTenure: currentData.sanctionedTenure,
+				interestRate: currentData.interestRate
+			};
+
+			// Ensure currentAnswers.tableLoanEntries exists
+			if (!Array.isArray(currentAnswers.tableLimitEntries)) {
+				currentAnswers.tableLimitEntries = [];
+			}
+
+			// Push into currentAnswers
+			currentAnswers.tableLimitEntries.push(newEntry);
+
+			// If selectedToClose is 'Keep Running', calculate totalLimits
+			if (newEntry.selectedToClose.toLowerCase() === 'keep running') {
+				currentAnswers.totalLimits = currentAnswers.tableLimitEntries
+					.filter((item) => item.selectedToClose.toLowerCase() === 'keep running')
+					.reduce((sum, entry) => sum + Number(entry.limit || 0), 0);
+			}
+
+			// Clear the validated fields in `testing` (optional)
+			limitRequiredFields.forEach((field) => {
+				currentData[field] = '';
+			});
+		} else if ('Dropline OD' == combinedAnswers.existingLoanType) {
+		} else {
+			// Prepare new loan entry
+			const missingField = termLoanRequiredFields.some((field) => !currentData[field]);
+			if (missingField) {
+				alert('Please fill all fields before adding');
+				return;
+			}
+			const newEntry = {
+				existingLoanType: combinedAnswers.existingLoanType,
+				bankName: currentData.bankName,
+				selectedToClose: currentData.selectedToClose,
+				EMIs: Number(currentData.EMIs),
+				tenure: currentData.tenure,
+				interestRate: currentData.interestRate
+			};
+
+			// Ensure currentAnswers.tableLoanEntries exists
+			if (!Array.isArray(currentAnswers.tableLoanEntries)) {
+				currentAnswers.tableLoanEntries = [];
+			}
+
+			// Push into currentAnswers
+			currentAnswers.tableLoanEntries.push(newEntry);
+
+			// If selectedToClose is 'Keep Running', calculate totalEMIs
+			if (newEntry.selectedToClose.toLowerCase() === 'keep running') {
+				currentAnswers.totalEMIs = currentAnswers.tableLoanEntries
+					.filter((item) => item.selectedToClose.toLowerCase() === 'keep running')
+					.reduce((sum, entry) => sum + Number(entry.EMIs || 0), 0);
+			}
+
+			// Clear the validated fields in `testing` (optional)
+			termLoanRequiredFields.forEach((field) => {
+				currentData[field] = '';
+			});
 		}
 
-		if (['Dropline OD', 'CC Limit', 'OD Limit'].includes(currentData.loanType)) {
+		// console.log('Updated currentAnswers:', currentAnswers);
+	};
 
-            console.log('Special loan type detected');
-		}  else {
-		// Prepare new loan entry
-		const newEntry = {
-			loanType: currentData.loanType,
-			bankName: currentData.bankName,
-			selectedToClose: currentData.selectedToClose,
-			EMIs: Number(currentData.EMIs),
-			tenure: currentData.tenure,
-			interestRate: currentData.interestRate
-		};
-
-		// Ensure currentAnswers.tableLoanEntries exists
-		if (!Array.isArray(currentAnswers.tableLoanEntries)) {
-			currentAnswers.tableLoanEntries = [];
+	function deleteEntry(data, index) {
+		if (
+			data.existingLoanType == 'OD Limit' ||
+			data.existingLoanType == 'CC Limit' ||
+			data.existingLoanType == 'Dropline OD'
+		) {
+			currentAnswers.tableLimitEntries = currentAnswers.tableLimitEntries.filter(
+				(_, i) => i !== index
+			);
+		} else {
+			currentAnswers.tableLoanEntries = currentAnswers.tableLoanEntries.filter(
+				(_, i) => i !== index
+			);
 		}
-
-		// Push into currentAnswers
-		currentAnswers.tableLoanEntries.push(newEntry);
-
-		// If selectedToClose is 'Keep Running', calculate totalEMIs
-		if (newEntry.selectedToClose.toLowerCase() === 'keep running') {
-			currentAnswers.totalEMIs = currentAnswers.tableLoanEntries
-				.filter((item) => item.selectedToClose.toLowerCase() === 'keep running')
-				.reduce((sum, entry) => sum + Number(entry.EMIs || 0), 0);
-		}
-
-		// Clear the validated fields in `testing` (optional)
-		requiredFields.forEach((field) => {
-			currentData[field] = '';
-		});
-
 	}
 
-		console.log('Updated currentAnswers:', currentAnswers);
-	};
+	
+
+	$: {
+		if (currentAnswers.tableLoanEntries) {
+			currentAnswers.totalEMIs = currentAnswers.tableLoanEntries
+				.filter((item) => item.selectedToClose.toLowerCase() === 'keep running')
+				.reduce((sum, entry) => sum + (Number(entry.EMIs) || 0), 0);
+		}
+
+		// totalLimit 
+		if (currentAnswers.tableLimitEntries) {
+			currentAnswers.totalLimits = currentAnswers.tableLimitEntries
+				.filter((item) => item.selectedToClose.toLowerCase() === 'keep running')
+				.reduce((sum, entry) => sum + (Number(entry.limit) || 0), 0);
+		}
+	}
 
 	const handleInput = (id, value) => {
 		if (!id) {
@@ -871,8 +941,6 @@
 		}
 		testing.update((data) => ({ ...data, [id]: value }));
 	};
-
-	
 </script>
 
 <!-- Main container with responsive padding and max-width -->
@@ -1047,7 +1115,7 @@
 						onChange={(values: (string | number)[]) => updateAnswer(question, values)}
 						required={question.required ?? false}
 					/>
-				{:else if question.type === 'existingtext'}
+				{:else if question.type === 'existingText'}
 					<div>
 						<label>{question.question}</label>
 						<input
@@ -1056,7 +1124,7 @@
 							on:input={(e) => handleInput(question.existing_bindsTo, e.target.value)}
 						/>
 					</div>
-				{:else if question.type === 'existingselect'}
+				{:else if question.type === 'existingSelect'}
 					<div>
 						<label>{question.question}</label>
 						{#if question.existing_bindsTo}
@@ -1067,7 +1135,7 @@
 								{/each}
 							</select>
 						{:else}
-							<span style="color:red">Error: bindsTo_template missing!</span>
+							<span style="color:red">Error: existing_bindsTo missing!</span>
 						{/if}
 					</div>
 				{:else if question.type === 'button'}
@@ -1078,7 +1146,7 @@
 			</div>
 		{/each}
 		{#if Array.isArray(currentAnswers.tableLoanEntries) && currentAnswers.tableLoanEntries.length > 0 && currentPage.title == 'Existing Details'}
-			<h3>Added Loan Entries:</h3>
+			<h3>Term Loans</h3>
 			<table class="loan-table">
 				<thead>
 					<tr>
@@ -1094,15 +1162,47 @@
 				<tbody>
 					{#each currentAnswers.tableLoanEntries as entry, i}
 						<tr>
-							<td>{entry.loanType}</td>
+							<td>{entry.existingLoanType}</td>
 							<td>{entry.bankName}</td>
 							<td>{entry.selectedToClose}</td>
 							<td>{entry.EMIs}</td>
 							<td>{entry.tenure}</td>
 							<td>{entry.interestRate}</td>
 							<td>
-								<button on:click={() => editEntry(i)}>✏️</button>
-								<button on:click={() => deleteEntry(i)}>🗑️</button>
+								<button on:click={() => editEntry(entry, i)}>✏️</button>
+								<button on:click={() => deleteEntry(entry, i)}>🗑️</button>
+							</td>
+						</tr>
+					{/each}
+				</tbody>
+			</table>
+		{/if}
+		{#if Array.isArray(currentAnswers.tableLimitEntries) && currentAnswers.tableLimitEntries.length > 0 && currentPage.title == 'Existing Details'}
+			<h3>Limit Loans</h3>
+			<table class="loan-table">
+				<thead>
+					<tr>
+						<th>Type</th>
+						<th>Bank Name</th>
+						<th>Closure Plan</th>
+						<th>LIMIT</th>
+						<th>Tenure (mo)</th>
+						<th>Interest (p.a)</th>
+						<th>Action</th>
+					</tr>
+				</thead>
+				<tbody>
+					{#each currentAnswers.tableLimitEntries as entry, i}
+						<tr>
+							<td>{entry.existingLoanType}</td>
+							<td>{entry.bankName}</td>
+							<td>{entry.selectedToClose}</td>
+							<td>{entry.limit}</td>
+							<td>{entry.sanctionedTenure}</td>
+							<td>{entry.interestRate}</td>
+							<td>
+								<button on:click={() => editEntry(entry, i)}>✏️</button>
+								<button on:click={() => deleteEntry(entry, i)}>🗑️</button>
 							</td>
 						</tr>
 					{/each}
@@ -1131,11 +1231,9 @@
 
 				{#if isLastPage}
 					<button
-						
 						class="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-8 rounded-md transition duration-200 ease-in-out disabled:opacity-50 disabled:cursor-not-allowed"
 						on:click={handleSubmit}
 						aria-label="Submit application"
-						
 					>
 						{#if isSubmitting}
 							Submitting...
