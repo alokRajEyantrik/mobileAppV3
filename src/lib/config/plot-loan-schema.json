@@ -216,11 +216,23 @@
 						}
 					],
 					"showWhen": {
-						"!=": [
+						"and": [
 							{
-								"var": "approvedByAuthority"
+								"in": [
+									{
+										"var": "LoanType"
+									},
+									["Plot & Construction Loan", "Construction Loan Only"]
+								]
 							},
-							""
+							{
+								"!=": [
+									{
+										"var": "approvedByAuthority"
+									},
+									""
+								]
+							}
 						]
 					},
 					"errorMessage": {
@@ -265,7 +277,7 @@
 					"showWhen": {
 						"!=": [
 							{
-								"var": "asPerMap"
+								"var": "approvedByAuthority"
 							},
 							""
 						]
@@ -912,11 +924,11 @@
 						}
 					],
 					"showWhen": {
-						"!=": [
+						"==": [
 							{
-								"var": "residenceOptionSame"
+								"var": "purchaseType"
 							},
-							""
+							"Direct Sale"
 						]
 					}
 				},
@@ -932,11 +944,23 @@
 					"question": "Enter the name of builder",
 					"required": true,
 					"showWhen": {
-						"==": [
+						"and": [
 							{
-								"var": "purchasedFrom"
+								"==": [
+									{
+										"var": "purchaseType"
+									},
+									"Direct Sale"
+								]
 							},
-							"Builder"
+							{
+								"==": [
+									{
+										"var": "purchasedFrom"
+									},
+									"Builder"
+								]
+							}
 						]
 					}
 				},
@@ -952,11 +976,51 @@
 					"question": "Enter the name of authority",
 					"required": true,
 					"showWhen": {
+						"and": [
+							{
+								"==": [
+									{
+										"var": "purchaseType"
+									},
+									"Direct Sale"
+								]
+							},
+							{
+								"==": [
+									{
+										"var": "purchasedFrom"
+									},
+									"Authority"
+								]
+							}
+						]
+					}
+				},
+				{
+					"id": "q1_ifSellerOnLoan",
+					"bindsTo_template": "ifSellerOnLoan",
+					"contextKey": "ifSellerOnLoan",
+					"type": "radio",
+					"uiGroup": "radio_fields",
+					"question": "Please specify if the property is on loan?",
+					"description": "You'll have to ensure if the seller has an existing loan on the property you're buying, as it can affect your loan options. You may need to use the seller's bank for the loan or have the seller transfer the balance to your chosen bank, which could lead to complications in getting the best terms.",
+					"required": true,
+					"options": [
+						{
+							"label": "Yes",
+							"value": "Yes"
+						},
+						{
+							"label": "No",
+							"value": "No"
+						}
+					],
+					"showWhen": {
 						"==": [
 							{
-								"var": "purchasedFrom"
+								"var": "purchaseType"
 							},
-							"Authority"
+							"Resale"
 						]
 					}
 				},
@@ -1007,21 +1071,146 @@
 						}
 					],
 					"showWhen": {
-						"and": [
+						"or": [
 							{
-								"==": [
-									{
-										"var": "purchasedFrom"
-									},
-									"Builder"
-								]
+								"==": [{ "var": "ifSellerOnLoan" }, "Yes"]
 							},
 							{
-								"!=": [
+								"and": [
 									{
-										"var": "fullNameOfBuilder"
+										"==": [
+											{
+												"var": "purchasedFrom"
+											},
+											"Builder"
+										]
 									},
-									""
+									{
+										"!=": [
+											{
+												"var": "fullNameOfBuilder"
+											},
+											""
+										]
+									}
+								]
+							}
+						]
+					}
+				},
+				{
+					"id": "q_selectSingleBank",
+					"bindsTo_template": "selectSingleBank",
+					"contextKey": "selectSingleBank",
+					"type": "select",
+					"uiGroup": "select_fields",
+					"uiMeta": {
+						"placeholder": "Select bank name"
+					},
+					"required": true,
+					"question": "Select the lender from where seller's loan is running.",
+					"options": [
+						{
+							"label": "HDFC Bank",
+							"value": "HDFC Bank"
+						},
+						{
+							"label": "SBI Bank",
+							"value": "SBI Bank"
+						},
+						{
+							"label": "Axis Bank",
+							"value": "Axis Bank"
+						},
+						{
+							"label": "ICICI Bank",
+							"value": "ICICI Bank"
+						},
+						{
+							"label": "Canara Bank",
+							"value": "Canara Bank"
+						},
+						{
+							"label": "Bank of Baroda",
+							"value": "Bank of Baroda"
+						},
+						{
+							"label": "Citi Bank",
+							"value": "Citi Bank"
+						},
+						{
+							"label": "Union Bank",
+							"value": "Union Bank"
+						}
+					],
+					"showWhen": {
+						"and": [
+							{
+								"==": [{ "var": "ifSellerOnLoan" }, "Yes"]
+							},
+							{
+								"!=": [{ "var": "approvedBankForSelectedByUser" }, ""]
+							}
+						]
+					}
+				},
+				{
+					"id": "q1_foreclosureAmount",
+					"bindsTo_template": "foreclosureAmount",
+					"contextKey": "foreclosureAmount",
+					"type": "number",
+					"uiGroup": "number_fields",
+					"question": "What is the foreclosure Amount?",
+					"description": "This Amount will be paid to the seller's Bank.",
+					"required": true,
+					"showWhen": {
+						"and": [
+							{
+								"==": [{ "var": "ifSellerOnLoan" }, "Yes"]
+							},
+							{
+								"!=": [{ "var": "approvedBankForSelectedByUser" }, ""]
+							},
+							{
+								"!=": [{ "var": "selectSingleBank" }, ""]
+							}
+						]
+					}
+				},
+				{
+					"id": "q1_ifSellerNri",
+					"bindsTo_template": "ifSellerNri",
+					"contextKey": "ifSellerNri",
+					"type": "radio",
+					"uiGroup": "radio_fields",
+					"question": "If seller / any of the seller's is NRI?",
+					"required": true,
+					"options": [
+						{
+							"label": "Yes",
+							"value": "Yes"
+						},
+						{
+							"label": "No",
+							"value": "No"
+						}
+					],
+					"showWhen": {
+						"or": [
+							{
+								"==": [{ "var": "ifSellerOnLoan" }, "No"]
+							},
+							{
+								"and": [
+									{
+										"==": [{ "var": "ifSellerOnLoan" }, "Yes"]
+									},
+									{
+										"!=": [{ "var": "approvedBankForSelectedByUser" }, ""]
+									},
+									{
+										"!=": [{ "var": "selectSingleBank" }, ""]
+									}
 								]
 							}
 						]
@@ -2089,7 +2278,7 @@
 											{
 												"var": "grossIncome"
 											},
-											""
+											null
 										]
 									},
 									{
@@ -2097,7 +2286,7 @@
 											{
 												"var": "fixedSalary"
 											},
-											""
+											null
 										]
 									},
 									{
@@ -2105,7 +2294,7 @@
 											{
 												"var": "monthlyOtherIncome"
 											},
-											""
+											null
 										]
 									}
 								]
@@ -2119,7 +2308,7 @@
 													{
 														"var": "depreciationArray"
 													},
-													""
+													null
 												]
 											},
 											{
@@ -2137,7 +2326,7 @@
 															{
 																"var": "grossReceiptsArray"
 															},
-															""
+															null
 														]
 													}
 												]
@@ -2158,7 +2347,7 @@
 											{
 												"var": "netProfit"
 											},
-											""
+											null
 										]
 									}
 								]
@@ -3377,6 +3566,14 @@
 					"showWhen": {
 						"and": [
 							{
+								"in": [
+									{
+										"var": "LoanType"
+									},
+									["Plot & Construction Loan", "Construction Loan Only"]
+								]
+							},
+							{
 								"!=": [
 									{
 										"var": "mortgageYear"
@@ -3409,6 +3606,14 @@
 					"description": "Although you will provide an estimate for the construction, lenders will conduct their own assessment and sanction up to a maximum 80% of their evaluated estimate.",
 					"showWhen": {
 						"and": [
+							{
+								"in": [
+									{
+										"var": "LoanType"
+									},
+									["Plot & Construction Loan", "Construction Loan Only"]
+								]
+							},
 							{
 								"!=": [
 									{
@@ -3464,11 +3669,38 @@
 									},
 									""
 								]
-							},
+							}
+						]
+					}
+				},
+				{
+					"id": "q5_differentATSandPV",
+					"bindsTo_template": "differentATSandPV",
+					"contextKey": "differentATSandPV",
+					"type": "radio",
+					"uiGroup": "radio_fields",
+					"uiMeta": {
+						"placeholder": "Enter amount in rupees"
+					},
+					"required": true,
+					"question": "If there is any difference between the \"Property Value\" and the \"Agreement to Sell value\" for the purpose of \"registry\"?",
+					"description": "In many areas of India, it is common practice to declare a property's value lower than its actual worth in the 'Agreement to Sell' (ATS document) or 'Sale Deed' to reduce stamp duty costs. While this may be prevalent and tempting, we strongly advise our customers to ensure that all transactions comply with legal requirements to avoid potential risks and complications.",
+					"options": [
+						{
+							"label": "Yes",
+							"value": "Yes"
+						},
+						{
+							"label": "No",
+							"value": "No"
+						}
+					],
+					"showWhen": {
+						"and": [
 							{
 								"!=": [
 									{
-										"var": "ConstructionArea"
+										"var": "mortgageYear"
 									},
 									""
 								]
@@ -3476,9 +3708,323 @@
 							{
 								"!=": [
 									{
-										"var": "requiredExtraAmount"
+										"var": "propCost"
 									},
 									""
+								]
+							},
+							{
+								"!=": [
+									{
+										"var": "deposit"
+									},
+									""
+								]
+							}
+						]
+					}
+				},
+				{
+					"id": "q5_ATSReady",
+					"bindsTo_template": "ATSReady",
+					"contextKey": "ATSReady",
+					"type": "radio",
+					"uiGroup": "radio_fields",
+					"uiMeta": {
+						"placeholder": "Enter amount in rupees"
+					},
+					"required": true,
+					"question": "Is your Agreement to Sell (ATS) ready ?",
+					"options": [
+						{
+							"label": "Yes",
+							"value": "Yes"
+						},
+						{
+							"label": "No",
+							"value": "No"
+						}
+					],
+					"showWhen": {
+						"and": [
+							{
+								"!=": [
+									{
+										"var": "mortgageYear"
+									},
+									""
+								]
+							},
+							{
+								"!=": [
+									{
+										"var": "propCost"
+									},
+									""
+								]
+							},
+							{
+								"!=": [
+									{
+										"var": "deposit"
+									},
+									""
+								]
+							},
+							{
+								"==": [
+									{
+										"var": "differentATSandPV"
+									},
+									"Yes"
+								]
+							}
+						]
+					}
+				},
+				{
+					"id": "q5_ATSvalue",
+					"bindsTo_template": "ATSvalue",
+					"contextKey": "ATSvalue",
+					"type": "radio",
+					"uiGroup": "radio_fields",
+					"uiMeta": {
+						"placeholder": "Enter amount in rupees"
+					},
+					"required": true,
+					"question": "Would you like to know our suggestion for ATS value (Registry Value) or you will decide by yourself?",
+					"options": [
+						{
+							"label": "Suggestion Required",
+							"value": "Suggestion Required"
+						},
+						{
+							"label": "By Myself",
+							"value": "By Myself"
+						}
+					],
+					"showWhen": {
+						"and": [
+							{
+								"!=": [
+									{
+										"var": "mortgageYear"
+									},
+									""
+								]
+							},
+							{
+								"!=": [
+									{
+										"var": "propCost"
+									},
+									""
+								]
+							},
+							{
+								"!=": [
+									{
+										"var": "deposit"
+									},
+									""
+								]
+							},
+							{
+								"==": [
+									{
+										"var": "differentATSandPV"
+									},
+									"Yes"
+								]
+							},
+							{
+								"==": [
+									{
+										"var": "ATSReady"
+									},
+									"No"
+								]
+							}
+						]
+					}
+				},
+				{
+					"id": "q5_agreementSellValue",
+					"bindsTo_template": "agreementSellValue",
+					"contextKey": "agreementSellValue",
+					"type": "number",
+					"uiGroup": "number_fields",
+					"uiMeta": {
+						"placeholder": "sell value"
+					},
+					"required": true,
+					"question": {
+						"switch": [
+							{
+								"case": { "==": [{ "var": "ATSvalue" }, "By Myself"] },
+								"then": "Property Value as per 'Agreement to Sell' (i.e. ATS document)?"
+							},
+							{
+								"case": { "==": [{ "var": "ATSvalue" }, "Suggestion Required"] },
+								"then": "The optimum Property Value for the 'Agreement to Sell' document is shown below."
+							}
+						]
+					},
+					"showWhen": {
+						"and": [
+							{
+								"!=": [
+									{
+										"var": "mortgageYear"
+									},
+									""
+								]
+							},
+							{
+								"!=": [
+									{
+										"var": "propCost"
+									},
+									""
+								]
+							},
+							{
+								"!=": [
+									{
+										"var": "deposit"
+									},
+									""
+								]
+							},
+							{
+								"==": [
+									{
+										"var": "differentATSandPV"
+									},
+									"Yes"
+								]
+							},
+							{
+								"or": [
+									{
+										"==": [
+											{
+												"var": "ATSReady"
+											},
+											"Yes"
+										]
+									},
+									{
+										"and": [
+											{
+												"==": [
+													{
+														"var": "ATSReady"
+													},
+													"No"
+												]
+											},
+											{
+												"!=": [
+													{
+														"var": "ATSvalue"
+													},
+													""
+												]
+											}
+										]
+									}
+								]
+							}
+						]
+					}
+				},
+				{
+					"id": "q5_depositAsPerATS",
+					"bindsTo_template": "depositAsPerATS",
+					"contextKey": "depositAsPerATS",
+					"type": "number",
+					"uiGroup": "number_fields",
+					"uiMeta": {
+						"placeholder": "sell value"
+					},
+					"required": true,
+					"question": {
+						"switch": [
+							{
+								"case": { "==": [{ "var": "ATSvalue" }, "By Myself"] },
+								"then": "Down Payment (own contribution amount) as per 'Agreement to Sell' document?"
+							},
+							{
+								"case": { "==": [{ "var": "ATSvalue" }, "Suggestion Required"] },
+								"then": "The optimum Down Payment for the 'Agreement to Sell' document is shown below."
+							}
+						]
+					},
+					"showWhen": {
+						"and": [
+							{
+								"!=": [
+									{
+										"var": "mortgageYear"
+									},
+									""
+								]
+							},
+							{
+								"!=": [
+									{
+										"var": "propCost"
+									},
+									""
+								]
+							},
+							{
+								"!=": [
+									{
+										"var": "deposit"
+									},
+									""
+								]
+							},
+							{
+								"==": [
+									{
+										"var": "differentATSandPV"
+									},
+									"Yes"
+								]
+							},
+							{
+								"or": [
+									{
+										"==": [
+											{
+												"var": "ATSReady"
+											},
+											"Yes"
+										]
+									},
+									{
+										"and": [
+											{
+												"==": [
+													{
+														"var": "ATSReady"
+													},
+													"No"
+												]
+											},
+											{
+												"!=": [
+													{
+														"var": "ATSvalue"
+													},
+													""
+												]
+											}
+										]
+									}
 								]
 							}
 						]
