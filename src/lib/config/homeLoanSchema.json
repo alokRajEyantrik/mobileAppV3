@@ -113,7 +113,10 @@
 							"label": "Top-up only",
 							"value": "Top-up only"
 						}
-					]
+					],
+					"showWhen": {
+						"!=": [{ "var": "loanName" }, ""]
+					}
 				}
 			]
 		},
@@ -138,6 +141,9 @@
 							"value": "Yes",
 							"flagKey": {
 								"isPropertyIdentified": true
+							},
+							"uiMeta": {
+								"icon": "Circle"
 							}
 						},
 						{
@@ -145,6 +151,9 @@
 							"value": "No",
 							"flagKey": {
 								"isPropertyIdentified": false
+							},
+							"uiMeta": {
+								"icon": "Circle"
 							}
 						}
 					]
@@ -156,11 +165,8 @@
 					"type": "select",
 					"uiGroup": "select_fields",
 					"uiMeta": { "placeholder": "Select a State" },
+					"question": "Where your property is located ?",
 					"description": "State Name",
-					"questionLabels": {
-						"Yes": "Where your property is located ?",
-						"No": "Where are you planning to purchase your property ?"
-					},
 					"required": true,
 					"showWhen": {
 						"in": [{ "var": "isPropertyIdentified" }, ["Yes", "No"]]
@@ -182,10 +188,7 @@
 					"type": "derivedSelect",
 					"uiGroup": "select_fields",
 					"uiMeta": { "placeholder": "Select a City" },
-					"questionLabels": {
-						"Yes": "Enter your property city",
-						"No": "Enter the city where you plan to purchase"
-					},
+					"description": "City Name",
 					"required": true,
 					"showWhen": {
 						"in": [{ "var": "isPropertyIdentified" }, ["Yes", "No"]]
@@ -215,6 +218,9 @@
 							"value": "Yes",
 							"flagKey": {
 								"isResidenceSameAsPropertyHas": true
+							},
+							"uiMeta": {
+								"icon": "Circle"
 							}
 						},
 						{
@@ -222,9 +228,20 @@
 							"value": "No",
 							"flagKey": {
 								"isResidenceSameAsPropertyHas": false
+							},
+							"uiMeta": {
+								"icon": "Circle"
 							}
 						}
-					]
+					],
+					"showWhen": {
+						"!=": [
+							{
+								"var": "propertyCityName"
+							},
+							""
+						]
+					}
 				},
 				{
 					"id": "q5_residenceStateName",
@@ -256,7 +273,7 @@
 					"uiMeta": {
 						"placeholder": "Select a City"
 					},
-					"question": "city name",
+					"description": "City Name",
 					"required": true,
 					"showWhen": {
 						"and": [
@@ -311,6 +328,9 @@
 							"value": "Yes",
 							"flagKey": {
 								"isAuthorizedArea": true
+							},
+							"uiMeta": {
+								"icon": "Circle"
 							}
 						},
 						{
@@ -318,6 +338,9 @@
 							"value": "No",
 							"flagKey": {
 								"isAuthorizedArea": false
+							},
+							"uiMeta": {
+								"icon": "Circle"
 							}
 						}
 					]
@@ -337,6 +360,9 @@
 							"value": "Yes",
 							"flagKey": {
 								"isApprovedAsPerMap": true
+							},
+							"uiMeta": {
+								"icon": "Circle"
 							}
 						},
 						{
@@ -344,6 +370,9 @@
 							"value": "No",
 							"flagKey": {
 								"isApprovedAsPerMap": false
+							},
+							"uiMeta": {
+								"icon": "Circle"
 							}
 						}
 					],
@@ -374,6 +403,9 @@
 							"value": "Yes",
 							"flagKey": {
 								"isApplicantNRI": true
+							},
+							"uiMeta": {
+								"icon": "Circle"
 							}
 						},
 						{
@@ -381,6 +413,9 @@
 							"value": "No",
 							"flagKey": {
 								"isApplicantNRI": false
+							},
+							"uiMeta": {
+								"icon": "Circle"
 							}
 						}
 					],
@@ -417,11 +452,17 @@
 					"options": [
 						{
 							"label": "Lease Hold",
-							"value": "Lease Hold"
+							"value": "Lease Hold",
+							"uiMeta": {
+								"icon": "Circle"
+							}
 						},
 						{
 							"label": "Free Hold",
-							"value": "Free Hold"
+							"value": "Free Hold",
+							"uiMeta": {
+								"icon": "Circle"
+							}
 						}
 					]
 				},
@@ -437,11 +478,17 @@
 					"options": [
 						{
 							"label": "Direct Sale",
-							"value": "Direct Sale"
+							"value": "Direct Sale",
+							"uiMeta": {
+								"icon": "Circle"
+							}
 						},
 						{
 							"label": "Resale",
-							"value": "Resale"
+							"value": "Resale",
+							"uiMeta": {
+								"icon": "Circle"
+							}
 						}
 					],
 					"showWhen": {
@@ -497,11 +544,17 @@
 					"options": [
 						{
 							"label": "Under Construction",
-							"value": "Under Construction"
+							"value": "Under Construction",
+							"uiMeta": {
+								"icon": "Circle"
+							}
 						},
 						{
 							"label": "Ready To Move",
-							"value": "Ready To Move"
+							"value": "Ready To Move",
+							"uiMeta": {
+								"icon": "Circle"
+							}
 						}
 					],
 					"showWhen": {
@@ -525,11 +578,17 @@
 					"options": [
 						{
 							"label": "Yes",
-							"value": "Yes"
+							"value": "Yes",
+							"uiMeta": {
+								"icon": "Circle"
+							}
 						},
 						{
 							"label": "No",
-							"value": "No"
+							"value": "No",
+							"uiMeta": {
+								"icon": "Circle"
+							}
 						}
 					],
 					"showWhen": {
@@ -569,11 +628,17 @@
 					"options": [
 						{
 							"label": "Yes",
-							"value": "Yes"
+							"value": "Yes",
+							"uiMeta": {
+								"icon": "Circle"
+							}
 						},
 						{
 							"label": "No",
-							"value": "No"
+							"value": "No",
+							"uiMeta": {
+								"icon": "Circle"
+							}
 						}
 					],
 					"showWhen": {
@@ -636,7 +701,8 @@
 					"type": "number",
 					"uiGroup": "inputNumber",
 					"uiMeta": {
-						"placeholder": "Enter demanded amount"
+						"placeholder": "Enter demanded amount",
+						"icon": "indian-rupee"
 					},
 					"required": true,
 					"question": "What is the total amount outstanding according to the payment plan?",
@@ -682,11 +748,17 @@
 					"options": [
 						{
 							"label": "Builder",
-							"value": "Builder"
+							"value": "Builder",
+							"uiMeta": {
+								"icon": "Circle"
+							}
 						},
 						{
 							"label": "Authority",
-							"value": "Authority"
+							"value": "Authority",
+							"uiMeta": {
+								"icon": "Circle"
+							}
 						}
 					],
 					"showWhen": {
@@ -705,7 +777,8 @@
 					"type": "text",
 					"uiGroup": "text_fields",
 					"uiMeta": {
-						"placeholder": "full name of builder"
+						"placeholder": "full name of builder",
+						"icon": "user-round"
 					},
 					"required": true,
 					"question": "Enter the name of builder.",
@@ -725,7 +798,8 @@
 					"type": "text",
 					"uiGroup": "text_fields",
 					"uiMeta": {
-						"placeholder": "full name of Authority"
+						"placeholder": "full name of Authority",
+						"icon": "user-round"
 					},
 					"required": true,
 					"question": "Enter the name of Authority.",
@@ -750,11 +824,17 @@
 					"options": [
 						{
 							"label": "Yes",
-							"value": "Yes"
+							"value": "Yes",
+							"uiMeta": {
+								"icon": "Circle"
+							}
 						},
 						{
 							"label": "No",
-							"value": "No"
+							"value": "No",
+							"uiMeta": {
+								"icon": "Circle"
+							}
 						}
 					],
 					"showWhen": {
@@ -903,7 +983,10 @@
 					"type": "number",
 					"uiGroup": "number_fields",
 					"uiMeta": {
-						"placeholder": "enter the foreclosure amount"
+						"placeholder": "enter the foreclosure amount",
+						"uiMeta": {
+							"icon": "indian-rupee"
+						}
 					},
 					"required": true,
 					"question": "What is the foreclosure Amount?",
@@ -928,11 +1011,17 @@
 					"options": [
 						{
 							"label": "Yes",
-							"value": "Yes"
+							"value": "Yes",
+							"uiMeta": {
+								"icon": "Circle"
+							}
 						},
 						{
 							"label": "No",
-							"value": "No"
+							"value": "No",
+							"uiMeta": {
+								"icon": "Circle"
+							}
 						}
 					],
 					"showWhen": {
@@ -964,19 +1053,31 @@
 					"options": [
 						{
 							"label": "Individual / Sole-Proprietor",
-							"value": "Individual / Sole-Proprietor"
+							"value": "Individual / Sole-Proprietor",
+							"uiMeta": {
+								"icon": "Circle"
+							}
 						},
 						{
 							"label": "Couple",
-							"value": "Couple"
+							"value": "Couple",
+							"uiMeta": {
+								"icon": "Circle"
+							}
 						},
 						{
 							"label": "Family",
-							"value": "Family"
+							"value": "Family",
+							"uiMeta": {
+								"icon": "Circle"
+							}
 						},
 						{
 							"label": "Company (Non-individual entity)",
-							"value": "Company (Non-individual entity)"
+							"value": "Company (Non-individual entity)",
+							"uiMeta": {
+								"icon": "Circle"
+							}
 						}
 					]
 				},
@@ -996,19 +1097,31 @@
 					"options": [
 						{
 							"label": "One Person Company (OPC)",
-							"value": "One Person Company (OPC)"
+							"value": "One Person Company (OPC)",
+							"uiMeta": {
+								"icon": "Circle"
+							}
 						},
 						{
 							"label": "Partnership firm",
-							"value": "Partnership firm"
+							"value": "Partnership firm",
+							"uiMeta": {
+								"icon": "Circle"
+							}
 						},
 						{
 							"label": "Limited Liability Partnership (LLP)",
-							"value": "Limited Liability Partnership (LLP)"
+							"value": "Limited Liability Partnership (LLP)",
+							"uiMeta": {
+								"icon": "Circle"
+							}
 						},
 						{
 							"label": "Private Limited Company (Pvt. Ltd.)",
-							"value": "Private Limited Company (Pvt. Ltd.)"
+							"value": "Private Limited Company (Pvt. Ltd.)",
+							"uiMeta": {
+								"icon": "Circle"
+							}
 						}
 					],
 					"showWhen": {
@@ -1031,11 +1144,17 @@
 					"options": [
 						{
 							"label": "Based on 3 years of ITRs",
-							"value": "Based on 3 years of ITRs"
+							"value": "Based on 3 years of ITRs",
+							"uiMeta": {
+								"icon": "Circle"
+							}
 						},
 						{
 							"label": "Book my appointment",
-							"value": "Book my appointment"
+							"value": "Book my appointment",
+							"uiMeta": {
+								"icon": "Circle"
+							}
 						}
 					],
 					"showWhen": {
@@ -1066,7 +1185,8 @@
 					"type": "number",
 					"uiGroup": "number_fields",
 					"uiMeta": {
-						"placeholder": "enter the number"
+						"placeholder": "enter the number",
+						"icon": "users-round"
 					},
 					"required": true,
 					"question": {
@@ -1077,7 +1197,7 @@
 							},
 							{
 								"case": { "==": [{ "var": "whoIsApplying" }, "Company (Non-individual entity)"] },
-								"then": "How many Directors/Partners are there in the company?zz"
+								"then": "How many Directors/Partners are there in the company?"
 							}
 						]
 					},
@@ -1142,7 +1262,8 @@
 					"type": "text",
 					"uiGroup": "text_fields",
 					"uiMeta": {
-						"placeholder": "Enter the full name"
+						"placeholder": "Enter the full name",
+						"icon": "user-round"
 					}
 				},
 				{
@@ -1156,11 +1277,17 @@
 					"options": [
 						{
 							"label": "For loan repayment only",
-							"value": "For loan repayment only"
+							"value": "For loan repayment only",
+							"uiMeta": {
+								"icon": "Circle"
+							}
 						},
 						{
 							"label": "Loan repayment and having name on the papers",
-							"value": "Loan repayment and having name on the papers"
+							"value": "Loan repayment and having name on the papers",
+							"uiMeta": {
+								"icon": "Circle"
+							}
 						}
 					],
 					"showWhen": {
@@ -1190,11 +1317,17 @@
 					"options": [
 						{
 							"label": "Yes",
-							"value": "Yes"
+							"value": "Yes",
+							"uiMeta": {
+								"icon": "Circle"
+							}
 						},
 						{
 							"label": "No",
-							"value": "No"
+							"value": "No",
+							"uiMeta": {
+								"icon": "Circle"
+							}
 						}
 					],
 					"showWhen": {
@@ -1271,6 +1404,9 @@
 							"value": "Yes",
 							"flagKey": {
 								"isPrimaryPFDeduct": true
+							},
+							"uiMeta": {
+								"icon": "Circle"
 							}
 						},
 						{
@@ -1278,6 +1414,9 @@
 							"value": "No",
 							"flagKey": {
 								"isPrimaryPFDeduct": false
+							},
+							"uiMeta": {
+								"icon": "Circle"
 							}
 						}
 					],
@@ -1419,6 +1558,9 @@
 							"value": "Yes",
 							"flagKey": {
 								"isIncomeTaxAvailable": true
+							},
+							"uiMeta": {
+								"icon": "Circle"
 							}
 						},
 						{
@@ -1426,6 +1568,9 @@
 							"value": "No",
 							"flagKey": {
 								"isIncomeTaxAvailable": false
+							},
+							"uiMeta": {
+								"icon": "Circle"
 							}
 						}
 					],
@@ -1445,7 +1590,8 @@
 					"type": "number",
 					"uiGroup": "inputNumber",
 					"uiMeta": {
-						"placeholder": ["FY2023-24", "FY2022-23", "FY2021-22"]
+						"placeholder": ["FY2023-24", "FY2022-23", "FY2021-22"],
+						"icon": ["indian-rupee", "indian-rupee", "indian-rupee"]
 					},
 					"required": true,
 					"question": "What were the Gross Receipts in the last three financial years?",
@@ -1465,7 +1611,8 @@
 					"type": "number",
 					"uiGroup": "inputNumber",
 					"uiMeta": {
-						"placeholder": ["FY2023-24", "FY2022-23", "FY2021-22"]
+						"placeholder": ["FY2023-24", "FY2022-23", "FY2021-22"],
+						"icon": ["indian-rupee", "indian-rupee", "indian-rupee"]
 					},
 					"required": true,
 					"question": "What were the Net Profits for the last three financial years?",
@@ -1485,7 +1632,8 @@
 					"type": "number",
 					"uiGroup": "inputNumber",
 					"uiMeta": {
-						"placeholder": "enter gross income"
+						"placeholder": "enter gross income",
+						"icon": "indian-rupee"
 					},
 					"required": true,
 					"question": "What is the monthly gross income?",
@@ -1506,7 +1654,8 @@
 					"type": "number",
 					"uiGroup": "inputNumber",
 					"uiMeta": {
-						"placeholder": "enter fixed monthly income"
+						"placeholder": "enter fixed monthly income",
+						"icon": "indian-rupee"
 					},
 					"required": true,
 					"question": "What is the monthly net income?",
@@ -1527,7 +1676,8 @@
 					"type": "number",
 					"uiGroup": "inputNumber",
 					"uiMeta": {
-						"placeholder": "enter extra monthly income"
+						"placeholder": "enter extra monthly income",
+						"icon": "indian-rupee"
 					},
 					"required": true,
 					"question": "What's the additional monthly income from bonuses, incentives, and rental earnings?",
@@ -1556,6 +1706,9 @@
 							"value": "Yes",
 							"flagKey": {
 								"isPrimaryHasOD": true
+							},
+							"uiMeta": {
+								"icon": "Circle"
 							}
 						},
 						{
@@ -1563,6 +1716,9 @@
 							"value": "No",
 							"flagKey": {
 								"isPrimaryHasOD": false
+							},
+							"uiMeta": {
+								"icon": "Circle"
 							}
 						}
 					],
@@ -1619,7 +1775,8 @@
 					"type": "number",
 					"uiGroup": "inputNumber",
 					"uiMeta": {
-						"placeholder": "enter the tenure"
+						"placeholder": "enter the tenure",
+						"icon": "calendar"
 					},
 					"required": true,
 					"question": "What is the tenure of OD (in Months)?",
@@ -1634,7 +1791,8 @@
 					"type": "number",
 					"uiGroup": "inputNumber",
 					"uiMeta": {
-						"placeholder": "enter the ROI"
+						"placeholder": "enter the ROI",
+						"icon": "percent"
 					},
 					"required": true,
 					"question": "Enter your OD rate of Interest (ROI).",
@@ -1649,7 +1807,8 @@
 					"type": "number",
 					"uiGroup": "inputNumber",
 					"uiMeta": {
-						"placeholder": "enter your OD limit"
+						"placeholder": "enter your OD limit",
+						"icon": "wallet"
 					},
 					"required": true,
 					"question": "Enter your OD limit.",
@@ -1669,7 +1828,8 @@
 					"type": "number",
 					"uiGroup": "inputNumber",
 					"uiMeta": {
-						"placeholder": "enter total EMIs"
+						"placeholder": "enter total EMIs",
+						"icon": "coins"
 					},
 					"required": true,
 					"question": "What are the monthly EMIs being paid from the account of {}",
@@ -1697,7 +1857,8 @@
 					"type": "number",
 					"uiGroup": "inputNumber",
 					"uiMeta": {
-						"placeholder": "enter credit cards limit"
+						"placeholder": "enter credit cards limit",
+						"icon": "credit-card"
 					},
 					"required": true,
 					"question": "What is the combined limit of all the credit cards issued in the name of",
@@ -1843,12 +2004,25 @@
 							{
 								"==": [{ "var": "isPrimaryDefaulter" }, "Yes"]
 							},
+
 							{
-								"!=": [
+								"and": [
 									{
-										"var": "primaryCIBILScore"
+										"!=": [
+											{
+												"var": "primaryCIBILScore"
+											},
+											"more than 800"
+										]
 									},
-									"more than 800"
+									{
+										"!=": [
+											{
+												"var": "primaryCIBILScore"
+											},
+											""
+										]
+									}
 								]
 							}
 						]

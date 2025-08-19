@@ -8,6 +8,7 @@
 
   export let id: string;
   export let label: string;
+  export let description: string | undefined = undefined;
   export let options: Option[] = [];
   export let value: string | number = '';
   export let error: string | null = null;
@@ -19,21 +20,24 @@
     const target = event.target as HTMLSelectElement;
     onChange(target.value);
   }
-  console.log('DerivedSelect', { id, label, options, value, error, disabled, required });
+  // console.log('DerivedSelect', { id, label, options, value, error, disabled, required });
 </script>
 
 <div class="mb-4">
   <label for={id} class="block text-sm font-medium text-gray-700 mb-1">
     {label}
-    {#if required}<span class="text-red-500">*</span>{/if}
+   
   </label>
+  {#if description}
+		<p class="text-sm text-gray-500 mb-2">{description}  {#if required}<span class="text-red-500">*</span>{/if}</p>
+	{/if}
   <select
     {id}
     {disabled}
     {required}
     bind:value
     on:change={handleChange}
-    class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+    class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#ffcc00] focus:border-[#ffcc00]"
     class:error={error}
   >
     <option value="">Select an option</option>

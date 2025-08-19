@@ -116,8 +116,8 @@
 		return cities.map((city) => ({ label: city, value: city }));
 	}
 	// For residence/business fields
-	$: residenceCityOptions = getCityOptionsForState(currentAnswers['propertyStateName']?.toString());
-	$: businessCityOptions = getCityOptionsForState(currentAnswers['residenceStateName']?.toString());
+	$: propertyCityOptions = getCityOptionsForState(currentAnswers['propertyStateName']?.toString());
+	$: residenceCityOptions = getCityOptionsForState(currentAnswers['residenceStateName']?.toString());
 	$: showBusinessAddress = currentAnswers['isResidenceSameAsPropertyHas'] === 'No';
 
 	// 2️⃣ Handle mounting and schema
@@ -188,7 +188,7 @@
 		// Key-specific effects
 		if (key.toLowerCase().includes('nri')) updateAnswerByKey('isApplicantNRI', value);
 		if (key === 'GSTNumber') updateStateFromGST(value as string);
-		if (key === 'residenceStateName') updateAnswerByKey('residenceCityName', '');
+		if (key === 'propertyStateName') updateAnswerByKey('propertyCityName', '');
 		else if (key === 'residenceStateName') updateAnswerByKey('residenceCityName', '');
 		else if (key === 'TypeOfResidence') updateAnswerByKey('typeOfResidence', value);
 		else if (key === 'isResidenceSameAsPropertyHas' && value === 'Yes') {
@@ -504,6 +504,7 @@
 		<div class="mb-6">
 			<h2 class="font-bold text-3xl">{currentPage?.title || 'Loan Application'}</h2>
 		</div>
+        
 		<!-- Render visible questions with support for new input types -->
 		{#each visibleQuestions as question (question.id)}
 			<div class="mb-6">
@@ -542,6 +543,7 @@
 						readonly={question.uiMeta?.readonly ?? false}
 						error={getValidationErrorMessage(question, combinedAnswers) || undefined}
 						onInput={(value: string) => updateAnswer(question, value)}
+						icon={question.uiMeta?.icon}
 					/>
 				{:else if question.type === 'select'}
 					<!-- <p>select field hai</p> -->
@@ -575,10 +577,11 @@
 					<DerivedSelect
 						id={question.id}
 						label={resolveDynamicText(question.question, combinedAnswers)}
+						description={resolveDynamicText(question.description, combinedAnswers)}
 						options={question.id === 'q3_propertyCityName'
-							? residenceCityOptions
+							? propertyCityOptions
 							: question.id === 'q6_residenceCityName'
-								? businessCityOptions
+								? residenceCityOptions
 								: []}
 						value={currentAnswers[
 							resolveBindsTo(question, combinedAnswers, selectedLoan)
@@ -645,6 +648,7 @@
 						error={getValidationErrorMessage(question, combinedAnswers) || undefined}
 						onInput={(value: number | number[] | null) => updateAnswer(question, value ?? 0)}
 						required={question.required ?? false}
+						icon={question.uiMeta?.icon}
 					/>
 					<!-- <p>number field hai</p> -->
 				{:else if question.type === 'multiple-select'}
