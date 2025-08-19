@@ -1942,7 +1942,15 @@
 						},
 						{
 							"label": "will be closed by this loan",
-							"value": "will be closed by this loan"
+							"value": "will be closed by this loan",
+							"showWhen": {
+								"==": [
+									{
+										"var": "loanType"
+									},
+									"Debt Consolidation with Extra Funds"
+								]
+							}
 						},
 						{
 							"label": "continue running as it is",

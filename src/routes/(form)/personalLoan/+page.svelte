@@ -8,7 +8,7 @@
 	import pincode_IN_Selected from '$lib/config/pincode_IN_Selected.json';
 	import { writable, get, type Writable } from 'svelte/store';
 	import type { Schema } from '$lib/types/types'; // runtime
-	import type { Question, Page, Answers, LoanDataStore } from '$lib/types/types'; 
+	import type { Question, Page, Answers, LoanDataStore } from '$lib/types/types';
 	import TextField from '$lib/components/TextField.svelte';
 	import RadioField from '$lib/components/RadioField.svelte';
 	import SelectField from '$lib/components/SelectField.svelte';
@@ -22,64 +22,9 @@
 	import { submitApplication } from '$lib/services/api';
 	import { formData } from '$lib/stores/formStepper';
 
-	// Enhanced type definitions to support additional input types, including multiple-select
-	// interface Question {
-	// 	id: string;
-	// 	type:
-	// 		| 'text'
-	// 		| 'radio'
-	// 		| 'select'
-	// 		| 'checkbox'
-	// 		| 'textarea'
-	// 		| 'date'
-	// 		| 'number'
-	// 		| 'derivedSelect'
-	// 		| 'multiple-select';
-	// 	question: string;
-	// 	description?: string;
-	// 	bindsTo?: string;
-	// 	bindsTo_template?: string;
-	// 	contextKey?: string;
-	// 	options?: Array<{
-	// 		label: string | { var: string };
-	// 		value: string | { var: string } | number | boolean;
-	// 	}>;
-	// 	required?: boolean;
-	// 	showWhen?: any; // JSON Logic expression
-	// 	validation?: { condition: any; message: string };
-	// 	errorMessage?: Record<string, string>;
-	// 	uiMeta?: {
-	// 		readonly?: boolean;
-	// 		placeholder?: string | string[];
-	// 		rows?: number;
-	// 		min?: string | number;
-	// 		max?: string | number;
-	// 		step?: number | 'any';
-	// 	};
-	// }
+	
 
-	// interface Page {
-	// 	questions: Question[];
-	// 	title?: string;
-	// 	showWhen?: any;
-	// 	nextButtonVisibility?: { mode: string[] };
-	// }
-
-	// interface Schema {
-	// 	pages: Page[];
-	// }
-
-	// interface Answers {
-	// 	[key: string]: string | number | boolean | (string | number)[] | undefined;
-	// 	loanName?: string;
-	// }
-
-	// interface LoanDataStore {
-	// 	[key: string]: Answers | string | undefined;
-	// 	loanName?: string;
-	// }
-
-	$:console.log(formSchema,"formSchema")
+	$: console.log(formSchema, 'formSchema');
 
 	// Component state
 	let selectedLoan: string = '';
@@ -775,7 +720,7 @@
 		});
 	})();
 
-	export const testing = writable({
+	export const obligationKeysName = writable({
 		existingLoanType: '',
 		bankName: '',
 		selectedToClose: '',
@@ -791,33 +736,31 @@
 		tableLoanEntries: [], // ✅ This is where we will push
 		tableLimitEntries: [] // ✅ This is where we will push
 	});
+	
+
 	const disableAddButton = (q, data) => {
-		if (['CC Limit', 'OD Limit'].includes(combinedAnswers.existingLoanType)) {
-			if (!q.disabledCondition?.limitEmpty) return false;
-
-			return q.disabledCondition.limitEmpty.some((fieldName) => {
-				const value = data[fieldName];
-				return value === undefined || value === null || value === '';
-			});
-		} else if ('Dropline OD' == combinedAnswers.existingLoanType) {
-			if (!q.disabledCondition?.dodLimitEmpty) return false;
-
-			return q.disabledCondition.dodLimitEmpty.some((fieldName) => {
-				const value = data[fieldName];
-				return value === undefined || value === null || value === '';
-			});
-		} else {
-			if (!q.disabledCondition?.termLoanEmpty) return false;
-
-			return q.disabledCondition.termLoanEmpty.some((fieldName) => {
-				const value = data[fieldName];
-				return value === undefined || value === null || value === '';
-			});
-		}
+	// Map loan types to condition keys
+	const conditionMap = {
+		'CC Limit': 'limitEmpty',
+		'OD Limit': 'limitEmpty',
+		'Dropline OD': 'dodLimitEmpty',
+		default: 'termLoanEmpty'
 	};
 
+	const loanType = combinedAnswers.existingLoanType;
+	const conditionKey = conditionMap[loanType] || conditionMap.default;
+
+	if (!q.disabledCondition?.[conditionKey]) return false;
+
+	return q.disabledCondition[conditionKey].some((fieldName) => {
+		const value = data[fieldName];
+		return value === undefined || value === null || value === '';
+	});
+};
+
+
 	const handleAddClick = () => {
-		const currentData = get(testing); // only for validation
+		const currentData = get(obligationKeysName); // only for validation
 
 		// Required fields check
 		const termLoanRequiredFields = [
@@ -875,7 +818,7 @@
 					.reduce((sum, entry) => sum + Number(entry.limit || 0), 0);
 			}
 
-			// Clear the validated fields in `testing` (optional)
+			// Clear the validated fields in `obligationKeysName` (optional)
 			limitRequiredFields.forEach((field) => {
 				currentData[field] = '';
 			});
@@ -912,7 +855,7 @@
 					.reduce((sum, entry) => sum + Number(entry.limit || 0), 0);
 			}
 
-			// Clear the validated fields in `testing` (optional)
+			// Clear the validated fields in `obligationKeysName` (optional)
 			DODRequiredFields.forEach((field) => {
 				currentData[field] = '';
 			});
@@ -947,7 +890,7 @@
 					.reduce((sum, entry) => sum + Number(entry.EMIs || 0), 0);
 			}
 
-			// Clear the validated fields in `testing` (optional)
+			// Clear the validated fields in `obligationKeysName` (optional)
 			termLoanRequiredFields.forEach((field) => {
 				currentData[field] = '';
 			});
@@ -972,47 +915,53 @@
 		}
 	}
 
-	// Edit entry: populate the form fields for editing
 	function editEntry(entry, index) {
 		deleteEntry(entry, index);
 		currentAnswers.existingLoanType = entry.existingLoanType || '';
-		if (entry.limit !== undefined && ['CC Limit', 'OD Limit'].includes(entry.existingLoanType)) {
-			// Limit entry
 
-			testing.update((data) => ({
-				...data,
-				existingLoanType: entry.existingLoanType || '',
-				bankName: entry.bankName || '',
-				selectedToClose: entry.selectedToClose || '',
-				limit: entry.limit || '',
-				sanctionedTenure: entry.sanctionedTenure || '',
-				interestRate: entry.interestRate || ''
-			}));
-		} else if (entry.sanctionedLimit !== undefined && 'Dropline OD' == entry.existingLoanType) {
-			testing.update((data) => ({
-				...data,
-				existingLoanType: entry.existingLoanType || '',
-				bankName: entry.bankName || '',
-				selectedToClose: entry.selectedToClose || '',
-				sanctionedLimit: entry.sanctionedLimit || '',
-				sanctionedTenure: entry.sanctionedTenure || '',
-				interestRate: entry.interestRate || '',
-				remainingLimit: entry.remainingLimit || '',
-				remainingTenure: entry.remainingTenure || '',
-				utilizedAmount: entry.utilizedAmount || ''
-			}));
-		} else {
-			// Term loan entry
-			testing.update((data) => ({
-				...data,
-				existingLoanType: entry.existingLoanType || '',
-				bankName: entry.bankName || '',
-				selectedToClose: entry.selectedToClose || '',
-				EMIs: entry.EMIs || '',
-				tenure: entry.tenure || '',
-				interestRate: entry.interestRate || ''
-			}));
-		}
+		// Define which fields to restore for each loan type
+		const fieldMap = {
+			'CC Limit': [
+				'existingLoanType',
+				'bankName',
+				'selectedToClose',
+				'limit',
+				'sanctionedTenure',
+				'interestRate'
+			],
+			'OD Limit': [
+				'existingLoanType',
+				'bankName',
+				'selectedToClose',
+				'limit',
+				'sanctionedTenure',
+				'interestRate'
+			],
+			'Dropline OD': [
+				'existingLoanType',
+				'bankName',
+				'selectedToClose',
+				'sanctionedLimit',
+				'sanctionedTenure',
+				'interestRate',
+				'remainingLimit',
+				'remainingTenure',
+				'utilizedAmount'
+			],
+			default: ['existingLoanType', 'bankName', 'selectedToClose', 'EMIs', 'tenure', 'interestRate']
+		};
+
+		const loanType = entry.existingLoanType;
+		const fields = fieldMap[loanType] || fieldMap.default;
+
+		// Build updated object dynamically
+		const updatedData = { ...get(obligationKeysName) };
+		fields.forEach((f) => {
+			updatedData[f] = entry[f] || '';
+		});
+
+		// Apply update
+		obligationKeysName.set(updatedData);
 	}
 
 	$: {
@@ -1038,7 +987,7 @@
 			console.warn('handleInput called with undefined id', value);
 			return;
 		}
-		testing.update((data) => ({ ...data, [id]: value }));
+		obligationKeysName.update((data) => ({ ...data, [id]: value }));
 	};
 </script>
 
@@ -1107,9 +1056,7 @@
 											? (combinedAnswers[opt.value.var] as string | number)
 											: (opt.value as string | number)
 								})) ?? [])}
-						value={currentAnswers[
-							resolveBindsTo(question, combinedAnswers, selectedLoan)
-						]?.toString() ?? ''}
+						value={currentAnswers[resolveBindsTo(question, combinedAnswers, selectedLoan)]?.toString() ?? ''}
 						error={getValidationErrorMessage(question, combinedAnswers) || undefined}
 						onChange={(value: string | number) => updateAnswer(question, value)}
 						required={question.required ?? false}
@@ -1219,7 +1166,7 @@
 						<label>{question.question}</label>
 						<input
 							type="text"
-							value={$testing[question.existing_bindsTo] || ''}
+							value={$obligationKeysName[question.existing_bindsTo] || ''}
 							on:input={(e) => handleInput(question.existing_bindsTo, e.target.value)}
 						/>
 					</div>
@@ -1227,7 +1174,7 @@
 					<div>
 						<label>{question.question}</label>
 						{#if question.existing_bindsTo}
-							<select bind:value={$testing[question.existing_bindsTo]}>
+							<select bind:value={$obligationKeysName[question.existing_bindsTo]}>
 								<option value="">Select</option>
 								{#each question.options as opt}
 									<option value={opt.value}>{opt.label}</option>
@@ -1238,7 +1185,7 @@
 						{/if}
 					</div>
 				{:else if question.type === 'button'}
-					<button on:click={handleAddClick} disabled={disableAddButton(question, $testing)}>
+					<button on:click={handleAddClick} disabled={disableAddButton(question, $obligationKeysName)}>
 						{question.question}
 					</button>
 				{/if}

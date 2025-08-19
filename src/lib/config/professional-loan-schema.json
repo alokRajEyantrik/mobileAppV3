@@ -1025,8 +1025,11 @@
 		{
 			"id": "existingDetailsPage",
 			"title": "Existing Details",
+			"bindsTo_template": "tableEntries",
 			"nextButtonVisibility": {
-				"mode": ["allRequiredAnswered"]
+				"mode": [
+					"allRequiredAnswered"
+				]
 			},
 			"showWhen": {
 				"==": [
@@ -1036,12 +1039,12 @@
 					"Yes"
 				]
 			},
-
 			"questions": [
 				{
-					"id": "q1_loanType",
-					"bindsTo_template": "tableLoanEntriesloanType",
-					"contextKey": "tableLoanEntriesloanType",
+					"id": "q1_existingLoanType",
+					"bindsTo_template": "existingLoanType",
+					"existing_bindsTo": "existingLoanType",
+					"contextKey": "existingLoanType",
 					"type": "select",
 					"uiGroup": "select_fields",
 					"uiMeta": {
@@ -1095,9 +1098,9 @@
 				},
 				{
 					"id": "q2_bankName",
-					"bindsTo_template": "tableLoanEntriesbankName",
-					"contextKey": "tableLoanEntriesbankName",
-					"type": "select",
+					"existing_bindsTo": "bankName",
+					"contextKey": "bankName",
+					"type": "existingSelect",
 					"uiGroup": "select_fields",
 					"uiMeta": {
 						"placeholder": "Select your bank"
@@ -1138,21 +1141,13 @@
 							"label": "Union Bank",
 							"value": "Union Bank"
 						}
-					],
-					"showWhen": {
-						"!=": [
-							{
-								"var": "tableLoanEntriesloanType"
-							},
-							""
-						]
-					}
+					]
 				},
 				{
 					"id": "q3_selectedToClose",
-					"bindsTo_template": "tableLoanEntriesselectedToClose",
-					"contextKey": "tableLoanEntriesselectedToClose",
-					"type": "select",
+					"existing_bindsTo": "selectedToClose",
+					"contextKey": "selectedToClose",
+					"type": "existingSelect",
 					"uiGroup": "select_fields",
 					"uiMeta": {
 						"placeholder": "How do you plan to close this loan?"
@@ -1167,73 +1162,31 @@
 						},
 						{
 							"label": "will be closed by this loan",
-							"value": "will be closed by this loan"
+							"value": "will be closed by this loan",
+							"showWhen": {
+								"==": [
+									{
+										"var": "loanType"
+									},
+									"Debt Consolidation with Extra Funds"
+								]
+							}
 						},
 						{
 							"label": "continue running as it is",
-							"value": "continue running as it is"
+							"value": "keep running"
 						}
 					],
 					"errorMessage": {
 						"required": true,
 						"message": "Please select a different reason for the closure plan. You have currently chosen “New Loan” as the reason. However, if your intention is to close this existing loan by consolidating it with a new debt consolidation loan, you need to go back and select the debt consolidation option instead. This is necessary because only the debt consolidation option allows you to close existing loans through this process."
-					},
-					"validation": {
-						"condition": {
-							"and": [
-								{
-									"==": [
-										{
-											"var": "existingLoan"
-										},
-										"Yes"
-									]
-								},
-								{
-									"!=": [
-										{
-											"var": "loanType"
-										},
-										"Debt Consolidation with Extra Funds"
-									]
-								},
-								{
-									"==": [
-										{
-											"var": "tableLoanEntriesselectedToClose"
-										},
-										"will be closed by this loan"
-									]
-								}
-							]
-						}
-					},
-					"showWhen": {
-						"and": [
-							{
-								"!=": [
-									{
-										"var": "tableLoanEntriesloanType"
-									},
-									""
-								]
-							},
-							{
-								"!=": [
-									{
-										"var": "tableLoanEntriesbankName"
-									},
-									""
-								]
-							}
-						]
 					}
 				},
 				{
 					"id": "q4_emi",
-					"bindsTo_template": "tableLoanEntriesemi",
-					"contextKey": "tableLoanEntriesemi",
-					"type": "text",
+					"existing_bindsTo": "EMIs",
+					"contextKey": "EMIs",
+					"type": "existingText",
 					"uiGroup": "text_fields",
 					"uiMeta": {
 						"placeholder": "Enter EMI"
@@ -1242,11 +1195,11 @@
 					"question": "What is the EMI for this existing loan?",
 					"description": "EMI (monthly)",
 					"showWhen": {
-						"and": [
+						"or": [
 							{
 								"in": [
 									{
-										"var": "tableLoanEntriesloanType"
+										"var": "existingLoanType"
 									},
 									[
 										"Business Loan - Unsecured",
@@ -1254,23 +1207,14 @@
 										"Loan Against Property",
 										"Machinery Loan",
 										"Vehicle Loan",
-										"Property Loan",
-										"Other Type Loan"
+										"Property Loan"
 									]
 								]
 							},
 							{
-								"!=": [
+								"==": [
 									{
-										"var": "tableLoanEntriesbankName"
-									},
-									""
-								]
-							},
-							{
-								"!=": [
-									{
-										"var": "tableLoanEntriesselectedToClose"
+										"var": "existingLoanType"
 									},
 									""
 								]
@@ -1280,9 +1224,9 @@
 				},
 				{
 					"id": "q5_tenure",
-					"bindsTo_template": "tableLoanEntriestenure",
-					"contextKey": "tableLoanEntriestenure",
-					"type": "text",
+					"existing_bindsTo": "tenure",
+					"contextKey": "tenure",
+					"type": "existingText",
 					"uiGroup": "text_fields",
 					"uiMeta": {
 						"placeholder": "in months"
@@ -1290,11 +1234,11 @@
 					"required": true,
 					"question": "remaining tenure",
 					"showWhen": {
-						"and": [
+						"or": [
 							{
 								"in": [
 									{
-										"var": "tableLoanEntriesloanType"
+										"var": "existingLoanType"
 									},
 									[
 										"Business Loan - Unsecured",
@@ -1302,31 +1246,14 @@
 										"Loan Against Property",
 										"Machinery Loan",
 										"Vehicle Loan",
-										"Property Loan",
-										"Other Type Loan"
+										"Property Loan"
 									]
 								]
 							},
 							{
-								"!=": [
+								"==": [
 									{
-										"var": "tableLoanEntriesbankName"
-									},
-									""
-								]
-							},
-							{
-								"!=": [
-									{
-										"var": "tableLoanEntriesselectedToClose"
-									},
-									""
-								]
-							},
-							{
-								"!=": [
-									{
-										"var": "tableLoanEntriesemi"
+										"var": "existingLoanType"
 									},
 									""
 								]
@@ -1335,10 +1262,10 @@
 					}
 				},
 				{
-					"id": "q6_totalLimit",
-					"bindsTo_template": "tableLoanEntriestotalLimit",
-					"contextKey": "tableLoanEntriestotalLimit",
-					"type": "text",
+					"id": "q6_limit",
+					"existing_bindsTo": "limit",
+					"contextKey": "limit",
+					"type": "existingText",
 					"uiGroup": "text_fields",
 					"uiMeta": {
 						"placeholder": "Enter total limit"
@@ -1346,39 +1273,22 @@
 					"required": true,
 					"question": "total limit",
 					"showWhen": {
-						"and": [
+						"in": [
 							{
-								"in": [
-									{
-										"var": "tableLoanEntriesloanType"
-									},
-									["OD Limit", "CC Limit"]
-								]
+								"var": "existingLoanType"
 							},
-							{
-								"!=": [
-									{
-										"var": "tableLoanEntriesbankName"
-									},
-									""
-								]
-							},
-							{
-								"!=": [
-									{
-										"var": "tableLoanEntriesselectedToClose"
-									},
-									""
-								]
-							}
+							[
+								"OD Limit",
+								"CC Limit"
+							]
 						]
 					}
 				},
 				{
 					"id": "q7_sanctionedLimit",
-					"bindsTo_template": "tableLoanEntriessanctionedLimit",
-					"contextKey": "tableLoanEntriessanctionedLimit",
-					"type": "text",
+					"existing_bindsTo": "sanctionedLimit",
+					"contextKey": "sanctionedLimit",
+					"type": "existingText",
 					"uiGroup": "text_fields",
 					"uiMeta": {
 						"placeholder": "Enter total limit"
@@ -1386,87 +1296,19 @@
 					"required": true,
 					"question": "sanctioned limit (at the time of start)",
 					"showWhen": {
-						"and": [
+						"==": [
 							{
-								"==": [
-									{
-										"var": "tableLoanEntriesloanType"
-									},
-									"Dropline OD"
-								]
+								"var": "existingLoanType"
 							},
-							{
-								"!=": [
-									{
-										"var": "tableLoanEntriesbankName"
-									},
-									""
-								]
-							},
-							{
-								"!=": [
-									{
-										"var": "tableLoanEntriesselectedToClose"
-									},
-									""
-								]
-							}
+							"Dropline OD"
 						]
 					}
 				},
 				{
-					"id": "q8_remainingLimit",
-					"bindsTo_template": "tableLoanEntriesremainingLimit",
-					"contextKey": "tableLoanEntriesremainingLimit",
-					"type": "text",
-					"uiGroup": "text_fields",
-					"uiMeta": {
-						"placeholder": "Enter total limit"
-					},
-					"required": true,
-					"question": "remaining limit (current)",
-					"showWhen": {
-						"and": [
-							{
-								"==": [
-									{
-										"var": "tableLoanEntriesloanType"
-									},
-									"Dropline OD"
-								]
-							},
-							{
-								"!=": [
-									{
-										"var": "tableLoanEntriesbankName"
-									},
-									""
-								]
-							},
-							{
-								"!=": [
-									{
-										"var": "tableLoanEntriesselectedToClose"
-									},
-									""
-								]
-							},
-							{
-								"!=": [
-									{
-										"var": "tableLoanEntriessanctionedLimit"
-									},
-									""
-								]
-							}
-						]
-					}
-				},
-				{
-					"id": "q9_sanctionedTenure",
-					"bindsTo_template": "tableLoanEntriessanctionedTenure",
-					"contextKey": "tableLoanEntriessanctionedTenure",
-					"type": "text",
+					"id": "q8_sanctionedTenure",
+					"existing_bindsTo": "sanctionedTenure",
+					"contextKey": "sanctionedTenure",
+					"type": "existingText",
 					"uiGroup": "text_fields",
 					"uiMeta": {
 						"placeholder": "in months"
@@ -1474,71 +1316,55 @@
 					"required": true,
 					"question": "sanctioned tenure",
 					"showWhen": {
-						"and": [
+						"in": [
 							{
-								"in": [
-									{
-										"var": "tableLoanEntriesloanType"
-									},
-									["OD Limit", "CC Limit", "Dropline OD"]
-								]
+								"var": "existingLoanType"
 							},
-							{
-								"!=": [
-									{
-										"var": "tableLoanEntriesbankName"
-									},
-									""
-								]
-							},
-							{
-								"!=": [
-									{
-										"var": "tableLoanEntriesselectedToClose"
-									},
-									""
-								]
-							},
-							{
-								"or": [
-									{
-										"!=": [
-											{
-												"var": "tableLoanEntriestotalLimit"
-											},
-											""
-										]
-									},
-									{
-										"and": [
-											{
-												"!=": [
-													{
-														"var": "tableLoanEntriessanctionedLimit"
-													},
-													""
-												]
-											},
-											{
-												"!=": [
-													{
-														"var": "tableLoanEntriesremainingLimit"
-													},
-													""
-												]
-											}
-										]
-									}
-								]
-							}
+							[
+								"OD Limit",
+								"CC Limit",
+								"Dropline OD"
+							]
 						]
 					}
 				},
 				{
-					"id": "q10_remainingTenure",
-					"bindsTo_template": "tableLoanEntriesremainingTenure",
-					"contextKey": "tableLoanEntriesremainingTenure",
-					"type": "text",
+					"id": "q9_interestRate",
+					"existing_bindsTo": "interestRate",
+					"contextKey": "interestRate",
+					"type": "existingText",
+					"uiGroup": "text_fields",
+					"uiMeta": {
+						"placeholder": "enter interest rate"
+					},
+					"required": true,
+					"question": "interest rate (p.a.)"
+				},
+				{
+					"id": "10_remainingLimit",
+					"existing_bindsTo": "remainingLimit",
+					"contextKey": "remainingLimit",
+					"type": "existingText",
+					"uiGroup": "text_fields",
+					"uiMeta": {
+						"placeholder": "Enter total limit"
+					},
+					"required": true,
+					"question": "remaining limit (current)",
+					"showWhen": {
+						"==": [
+							{
+								"var": "existingLoanType"
+							},
+							"Dropline OD"
+						]
+					}
+				},
+				{
+					"id": "q11_remainingTenure",
+					"existing_bindsTo": "remainingTenure",
+					"contextKey": "remainingTenure",
+					"type": "existingText",
 					"uiGroup": "text_fields",
 					"uiMeta": {
 						"placeholder": "in months"
@@ -1546,63 +1372,19 @@
 					"required": true,
 					"question": "remaining tenure",
 					"showWhen": {
-						"and": [
+						"==": [
 							{
-								"==": [
-									{
-										"var": "tableLoanEntriesloanType"
-									},
-									"Dropline OD"
-								]
+								"var": "existingLoanType"
 							},
-							{
-								"!=": [
-									{
-										"var": "tableLoanEntriesbankName"
-									},
-									""
-								]
-							},
-							{
-								"!=": [
-									{
-										"var": "tableLoanEntriesselectedToClose"
-									},
-									""
-								]
-							},
-							{
-								"!=": [
-									{
-										"var": "tableLoanEntriessanctionedLimit"
-									},
-									""
-								]
-							},
-							{
-								"!=": [
-									{
-										"var": "tableLoanEntriesremainingLimit"
-									},
-									""
-								]
-							},
-							{
-								"!=": [
-									{
-										"var": "tableLoanEntriessanctionedTenure"
-									},
-									""
-								]
-							}
+							"Dropline OD"
 						]
 					}
 				},
 				{
-					"id": "q11_utilizedAmount",
-					"bindsTo_template": "tableLoanEntriesutilizedAmount",
-					"contextKey": "tableLoanEntriesutilizedAmount",
-					"type": "text",
+					"id": "q12_utilizedAmount",
+					"existing_bindsTo": "utilizedAmount",
+					"contextKey": "utilizedAmount",
+					"type": "existingText",
 					"uiGroup": "text_fields",
 					"uiMeta": {
 						"placeholder": "Enter total limit"
@@ -1610,171 +1392,53 @@
 					"required": true,
 					"question": "utilized amount",
 					"showWhen": {
-						"and": [
+						"==": [
 							{
-								"==": [
-									{
-										"var": "tableLoanEntriesloanType"
-									},
-									"Dropline OD"
-								]
+								"var": "existingLoanType"
 							},
-							{
-								"!=": [
-									{
-										"var": "tableLoanEntriesbankName"
-									},
-									""
-								]
-							},
-							{
-								"!=": [
-									{
-										"var": "tableLoanEntriesselectedToClose"
-									},
-									""
-								]
-							},
-							{
-								"!=": [
-									{
-										"var": "tableLoanEntriessanctionedLimit"
-									},
-									""
-								]
-							},
-							{
-								"!=": [
-									{
-										"var": "tableLoanEntriesremainingLimit"
-									},
-									""
-								]
-							},
-							{
-								"!=": [
-									{
-										"var": "tableLoanEntriessanctionedTenure"
-									},
-									""
-								]
-							},
-							{
-								"!=": [
-									{
-										"var": "tableLoanEntriesremainingTenure"
-									},
-									""
-								]
-							}
+							"Dropline OD"
 						]
 					}
 				},
 				{
-					"id": "q12_interestRate",
-					"bindsTo_template": "tableLoanEntriesinterestRate",
-					"contextKey": "tableLoanEntriesinterestRate",
-					"type": "text",
-					"uiGroup": "text_fields",
-					"uiMeta": {
-						"placeholder": "enter interest rate"
+					"id": "q12_addButton",
+					"existing_bindsTo": "addButton",
+					"contextKey": "addButton",
+					"uiGroup": "add_button",
+					"type": "button",
+					"question": "Add",
+					"disabledCondition": {
+						"termLoanEmpty": [
+							"bankName",
+							"selectedToClose",
+							"EMIs",
+							"tenure",
+							"interestRate"
+						],
+						"limitEmpty": [
+							"bankName",
+							"selectedToClose",
+							"limit",
+							"sanctionedTenure",
+							"interestRate"
+						],
+						"DODEmpty": [
+							"bankName",
+							"selectedToClose",
+							"sanctionedTenure",
+							"interestRate",
+							"remainingTenure",
+							"utilizedAmount",
+							"sanctionedLimit",
+							"remainingLimit"
+						]
 					},
-					"required": true,
-					"question": "interest rate (p.a.)",
 					"showWhen": {
-						"and": [
+						"==": [
 							{
-								"!=": [
-									{
-										"var": "tableLoanEntriesloanType"
-									},
-									""
-								]
+								"var": "existingLoan"
 							},
-							{
-								"!=": [
-									{
-										"var": "tableLoanEntriesbankName"
-									},
-									""
-								]
-							},
-							{
-								"!=": [
-									{
-										"var": "tableLoanEntriesselectedToClose"
-									},
-									""
-								]
-							},
-							{
-								"or": [
-									{
-										"!=": [
-											{
-												"var": "tableLoanEntriesemi"
-											},
-											""
-										]
-									},
-									{
-										"!=": [
-											{
-												"var": "tableLoanEntriestotalLimit"
-											},
-											""
-										]
-									},
-									{
-										"and": [
-											{
-												"!=": [
-													{
-														"var": "tableLoanEntriessanctionedLimit"
-													},
-													""
-												]
-											},
-											{
-												"!=": [
-													{
-														"var": "tableLoanEntriesremainingLimit"
-													},
-													""
-												]
-											}
-										]
-									}
-								]
-							},
-							{
-								"or": [
-									{
-										"!=": [
-											{
-												"var": "tableLoanEntriestenure"
-											},
-											""
-										]
-									},
-									{
-										"!=": [
-											{
-												"var": "tableLoanEntriessanctionedTenure"
-											},
-											""
-										]
-									},
-									{
-										"!=": [
-											{
-												"var": "tableLoanEntriesremainingTenure"
-											},
-											""
-										]
-									}
-								]
-							}
+							"Yes"
 						]
 					}
 				}
