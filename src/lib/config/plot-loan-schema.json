@@ -216,11 +216,23 @@
 						}
 					],
 					"showWhen": {
-						"!=": [
+						"and": [
 							{
-								"var": "approvedByAuthority"
+								"in": [
+									{
+										"var": "LoanType"
+									},
+									["Plot & Construction Loan", "Construction Loan Only"]
+								]
 							},
-							""
+							{
+								"!=": [
+									{
+										"var": "approvedByAuthority"
+									},
+									""
+								]
+							}
 						]
 					},
 					"errorMessage": {
@@ -265,7 +277,7 @@
 					"showWhen": {
 						"!=": [
 							{
-								"var": "asPerMap"
+								"var": "approvedByAuthority"
 							},
 							""
 						]
@@ -285,7 +297,7 @@
 					"bindsTo_template": "propertyType",
 					"contextKey": "propertyType",
 					"type": "radio",
-					"uiGroup": "loan_details",
+					"uiGroup": "radio_fields",
 					"description": "Lenders need to ensure that the property meets legal requirements and compliances related to ownership rights, land tenure, and property transfer.",
 					"question": "Please indicate the type of ownership for the property?",
 					"required": true,
@@ -313,7 +325,7 @@
 					"bindsTo_template": "purchaseType",
 					"contextKey": "purchaseType",
 					"type": "radio",
-					"uiGroup": "loan_details",
+					"uiGroup": "radio_fields",
 					"description": "The loan process may vary based on the purchase type, primarily concerning the disbursement of funds and documentation requirements related to the property's stage and ownership transfer.",
 					"question": "Please specify the nature of property purchase?",
 					"required": true,
@@ -401,7 +413,7 @@
 					"bindsTo_template": "PlotArea",
 					"contextKey": "PlotArea",
 					"type": "number",
-					"uiGroup": "text_fields",
+					"uiGroup": "number_fields",
 					"uiMeta": {
 						"placeholder": "Enter total area of plot"
 					},
@@ -511,7 +523,7 @@
 									{
 										"var": "PlotArea"
 									},
-									""
+									null
 								]
 							}
 						]
@@ -575,7 +587,7 @@
 									{
 										"var": "PlotArea"
 									},
-									""
+									null
 								]
 							},
 							{
@@ -594,7 +606,7 @@
 					"bindsTo_template": "residenceOptionSame",
 					"contextKey": "residenceOptionSame",
 					"type": "radio",
-					"uiGroup": "loan_details",
+					"uiGroup": "radio_fields",
 					"required": true,
 					"question": "If the residence location is the same as the property location?",
 					"description": "For an NRI applicant, this should be addressed from the perspective of the GPA (Power of Attorney).",
@@ -661,7 +673,7 @@
 									{
 										"var": "PlotArea"
 									},
-									""
+									null
 								]
 							},
 							{
@@ -742,7 +754,7 @@
 									{
 										"var": "PlotArea"
 									},
-									""
+									null
 								]
 							},
 							{
@@ -830,7 +842,7 @@
 									{
 										"var": "PlotArea"
 									},
-									""
+									null
 								]
 							},
 							{
@@ -912,11 +924,11 @@
 						}
 					],
 					"showWhen": {
-						"!=": [
+						"==": [
 							{
-								"var": "residenceOptionSame"
+								"var": "purchaseType"
 							},
-							""
+							"Direct Sale"
 						]
 					}
 				},
@@ -932,11 +944,23 @@
 					"question": "Enter the name of builder",
 					"required": true,
 					"showWhen": {
-						"==": [
+						"and": [
 							{
-								"var": "purchasedFrom"
+								"==": [
+									{
+										"var": "purchaseType"
+									},
+									"Direct Sale"
+								]
 							},
-							"Builder"
+							{
+								"==": [
+									{
+										"var": "purchasedFrom"
+									},
+									"Builder"
+								]
+							}
 						]
 					}
 				},
@@ -952,11 +976,51 @@
 					"question": "Enter the name of authority",
 					"required": true,
 					"showWhen": {
+						"and": [
+							{
+								"==": [
+									{
+										"var": "purchaseType"
+									},
+									"Direct Sale"
+								]
+							},
+							{
+								"==": [
+									{
+										"var": "purchasedFrom"
+									},
+									"Authority"
+								]
+							}
+						]
+					}
+				},
+				{
+					"id": "q1_ifSellerOnLoan",
+					"bindsTo_template": "ifSellerOnLoan",
+					"contextKey": "ifSellerOnLoan",
+					"type": "radio",
+					"uiGroup": "radio_fields",
+					"question": "Please specify if the property is on loan?",
+					"description": "You'll have to ensure if the seller has an existing loan on the property you're buying, as it can affect your loan options. You may need to use the seller's bank for the loan or have the seller transfer the balance to your chosen bank, which could lead to complications in getting the best terms.",
+					"required": true,
+					"options": [
+						{
+							"label": "Yes",
+							"value": "Yes"
+						},
+						{
+							"label": "No",
+							"value": "No"
+						}
+					],
+					"showWhen": {
 						"==": [
 							{
-								"var": "purchasedFrom"
+								"var": "purchaseType"
 							},
-							"Authority"
+							"Resale"
 						]
 					}
 				},
@@ -1007,21 +1071,146 @@
 						}
 					],
 					"showWhen": {
-						"and": [
+						"or": [
 							{
-								"==": [
-									{
-										"var": "purchasedFrom"
-									},
-									"Builder"
-								]
+								"==": [{ "var": "ifSellerOnLoan" }, "Yes"]
 							},
 							{
-								"!=": [
+								"and": [
 									{
-										"var": "fullNameOfBuilder"
+										"==": [
+											{
+												"var": "purchasedFrom"
+											},
+											"Builder"
+										]
 									},
-									""
+									{
+										"!=": [
+											{
+												"var": "fullNameOfBuilder"
+											},
+											""
+										]
+									}
+								]
+							}
+						]
+					}
+				},
+				{
+					"id": "q_selectSingleBank",
+					"bindsTo_template": "selectSingleBank",
+					"contextKey": "selectSingleBank",
+					"type": "select",
+					"uiGroup": "select_fields",
+					"uiMeta": {
+						"placeholder": "Select bank name"
+					},
+					"required": true,
+					"question": "Select the lender from where seller's loan is running.",
+					"options": [
+						{
+							"label": "HDFC Bank",
+							"value": "HDFC Bank"
+						},
+						{
+							"label": "SBI Bank",
+							"value": "SBI Bank"
+						},
+						{
+							"label": "Axis Bank",
+							"value": "Axis Bank"
+						},
+						{
+							"label": "ICICI Bank",
+							"value": "ICICI Bank"
+						},
+						{
+							"label": "Canara Bank",
+							"value": "Canara Bank"
+						},
+						{
+							"label": "Bank of Baroda",
+							"value": "Bank of Baroda"
+						},
+						{
+							"label": "Citi Bank",
+							"value": "Citi Bank"
+						},
+						{
+							"label": "Union Bank",
+							"value": "Union Bank"
+						}
+					],
+					"showWhen": {
+						"and": [
+							{
+								"==": [{ "var": "ifSellerOnLoan" }, "Yes"]
+							},
+							{
+								"!=": [{ "var": "approvedBankForSelectedByUser" }, ""]
+							}
+						]
+					}
+				},
+				{
+					"id": "q1_foreclosureAmount",
+					"bindsTo_template": "foreclosureAmount",
+					"contextKey": "foreclosureAmount",
+					"type": "number",
+					"uiGroup": "number_fields",
+					"question": "What is the foreclosure Amount?",
+					"description": "This Amount will be paid to the seller's Bank.",
+					"required": true,
+					"showWhen": {
+						"and": [
+							{
+								"==": [{ "var": "ifSellerOnLoan" }, "Yes"]
+							},
+							{
+								"!=": [{ "var": "approvedBankForSelectedByUser" }, ""]
+							},
+							{
+								"!=": [{ "var": "selectSingleBank" }, ""]
+							}
+						]
+					}
+				},
+				{
+					"id": "q1_ifSellerNri",
+					"bindsTo_template": "ifSellerNri",
+					"contextKey": "ifSellerNri",
+					"type": "radio",
+					"uiGroup": "radio_fields",
+					"question": "If seller / any of the seller's is NRI?",
+					"required": true,
+					"options": [
+						{
+							"label": "Yes",
+							"value": "Yes"
+						},
+						{
+							"label": "No",
+							"value": "No"
+						}
+					],
+					"showWhen": {
+						"or": [
+							{
+								"==": [{ "var": "ifSellerOnLoan" }, "No"]
+							},
+							{
+								"and": [
+									{
+										"==": [{ "var": "ifSellerOnLoan" }, "Yes"]
+									},
+									{
+										"!=": [{ "var": "approvedBankForSelectedByUser" }, ""]
+									},
+									{
+										"!=": [{ "var": "selectSingleBank" }, ""]
+									}
 								]
 							}
 						]
@@ -1041,7 +1230,7 @@
 					"bindsTo_template": "tellUsApplying",
 					"contextKey": "tellUsApplying",
 					"type": "radio",
-					"uiGroup": "loan_details",
+					"uiGroup": "radio_fields",
 					"uiMeta": {
 						"placeholder": "Select value"
 					},
@@ -1139,7 +1328,7 @@
 					"bindsTo_template": "BasedOnITR",
 					"contextKey": "BasedOnITR",
 					"type": "radio",
-					"uiGroup": "select_fields",
+					"uiGroup": "radio_fields",
 					"required": true,
 					"question": "How would you like to assess your company’s loan eligibility?",
 					"options": [
@@ -1178,7 +1367,7 @@
 					"bindsTo_template": "numberOfDirectorOrApplicant",
 					"contextKey": "numberOfDirectorOrApplicant",
 					"type": "number",
-					"uiGroup": "loan_details",
+					"uiGroup": "number_fields",
 					"uiMeta": {
 						"placeholder": "Enter the number"
 					},
@@ -1289,7 +1478,7 @@
 					"bindsTo_template": "existingRoleOfPerson",
 					"contextKey": "existingRoleOfPerson",
 					"type": "radio",
-					"uiGroup": "select_fields",
+					"uiGroup": "radio_fields",
 					"required": true,
 					"question": "Please specify the reason for this person's involvement in the loan?",
 					"options": [
@@ -1340,7 +1529,7 @@
 					"bindsTo_template": "primaryApplicantIsNRI",
 					"contextKey": "primaryApplicantIsNRI",
 					"type": "radio",
-					"uiGroup": "select_fields",
+					"uiGroup": "radio_fields",
 					"required": true,
 					"question": "Is the applicant NRI?",
 					"options": [
@@ -1497,7 +1686,7 @@
 					"bindsTo_template": "PFdeducted",
 					"contextKey": "PFdeducted",
 					"type": "radio",
-					"uiGroup": "select_fields",
+					"uiGroup": "radio_fields",
 					"uiMeta": {
 						"placeholder": "Select employment type"
 					},
@@ -1677,7 +1866,7 @@
 					"bindsTo_template": "grossIncome",
 					"contextKey": "grossIncome",
 					"type": "number",
-					"uiGroup": "text_fields",
+					"uiGroup": "number_fields",
 					"uiMeta": {
 						"placeholder": "Enter gross income"
 					},
@@ -1698,7 +1887,7 @@
 					"bindsTo_template": "fixedSalary",
 					"contextKey": "fixedSalary",
 					"type": "number",
-					"uiGroup": "text_fields",
+					"uiGroup": "number_fields",
 					"uiMeta": {
 						"placeholder": "Enter fixed monthly salary"
 					},
@@ -1729,7 +1918,7 @@
 									{
 										"var": "grossIncome"
 									},
-									""
+									null
 								]
 							}
 						]
@@ -1740,7 +1929,7 @@
 					"bindsTo_template": "monthlyOtherIncome",
 					"contextKey": "monthlyOtherIncome",
 					"type": "number",
-					"uiGroup": "text_fields",
+					"uiGroup": "number_fields",
 					"uiMeta": {
 						"placeholder": "extra monthly income"
 					},
@@ -1762,7 +1951,7 @@
 									{
 										"var": "grossIncome"
 									},
-									""
+									null
 								]
 							},
 							{
@@ -1770,7 +1959,7 @@
 									{
 										"var": "fixedSalary"
 									},
-									""
+									null
 								]
 							}
 						]
@@ -1781,7 +1970,7 @@
 					"bindsTo_template": "professionType",
 					"contextKey": "professionType",
 					"type": "select",
-					"uiGroup": "selectButton",
+					"uiGroup": "select_fields",
 					"uiMeta": {
 						"placeholder": "Select profession"
 					},
@@ -1820,7 +2009,7 @@
 					"bindsTo_template": "incomeTaxAvailableThreeFinancialYear",
 					"contextKey": "incomeTaxAvailableThreeFinancialYear",
 					"type": "radio",
-					"uiGroup": "loan_details",
+					"uiGroup": "radio_fields",
 					"required": true,
 					"question": "If Income Tax Returns are available for last three consecutive financial years?",
 					"options": [
@@ -1891,7 +2080,7 @@
 					"bindsTo_template": "grossReceiptsArray",
 					"contextKey": "grossReceiptsArray",
 					"type": "number",
-					"uiGroup": "inputNumber",
+					"uiGroup": "number_fields",
 					"uiMeta": {
 						"placeholder": ["FY2023-24", "FY2022-23", "FY2021-22"]
 					},
@@ -1931,7 +2120,7 @@
 					"bindsTo_template": "netProfit",
 					"contextKey": "netProfit",
 					"type": "number",
-					"uiGroup": "inputNumber",
+					"uiGroup": "number_fields",
 					"uiMeta": {
 						"placeholder": ["FY2023-24", "FY2022-23", "FY2021-22"]
 					},
@@ -1980,7 +2169,7 @@
 													{
 														"var": "grossReceiptsArray"
 													},
-													""
+													null
 												]
 											}
 										]
@@ -2003,7 +2192,7 @@
 					"bindsTo_template": "depreciationArray",
 					"contextKey": "depreciationArray",
 					"type": "number",
-					"uiGroup": "inputNumber",
+					"uiGroup": "number_fields",
 					"uiMeta": {
 						"placeholder": ["FY2023-24", "FY2022-23", "FY2021-22"]
 					},
@@ -2032,7 +2221,7 @@
 									{
 										"var": "netProfit"
 									},
-									""
+									null
 								]
 							}
 						]
@@ -2043,7 +2232,7 @@
 					"bindsTo_template": "creditScore",
 					"contextKey": "creditScore",
 					"type": "select",
-					"uiGroup": "selectButton",
+					"uiGroup": "select_fields",
 					"uiMeta": {
 						"placeholder": "Select credit score"
 					},
@@ -2089,7 +2278,7 @@
 											{
 												"var": "grossIncome"
 											},
-											""
+											null
 										]
 									},
 									{
@@ -2097,7 +2286,7 @@
 											{
 												"var": "fixedSalary"
 											},
-											""
+											null
 										]
 									},
 									{
@@ -2105,7 +2294,7 @@
 											{
 												"var": "monthlyOtherIncome"
 											},
-											""
+											null
 										]
 									}
 								]
@@ -2119,7 +2308,7 @@
 													{
 														"var": "depreciationArray"
 													},
-													""
+													null
 												]
 											},
 											{
@@ -2137,7 +2326,7 @@
 															{
 																"var": "grossReceiptsArray"
 															},
-															""
+															null
 														]
 													}
 												]
@@ -2158,7 +2347,7 @@
 											{
 												"var": "netProfit"
 											},
-											""
+											null
 										]
 									}
 								]
@@ -2171,7 +2360,7 @@
 					"bindsTo_template": "isDefaulter",
 					"contextKey": "isDefaulter",
 					"type": "select",
-					"uiGroup": "selectButton",
+					"uiGroup": "select_fields",
 					"required": true,
 					"question": "Have you ever been defaulter",
 					"options": [
@@ -2195,7 +2384,7 @@
 													{
 														"var": "grossIncome"
 													},
-													""
+													null
 												]
 											},
 											{
@@ -2203,7 +2392,7 @@
 													{
 														"var": "fixedSalary"
 													},
-													""
+													null
 												]
 											},
 											{
@@ -2211,7 +2400,7 @@
 													{
 														"var": "monthlyOtherIncome"
 													},
-													""
+													null
 												]
 											}
 										]
@@ -2225,7 +2414,7 @@
 															{
 																"var": "depreciationArray"
 															},
-															""
+															null
 														]
 													},
 													{
@@ -2243,7 +2432,7 @@
 																	{
 																		"var": "grossReceiptsArray"
 																	},
-																	""
+																	null
 																]
 															}
 														]
@@ -2264,7 +2453,7 @@
 													{
 														"var": "netProfit"
 													},
-													""
+													null
 												]
 											}
 										]
@@ -2347,7 +2536,7 @@
 													{
 														"var": "grossIncome"
 													},
-													""
+													null
 												]
 											},
 											{
@@ -2355,7 +2544,7 @@
 													{
 														"var": "fixedSalary"
 													},
-													""
+													null
 												]
 											},
 											{
@@ -2363,7 +2552,7 @@
 													{
 														"var": "monthlyOtherIncome"
 													},
-													""
+													null
 												]
 											}
 										]
@@ -2377,7 +2566,7 @@
 															{
 																"var": "depreciationArray"
 															},
-															""
+															null
 														]
 													},
 													{
@@ -2395,7 +2584,7 @@
 																	{
 																		"var": "grossReceiptsArray"
 																	},
-																	""
+																	null
 																]
 															}
 														]
@@ -2416,7 +2605,7 @@
 													{
 														"var": "netProfit"
 													},
-													""
+													null
 												]
 											}
 										]
@@ -2447,7 +2636,7 @@
 					"bindsTo_template": "obligation",
 					"contextKey": "obligation",
 					"type": "radio",
-					"uiGroup": "selectButton",
+					"uiGroup": "radio_fields",
 					"required": true,
 					"question": "Do you have any obligation?",
 					"options": [
@@ -2471,7 +2660,7 @@
 													{
 														"var": "grossIncome"
 													},
-													""
+													null
 												]
 											},
 											{
@@ -2479,7 +2668,7 @@
 													{
 														"var": "fixedSalary"
 													},
-													""
+													null
 												]
 											},
 											{
@@ -2487,7 +2676,7 @@
 													{
 														"var": "monthlyOtherIncome"
 													},
-													""
+													null
 												]
 											}
 										]
@@ -2501,7 +2690,7 @@
 															{
 																"var": "depreciationArray"
 															},
-															""
+															null
 														]
 													},
 													{
@@ -2519,7 +2708,7 @@
 																	{
 																		"var": "grossReceiptsArray"
 																	},
-																	""
+																	null
 																]
 															}
 														]
@@ -2540,7 +2729,7 @@
 													{
 														"var": "netProfit"
 													},
-													""
+													null
 												]
 											}
 										]
@@ -2751,8 +2940,8 @@
 					"id": "q4_emi",
 					"bindsTo_template": "tableLoanEntriesemi",
 					"contextKey": "tableLoanEntriesemi",
-					"type": "text",
-					"uiGroup": "text_fields",
+					"type": "number",
+					"uiGroup": "number_fields",
 					"uiMeta": {
 						"placeholder": "Enter EMI"
 					},
@@ -2804,8 +2993,8 @@
 					"id": "q5_tenure",
 					"bindsTo_template": "tableLoanEntriestenure",
 					"contextKey": "tableLoanEntriestenure",
-					"type": "text",
-					"uiGroup": "text_fields",
+					"type": "number",
+					"uiGroup": "number_fields",
 					"uiMeta": {
 						"placeholder": "in months"
 					},
@@ -2854,7 +3043,7 @@
 									{
 										"var": "tableLoanEntriesemi"
 									},
-									""
+									null
 								]
 							}
 						]
@@ -2864,8 +3053,8 @@
 					"id": "q6_totalLimit",
 					"bindsTo_template": "tableLoanEntriestotalLimit",
 					"contextKey": "tableLoanEntriestotalLimit",
-					"type": "text",
-					"uiGroup": "text_fields",
+					"type": "number",
+					"uiGroup": "number_fields",
 					"uiMeta": {
 						"placeholder": "Enter total limit"
 					},
@@ -2904,8 +3093,8 @@
 					"id": "q7_sanctionedLimit",
 					"bindsTo_template": "tableLoanEntriessanctionedLimit",
 					"contextKey": "tableLoanEntriessanctionedLimit",
-					"type": "text",
-					"uiGroup": "text_fields",
+					"type": "number",
+					"uiGroup": "number_fields",
 					"uiMeta": {
 						"placeholder": "Enter total limit"
 					},
@@ -2944,8 +3133,8 @@
 					"id": "q8_remainingLimit",
 					"bindsTo_template": "tableLoanEntriesremainingLimit",
 					"contextKey": "tableLoanEntriesremainingLimit",
-					"type": "text",
-					"uiGroup": "text_fields",
+					"type": "number",
+					"uiGroup": "number_fields",
 					"uiMeta": {
 						"placeholder": "Enter total limit"
 					},
@@ -2982,7 +3171,7 @@
 									{
 										"var": "tableLoanEntriessanctionedLimit"
 									},
-									""
+									null
 								]
 							}
 						]
@@ -2992,8 +3181,8 @@
 					"id": "q9_sanctionedTenure",
 					"bindsTo_template": "tableLoanEntriessanctionedTenure",
 					"contextKey": "tableLoanEntriessanctionedTenure",
-					"type": "text",
-					"uiGroup": "text_fields",
+					"type": "number",
+					"uiGroup": "number_fields",
 					"uiMeta": {
 						"placeholder": "in months"
 					},
@@ -3032,7 +3221,7 @@
 											{
 												"var": "tableLoanEntriestotalLimit"
 											},
-											""
+											null
 										]
 									},
 									{
@@ -3042,7 +3231,7 @@
 													{
 														"var": "tableLoanEntriessanctionedLimit"
 													},
-													""
+													null
 												]
 											},
 											{
@@ -3050,7 +3239,7 @@
 													{
 														"var": "tableLoanEntriesremainingLimit"
 													},
-													""
+													null
 												]
 											}
 										]
@@ -3064,8 +3253,8 @@
 					"id": "q10_remainingTenure",
 					"bindsTo_template": "tableLoanEntriesremainingTenure",
 					"contextKey": "tableLoanEntriesremainingTenure",
-					"type": "text",
-					"uiGroup": "text_fields",
+					"type": "number",
+					"uiGroup": "number_fields",
 					"uiMeta": {
 						"placeholder": "in months"
 					},
@@ -3102,7 +3291,7 @@
 									{
 										"var": "tableLoanEntriessanctionedLimit"
 									},
-									""
+									null
 								]
 							},
 							{
@@ -3110,7 +3299,7 @@
 									{
 										"var": "tableLoanEntriesremainingLimit"
 									},
-									""
+									null
 								]
 							},
 							{
@@ -3118,7 +3307,7 @@
 									{
 										"var": "tableLoanEntriessanctionedTenure"
 									},
-									""
+									null
 								]
 							}
 						]
@@ -3128,8 +3317,8 @@
 					"id": "q11_utilizedAmount",
 					"bindsTo_template": "tableLoanEntriesutilizedAmount",
 					"contextKey": "tableLoanEntriesutilizedAmount",
-					"type": "text",
-					"uiGroup": "text_fields",
+					"type": "number",
+					"uiGroup": "number_fields",
 					"uiMeta": {
 						"placeholder": "Enter total limit"
 					},
@@ -3166,7 +3355,7 @@
 									{
 										"var": "tableLoanEntriessanctionedLimit"
 									},
-									""
+									null
 								]
 							},
 							{
@@ -3174,7 +3363,7 @@
 									{
 										"var": "tableLoanEntriesremainingLimit"
 									},
-									""
+									null
 								]
 							},
 							{
@@ -3182,7 +3371,7 @@
 									{
 										"var": "tableLoanEntriessanctionedTenure"
 									},
-									""
+									null
 								]
 							},
 							{
@@ -3190,7 +3379,7 @@
 									{
 										"var": "tableLoanEntriesremainingTenure"
 									},
-									""
+									null
 								]
 							}
 						]
@@ -3200,8 +3389,8 @@
 					"id": "q12_interestRate",
 					"bindsTo_template": "tableLoanEntriesinterestRate",
 					"contextKey": "tableLoanEntriesinterestRate",
-					"type": "text",
-					"uiGroup": "text_fields",
+					"type": "number",
+					"uiGroup": "number_fields",
 					"uiMeta": {
 						"placeholder": "enter interest rate"
 					},
@@ -3240,7 +3429,7 @@
 											{
 												"var": "tableLoanEntriesemi"
 											},
-											""
+											null
 										]
 									},
 									{
@@ -3248,7 +3437,7 @@
 											{
 												"var": "tableLoanEntriestotalLimit"
 											},
-											""
+											null
 										]
 									},
 									{
@@ -3258,7 +3447,7 @@
 													{
 														"var": "tableLoanEntriessanctionedLimit"
 													},
-													""
+													null
 												]
 											},
 											{
@@ -3266,7 +3455,7 @@
 													{
 														"var": "tableLoanEntriesremainingLimit"
 													},
-													""
+													null
 												]
 											}
 										]
@@ -3280,7 +3469,7 @@
 											{
 												"var": "tableLoanEntriestenure"
 											},
-											""
+											null
 										]
 									},
 									{
@@ -3288,7 +3477,7 @@
 											{
 												"var": "tableLoanEntriessanctionedTenure"
 											},
-											""
+											null
 										]
 									},
 									{
@@ -3296,7 +3485,7 @@
 											{
 												"var": "tableLoanEntriesremainingTenure"
 											},
-											""
+											null
 										]
 									}
 								]
@@ -3377,6 +3566,14 @@
 					"showWhen": {
 						"and": [
 							{
+								"in": [
+									{
+										"var": "LoanType"
+									},
+									["Plot & Construction Loan", "Construction Loan Only"]
+								]
+							},
+							{
 								"!=": [
 									{
 										"var": "mortgageYear"
@@ -3389,7 +3586,7 @@
 									{
 										"var": "propCost"
 									},
-									""
+									null
 								]
 							}
 						]
@@ -3410,6 +3607,14 @@
 					"showWhen": {
 						"and": [
 							{
+								"in": [
+									{
+										"var": "LoanType"
+									},
+									["Plot & Construction Loan", "Construction Loan Only"]
+								]
+							},
+							{
 								"!=": [
 									{
 										"var": "mortgageYear"
@@ -3422,7 +3627,7 @@
 									{
 										"var": "propCost"
 									},
-									""
+									null
 								]
 							},
 							{
@@ -3430,7 +3635,7 @@
 									{
 										"var": "ConstructionArea"
 									},
-									""
+									null
 								]
 							}
 						]
@@ -3462,13 +3667,40 @@
 									{
 										"var": "propCost"
 									},
-									""
+									null
 								]
-							},
+							}
+						]
+					}
+				},
+				{
+					"id": "q5_differentATSandPV",
+					"bindsTo_template": "differentATSandPV",
+					"contextKey": "differentATSandPV",
+					"type": "radio",
+					"uiGroup": "radio_fields",
+					"uiMeta": {
+						"placeholder": "Enter amount in rupees"
+					},
+					"required": true,
+					"question": "If there is any difference between the \"Property Value\" and the \"Agreement to Sell value\" for the purpose of \"registry\"?",
+					"description": "In many areas of India, it is common practice to declare a property's value lower than its actual worth in the 'Agreement to Sell' (ATS document) or 'Sale Deed' to reduce stamp duty costs. While this may be prevalent and tempting, we strongly advise our customers to ensure that all transactions comply with legal requirements to avoid potential risks and complications.",
+					"options": [
+						{
+							"label": "Yes",
+							"value": "Yes"
+						},
+						{
+							"label": "No",
+							"value": "No"
+						}
+					],
+					"showWhen": {
+						"and": [
 							{
 								"!=": [
 									{
-										"var": "ConstructionArea"
+										"var": "mortgageYear"
 									},
 									""
 								]
@@ -3476,9 +3708,323 @@
 							{
 								"!=": [
 									{
-										"var": "requiredExtraAmount"
+										"var": "propCost"
+									},
+									null
+								]
+							},
+							{
+								"!=": [
+									{
+										"var": "deposit"
+									},
+									null
+								]
+							}
+						]
+					}
+				},
+				{
+					"id": "q5_ATSReady",
+					"bindsTo_template": "ATSReady",
+					"contextKey": "ATSReady",
+					"type": "radio",
+					"uiGroup": "radio_fields",
+					"uiMeta": {
+						"placeholder": "Enter amount in rupees"
+					},
+					"required": true,
+					"question": "Is your Agreement to Sell (ATS) ready ?",
+					"options": [
+						{
+							"label": "Yes",
+							"value": "Yes"
+						},
+						{
+							"label": "No",
+							"value": "No"
+						}
+					],
+					"showWhen": {
+						"and": [
+							{
+								"!=": [
+									{
+										"var": "mortgageYear"
 									},
 									""
+								]
+							},
+							{
+								"!=": [
+									{
+										"var": "propCost"
+									},
+									null
+								]
+							},
+							{
+								"!=": [
+									{
+										"var": "deposit"
+									},
+									null
+								]
+							},
+							{
+								"==": [
+									{
+										"var": "differentATSandPV"
+									},
+									"Yes"
+								]
+							}
+						]
+					}
+				},
+				{
+					"id": "q5_ATSvalue",
+					"bindsTo_template": "ATSvalue",
+					"contextKey": "ATSvalue",
+					"type": "radio",
+					"uiGroup": "radio_fields",
+					"uiMeta": {
+						"placeholder": "Enter amount in rupees"
+					},
+					"required": true,
+					"question": "Would you like to know our suggestion for ATS value (Registry Value) or you will decide by yourself?",
+					"options": [
+						{
+							"label": "Suggestion Required",
+							"value": "Suggestion Required"
+						},
+						{
+							"label": "By Myself",
+							"value": "By Myself"
+						}
+					],
+					"showWhen": {
+						"and": [
+							{
+								"!=": [
+									{
+										"var": "mortgageYear"
+									},
+									""
+								]
+							},
+							{
+								"!=": [
+									{
+										"var": "propCost"
+									},
+									null
+								]
+							},
+							{
+								"!=": [
+									{
+										"var": "deposit"
+									},
+									null
+								]
+							},
+							{
+								"==": [
+									{
+										"var": "differentATSandPV"
+									},
+									"Yes"
+								]
+							},
+							{
+								"==": [
+									{
+										"var": "ATSReady"
+									},
+									"No"
+								]
+							}
+						]
+					}
+				},
+				{
+					"id": "q5_agreementSellValue",
+					"bindsTo_template": "agreementSellValue",
+					"contextKey": "agreementSellValue",
+					"type": "number",
+					"uiGroup": "number_fields",
+					"uiMeta": {
+						"placeholder": "sell value"
+					},
+					"required": true,
+					"question": {
+						"switch": [
+							{
+								"case": { "==": [{ "var": "ATSvalue" }, "By Myself"] },
+								"then": "Property Value as per 'Agreement to Sell' (i.e. ATS document)?"
+							},
+							{
+								"case": { "==": [{ "var": "ATSvalue" }, "Suggestion Required"] },
+								"then": "The optimum Property Value for the 'Agreement to Sell' document is shown below."
+							}
+						]
+					},
+					"showWhen": {
+						"and": [
+							{
+								"!=": [
+									{
+										"var": "mortgageYear"
+									},
+									""
+								]
+							},
+							{
+								"!=": [
+									{
+										"var": "propCost"
+									},
+									null
+								]
+							},
+							{
+								"!=": [
+									{
+										"var": "deposit"
+									},
+									null
+								]
+							},
+							{
+								"==": [
+									{
+										"var": "differentATSandPV"
+									},
+									"Yes"
+								]
+							},
+							{
+								"or": [
+									{
+										"==": [
+											{
+												"var": "ATSReady"
+											},
+											"Yes"
+										]
+									},
+									{
+										"and": [
+											{
+												"==": [
+													{
+														"var": "ATSReady"
+													},
+													"No"
+												]
+											},
+											{
+												"!=": [
+													{
+														"var": "ATSvalue"
+													},
+													""
+												]
+											}
+										]
+									}
+								]
+							}
+						]
+					}
+				},
+				{
+					"id": "q5_depositAsPerATS",
+					"bindsTo_template": "depositAsPerATS",
+					"contextKey": "depositAsPerATS",
+					"type": "number",
+					"uiGroup": "number_fields",
+					"uiMeta": {
+						"placeholder": "sell value"
+					},
+					"required": true,
+					"question": {
+						"switch": [
+							{
+								"case": { "==": [{ "var": "ATSvalue" }, "By Myself"] },
+								"then": "Down Payment (own contribution amount) as per 'Agreement to Sell' document?"
+							},
+							{
+								"case": { "==": [{ "var": "ATSvalue" }, "Suggestion Required"] },
+								"then": "The optimum Down Payment for the 'Agreement to Sell' document is shown below."
+							}
+						]
+					},
+					"showWhen": {
+						"and": [
+							{
+								"!=": [
+									{
+										"var": "mortgageYear"
+									},
+									""
+								]
+							},
+							{
+								"!=": [
+									{
+										"var": "propCost"
+									},
+									null
+								]
+							},
+							{
+								"!=": [
+									{
+										"var": "deposit"
+									},
+									null
+								]
+							},
+							{
+								"==": [
+									{
+										"var": "differentATSandPV"
+									},
+									"Yes"
+								]
+							},
+							{
+								"or": [
+									{
+										"==": [
+											{
+												"var": "ATSReady"
+											},
+											"Yes"
+										]
+									},
+									{
+										"and": [
+											{
+												"==": [
+													{
+														"var": "ATSReady"
+													},
+													"No"
+												]
+											},
+											{
+												"!=": [
+													{
+														"var": "ATSvalue"
+													},
+													""
+												]
+											}
+										]
+									}
 								]
 							}
 						]

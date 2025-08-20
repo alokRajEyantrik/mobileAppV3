@@ -104,6 +104,22 @@
 		}
 	}
 
+	function resolveDynamicText(field: any, answers: Answers): string {
+		if (!field) return '';
+		if (typeof field === 'string') return field;
+
+		if (typeof field === 'object' && field.switch && Array.isArray(field.switch)) {
+			for (const condition of field.switch) {
+				if (jsonLogic.apply(condition.case, answers)) {
+					return resolveDynamicText(condition.then, answers);
+				}
+			}
+			return '';
+		}
+
+		return typeof field === 'object' ? JSON.stringify(field) : '';
+	}
+
 	// Dynamic state options from pincode data
 	$: stateOptions = Object.keys(pincode_IN_Selected).map((state) => ({
 		label: state,
@@ -231,35 +247,41 @@
 		}
 	};
 
-		// Handlers for grouped entries (arrays of objects)
+	// Handlers for grouped entries (arrays of objects)
 	function addGroupEntry(collectionKey: string, entry: any) {
 		try {
 			// Special handling for specific collections based on the schema
-			const isExistingLoanCollection = collectionKey === 'existingLoans' || 
+			const isExistingLoanCollection =
+				collectionKey === 'existingLoans' ||
 				collectionKey.includes('loanType') ||
 				collectionKey === 'tableLoanEntries';
-			
+
 			// Use a standardized collection key for loan details
-			const finalCollectionKey = isExistingLoanCollection ? 'q1_loanType_collection' : collectionKey;
-			
-			console.log(`Adding entry to collection ${collectionKey} (standardized to: ${finalCollectionKey})`, entry);
-			
+			const finalCollectionKey = isExistingLoanCollection
+				? 'q1_loanType_collection'
+				: collectionKey;
+
+			console.log(
+				`Adding entry to collection ${collectionKey} (standardized to: ${finalCollectionKey})`,
+				entry
+			);
+
 			// Get existing entries or initialize empty array
 			const existingEntries = currentAnswers[finalCollectionKey] || [];
-			
+
 			// Check if existingEntries is an array, if not convert to array
 			const validEntries = Array.isArray(existingEntries) ? existingEntries : [];
-			
+
 			// Create new array with the new entry
 			const updatedEntries = [...validEntries, entry];
 			console.log('Updated entries:', updatedEntries);
-			
+
 			// Update the store with the new array
 			updateAnswerByKey(finalCollectionKey, updatedEntries);
-			
+
 			// Force a refresh of the reactive store
 			setTimeout(() => {
-				loanData.update(data => {
+				loanData.update((data) => {
 					// Make sure we preserve the updated entries in the store
 					const updatedData = { ...data };
 					if (isExistingLoanCollection) {
@@ -268,7 +290,7 @@
 					}
 					return updatedData;
 				});
-				
+
 				// Log current store state for debugging
 				console.log('Current store state after update:', get(loanData));
 			}, 10);
@@ -276,40 +298,42 @@
 			console.error('Error adding group entry:', error);
 			alert('Failed to add entry. Please try again.');
 		}
-	}	function deleteGroupEntry(collectionKey: string, index: number) {
+	}
+	function deleteGroupEntry(collectionKey: string, index: number) {
 		console.log('Deleting entry at index', index, 'from collection:', collectionKey);
-		
+
 		// Special handling for specific collections based on the schema
-		const isExistingLoanCollection = collectionKey === 'existingLoans' || collectionKey.includes('loanType');
-		
+		const isExistingLoanCollection =
+			collectionKey === 'existingLoans' || collectionKey.includes('loanType');
+
 		// Use a standardized collection key for loan details
 		const finalCollectionKey = isExistingLoanCollection ? 'q1_loanType_collection' : collectionKey;
-		
+
 		// Safely get the current entries array
 		let prev = currentAnswers[finalCollectionKey];
-		
+
 		// Validate the collection is an array
 		if (!Array.isArray(prev)) {
 			console.warn('Cannot delete from non-array:', prev);
 			return;
 		}
-		
+
 		// Make sure the index is valid
 		if (index < 0 || index >= prev.length) {
 			console.warn('Invalid index for deletion:', index, 'in array of length', prev.length);
 			return;
 		}
-		
+
 		// Create a new array without the deleted entry
 		const next = [...prev.slice(0, index), ...prev.slice(index + 1)];
 		console.log('New entries after deletion:', next);
-		
+
 		// Update the store
 		updateAnswerByKey(finalCollectionKey, next);
-		
+
 		// Force a refresh of the reactive store
 		setTimeout(() => {
-			loanData.update(data => {
+			loanData.update((data) => {
 				// This creates a new reference to trigger reactivity
 				return { ...data };
 			});
@@ -591,18 +615,18 @@
 					<GroupFields
 						groupedQuestions={(question as any).group}
 						collectionTemplate={currentPage.bindsTo_template}
-						combinedAnswers={combinedAnswers}
-						selectedLoan={selectedLoan}
-						updateAnswer={updateAnswer}
-						addGroupEntry={addGroupEntry}
-						deleteGroupEntry={deleteGroupEntry}
+						{combinedAnswers}
+						{selectedLoan}
+						{updateAnswer}
+						{addGroupEntry}
+						{deleteGroupEntry}
 					/>
 				{:else if question.type === 'radio'}
 					<RadioField
 						id={question.id}
 						name={question.id}
-						label={question.question}
-						description={question.description}
+						label={resolveDynamicText(question.question, combinedAnswers)}
+						description={resolveDynamicText(question.description, combinedAnswers)}
 						options={question.options?.filter((opt) => {
 							if (!opt.showWhen) return true;
 							return jsonLogic.apply(opt.showWhen, combinedAnswers);
@@ -621,8 +645,8 @@
 				{:else if question.type === 'text'}
 					<TextField
 						id={question.id}
-						label={question.question}
-						description={question.description}
+						label={resolveDynamicText(question.question, combinedAnswers)}
+						description={resolveDynamicText(question.description, combinedAnswers)}
 						value={currentAnswers[
 							resolveBindsTo(question, combinedAnswers, selectedLoan)
 						]?.toString() || ''}
@@ -633,8 +657,8 @@
 				{:else if question.type === 'select'}
 					<SelectField
 						id={question.id}
-						label={question.question}
-						description={question.description}
+						label={resolveDynamicText(question.question, combinedAnswers)}
+						description={resolveDynamicText(question.description, combinedAnswers)}
 						options={question.id === 'q1_propertyStateName' ||
 						question.id === 'q4_residenceStateName'
 							? stateOptions
@@ -656,7 +680,8 @@
 				{:else if question.type === 'derivedSelect'}
 					<DerivedSelect
 						id={question.id}
-						label={question.question}
+						label={resolveDynamicText(question.question, combinedAnswers)}
+						description={resolveDynamicText(question.description, combinedAnswers)}
 						options={question.id === 'q2_propertyCityName'
 							? propertyCityOptions
 							: question.id === 'q5_residenceCityName'
@@ -673,7 +698,8 @@
 				{:else if question.type === 'checkbox'}
 					<CheckboxField
 						id={question.id}
-						label={question.question}
+						label={resolveDynamicText(question.question, combinedAnswers)}
+						description={resolveDynamicText(question.description, combinedAnswers)}
 						checked={!!currentAnswers[resolveBindsTo(question, combinedAnswers, selectedLoan)]}
 						error={getValidationErrorMessage(question, combinedAnswers)}
 						onChange={(checked: boolean) => updateAnswer(question, checked)}
@@ -681,8 +707,8 @@
 				{:else if question.type === 'textarea'}
 					<TextareaField
 						id={question.id}
-						label={question.question}
-						description={question.description}
+						label={resolveDynamicText(question.question, combinedAnswers)}
+						description={resolveDynamicText(question.description, combinedAnswers)}
 						value={currentAnswers[
 							resolveBindsTo(question, combinedAnswers, selectedLoan)
 						]?.toString() || ''}
@@ -694,7 +720,8 @@
 				{:else if question.type === 'date'}
 					<DateField
 						id={question.id}
-						label={question.question}
+						label={resolveDynamicText(question.question, combinedAnswers)}
+						description={resolveDynamicText(question.description, combinedAnswers)}
 						value={currentAnswers[
 							resolveBindsTo(question, combinedAnswers, selectedLoan)
 						]?.toString() || ''}
@@ -707,8 +734,8 @@
 				{:else if question.type === 'number'}
 					<NumberField
 						id={question.id}
-						label={question.question}
-						description={question.description}
+						label={resolveDynamicText(question.question, combinedAnswers)}
+						description={resolveDynamicText(question.description, combinedAnswers)}
 						value={(currentAnswers[resolveBindsTo(question, combinedAnswers, selectedLoan)] as
 							| number[]
 							| number
@@ -724,8 +751,8 @@
 				{:else if question.type === 'multiple-select'}
 					<MultipleSelectField
 						id={question.id}
-						label={question.question}
-						description={question.description}
+						label={resolveDynamicText(question.question, combinedAnswers)}
+						description={resolveDynamicText(question.description, combinedAnswers)}
 						options={question.options?.map((opt) => ({
 							label: opt.label as string,
 							value: opt.value as string | number
