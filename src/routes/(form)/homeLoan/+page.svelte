@@ -74,6 +74,7 @@
 		if (!value) return '';
 		return value.replace(/\s+/g, '_');
 	}
+
 	function resolveBindsTo(question: Question, answers: Answers, selectedLoan: string): string {
 		if (question.bindsTo_template) {
 			return question.bindsTo_template.replace(/\{([^}]+)\}/g, (_, key: string) => {
@@ -117,7 +118,9 @@
 	}
 	// For residence/business fields
 	$: propertyCityOptions = getCityOptionsForState(currentAnswers['propertyStateName']?.toString());
-	$: residenceCityOptions = getCityOptionsForState(currentAnswers['residenceStateName']?.toString());
+	$: residenceCityOptions = getCityOptionsForState(
+		currentAnswers['residenceStateName']?.toString()
+	);
 	$: showBusinessAddress = currentAnswers['isResidenceSameAsPropertyHas'] === 'No';
 
 	// 2️⃣ Handle mounting and schema
@@ -153,9 +156,59 @@
 	})();
 
 	// 4️⃣ Control page visibility & nav
-	$: visiblePages = schema.pages.filter(
-		(page) => !page.showWhen || jsonLogic.apply(page.showWhen, combinedAnswers)
-	);
+	// $: visiblePages = schema.pages.filter(
+	// 	(page) => !page.showWhen || jsonLogic.apply(page.showWhen, combinedAnswers)
+	// );
+
+	$: visiblePages = (() => {
+		if (!schema.pages) return [];
+
+		const type = combinedAnswers.homeLoanType;
+
+		if (type === 'New Loan') {
+			// Path 1 sequence
+			const order = [
+				'firstPage',
+				'property_location_homeLoan',
+				'selection_homeLoan',
+				'propertyDetails_homeLoan',
+				'sellerInformation_homeLoan',
+				'tellUs_homeLoan',
+				'loanStructure_homeLoan',
+				'basicInfo_homeLoan',
+				'mortgageProfile_homeLoan'
+			];
+
+			return order.map((id) => schema.pages.find((p) => p.id === id)).filter(Boolean); // filter out undefined just in case
+		}
+
+		if (
+			type === 'Top-up only' ||
+			type === 'Balance Transfer' ||
+			type === 'Balance Transfer with Top-up'
+		) {
+			// Path 2 sequence
+			const order = [
+				'firstPage',
+				'property_location_homeLoan',
+				'selection_homeLoan',
+				'tellUs_homeLoan',
+				'loanStructure_homeLoan',
+				'basicInfo_homeLoan',
+				'propertyDetails_homeLoan',
+				'existingLoanInfo_homeLoan',
+				'loanRequirements_homeLoan'
+			];
+
+			return order.map((id) => schema.pages.find((p) => p.id === id)).filter(Boolean);
+		}
+
+		// Default fallback: filter by existing showWhen logic
+		return schema.pages.filter(
+			(page) => !page.showWhen || jsonLogic.apply(page.showWhen, combinedAnswers)
+		);
+	})();
+
 	$: currentPageIndex = Math.min(currentPageIndex, visiblePages.length - 1);
 	$: currentPage = visiblePages[currentPageIndex];
 	$: visibleQuestions =
@@ -496,15 +549,16 @@
 	};
 </script>
 
-<!-- Main container with responsive padding and max-width -->
 <div class="max-w-4xl mx-auto px-4 py-8 sm:px-6 lg:px-8">
 	<!-- Form title or header can be added here if needed -->
 
 	<div class="bg-white shadow-md rounded-lg p-6">
 		<div class="mb-6">
-			<h2 class="font-bold text-3xl">{currentPage?.title || 'Loan Application'}</h2>
+			<h2 class="font-bold text-3xl">
+				{resolveDynamicText(currentPage?.title, combinedAnswers) || 'Loan Application'}
+			</h2>
 		</div>
-        
+
 		<!-- Render visible questions with support for new input types -->
 		{#each visibleQuestions as question (question.id)}
 			<div class="mb-6">
@@ -514,16 +568,10 @@
 						name={question.id}
 						label={resolveDynamicText(question.question, combinedAnswers)}
 						description={resolveDynamicText(question.description, combinedAnswers)}
-						options={question.options?.map((opt) => ({
-							label:
-								typeof opt.label === 'object' && opt.label.var
-									? combinedAnswers[opt.label.var]?.toString() || opt.label.var
-									: (opt.label as string),
-							value:
-								typeof opt.value === 'object' && 'var' in opt.value
-									? combinedAnswers[opt.value.var]?.toString() || ''
-									: opt.value.toString()
-						})) ?? []}
+						options={question.options?.filter((opt) => {
+							if (!opt.showWhen) return true;
+							return jsonLogic.apply(opt.showWhen, combinedAnswers);
+						}) ?? []}
 						value={currentAnswers[
 							resolveBindsTo(question, combinedAnswers, selectedLoan)
 						]?.toString() ?? ''}
@@ -554,16 +602,15 @@
 						options={question.id === 'q2_propertyStateName' ||
 						question.id === 'q5_residenceStateName'
 							? stateOptions
-							: (question.options?.map((opt) => ({
-									label:
-										typeof opt.label === 'object' && opt.label.var
-											? combinedAnswers[opt.label.var]?.toString() || opt.label.var
-											: (opt.label as string),
-									value:
-										typeof opt.value === 'object' && 'var' in opt.value
-											? (combinedAnswers[opt.value.var] as string | number)
-											: (opt.value as string | number)
-								})) ?? [])}
+							: (question.options
+									?.filter((opt) => {
+										if (!opt.showWhen) return true;
+										return jsonLogic.apply(opt.showWhen, combinedAnswers);
+									})
+									.map((opt) => ({
+										label: opt.label as string,
+										value: opt.value as string | number
+									})) ?? [])}
 						value={currentAnswers[
 							resolveBindsTo(question, combinedAnswers, selectedLoan)
 						]?.toString() ?? ''}
@@ -571,6 +618,7 @@
 						onChange={(value: string | number) => updateAnswer(question, value)}
 						required={question.required ?? false}
 						disabled={question.uiMeta?.readonly ?? false}
+						icon={question.uiMeta?.icon}
 					/>
 				{:else if question.type === 'derivedSelect'}
 					<!-- <p>derived select hai</p> -->
@@ -589,6 +637,7 @@
 						error={getValidationErrorMessage(question, combinedAnswers) || undefined}
 						onChange={(value: string | number) => updateAnswer(question, value)}
 						required={question.required ?? false}
+						icon={question.uiMeta?.icon}
 						disabled={(question.id === 'q3_propertyCityName' &&
 							!currentAnswers['propertyStateName']) ||
 							(question.id === 'q6_residenceCityName' && !currentAnswers['residenceStateName'])}
@@ -889,39 +938,3 @@
 		</div>
 	{/if}
 </div>
-
-<style>
-	.loan-table {
-		border-collapse: collapse;
-		width: 100%;
-		font-family: Arial, sans-serif;
-	}
-
-	.loan-table th,
-	.loan-table td {
-		border: 1px solid #ddd;
-		padding: 8px;
-		text-align: left;
-	}
-
-	.loan-table th {
-		background-color: #f4f4f4;
-		font-weight: bold;
-	}
-
-	.loan-table tr:nth-child(even) {
-		background-color: #f9f9f9;
-	}
-
-	.loan-table tr:hover {
-		background-color: #f1f1f1;
-	}
-
-	.loan-table button {
-		border: none;
-		background: none;
-		cursor: pointer;
-		font-size: 16px;
-		margin-right: 5px;
-	}
-</style>

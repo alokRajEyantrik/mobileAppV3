@@ -896,7 +896,10 @@
 						name={question.id}
 						label={question.question}
 						description={question.description}
-						options={question.options ?? []}
+						options={question.options?.filter((opt) => {
+							if (!opt.showWhen) return true;
+							return jsonLogic.apply(opt.showWhen, combinedAnswers);
+						}) ?? []}
 						value={currentAnswers[
 							resolveBindsTo(question, combinedAnswers, selectedLoan)
 						]?.toString() ?? ''}
@@ -928,7 +931,10 @@
 						options={question.id === 'q1_residenceStateName' ||
 						question.id === 'q4_businessStateName'
 							? stateOptions
-							: (question.options?.map((opt) => ({
+							: (question.options?.filter((opt) => {
+										if (!opt.showWhen) return true;
+										return jsonLogic.apply(opt.showWhen, combinedAnswers);
+									}).map((opt) => ({
 									label: opt.label as string,
 									value: opt.value as string | number
 								})) ?? [])}
