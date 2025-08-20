@@ -122,7 +122,7 @@
 		},
 		{
 			"id": "property_location_homeLoan",
-			"title": "Property Details",
+			"title": "Property Location",
 			"nextButtonVisibility": {
 				"mode": ["allRequiredAnswered"]
 			},
@@ -156,7 +156,15 @@
 								"icon": "Circle"
 							}
 						}
-					]
+					],
+					"showWhen": {
+						"==": [
+							{
+								"var": "homeLoanType"
+							},
+							"New Loan"
+						]
+					}
 				},
 				{
 					"id": "q2_propertyStateName",
@@ -164,12 +172,24 @@
 					"contextKey": "propertyStateName",
 					"type": "select",
 					"uiGroup": "select_fields",
-					"uiMeta": { "placeholder": "Select a State" },
+					"uiMeta": { "placeholder": "Select a State", "icon": "milestone" },
 					"question": "Where your property is located ?",
 					"description": "State Name",
 					"required": true,
 					"showWhen": {
-						"in": [{ "var": "isPropertyIdentified" }, ["Yes", "No"]]
+						"or": [
+							{
+								"in": [{ "var": "isPropertyIdentified" }, ["Yes", "No"]]
+							},
+							{
+								"!=": [
+									{
+										"var": "homeLoanType"
+									},
+									"New Loan"
+								]
+							}
+						]
 					},
 					"errorMessage": {
 						"required": "State is required",
@@ -187,11 +207,23 @@
 					"contextKey": "propertyCityName",
 					"type": "derivedSelect",
 					"uiGroup": "select_fields",
-					"uiMeta": { "placeholder": "Select a City" },
+					"uiMeta": { "placeholder": "Select a City", "icon": "house" },
 					"description": "City Name",
 					"required": true,
 					"showWhen": {
-						"in": [{ "var": "isPropertyIdentified" }, ["Yes", "No"]]
+						"or": [
+							{
+								"in": [{ "var": "isPropertyIdentified" }, ["Yes", "No"]]
+							},
+							{
+								"!=": [
+									{
+										"var": "homeLoanType"
+									},
+									"New Loan"
+								]
+							}
+						]
 					},
 					"errorMessage": {
 						"required": "City is required",
@@ -250,7 +282,8 @@
 					"type": "select",
 					"uiGroup": "select_fields",
 					"uiMeta": {
-						"placeholder": "Select a State"
+						"placeholder": "Select a State",
+						"icon": "milestone"
 					},
 					"description": "Where would you like to process your loan application from? Select the location that’s most convenient for you, ensuring smooth coordination with the bank for residence and office verifications, and completing loan formalities without disrupting your schedule.",
 					"question": "Location for residence verification ?",
@@ -271,7 +304,8 @@
 					"type": "derivedSelect",
 					"uiGroup": "select_fields",
 					"uiMeta": {
-						"placeholder": "Select a City"
+						"placeholder": "Select a City",
+						"icon": "house"
 					},
 					"description": "City Name",
 					"required": true,
@@ -302,6 +336,192 @@
 								}
 							]
 						}
+					}
+				},
+				{
+					"id": "q_isRegistryDone",
+					"bindsTo_template": "isRegistryDone",
+					"contextKey": "isRegistryDone",
+					"type": "radio",
+					"uiGroup": "loan_details",
+					"required": true,
+					"question": "If the registry has been done in the name of property owner(s)?",
+					"options": [
+						{
+							"label": "Yes",
+							"value": "Yes",
+							"flagKey": {
+								"isRegistryDone": true
+							},
+							"uiMeta": {
+								"icon": "Circle"
+							}
+						},
+						{
+							"label": "No",
+							"value": "No",
+							"flagKey": {
+								"isRegistryDone": false
+							},
+							"uiMeta": {
+								"icon": "Circle"
+							}
+						}
+					],
+					"showWhen": {
+						"or": [
+							{
+								"and": [
+									{
+										"!=": [
+											{
+												"var": "homeLoanType"
+											},
+											"New Loan"
+										]
+									},
+									{
+										"==": [
+											{
+												"var": "isResidenceSameAsPropertyHas"
+											},
+											"Yes"
+										]
+									}
+								]
+							},
+							{
+								"and": [
+									{
+										"!=": [
+											{
+												"var": "homeLoanType"
+											},
+											"New Loan"
+										]
+									},
+									{
+										"==": [
+											{
+												"var": "isResidenceSameAsPropertyHas"
+											},
+											"No"
+										]
+									},
+									{
+										"!=": [
+											{
+												"var": "residenceCityName"
+											},
+											""
+										]
+									}
+								]
+							}
+						]
+					}
+				},
+				{
+					"id": "q_isPossessionOfferedByBuilder",
+					"bindsTo_template": "isPossessionOfferedByBuilder",
+					"contextKey": "isPossessionOfferedByBuilder",
+					"type": "radio",
+					"uiGroup": "loan_details",
+					"required": true,
+					"question": "If the possession has been offered by the builder?",
+					"description": "\"Possession offered\" refers to the stage when the builder imps over the completed property to the buyer. It signifies that the buyer has made full payment to the builder and can now take possession of the property and start using it.",
+					"options": [
+						{
+							"label": "Yes",
+							"value": "Yes",
+							"flagKey": {
+								"isPossessionOfferedByBuilder": true
+							},
+							"uiMeta": {
+								"icon": "Circle"
+							}
+						},
+						{
+							"label": "No",
+							"value": "No",
+							"flagKey": {
+								"isPossessionOfferedByBuilder": false
+							},
+							"uiMeta": {
+								"icon": "Circle"
+							}
+						}
+					],
+					"showWhen": {
+						"and": [
+							{
+								"!=": [
+									{
+										"var": "homeLoanType"
+									},
+									"New Loan"
+								]
+							},
+							{
+								"==": [
+									{
+										"var": "isRegistryDone"
+									},
+									"No"
+								]
+							}
+						]
+					}
+				},
+				{
+					"id": "q_isAnyDemandFromTheBuilder",
+					"bindsTo_template": "isAnyDemandFromTheBuilder",
+					"contextKey": "isAnyDemandFromTheBuilder",
+					"type": "radio",
+					"uiGroup": "loan_details",
+					"required": true,
+					"question": "Is there any outstanding demand from the builder that remains to be disbursed in the future?",
+					"options": [
+						{
+							"label": "Yes",
+							"value": "Yes",
+							"flagKey": {
+								"isAnyDemandFromTheBuilder": true
+							},
+							"uiMeta": {
+								"icon": "Circle"
+							}
+						},
+						{
+							"label": "No",
+							"value": "No",
+							"flagKey": {
+								"isAnyDemandFromTheBuilder": false
+							},
+							"uiMeta": {
+								"icon": "Circle"
+							}
+						}
+					],
+					"showWhen": {
+						"and": [
+							{
+								"!=": [
+									{
+										"var": "homeLoanType"
+									},
+									"New Loan"
+								]
+							},
+							{
+								"==": [
+									{
+										"var": "isPossessionOfferedByBuilder"
+									},
+									"No"
+								]
+							}
+						]
 					}
 				}
 			]
@@ -506,7 +726,7 @@
 					"contextKey": "constructionType",
 					"type": "select",
 					"uiGroup": "select_fields",
-					"uiMeta": { "placeholder": "Choose Construction Type" },
+					"uiMeta": { "placeholder": "Choose Construction Type", "icon": "construction" },
 					"required": true,
 					"question": "What type of construction is it?",
 					"options": [
@@ -728,7 +948,44 @@
 						]
 					}
 				}
-			]
+			],
+			"showWhen": {
+				"or": [
+					{
+						"and": [
+							{
+								"==": [
+									{
+										"var": "homeLoanType"
+									},
+									"New Loan"
+								]
+							},
+							{
+								"in": [{ "var": "isPropertyIdentified" }, ["Yes", "No"]]
+							}
+						]
+					},
+					{
+						"and": [
+							{
+								"in": [
+									{ "var": "homeLoanType" },
+									["Top-up only", "Balance Transfer", "Balance Transfer with Top-up"]
+								]
+							},
+							{
+								"!=": [
+									{
+										"var": "primaryCIBILScore"
+									},
+									""
+								]
+							}
+						]
+					}
+				]
+			}
 		},
 		{
 			"id": "sellerInformation_homeLoan",
@@ -1033,7 +1290,15 @@
 						]
 					}
 				}
-			]
+			],
+			"showWhen": {
+				"==": [
+					{
+						"var": "homeLoanType"
+					},
+					"New Loan"
+				]
+			}
 		},
 		{
 			"id": "tellUs_homeLoan",
@@ -1077,6 +1342,14 @@
 							"value": "Company (Non-individual entity)",
 							"uiMeta": {
 								"icon": "Circle"
+							},
+							"showWhen": {
+								"==": [
+									{
+										"var": "isApplicantNRI"
+									},
+									"No"
+								]
 							}
 						}
 					]
@@ -1089,7 +1362,8 @@
 					"type": "select",
 					"uiGroup": "select_fields",
 					"uiMeta": {
-						"placeholder": "Select company type"
+						"placeholder": "Select company type",
+						"icon": "building-2"
 					},
 					"required": true,
 					"question": "What's company type?",
@@ -1248,7 +1522,18 @@
 		},
 		{
 			"id": "loanStructure_homeLoan",
-			"title": "Applicant(s) Details",
+			"title": {
+				"switch": [
+					{
+						"case": { "==": [{ "var": "homeLoanType" }, "New Loan"] },
+						"then": "Applicant(s) Details"
+					},
+					{
+						"case": { "!=": [{ "var": "homeLoanType" }, "New Loan"] },
+						"then": "Applicant(s) Details of Existing Loan"
+					}
+				]
+			},
 			"nextButtonVisibility": {
 				"mode": ["allRequiredAnswered"]
 			},
@@ -1346,7 +1631,8 @@
 					"type": "select",
 					"uiGroup": "select_fields",
 					"uiMeta": {
-						"placeholder": "Select employment type"
+						"placeholder": "Select employment type",
+						"icon": "briefcase-business"
 					},
 					"required": true,
 					"question": "What's your employment status?",
@@ -1361,23 +1647,75 @@
 						},
 						{
 							"label": "Self-employed(Professional)",
-							"value": "Self-employed(Professional)"
+							"value": "Self-employed(Professional)",
+							"showWhen": {
+								"or": [
+									{
+										"==": [
+											{
+												"var": "isApplicantNRI"
+											},
+											"No"
+										]
+									},
+									{
+										"==": [
+											{
+												"var": "isPrimaryApplicantNRI"
+											},
+											"No"
+										]
+									}
+								]
+							}
 						},
 						{
 							"label": "Self-employed(Businessman)",
-							"value": "Self-employed(Businessman)"
+							"value": "Self-employed(Businessman)",
+							"showWhen": {
+								"or": [
+									{
+										"==": [
+											{
+												"var": "isApplicantNRI"
+											},
+											"No"
+										]
+									},
+									{
+										"==": [
+											{
+												"var": "isPrimaryApplicantNRI"
+											},
+											"No"
+										]
+									}
+								]
+							}
 						},
 						{
 							"label": "Self-employed(Others)",
-							"value": "Self-employed(Others)"
-						},
-						{
-							"label": "Unemployed",
-							"value": "Unemployed"
-						},
-						{
-							"label": "Home-maker",
-							"value": "Home-maker"
+							"value": "Self-employed(Others)",
+							"showWhen": {
+								"or": [
+									{
+										"==": [
+											{
+												"var": "isApplicantNRI"
+											},
+											"No"
+										]
+									},
+									{
+										"==": [
+											{
+												"var": "isPrimaryApplicantNRI"
+											},
+											"No"
+										]
+									}
+								]
+							}
 						}
 					],
 					"showWhen": {
@@ -1436,7 +1774,8 @@
 					"type": "select",
 					"uiGroup": "select_fields",
 					"uiMeta": {
-						"placeholder": "Select Age"
+						"placeholder": "Select Age",
+						"icon": "calendar-1"
 					},
 					"required": true,
 					"question": "What is your current age? (select completed years only)",
@@ -1512,7 +1851,8 @@
 					"type": "select",
 					"uiGroup": "select_fields",
 					"uiMeta": {
-						"placeholder": "Select employment type"
+						"placeholder": "Select employment type",
+						"icon": "briefcase-business"
 					},
 					"required": true,
 					"question": "Please select your profession.",
@@ -1590,8 +1930,7 @@
 					"type": "number",
 					"uiGroup": "inputNumber",
 					"uiMeta": {
-						"placeholder": ["FY2023-24", "FY2022-23", "FY2021-22"],
-						"icon": ["indian-rupee", "indian-rupee", "indian-rupee"]
+						"placeholder": ["FY2023-24", "FY2022-23", "FY2021-22"]
 					},
 					"required": true,
 					"question": "What were the Gross Receipts in the last three financial years?",
@@ -1611,8 +1950,7 @@
 					"type": "number",
 					"uiGroup": "inputNumber",
 					"uiMeta": {
-						"placeholder": ["FY2023-24", "FY2022-23", "FY2021-22"],
-						"icon": ["indian-rupee", "indian-rupee", "indian-rupee"]
+						"placeholder": ["FY2023-24", "FY2022-23", "FY2021-22"]
 					},
 					"required": true,
 					"question": "What were the Net Profits for the last three financial years?",
@@ -1735,9 +2073,9 @@
 							{
 								"!=": [
 									{
-										"var": "netProfit"
+										"var": "primaryAdditionalIncome"
 									},
-									""
+									null
 								]
 							}
 						]
@@ -1750,7 +2088,8 @@
 					"type": "select",
 					"uiGroup": "selectButton",
 					"uiMeta": {
-						"placeholder": "Choose lender name"
+						"placeholder": "Choose lender name",
+						"icon": "landmark"
 					},
 					"required": true,
 					"question": "Select the lender from where you have availed the OD facility.",
@@ -1781,7 +2120,12 @@
 					"required": true,
 					"question": "What is the tenure of OD (in Months)?",
 					"showWhen": {
-						"==": [{ "var": "isPrimaryHasOD" }, "Yes"]
+						"and": [
+							{ "==": [{ "var": "isPrimaryHasOD" }, "Yes"] },
+							{
+								"!=": [{ "var": "primaryODLenderName" }, ""]
+							}
+						]
 					}
 				},
 				{
@@ -1797,7 +2141,12 @@
 					"required": true,
 					"question": "Enter your OD rate of Interest (ROI).",
 					"showWhen": {
-						"==": [{ "var": "isPrimaryHasOD" }, "Yes"]
+						"and": [
+							{ "==": [{ "var": "isPrimaryHasOD" }, "Yes"] },
+							{
+								"!=": [{ "var": "primaryODLenderName" }, ""]
+							}
+						]
 					}
 				},
 				{
@@ -1837,14 +2186,38 @@
 					"showWhen": {
 						"or": [
 							{
-								"!=": [{ "var": "primaryLimitOfOD" }, ""]
+								"and": [
+									{
+										"==": [
+											{
+												"var": "isPrimaryHasOD"
+											},
+											"Yes"
+										]
+									},
+									{
+										"!=": [{ "var": "primaryLimitOfOD" }, null]
+									}
+								]
 							},
 							{
-								"==": [
+								"and": [
 									{
-										"var": "isPrimaryHasOD"
+										"==": [
+											{
+												"var": "isPrimaryHasOD"
+											},
+											"No"
+										]
 									},
-									"No"
+									{
+										"!=": [
+											{
+												"var": "primaryAdditionalIncome"
+											},
+											null
+										]
+									}
 								]
 							}
 						]
@@ -1863,9 +2236,10 @@
 					"required": true,
 					"question": "What is the combined limit of all the credit cards issued in the name of",
 					"showWhen": {
-						">=": [{ "var": "primaryMonthlyEMI" }, 0]
+						"!=": [{ "var": "primaryMonthlyEMI" }, null]
 					}
 				},
+
 				{
 					"id": "q_primaryCIBILScore",
 					"bindsTo_template": "primaryCIBILScore",
@@ -1873,7 +2247,8 @@
 					"type": "select",
 					"uiGroup": "selectButton",
 					"uiMeta": {
-						"placeholder": "Select credit score"
+						"placeholder": "Select credit score",
+						"icon": "gauge"
 					},
 					"required": true,
 					"question": "What's the Credit Score?",
@@ -1909,7 +2284,7 @@
 						}
 					],
 					"showWhen": {
-						">=": [{ "var": "primaryCombinedLimitOfCC" }, 0]
+						"!=": [{ "var": "primaryCombinedLimitOfCC" }, null]
 					}
 				},
 				{
@@ -1918,6 +2293,9 @@
 					"contextKey": "isPrimaryDefaulter",
 					"type": "select",
 					"uiGroup": "selectButton",
+					"uiMeta": {
+						"icon": "shield-alert"
+					},
 					"required": true,
 					"question": "Have you ever been defaulter",
 					"options": [
@@ -2079,7 +2457,8 @@
 					"type": "number",
 					"uiGroup": "inputNumber",
 					"uiMeta": {
-						"placeholder": "allotment value"
+						"placeholder": "allotment value",
+						"icon": "indian-rupee"
 					},
 					"required": true,
 					"question": "Please provide the property allotment value?",
@@ -2095,7 +2474,8 @@
 					"type": "number",
 					"uiGroup": "inputNumber",
 					"uiMeta": {
-						"placeholder": "deal value"
+						"placeholder": "deal value",
+						"icon": "indian-rupee"
 					},
 					"required": true,
 					"question": "What is the assessed market value of the property or the agreed-upon deal value with the seller?",
@@ -2125,12 +2505,48 @@
 					"type": "number",
 					"uiGroup": "inputNumber",
 					"uiMeta": {
-						"placeholder": "downpayment amount"
+						"placeholder": "downpayment amount",
+						"icon": "indian-rupee"
 					},
 					"required": true,
 					"question": "How much amount you have for the downpayment ?",
 					"showWhen": {
 						"!=": [{ "var": "dealValue" }, ""]
+					}
+				},
+				{
+					"id": "q_isDifferATSAndPropertyValue",
+					"bindsTo_template": "isDifferATSAndPropertyValue",
+					"contextKey": "isDifferATSAndPropertyValue",
+					"type": "radio",
+					"uiGroup": "loan_details",
+					"required": true,
+					"question": "If there is any difference between the \"Property Value\" and the \"Agreement to Sell value\" for the purpose of \"registry\"?",
+					"description": "In many areas of India, it is common practice to declare a property's value lower than its actual worth in the 'Agreement to Sell' (ATS document) or 'Sale Deed' to reduce stamp duty costs. While this may be prevalent and tempting, we strongly advise our customers to ensure that all transactions comply with legal requirements to avoid potential risks and complications.",
+					"options": [
+						{
+							"label": "Yes",
+							"value": "Yes",
+							"flagKey": {
+								"isDifferATSAndPropertyValue": true
+							},
+							"uiMeta": {
+								"icon": "Circle"
+							}
+						},
+						{
+							"label": "No",
+							"value": "No",
+							"flagKey": {
+								"isDifferATSAndPropertyValue": false
+							},
+							"uiMeta": {
+								"icon": "Circle"
+							}
+						}
+					],
+					"showWhen": {
+						"!=": [{ "var": "downPayment" }, ""]
 					}
 				},
 				{
@@ -2147,6 +2563,9 @@
 							"value": "Yes",
 							"flagKey": {
 								"isATSReady": true
+							},
+							"uiMeta": {
+								"icon": "Circle"
 							}
 						},
 						{
@@ -2154,11 +2573,14 @@
 							"value": "No",
 							"flagKey": {
 								"isATSReady": false
+							},
+							"uiMeta": {
+								"icon": "Circle"
 							}
 						}
 					],
 					"showWhen": {
-						"!=": [{ "var": "downPayment" }, ""]
+						"==": [{ "var": "isDifferATSAndPropertyValue" }, "Yes"]
 					}
 				},
 				{
@@ -2172,15 +2594,28 @@
 					"options": [
 						{
 							"label": "Suggestion Required",
-							"value": "Suggestion Required"
+							"value": "Suggestion Required",
+							"uiMeta": {
+								"icon": "Circle"
+							}
 						},
 						{
 							"label": "By Myself",
-							"value": "By Myself"
+							"value": "By Myself",
+							"uiMeta": {
+								"icon": "Circle"
+							}
 						}
 					],
 					"showWhen": {
-						"==": [{ "var": "isATSReady" }, "No"]
+						"and": [
+							{
+								"==": [{ "var": "isATSReady" }, "No"]
+							},
+							{
+								"==": [{ "var": "isDifferATSAndPropertyValue" }, "Yes"]
+							}
+						]
 					}
 				},
 				{
@@ -2190,25 +2625,19 @@
 					"type": "number",
 					"uiGroup": "inputNumber",
 					"uiMeta": {
-						"placeholder": "Sell value"
+						"placeholder": "Sell value",
+						"icon": "indian-rupee"
 					},
 					"required": true,
 					"question": "Property Value as per 'Agreement to Sell' (i.e. ATS document)?",
 					"description": "This will be considered as the registry amount on which stamp duty will be calculated.",
 					"showWhen": {
-						"or": [
+						"and": [
 							{
 								"==": [{ "var": "isATSReady" }, "Yes"]
 							},
 							{
-								"and": [
-									{
-										"==": [{ "var": "isATSReady" }, "No"]
-									},
-									{
-										"==": [{ "var": "ourSuggestionOrBySelf" }, "By Myself"]
-									}
-								]
+								"==": [{ "var": "isDifferATSAndPropertyValue" }, "Yes"]
 							}
 						]
 					}
@@ -2220,29 +2649,326 @@
 					"type": "number",
 					"uiGroup": "inputNumber",
 					"uiMeta": {
-						"placeholder": "Downpayment amount of ATS"
+						"placeholder": "Downpayment amount of ATS",
+						"icon": "indian-rupee"
 					},
 					"required": true,
 					"question": "Down Payment (own contribution amount) as per 'Agreement to Sell' document?",
 					"showWhen": {
-						"or": [
+						"and": [
 							{
 								"==": [{ "var": "isATSReady" }, "Yes"]
 							},
 							{
-								"and": [
-									{
-										"==": [{ "var": "isATSReady" }, "No"]
-									},
-									{
-										"==": [{ "var": "ourSuggestionOrBySelf" }, "By Myself"]
-									}
-								]
+								"==": [{ "var": "isDifferATSAndPropertyValue" }, "Yes"]
 							}
 						]
 					}
 				}
-			]
+			],
+			"showWhen": {
+				"==": [
+					{
+						"var": "homeLoanType"
+					},
+					"New Loan"
+				]
+			}
+		},
+		{
+			"id": "existingLoanInfo_homeLoan",
+			"title": "Existing Details",
+			"nextButtonVisibility": {
+				"mode": ["allRequiredAnswered"]
+			},
+			"questions": [
+				{
+					"id": "q_currentOutstandingAmount",
+					"bindsTo_template": "currentOutstandingAmount",
+					"contextKey": "currentOutstandingAmount",
+					"type": "number",
+					"uiGroup": "inputNumber",
+					"uiMeta": {
+						"placeholder": "enter current outstanding amount",
+						"icon": "indian-rupee"
+					},
+					"required": true,
+					"question": "What is the outstanding principal of the current home loan, as on today?",
+					"description": "The \"outstanding principal\" is the remaining amount of the original loan, which decreases with each EMI. Sometimes people confuse it with total of remaining EMIs, but that's not the outstanding principal amount. You can check this outstanding amount in \"Schedule of repayment\" or can ask from your lender."
+				},
+				{
+					"id": "q_currentInterestRate",
+					"bindsTo_template": "currentInterestRate",
+					"contextKey": "currentInterestRate",
+					"type": "number",
+					"uiGroup": "inputNumber",
+					"uiMeta": {
+						"placeholder": "enter current interest rate",
+						"icon": "indian-rupee"
+					},
+					"required": true,
+					"question": "What's the current interest rate with existing Lender?"
+				},
+				{
+					"id": "q_currentRemainingTenure",
+					"bindsTo_template": "currentRemainingTenure",
+					"contextKey": "currentRemainingTenure",
+					"type": "number",
+					"uiGroup": "inputNumber",
+					"uiMeta": {
+						"placeholder": "enter current remaining tenure",
+						"icon": "indian-rupee"
+					},
+					"required": true,
+					"question": "What's the remaining tenure to close the loan at existing Lender?(in Months)"
+				},
+				{
+					"id": "q_lendersName",
+					"bindsTo_template": "lendersName",
+					"contextKey": "lendersName",
+					"type": "multiple-select",
+					"uiGroup": "select_fields",
+					"uiMeta": {
+						"placeholder": "Select your bank"
+					},
+					"required": true,
+					"question": "Please select all the lenders, from where project is approved.",
+					"description": "At times, a project may not be approved by all the lenders. Consequently, our results, which display offers from all lenders, may be ineffective. We recommend verifying with your sources and selecting only the appropriate lenders. <br />You can add multiple lenders one by one.",
+					"options": [
+						{
+							"label": "HDFC Bank",
+							"value": "HDFC Bank"
+						},
+						{
+							"label": "SBI Bank",
+							"value": "SBI Bank"
+						},
+						{
+							"label": "Axis Bank",
+							"value": "Axis Bank"
+						},
+						{
+							"label": "ICICI Bank",
+							"value": "ICICI Bank"
+						},
+						{
+							"label": "Canara Bank",
+							"value": "Canara Bank"
+						},
+						{
+							"label": "Bank of Baroda",
+							"value": "Bank of Baroda"
+						},
+						{
+							"label": "Citi Bank",
+							"value": "Citi Bank"
+						},
+						{
+							"label": "Union Bank",
+							"value": "Union Bank"
+						}
+					]
+				},
+				{
+					"id": "q_ExistingLendersName",
+					"bindsTo_template": "ExistingLendersName",
+					"contextKey": "ExistingLendersName",
+					"type": "select",
+					"uiGroup": "select_fields",
+					"uiMeta": {
+						"placeholder": "Select your bank"
+					},
+					"required": true,
+					"question": "Please select the lender with whom your current Home Loan is active?",
+					"options": [
+						{
+							"label": "HDFC Bank",
+							"value": "HDFC Bank"
+						},
+						{
+							"label": "SBI Bank",
+							"value": "SBI Bank"
+						},
+						{
+							"label": "Axis Bank",
+							"value": "Axis Bank"
+						},
+						{
+							"label": "ICICI Bank",
+							"value": "ICICI Bank"
+						},
+						{
+							"label": "Canara Bank",
+							"value": "Canara Bank"
+						},
+						{
+							"label": "Bank of Baroda",
+							"value": "Bank of Baroda"
+						},
+						{
+							"label": "Citi Bank",
+							"value": "Citi Bank"
+						},
+						{
+							"label": "Union Bank",
+							"value": "Union Bank"
+						}
+					]
+				},
+				{
+					"id": "q_currentEMI",
+					"bindsTo_template": "currentEMI",
+					"contextKey": "currentEMI",
+					"type": "number",
+					"uiGroup": "inputNumber",
+					"uiMeta": {
+						"placeholder": "enter current remaining tenure",
+						"icon": "indian-rupee"
+					},
+					"required": true,
+					"question": "What's the EMI of currently running Home Loan?",
+					"description": "Based on your inputs (outstanding amount, interest rate, remaining tenure), EMI should be around {}"
+				},
+				{
+					"id": "q_haveYouTakenHomeInsurance",
+					"bindsTo_template": "haveYouTakenHomeInsurance",
+					"contextKey": "haveYouTakenHomeInsurance",
+					"type": "radio",
+					"uiGroup": "loan_details",
+					"required": true,
+					"question": "Have you taken any home loan insurance?",
+					"description": "When you take a Home Loan, the bank usually asks you to buy insurance, like Life and Property Insurance. They pay for it and add the cost to your home loan payments. But if you transfer your loan to another bank, these insurance policies get terminated. The remaining amount of 'insurance loan' doesn't get transferred with your home loan. So, before Balance Transfer, a few lenders may ask you to pay off this insurance loan yourself. Please be informed that the newly opted bank may also demand the insurance for the full loan amount.",
+					"options": [
+						{
+							"label": "Yes",
+							"value": "Yes",
+							"uiMeta": {
+								"icon": "Circle"
+							},
+							"flagKey": {
+								"haveYouTakenHomeInsurance": true
+							}
+						},
+						{
+							"label": "No",
+							"value": "No",
+							"uiMeta": {
+								"icon": "Circle"
+							},
+							"flagKey": {
+								"haveYouTakenHomeInsurance": false
+							}
+						}
+					]
+				},
+				{
+					"id": "q_outstandingInsuranceAmount",
+					"bindsTo_template": "outstandingInsuranceAmount",
+					"contextKey": "outstandingInsuranceAmount",
+					"type": "number",
+					"uiGroup": "inputNumber",
+					"uiMeta": {
+						"placeholder": "enter your outstanding insurance amount",
+						"icon": "indian-rupee"
+					},
+					"required": true,
+					"question": "What's the outstanding insurance amount?",
+					"showWhen": {
+						"==": [
+							{
+								"var": "haveYouTakenHomeInsurance"
+							},
+							"Yes"
+						]
+					}
+				}
+			],
+			"showWhen": {
+				"!=": [
+					{
+						"var": "homeLoanType"
+					},
+					"New Loan"
+				]
+			}
+		},
+		{
+			"id": "loanRequirements_homeLoan",
+			"title": "Your Loan Requirements",
+			"nextButtonVisibility": {
+				"mode": ["allRequiredAnswered"]
+			},
+			"questions": [
+				{
+					"id": "q_currentOutstandingAmount",
+					"bindsTo_template": "currentPropertyValue",
+					"contextKey": "currentPropertyValue",
+					"type": "number",
+					"uiGroup": "inputNumber",
+					"uiMeta": {
+						"placeholder": "enter current property amount",
+						"icon": "indian-rupee"
+					},
+					"required": true,
+					"question": "What would you estimate the current value of your property?",
+					"description": "If uncertain, please provide your best estimate. Keep in mind that lenders will independently evaluate the market value of your property and determine the maximum lending amount accordingly."
+				},
+				{
+					"id": "q_newTenure",
+					"bindsTo_template": "newTenure",
+					"contextKey": "newTenure",
+					"type": "select",
+					"uiGroup": "select_fields",
+					"uiMeta": {
+						"placeholder": "Select your term"
+					},
+					"required": true,
+					"question": "What loan term would you prefer with the new lender?",
+					"description": "You can choose a term between 5 and bank-wise maximum years. A longer term will result in lower monthly payments but higher total interest over time. You can always change your decision later if needed.",
+					"options": [
+						{
+							"label": "5",
+							"value": "5"
+						},
+						{
+							"label": "6",
+							"value": "6"
+						},
+						{
+							"label": "7",
+							"value": "7"
+						},
+						{
+							"label": "8",
+							"value": "8"
+						},
+						{
+							"label": "9",
+							"value": "9"
+						},
+						{
+							"label": "10",
+							"value": "10"
+						},
+						{
+							"label": "11",
+							"value": "11"
+						},
+						{
+							"label": "12",
+							"value": "12"
+						}
+					]
+				}
+			],
+			"showWhen": {
+				"!=": [
+					{
+						"var": "homeLoanType"
+					},
+					"New Loan"
+				]
+			}
 		}
 	]
 }
