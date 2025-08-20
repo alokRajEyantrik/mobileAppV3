@@ -218,11 +218,35 @@
 					"showWhen": {
 						"and": [
 							{
-								"in": [
+								"or": [
 									{
-										"var": "LoanType"
+										"==": [
+											{
+												"var": "PlotLoanActivity"
+											},
+											["Balance Transfer Only"]
+										]
 									},
-									["Plot & Construction Loan", "Construction Loan Only"]
+									{
+										"and": [
+											{
+												"==": [
+													{
+														"var": "PlotLoanActivity"
+													},
+													["New Loan"]
+												]
+											},
+											{
+												"in": [
+													{
+														"var": "LoanType"
+													},
+													["Plot & Construction Loan", "Construction Loan Only"]
+												]
+											}
+										]
+									}
 								]
 							},
 							{
@@ -340,11 +364,31 @@
 						}
 					],
 					"showWhen": {
-						"!=": [
+						"and": [
 							{
-								"var": "propertyType"
+								"==": [
+									{
+										"var": "PlotLoanActivity"
+									},
+									["New Loan"]
+								]
 							},
-							""
+							{
+								"in": [
+									{
+										"var": "LoanType"
+									},
+									["Plot Loan Only", "Plot & Construction Loan"]
+								]
+							},
+							{
+								"!=": [
+									{
+										"var": "propertyType"
+									},
+									""
+								]
+							}
 						]
 					}
 				},
@@ -376,19 +420,71 @@
 					"showWhen": {
 						"and": [
 							{
+								"or": [
+									{
+										"and": [
+											{
+												"==": [
+													{
+														"var": "PlotLoanActivity"
+													},
+													["New Loan"]
+												]
+											},
+											{
+												"in": [
+													{
+														"var": "LoanType"
+													},
+													["Plot Loan Only", "Plot & Construction Loan"]
+												]
+											},
+											{
+												"==": [
+													{
+														"var": "purchaseType"
+													},
+													["Resale"]
+												]
+											}
+										]
+									},
+									{
+										"and": [
+											{
+												"==": [
+													{
+														"var": "PlotLoanActivity"
+													},
+													["New Loan"]
+												]
+											},
+											{
+												"in": [
+													{
+														"var": "LoanType"
+													},
+													["Plot & Equity Loan", "Construction Loan Only"]
+												]
+											}
+										]
+									},
+									{
+										"==": [
+											{
+												"var": "PlotLoanActivity"
+											},
+											["Balance Transfer Only"]
+										]
+									}
+								]
+							},
+							{
 								"!=": [
 									{
 										"var": "propertyType"
 									},
 									""
-								]
-							},
-							{
-								"==": [
-									{
-										"var": "purchaseType"
-									},
-									"Resale"
 								]
 							}
 						]
@@ -422,6 +518,46 @@
 					"showWhen": {
 						"and": [
 							{
+								"or": [
+									{
+										"and": [
+											{
+												"in": [
+													{
+														"var": "LoanType"
+													},
+													["Plot Loan Only", "Plot & Construction Loan"]
+												]
+											},
+											{
+												"==": [
+													{
+														"var": "purchaseType"
+													},
+													["Resale"]
+												]
+											}
+										]
+									},
+									{
+										"in": [
+											{
+												"var": "LoanType"
+											},
+											["Plot & Equity Loan", "Construction Loan Only"]
+										]
+									},
+									{
+										"==": [
+											{
+												"var": "PlotLoanActivity"
+											},
+											["Balance Transfer Only"]
+										]
+									}
+								]
+							},
+							{
 								"!=": [
 									{
 										"var": "propertyType"
@@ -430,35 +566,11 @@
 								]
 							},
 							{
-								"or": [
+								"!=": [
 									{
-										"==": [
-											{
-												"var": "purchaseType"
-											},
-											"Direct Sale"
-										]
+										"var": "ifPropertyRegistered"
 									},
-									{
-										"and": [
-											{
-												"==": [
-													{
-														"var": "purchaseType"
-													},
-													"Resale"
-												]
-											},
-											{
-												"!=": [
-													{
-														"var": "ifPropertyRegistered"
-													},
-													""
-												]
-											}
-										]
-									}
+									""
 								]
 							}
 						]
@@ -479,6 +591,46 @@
 					"showWhen": {
 						"and": [
 							{
+								"or": [
+									{
+										"and": [
+											{
+												"in": [
+													{
+														"var": "LoanType"
+													},
+													["Plot Loan Only", "Plot & Construction Loan"]
+												]
+											},
+											{
+												"==": [
+													{
+														"var": "purchaseType"
+													},
+													["Resale"]
+												]
+											}
+										]
+									},
+									{
+										"in": [
+											{
+												"var": "LoanType"
+											},
+											["Plot & Equity Loan", "Construction Loan Only"]
+										]
+									},
+									{
+										"==": [
+											{
+												"var": "PlotLoanActivity"
+											},
+											["Balance Transfer Only"]
+										]
+									}
+								]
+							},
+							{
 								"!=": [
 									{
 										"var": "propertyType"
@@ -487,35 +639,11 @@
 								]
 							},
 							{
-								"or": [
+								"!=": [
 									{
-										"==": [
-											{
-												"var": "purchaseType"
-											},
-											"Direct Sale"
-										]
+										"var": "ifPropertyRegistered"
 									},
-									{
-										"and": [
-											{
-												"==": [
-													{
-														"var": "purchaseType"
-													},
-													"Resale"
-												]
-											},
-											{
-												"!=": [
-													{
-														"var": "ifPropertyRegistered"
-													},
-													""
-												]
-											}
-										]
-									}
+									""
 								]
 							},
 							{
@@ -543,6 +671,46 @@
 					"showWhen": {
 						"and": [
 							{
+								"or": [
+									{
+										"and": [
+											{
+												"in": [
+													{
+														"var": "LoanType"
+													},
+													["Plot Loan Only", "Plot & Construction Loan"]
+												]
+											},
+											{
+												"==": [
+													{
+														"var": "purchaseType"
+													},
+													["Resale"]
+												]
+											}
+										]
+									},
+									{
+										"in": [
+											{
+												"var": "LoanType"
+											},
+											["Plot & Equity Loan", "Construction Loan Only"]
+										]
+									},
+									{
+										"==": [
+											{
+												"var": "PlotLoanActivity"
+											},
+											["Balance Transfer Only"]
+										]
+									}
+								]
+							},
+							{
 								"!=": [
 									{
 										"var": "propertyType"
@@ -551,35 +719,11 @@
 								]
 							},
 							{
-								"or": [
+								"!=": [
 									{
-										"==": [
-											{
-												"var": "purchaseType"
-											},
-											"Direct Sale"
-										]
+										"var": "ifPropertyRegistered"
 									},
-									{
-										"and": [
-											{
-												"==": [
-													{
-														"var": "purchaseType"
-													},
-													"Resale"
-												]
-											},
-											{
-												"!=": [
-													{
-														"var": "ifPropertyRegistered"
-													},
-													""
-												]
-											}
-										]
-									}
+									""
 								]
 							},
 							{
@@ -629,6 +773,46 @@
 					"showWhen": {
 						"and": [
 							{
+								"or": [
+									{
+										"and": [
+											{
+												"in": [
+													{
+														"var": "LoanType"
+													},
+													["Plot Loan Only", "Plot & Construction Loan"]
+												]
+											},
+											{
+												"==": [
+													{
+														"var": "purchaseType"
+													},
+													["Resale"]
+												]
+											}
+										]
+									},
+									{
+										"in": [
+											{
+												"var": "LoanType"
+											},
+											["Plot & Equity Loan", "Construction Loan Only"]
+										]
+									},
+									{
+										"==": [
+											{
+												"var": "PlotLoanActivity"
+											},
+											["Balance Transfer Only"]
+										]
+									}
+								]
+							},
+							{
 								"!=": [
 									{
 										"var": "propertyType"
@@ -637,35 +821,11 @@
 								]
 							},
 							{
-								"or": [
+								"!=": [
 									{
-										"==": [
-											{
-												"var": "purchaseType"
-											},
-											"Direct Sale"
-										]
+										"var": "ifPropertyRegistered"
 									},
-									{
-										"and": [
-											{
-												"==": [
-													{
-														"var": "purchaseType"
-													},
-													"Resale"
-												]
-											},
-											{
-												"!=": [
-													{
-														"var": "ifPropertyRegistered"
-													},
-													""
-												]
-											}
-										]
-									}
+									""
 								]
 							},
 							{
@@ -710,6 +870,46 @@
 					"showWhen": {
 						"and": [
 							{
+								"or": [
+									{
+										"and": [
+											{
+												"in": [
+													{
+														"var": "LoanType"
+													},
+													["Plot Loan Only", "Plot & Construction Loan"]
+												]
+											},
+											{
+												"==": [
+													{
+														"var": "purchaseType"
+													},
+													["Resale"]
+												]
+											}
+										]
+									},
+									{
+										"in": [
+											{
+												"var": "LoanType"
+											},
+											["Plot & Equity Loan", "Construction Loan Only"]
+										]
+									},
+									{
+										"==": [
+											{
+												"var": "PlotLoanActivity"
+											},
+											["Balance Transfer Only"]
+										]
+									}
+								]
+							},
+							{
 								"!=": [
 									{
 										"var": "propertyType"
@@ -718,35 +918,11 @@
 								]
 							},
 							{
-								"or": [
+								"!=": [
 									{
-										"==": [
-											{
-												"var": "purchaseType"
-											},
-											"Direct Sale"
-										]
+										"var": "ifPropertyRegistered"
 									},
-									{
-										"and": [
-											{
-												"==": [
-													{
-														"var": "purchaseType"
-													},
-													"Resale"
-												]
-											},
-											{
-												"!=": [
-													{
-														"var": "ifPropertyRegistered"
-													},
-													""
-												]
-											}
-										]
-									}
+									""
 								]
 							},
 							{
@@ -798,6 +974,46 @@
 					"showWhen": {
 						"and": [
 							{
+								"or": [
+									{
+										"and": [
+											{
+												"in": [
+													{
+														"var": "LoanType"
+													},
+													["Plot Loan Only", "Plot & Construction Loan"]
+												]
+											},
+											{
+												"==": [
+													{
+														"var": "purchaseType"
+													},
+													["Resale"]
+												]
+											}
+										]
+									},
+									{
+										"in": [
+											{
+												"var": "LoanType"
+											},
+											["Plot & Equity Loan", "Construction Loan Only"]
+										]
+									},
+									{
+										"==": [
+											{
+												"var": "PlotLoanActivity"
+											},
+											["Balance Transfer Only"]
+										]
+									}
+								]
+							},
+							{
 								"!=": [
 									{
 										"var": "propertyType"
@@ -806,35 +1022,11 @@
 								]
 							},
 							{
-								"or": [
+								"!=": [
 									{
-										"==": [
-											{
-												"var": "purchaseType"
-											},
-											"Direct Sale"
-										]
+										"var": "ifPropertyRegistered"
 									},
-									{
-										"and": [
-											{
-												"==": [
-													{
-														"var": "purchaseType"
-													},
-													"Resale"
-												]
-											},
-											{
-												"!=": [
-													{
-														"var": "ifPropertyRegistered"
-													},
-													""
-												]
-											}
-										]
-									}
+									""
 								]
 							},
 							{
@@ -903,6 +1095,26 @@
 			"title": "A few details from seller",
 			"nextButtonVisibility": {
 				"mode": ["allRequiredAnswered"]
+			},
+			"showWhen": {
+				"and": [
+					{
+						"!=": [
+							{
+								"var": "LoanType"
+							},
+							["Construction Loan Only"]
+						]
+					},
+					{
+						"!=": [
+							{
+								"var": "PlotLoanActivity"
+							},
+							["Balance Transfer Only"]
+						]
+					}
+				]
 			},
 			"questions": [
 				{
@@ -1016,11 +1228,23 @@
 						}
 					],
 					"showWhen": {
-						"==": [
+						"or": [
 							{
-								"var": "purchaseType"
+								"==": [
+									{
+										"var": "purchaseType"
+									},
+									"Resale"
+								]
 							},
-							"Resale"
+							{
+								"==": [
+									{
+										"var": "LoanType"
+									},
+									"Plot & Equity Loan"
+								]
+							}
 						]
 					}
 				},
@@ -1262,15 +1486,7 @@
 								]
 							}
 						}
-					],
-					"showWhen": {
-						"!=": [
-							{
-								"var": "purchasedFrom"
-							},
-							""
-						]
-					}
+					]
 				},
 				{
 					"id": "q_typeOfCompany",
@@ -3496,6 +3712,180 @@
 			]
 		},
 		{
+			"id": "existingDetailsPage",
+			"title": "existing details",
+			"nextButtonVisibility": {
+				"mode": ["allRequiredAnswered"]
+			},
+			"showWhen": {
+				"==": [
+					{
+						"var": "PlotLoanActivity"
+					},
+					["Balance Transfer Only"]
+				]
+			},
+			"questions": [
+				{
+					"id": "q1_principalOutstanding",
+					"bindsTo_template": "principalOutstanding",
+					"contextKey": "principalOutstanding",
+					"type": "number",
+					"uiGroup": "text_fields",
+					"uiMeta": {
+						"placeholder": "Enter outstanding amount"
+					},
+					"required": true,
+					"question": "What is the total outstanding principal of the current loan on property, as on today?",
+					"description": "The \"outstanding principal\" is the remaining amount of the original loan, which decreases with each EMI. Sometimes people confuse it with total of remaining EMIs, but that's not the outstanding principal amount. You can check this outstanding amount in \"Schedule of repayment\" or can ask from your lender. Also if any plot loan, LAP (Loan Against Property), construction loan or any other loan on property is currently active, please input the combined outstanding amount of all loans that need to be closed during a balance transfer.",
+					"errorMessage": {
+						"required": true,
+						"message": "Please enter a minimum principal outstanding amount of 5 lakh."
+					},
+					"validation": {
+						"condition": {
+							"<": [
+								{
+									"var": "principalOutstanding"
+								},
+								"500000"
+							]
+						}
+					}
+				},
+				{
+					"id": "q4_bankName",
+					"existing_bindsTo": "bankName",
+					"contextKey": "bankName",
+					"type": "select",
+					"uiGroup": "select_fields",
+					"uiMeta": {
+						"placeholder": "Select bank name"
+					},
+					"required": true,
+					"question": "Please select the lender with whom your current loan is active.",
+					"options": [
+						{
+							"label": "HDFC Bank",
+							"value": "HDFC Bank"
+						},
+						{
+							"label": "SBI Bank",
+							"value": "SBI Bank"
+						},
+						{
+							"label": "Axis Bank",
+							"value": "Axis Bank"
+						},
+						{
+							"label": "ICICI Bank",
+							"value": "ICICI Bank"
+						},
+						{
+							"label": "Canara Bank",
+							"value": "Canara Bank"
+						},
+						{
+							"label": "Bank of Baroda",
+							"value": "Bank of Baroda"
+						},
+						{
+							"label": "Citi Bank",
+							"value": "Citi Bank"
+						},
+						{
+							"label": "Union Bank",
+							"value": "Union Bank"
+						}
+					],
+					"showWhen": {
+						">=": [
+							{
+								"var": "principalOutstanding"
+							},
+							"500000"
+						]
+					}
+				},
+				{
+					"id": "q6_insuranceDetailsOptions",
+					"bindsTo_template": "insuranceDetailsOptions",
+					"contextKey": "insuranceDetailsOptions",
+					"type": "radio",
+					"uiGroup": "text_fields",
+					"required": true,
+					"question": "Have you taken any loan insurance?",
+					"options": [
+						{
+							"label": "Yes",
+							"value": "Yes"
+						},
+						{
+							"label": "No",
+							"value": "No"
+						}
+					],
+					"showWhen": {
+						"and": [
+							{
+								">=": [
+									{
+										"var": "principalOutstanding"
+									},
+									"500000"
+								]
+							},
+							{
+								"!=": [
+									{
+										"var": "bankName"
+									},
+									""
+								]
+							}
+						]
+					}
+				},
+				{
+					"id": "q7_insuranceLoanAmount",
+					"bindsTo_template": "insuranceLoanAmount",
+					"contextKey": "insuranceLoanAmount",
+					"type": "number",
+					"uiGroup": "text_fields",
+					"required": true,
+					"question": "What's the outstanding insurance amount?",
+					"showWhen": {
+						"and": [
+							{
+								">=": [
+									{
+										"var": "principalOutstanding"
+									},
+									"500000"
+								]
+							},
+							{
+								"!=": [
+									{
+										"var": "bankName"
+									},
+									""
+								]
+							},
+							{
+								"==": [
+									{
+										"var": "insuranceDetailsOptions"
+									},
+									"Yes"
+								]
+							}
+						]
+					}
+				}
+			]
+		},
+		{
 			"id": "loanRequirementPage",
 			"title": "Your Loan Requirements",
 			"nextButtonVisibility": {
@@ -3540,14 +3930,40 @@
 					"type": "number",
 					"uiGroup": "number_fields",
 					"required": true,
-					"question": "About how much will the property you're buying, cost?",
-					"description": "Accurate numbers get you accurate offers from lenders.",
-					"showWhen": {
-						"!=": [
+					"question": {
+						"switch": [
 							{
-								"var": "mortgageYear"
+								"case": { "==": [{ "var": "PlotLoanActivity" }, "New Loan"] },
+								"then": "About how much will the property you're buying, cost?"
 							},
-							""
+							{
+								"case": { "==": [{ "var": "PlotLoanActivity" }, "Balance Transfer Only"] },
+								"then": "What would you estimate the current value of your property?"
+							}
+						]
+					},
+					"description": {
+						"switch": [
+							{
+								"case": { "==": [{ "var": "PlotLoanActivity" }, "New Loan"] },
+								"then": "Accurate numbers get you accurate offers from lenders."
+							},
+							{
+								"case": { "==": [{ "var": "PlotLoanActivity" }, "Balance Transfer Only"] },
+								"then": "If uncertain, please provide your best estimate. Keep in mind that lenders will independently evaluate the market value of your property and determine the maximum lending amount accordingly."
+							}
+						]
+					},
+					"showWhen": {
+						"or": [
+							{
+								"!=": [
+									{
+										"var": "mortgageYear"
+									},
+									""
+								]
+							}
 						]
 					}
 				},
