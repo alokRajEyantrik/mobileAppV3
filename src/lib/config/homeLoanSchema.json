@@ -2629,15 +2629,156 @@
 						"icon": "indian-rupee"
 					},
 					"required": true,
-					"question": "Property Value as per 'Agreement to Sell' (i.e. ATS document)?",
-					"description": "This will be considered as the registry amount on which stamp duty will be calculated.",
-					"showWhen": {
-						"and": [
+					"question": {
+						"switch": [
 							{
-								"==": [{ "var": "isATSReady" }, "Yes"]
+								"case": {
+									"or": [
+										{
+											"==": [
+												{
+													"var": "isATSReady"
+												},
+												"Yes"
+											]
+										},
+										{
+											"and": [
+												{
+													"==": [
+														{
+															"var": "isATSReady"
+														},
+														"No"
+													]
+												},
+												{
+													"==": [
+														{
+															"var": "ourSuggestionOrBySelf"
+														},
+														"By Myself"
+													]
+												}
+											]
+										}
+									]
+								},
+								"then": "Property Value as per 'Agreement to Sell' (i.e. ATS document)?"
 							},
 							{
-								"==": [{ "var": "isDifferATSAndPropertyValue" }, "Yes"]
+								"case": {
+									"and": [
+										{
+											"==": [
+												{
+													"var": "isATSReady"
+												},
+												"No"
+											]
+										},
+										{
+											"==": [
+												{
+													"var": "ourSuggestionOrBySelf"
+												},
+												"Suggestion Required"
+											]
+										}
+									]
+								},
+								"then": "The optimum Property Value for the 'Agreement to Sell' document is shown below."
+							}
+						]
+					},
+					"description": {
+						"switch": [
+							{
+								"case": {
+									"or": [
+										{
+											"==": [
+												{
+													"var": "isATSReady"
+												},
+												"Yes"
+											]
+										},
+										{
+											"and": [
+												{
+													"==": [
+														{
+															"var": "isATSReady"
+														},
+														"No"
+													]
+												},
+												{
+													"==": [
+														{
+															"var": "ourSuggestionOrBySelf"
+														},
+														"By Myself"
+													]
+												}
+											]
+										}
+									]
+								},
+								"then": "This will be considered as the registry amount on which stamp duty will be calculated."
+							},
+							{
+								"case": {
+									"and": [
+										{
+											"==": [
+												{
+													"var": "isATSReady"
+												},
+												"No"
+											]
+										},
+										{
+											"==": [
+												{
+													"var": "ourSuggestionOrBySelf"
+												},
+												"Suggestion Required"
+											]
+										}
+									]
+								},
+								"then": "Our AI recommends this value to secure the maximum possible loan amount while minimizing registry amount on which stamp duty will be calculated."
+							}
+						]
+					},
+					"showWhen": {
+						"or": [
+							{
+								"and": [
+									{
+										"==": [{ "var": "isATSReady" }, "Yes"]
+									},
+									{
+										"==": [{ "var": "isDifferATSAndPropertyValue" }, "Yes"]
+									}
+								]
+							},
+							{
+								"and": [
+									{
+										"==": [{ "var": "isATSReady" }, "No"]
+									},
+									{
+										"!=": [
+											{
+												"var": "ourSuggestionOrBySelf"
+											},
+											""
+										]
+									}
+								]
 							}
 						]
 					}
@@ -2653,14 +2794,111 @@
 						"icon": "indian-rupee"
 					},
 					"required": true,
-					"question": "Down Payment (own contribution amount) as per 'Agreement to Sell' document?",
-					"showWhen": {
-						"and": [
+					"question": {
+						"switch": [
 							{
-								"==": [{ "var": "isATSReady" }, "Yes"]
+								"case": {
+									"or": [
+										{
+											"==": [
+												{
+													"var": "isATSReady"
+												},
+												"Yes"
+											]
+										},
+										{
+											"and": [
+												{
+													"==": [
+														{
+															"var": "isATSReady"
+														},
+														"No"
+													]
+												},
+												{
+													"==": [
+														{
+															"var": "ourSuggestionOrBySelf"
+														},
+														"By Myself"
+													]
+												}
+											]
+										}
+									]
+								},
+								"then": "Down Payment (own contribution amount) as per 'Agreement to Sell' document?"
 							},
 							{
-								"==": [{ "var": "isDifferATSAndPropertyValue" }, "Yes"]
+								"case": {
+									"and": [
+										{
+											"==": [
+												{
+													"var": "isATSReady"
+												},
+												"No"
+											]
+										},
+										{
+											"==": [
+												{
+													"var": "ourSuggestionOrBySelf"
+												},
+												"Suggestion Required"
+											]
+										}
+									]
+								},
+								"then": "The optimum Property Value for the 'Agreement to Sell' document is shown below."
+							}
+						]
+					},
+					"description": {
+						"switch": [
+							{
+								"case": {
+									"and": [
+										{
+											"==": [{ "var": "isATSReady" }, "No"]
+										},
+										{
+											"==": [{ "var": "ourSuggestionOrBySelf" }, "Suggestion Required"]
+										}
+									]
+								},
+								"then": "Our AI recommends this value according to RBI's LTV ratio regulations and the suggested property value."
+							}
+						]
+					},
+					"showWhen": {
+						"or": [
+							{
+								"and": [
+									{
+										"==": [{ "var": "isATSReady" }, "Yes"]
+									},
+									{
+										"==": [{ "var": "isDifferATSAndPropertyValue" }, "Yes"]
+									}
+								]
+							},
+							{
+								"and": [
+									{
+										"==": [{ "var": "isATSReady" }, "No"]
+									},
+									{
+										"!=": [
+											{
+												"var": "ourSuggestionOrBySelf"
+											},
+											""
+										]
+									}
+								]
 							}
 						]
 					}
