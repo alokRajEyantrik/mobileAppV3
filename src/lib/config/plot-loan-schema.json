@@ -530,11 +530,11 @@
 												]
 											},
 											{
-												"==": [
+												"!=": [
 													{
 														"var": "purchaseType"
 													},
-													["Resale"]
+													[""]
 												]
 											}
 										]
@@ -561,14 +561,6 @@
 								"!=": [
 									{
 										"var": "propertyType"
-									},
-									""
-								]
-							},
-							{
-								"!=": [
-									{
-										"var": "ifPropertyRegistered"
 									},
 									""
 								]
@@ -603,11 +595,11 @@
 												]
 											},
 											{
-												"==": [
+												"!=": [
 													{
 														"var": "purchaseType"
 													},
-													["Resale"]
+													[""]
 												]
 											}
 										]
@@ -634,14 +626,6 @@
 								"!=": [
 									{
 										"var": "propertyType"
-									},
-									""
-								]
-							},
-							{
-								"!=": [
-									{
-										"var": "ifPropertyRegistered"
 									},
 									""
 								]
@@ -683,11 +667,11 @@
 												]
 											},
 											{
-												"==": [
+												"!=": [
 													{
 														"var": "purchaseType"
 													},
-													["Resale"]
+													[""]
 												]
 											}
 										]
@@ -714,14 +698,6 @@
 								"!=": [
 									{
 										"var": "propertyType"
-									},
-									""
-								]
-							},
-							{
-								"!=": [
-									{
-										"var": "ifPropertyRegistered"
 									},
 									""
 								]
@@ -785,11 +761,11 @@
 												]
 											},
 											{
-												"==": [
+												"!=": [
 													{
 														"var": "purchaseType"
 													},
-													["Resale"]
+													[""]
 												]
 											}
 										]
@@ -816,14 +792,6 @@
 								"!=": [
 									{
 										"var": "propertyType"
-									},
-									""
-								]
-							},
-							{
-								"!=": [
-									{
-										"var": "ifPropertyRegistered"
 									},
 									""
 								]
@@ -882,11 +850,11 @@
 												]
 											},
 											{
-												"==": [
+												"!=": [
 													{
 														"var": "purchaseType"
 													},
-													["Resale"]
+													[""]
 												]
 											}
 										]
@@ -913,14 +881,6 @@
 								"!=": [
 									{
 										"var": "propertyType"
-									},
-									""
-								]
-							},
-							{
-								"!=": [
-									{
-										"var": "ifPropertyRegistered"
 									},
 									""
 								]
@@ -986,11 +946,11 @@
 												]
 											},
 											{
-												"==": [
+												"!=": [
 													{
 														"var": "purchaseType"
 													},
-													["Resale"]
+													[""]
 												]
 											}
 										]
@@ -1017,14 +977,6 @@
 								"!=": [
 									{
 										"var": "propertyType"
-									},
-									""
-								]
-							},
-							{
-								"!=": [
-									{
-										"var": "ifPropertyRegistered"
 									},
 									""
 								]
@@ -1097,23 +1049,11 @@
 				"mode": ["allRequiredAnswered"]
 			},
 			"showWhen": {
-				"and": [
+				"!=": [
 					{
-						"!=": [
-							{
-								"var": "LoanType"
-							},
-							["Construction Loan Only"]
-						]
+						"var": "PlotLoanActivity"
 					},
-					{
-						"!=": [
-							{
-								"var": "PlotLoanActivity"
-							},
-							["Balance Transfer Only"]
-						]
-					}
+					["Balance Transfer Only"]
 				]
 			},
 			"questions": [
@@ -1238,11 +1178,11 @@
 								]
 							},
 							{
-								"==": [
+								"in": [
 									{
 										"var": "LoanType"
 									},
-									"Plot & Equity Loan"
+									["Plot & Equity Loan", "Construction Loan Only"]
 								]
 							}
 						]
