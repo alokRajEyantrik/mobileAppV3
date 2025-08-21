@@ -1178,11 +1178,11 @@
 								]
 							},
 							{
-								"==": [
+								"in": [
 									{
 										"var": "LoanType"
 									},
-									"Plot & Equity Loan"
+									["Plot & Equity Loan", "Construction Loan Only"]
 								]
 							}
 						]
