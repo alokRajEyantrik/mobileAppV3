@@ -569,6 +569,11 @@
 			};
 		}
 	}
+
+	function updateTitle(questionId: string, value: string) {
+		const key = `${questionId}_title`;
+		updateAnswerByKey(key, value);
+	}
 </script>
 
 <div class="max-w-4xl mx-auto px-4 py-8 sm:px-6 lg:px-8">
@@ -614,6 +619,9 @@
 						error={getValidationErrorMessage(question, combinedAnswers) || undefined}
 						onInput={(value: string) => updateAnswer(question, value)}
 						icon={question.uiMeta?.icon}
+						showTitleDropdown={question.uiMeta?.showTitleDropdown ?? false}
+						title={combinedAnswers[question.id + '_title'] ?? ''}
+						onTitleChange={(val: string) => updateTitle(question.id, val)}
 					/>
 				{:else if question.type === 'select'}
 					<SelectField

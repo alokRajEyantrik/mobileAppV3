@@ -14,6 +14,11 @@
 	export let icon = '';
 	export let placeholder: string | string[] = '';
 	export let onInput: (value: number | number[] | null) => void = () => {};
+	export let showUnitDropdown = false;
+	export let unit = ''; // selected title value
+	export let onUnitChange = (val: string) => {}; // callback when title changes
+
+	let units = ['Sq. Ft.', 'Sq. Mt.', 'Sq. Yd.'];
 
 	function handleInput(event: Event, index?: number) {
 		const target = event.target as HTMLInputElement;
@@ -44,6 +49,11 @@
 
 	// pick correct icon component
 	$: IconComponent = icon ? Icons[toPascalCase(icon)] : null;
+
+	function handleUnitChange(event: Event) {
+		const target = event.target as HTMLSelectElement;
+		onUnitChange(target.value);
+	}
 </script>
 
 <div class="">
@@ -78,7 +88,20 @@
 		</div>
 	{:else}
 		<div class="relative w-full">
-			{#if IconComponent}
+			{#if showUnitDropdown}
+				<select
+					name="unit"
+					aria-label="Unit"
+					bind:value={unit}
+					on:change={handleUnitChange}
+					class="outline-none absolute text-center top-0 h-full rounded-l-sm bg-black text-white font-Paragraph text-leastPara md:text-subParaFont"
+				>
+					<option value="" disabled>Title</option>
+					{#each units as unit}
+						<option value={unit}>{unit}</option>
+					{/each}
+				</select>
+			{:else if IconComponent}
 				<div
 					class="absolute left-0 bg-black w-[3rem] h-full rounded-l-md flex justify-center items-center"
 				>
@@ -96,8 +119,9 @@
 				{required}
 				placeholder={placeholder as string}
 				on:input={(e) => handleInput(e)}
-				class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#ffcc00] focus:border-[#ffcc00] {IconComponent
-					? 'pl-[3.5rem]'
+				class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#ffcc00] focus:border-[#ffcc00] {showUnitDropdown ||
+				IconComponent
+					? 'pl-[4rem]'
 					: ''}"
 				class:error
 			/>

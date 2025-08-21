@@ -1548,7 +1548,7 @@
 					"uiGroup": "text_fields",
 					"uiMeta": {
 						"placeholder": "Enter the full name",
-						"icon": "user-round"
+						"showTitleDropdown": true
 					}
 				},
 				{
