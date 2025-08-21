@@ -46,7 +46,7 @@
 	$: IconComponent = icon ? Icons[toPascalCase(icon)] : null;
 </script>
 
-<div class="mb-4">
+<div class="">
 	<label for={id} class="block text-sm font-medium text-gray-700 mb-1">
 		{label}
 		{#if required}<span class="text-red-500">*</span>{/if}

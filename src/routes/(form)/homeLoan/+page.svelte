@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
+	import { ToWords } from 'to-words';
 	import { writable, get, type Writable } from 'svelte/store';
 	import jsonLogic from 'json-logic-js';
 	import { loanData } from '$lib/stores/loanData';
@@ -46,6 +47,11 @@
 		[key: string]: Answers | string | undefined;
 		loanName?: string;
 	}
+
+	const toWords = new ToWords();
+	// local state for number + words
+	let numberValue: number | null = null;
+	let numberWordsMap: Record<string, string> = {};
 
 	// Store variable for GST
 	const gstStateError: Writable<string> = writable('');
@@ -542,11 +548,27 @@
 	};
 	const handleInput = (id, value) => {
 		if (!id) {
-			// console.warn('handleInput called with undefined id', value);
 			return;
 		}
 		testing.update((data) => ({ ...data, [id]: value }));
 	};
+
+	function handleNumberInput(value: number | number[] | null, question) {
+		updateAnswer(question, value ?? 0);
+
+		if (typeof value === 'number' && !isNaN(value)) {
+			const formatted = value.toLocaleString('en-IN');
+			numberWordsMap = {
+				...numberWordsMap,
+				[question.id]: `${toWords.convert(value)}`
+			};
+		} else {
+			numberWordsMap = {
+				...numberWordsMap,
+				[question.id]: ''
+			};
+		}
+	}
 </script>
 
 <div class="max-w-4xl mx-auto px-4 py-8 sm:px-6 lg:px-8">
@@ -594,7 +616,6 @@
 						icon={question.uiMeta?.icon}
 					/>
 				{:else if question.type === 'select'}
-					<!-- <p>select field hai</p> -->
 					<SelectField
 						id={question.id}
 						label={resolveDynamicText(question.question, combinedAnswers)}
@@ -695,11 +716,15 @@
 						max={question.uiMeta?.max as number}
 						step={question.uiMeta?.step ?? 1}
 						error={getValidationErrorMessage(question, combinedAnswers) || undefined}
-						onInput={(value: number | number[] | null) => updateAnswer(question, value ?? 0)}
+						onInput={(value: number | number[] | null) => handleNumberInput(value, question)}
 						required={question.required ?? false}
 						icon={question.uiMeta?.icon}
 					/>
-					<!-- <p>number field hai</p> -->
+					{#if numberWordsMap[question.id]}
+						<span class="text-sm font-regular text-gray-700 pl-[3rem]">
+							{numberWordsMap[question.id]}
+						</span>
+					{/if}
 				{:else if question.type === 'multiple-select'}
 					<MultipleSelectField
 						id={question.id}
@@ -761,38 +786,6 @@
 				{/if}
 			</div>
 		{/each}
-		<!-- {#if Array.isArray(currentAnswers.tableLoanEntries) && currentAnswers.tableLoanEntries.length > 0 && currentPage.title == 'Existing Details'}
-			<h3>Added Loan Entries:</h3>
-			<table class="loan-table">
-				<thead>
-					<tr>
-						<th>Type</th>
-						<th>Bank Name</th>
-						<th>Closure Plan</th>
-						<th>EMI</th>
-						<th>Tenure (mo)</th>
-						<th>Interest (p.a)</th>
-						<th>Action</th>
-					</tr>
-				</thead>
-				<tbody>
-					{#each currentAnswers.tableLoanEntries as entry, i}
-						<tr>
-							<td>{entry.loanType}</td>
-							<td>{entry.bankName}</td>
-							<td>{entry.selectedToClose}</td>
-							<td>{entry.EMIs}</td>
-							<td>{entry.tenure}</td>
-							<td>{entry.interestRate}</td>
-							<td>
-								<button on:click={() => editEntry(i)}>✏️</button>
-								<button on:click={() => deleteEntry(i)}>🗑️</button>
-							</td>
-						</tr>
-					{/each}
-				</tbody>
-			</table>
-		{/if} -->
 
 		<!-- Navigation buttons with improved accessibility -->
 		<div class="flex flex-col sm:flex-row justify-between mt-8 space-y-4 sm:space-y-0 sm:space-x-4">
