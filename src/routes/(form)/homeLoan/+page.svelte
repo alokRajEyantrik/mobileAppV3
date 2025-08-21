@@ -169,9 +169,10 @@
 	$: visiblePages = (() => {
 		if (!schema.pages) return [];
 
+		const loanName = combinedAnswers.loanName;
 		const type = combinedAnswers.homeLoanType;
 
-		if (type === 'New Loan') {
+		if (loanName == 'Home Loan' && type === 'New Loan') {
 			// Path 1 sequence
 			const order = [
 				'firstPage',
@@ -189,9 +190,10 @@
 		}
 
 		if (
-			type === 'Top-up only' ||
-			type === 'Balance Transfer' ||
-			type === 'Balance Transfer with Top-up'
+			loanName === 'Home Loan' &&
+			(type === 'Top-up only' ||
+				type === 'Balance Transfer' ||
+				type === 'Balance Transfer with Top-up')
 		) {
 			// Path 2 sequence
 			const order = [
